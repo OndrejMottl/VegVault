@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                     Project name
+#                 BIODYNAMICS- Database
 #
 #                     Config file
 #
@@ -50,7 +50,7 @@ if (
 # Define packages
 package_list <-
   c(
-   "assertthat",
+    "assertthat",
     "devtools",
     "here",
     "httpgd",
