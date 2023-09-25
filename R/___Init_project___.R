@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                     Project name
+#                 BIODYNAMICS- Database
 #
 #                     Project setup
 #
