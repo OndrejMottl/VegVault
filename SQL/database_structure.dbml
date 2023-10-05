@@ -12,7 +12,12 @@ Table DatasetSources {
 
 Table DatasetType {
   dataset_id varchar
-  data_type varchar
+  dataset_type_id int
+}
+
+Table DatasetTypeID {
+  dataset_type_id int [primary key]
+  dataset_type varchar
 }
 
 Table DatasetCoord {
@@ -48,27 +53,33 @@ Table SampleTaxa {
 }
 
 Table SampleSize {
-  sample_id varchar [primary key]
-  sample_size int
+  sample_id varchar
+  sample_size_id int 
+}
+
+Table SampleSizeID {
+  sample_size_id int [primary key]
+  sample_size numeric
 }
 
 Table SampleSizeDetails {
-  sample_size int
+  sample_size_id int
   description varchar
 }
 
 Table Taxa {
-  taxon_id varchar [primary key]
-}
+  taxon_id int [primary key]
+  taxon_name varchar
+  }
 
 Table TaxonClassification {
-  taxon_id varchar
-  taxon_name_raw varchar
-  taxon_name_agree varchar
+  taxon_id int
+  taxon_name_raw int
+  taxon_name_agree int
   taxon_name_exact bool [note: 'Does the name exactly match?']
-  taxon_species varchar
-  taxon_genus varchar
-  taxon_family varchar
+  taxon_species int
+  taxon_genus int
+  taxon_family int
 }
 
 Ref: Datasets.dataset_id < DatasetCoord.dataset_id
@@ -76,17 +87,26 @@ Ref: Datasets.dataset_id < DatasetType.dataset_id
 Ref: Datasets.dataset_id < DatasetSources.dataset_id
 Ref: Datasets.dataset_id < DatasetSample.dataset_id
 
+Ref: DatasetTypeID.dataset_type_id < DatasetType.dataset_type_id 
+
 Ref: Samples.sample_id < DatasetSample.sample_id
 Ref: Samples.sample_id < SampleAge.sample_id
 Ref: Samples.sample_id < SampleTaxa.sample_id
 Ref: Samples.sample_id < SampleSize.sample_id
 Ref: Samples.sample_id < SampleUncern.sample_id
 
-Ref: SampleSize.sample_size < SampleSizeDetails.sample_size 
-
+Ref: SampleSizeID.sample_size_id < SampleSizeDetails.sample_size_id 
+Ref: SampleSizeID.sample_size_id < SampleSize.sample_size_id 
 
 Ref: Taxa.taxon_id < SampleTaxa.taxon_id
 Ref: Taxa.taxon_id < TaxonClassification.taxon_id
+Ref: Taxa.taxon_id < TaxonClassification.taxon_name_raw
+Ref: Taxa.taxon_id < TaxonClassification.taxon_name_agree
+Ref: Taxa.taxon_id < TaxonClassification.taxon_species
+Ref: Taxa.taxon_id < TaxonClassification.taxon_genus
+Ref: Taxa.taxon_id < TaxonClassification.taxon_family
+
+
 
 
 // Table users {
