@@ -1,13 +1,19 @@
 // Use DBML to define your database structure
 // Docs: https://dbml.dbdiagram.io/docs
 
+// Datasets
 Table Datasets {
-  dataset_id varchar [primary key]
+  dataset_id varchar [primary key, note: 'It can be aslso a plot']
 }
 
 Table DatasetSources {
   dataset_id varchar
-  data_source varchar
+  data_source_id int
+}
+
+Table DatasetSourcesID {
+  data_source_id int [primary key]
+  data_source_desc varchar
 }
 
 Table DatasetType {
@@ -22,10 +28,22 @@ Table DatasetTypeID {
 
 Table DatasetCoord {
   dataset_id varchar
-  long numeric 
-  lat numeric
+  coord_long numeric 
+  coord_lat numeric
 }
 
+// Sampling method
+Table SamplingMethodID {
+ sampling_method_id int [primary key]
+ sampling_method_details varchar
+}
+
+Table DatasetSamplingMethod {
+  dataset_id varchar
+  sampling_method_id int
+}
+
+// Sampling
 Table Samples {
   sample_id varchar [primary key]
 }
@@ -52,11 +70,7 @@ Table SampleTaxa {
   value numeric
 }
 
-Table SampleSize {
-  sample_id varchar
-  sample_size_id int 
-}
-
+// Sample size
 Table SampleSizeID {
   sample_size_id int [primary key]
   sample_size numeric
@@ -67,6 +81,12 @@ Table SampleSizeDetails {
   description varchar
 }
 
+Table SampleSize {
+  sample_id varchar
+  sample_size_id int 
+}
+
+// Taxa
 Table Taxa {
   taxon_id int [primary key]
   taxon_name varchar
@@ -82,12 +102,18 @@ Table TaxonClassification {
   taxon_family int
 }
 
+// All references
 Ref: Datasets.dataset_id < DatasetCoord.dataset_id
 Ref: Datasets.dataset_id < DatasetType.dataset_id
 Ref: Datasets.dataset_id < DatasetSources.dataset_id
 Ref: Datasets.dataset_id < DatasetSample.dataset_id
+Ref: Datasets.dataset_id < DatasetSamplingMethod.dataset_id
 
 Ref: DatasetTypeID.dataset_type_id < DatasetType.dataset_type_id 
+
+Ref: SamplingMethodID.sampling_method_id < DatasetSamplingMethod.sampling_method_id 
+
+Ref: DatasetSourcesID.data_source_id < DatasetType.dataset_type_id
 
 Ref: Samples.sample_id < DatasetSample.sample_id
 Ref: Samples.sample_id < SampleAge.sample_id
@@ -105,25 +131,3 @@ Ref: Taxa.taxon_id < TaxonClassification.taxon_name_agree
 Ref: Taxa.taxon_id < TaxonClassification.taxon_species
 Ref: Taxa.taxon_id < TaxonClassification.taxon_genus
 Ref: Taxa.taxon_id < TaxonClassification.taxon_family
-
-
-
-
-// Table users {
-//   id integer [primary key]
-//   username varchar
-//   role varchar
-//   created_at timestamp
-// }
-
-// Table posts {
-//   id integer [primary key]
-//   title varchar
-//   body text [note: 'Content of the post']
-//   user_id integer
-//   status varchar
-//   created_at timestamp
-// }
-
-// Ref: posts.user_id > users.id // many-to-one
-
