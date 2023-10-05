@@ -1,0 +1,109 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table Datasets {
+  dataset_id varchar [primary key]
+}
+
+Table DatasetSources {
+  dataset_id varchar
+  data_source varchar
+}
+
+Table DatasetType {
+  dataset_id varchar
+  data_type varchar
+}
+
+Table DatasetCoord {
+  dataset_id varchar
+  long numeric 
+  lat numeric
+}
+
+Table Samples {
+  sample_id varchar [primary key]
+}
+
+Table DatasetSample {
+  dataset_id varchar
+  sample_id varchar
+}
+
+Table SampleAge {
+  sample_id varchar
+  age numeric
+}
+
+Table SampleUncern {
+  sample_id varchar
+  iteration int
+  age int
+}
+
+Table SampleTaxa {
+  sample_id varchar
+  taxon_id varchar
+  value numeric
+}
+
+Table SampleSize {
+  sample_id varchar [primary key]
+  sample_size int
+}
+
+Table SampleSizeDetails {
+  sample_size int
+  description varchar
+}
+
+Table Taxa {
+  taxon_id varchar [primary key]
+}
+
+Table TaxonClassification {
+  taxon_id varchar
+  taxon_name_raw varchar
+  taxon_name_agree varchar
+  taxon_name_exact bool [note: 'Does the name exactly match?']
+  taxon_species varchar
+  taxon_genus varchar
+  taxon_family varchar
+}
+
+Ref: Datasets.dataset_id < DatasetCoord.dataset_id
+Ref: Datasets.dataset_id < DatasetType.dataset_id
+Ref: Datasets.dataset_id < DatasetSources.dataset_id
+Ref: Datasets.dataset_id < DatasetSample.dataset_id
+
+Ref: Samples.sample_id < DatasetSample.sample_id
+Ref: Samples.sample_id < SampleAge.sample_id
+Ref: Samples.sample_id < SampleTaxa.sample_id
+Ref: Samples.sample_id < SampleSize.sample_id
+Ref: Samples.sample_id < SampleUncern.sample_id
+
+Ref: SampleSize.sample_size < SampleSizeDetails.sample_size 
+
+
+Ref: Taxa.taxon_id < SampleTaxa.taxon_id
+Ref: Taxa.taxon_id < TaxonClassification.taxon_id
+
+
+// Table users {
+//   id integer [primary key]
+//   username varchar
+//   role varchar
+//   created_at timestamp
+// }
+
+// Table posts {
+//   id integer [primary key]
+//   title varchar
+//   body text [note: 'Content of the post']
+//   user_id integer
+//   status varchar
+//   created_at timestamp
+// }
+
+// Ref: posts.user_id > users.id // many-to-one
+
