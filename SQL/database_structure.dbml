@@ -102,6 +102,21 @@ Table TaxonClassification {
   taxon_family int
 }
 
+// Traits
+table Traits {
+  trait_id int [primary key]
+  trait_name varchar
+  references varchar
+}
+
+Table TraitsValue {
+  trait_id int
+  dataset_id varchar
+  sample_id varchar [note: 'observation_id']
+  taxon_id int
+  trait_value numeric
+}
+
 // All references
 Ref: Datasets.dataset_id < DatasetCoord.dataset_id
 Ref: Datasets.dataset_id < DatasetType.dataset_id
@@ -131,3 +146,8 @@ Ref: Taxa.taxon_id < TaxonClassification.taxon_name_agree
 Ref: Taxa.taxon_id < TaxonClassification.taxon_species
 Ref: Taxa.taxon_id < TaxonClassification.taxon_genus
 Ref: Taxa.taxon_id < TaxonClassification.taxon_family
+
+Ref: Traits.trait_id < TraitsValue.trait_id
+Ref: Datasets.dataset_id < TraitsValue.dataset_id 
+Ref: Samples.sample_id < TraitsValue.sample_id
+Ref: Taxa.taxon_id < TraitsValue.taxon_id
