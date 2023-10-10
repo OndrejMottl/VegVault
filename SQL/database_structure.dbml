@@ -53,6 +53,12 @@ Table DatasetSample {
   sample_id varchar
 }
 
+Table SampleDetail {
+  sample_id varchar
+  sample_details varchar
+  sample_referecne varchar
+}
+
 Table SampleAge {
   sample_id varchar
   age numeric
@@ -131,6 +137,7 @@ Ref: SamplingMethodID.sampling_method_id < DatasetSamplingMethod.sampling_method
 Ref: DatasetSourcesID.data_source_id < DatasetType.dataset_type_id
 
 Ref: Samples.sample_id < DatasetSample.sample_id
+Ref: Samples.sample_id < SampleDetail.sample_id
 Ref: Samples.sample_id < SampleAge.sample_id
 Ref: Samples.sample_id < SampleTaxa.sample_id
 Ref: Samples.sample_id < SampleSize.sample_id
