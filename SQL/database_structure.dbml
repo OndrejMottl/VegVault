@@ -1,0 +1,160 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+// Datasets
+Table Datasets {
+  dataset_id varchar [primary key, note: 'It can be aslso a plot']
+}
+
+Table DatasetSources {
+  dataset_id varchar
+  data_source_id int
+}
+
+Table DatasetSourcesID {
+  data_source_id int [primary key]
+  data_source_desc varchar
+}
+
+Table DatasetType {
+  dataset_id varchar
+  dataset_type_id int
+}
+
+Table DatasetTypeID {
+  dataset_type_id int [primary key]
+  dataset_type varchar
+}
+
+Table DatasetCoord {
+  dataset_id varchar
+  coord_long numeric 
+  coord_lat numeric
+}
+
+// Sampling method
+Table SamplingMethodID {
+ sampling_method_id int [primary key]
+ sampling_method_details varchar
+}
+
+Table DatasetSamplingMethod {
+  dataset_id varchar
+  sampling_method_id int
+}
+
+// Sampling
+Table Samples {
+  sample_id varchar [primary key]
+}
+
+Table DatasetSample {
+  dataset_id varchar
+  sample_id varchar
+}
+
+Table SampleDetail {
+  sample_id varchar
+  sample_details varchar
+  sample_referecne varchar
+}
+
+Table SampleAge {
+  sample_id varchar
+  age numeric
+}
+
+Table SampleUncern {
+  sample_id varchar
+  iteration int
+  age int
+}
+
+Table SampleTaxa {
+  sample_id varchar
+  taxon_id varchar
+  value numeric
+}
+
+// Sample size
+Table SampleSizeID {
+  sample_size_id int [primary key]
+  sample_size numeric
+}
+
+Table SampleSizeDetails {
+  sample_size_id int
+  description varchar
+}
+
+Table SampleSize {
+  sample_id varchar
+  sample_size_id int 
+}
+
+// Taxa
+Table Taxa {
+  taxon_id int [primary key]
+  taxon_name varchar
+  }
+
+Table TaxonClassification {
+  taxon_id int
+  taxon_name_raw int
+  taxon_name_agree int
+  taxon_name_exact bool [note: 'Does the name exactly match?']
+  taxon_species int
+  taxon_genus int
+  taxon_family int
+}
+
+// Traits
+table Traits {
+  trait_id int [primary key]
+  trait_name varchar
+  references varchar
+}
+
+Table TraitsValue {
+  trait_id int
+  dataset_id varchar
+  sample_id varchar [note: 'observation_id']
+  taxon_id int
+  trait_value numeric
+}
+
+// All references
+Ref: Datasets.dataset_id < DatasetCoord.dataset_id
+Ref: Datasets.dataset_id < DatasetType.dataset_id
+Ref: Datasets.dataset_id < DatasetSources.dataset_id
+Ref: Datasets.dataset_id < DatasetSample.dataset_id
+Ref: Datasets.dataset_id < DatasetSamplingMethod.dataset_id
+
+Ref: DatasetTypeID.dataset_type_id < DatasetType.dataset_type_id 
+
+Ref: SamplingMethodID.sampling_method_id < DatasetSamplingMethod.sampling_method_id 
+
+Ref: DatasetSourcesID.data_source_id < DatasetType.dataset_type_id
+
+Ref: Samples.sample_id < DatasetSample.sample_id
+Ref: Samples.sample_id < SampleDetail.sample_id
+Ref: Samples.sample_id < SampleAge.sample_id
+Ref: Samples.sample_id < SampleTaxa.sample_id
+Ref: Samples.sample_id < SampleSize.sample_id
+Ref: Samples.sample_id < SampleUncern.sample_id
+
+Ref: SampleSizeID.sample_size_id < SampleSizeDetails.sample_size_id 
+Ref: SampleSizeID.sample_size_id < SampleSize.sample_size_id 
+
+Ref: Taxa.taxon_id < SampleTaxa.taxon_id
+Ref: Taxa.taxon_id < TaxonClassification.taxon_id
+Ref: Taxa.taxon_id < TaxonClassification.taxon_name_raw
+Ref: Taxa.taxon_id < TaxonClassification.taxon_name_agree
+Ref: Taxa.taxon_id < TaxonClassification.taxon_species
+Ref: Taxa.taxon_id < TaxonClassification.taxon_genus
+Ref: Taxa.taxon_id < TaxonClassification.taxon_family
+
+Ref: Traits.trait_id < TraitsValue.trait_id
+Ref: Datasets.dataset_id < TraitsValue.dataset_id 
+Ref: Samples.sample_id < TraitsValue.sample_id
+Ref: Taxa.taxon_id < TraitsValue.taxon_id
