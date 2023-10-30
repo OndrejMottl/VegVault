@@ -123,6 +123,14 @@ Table TraitsValue {
   trait_value numeric
 }
 
+// The abiotic data will use geo point as a dataset. Current data will have just
+//  one sample. Palaeoclimate data will have one sample per each time slice.
+Table AbioticData {
+  sample_id varchar
+  value numeric
+  measure_details varchar
+}
+
 // All references
 Ref: Datasets.dataset_id < DatasetCoord.dataset_id
 Ref: Datasets.dataset_id < DatasetType.dataset_id
@@ -134,7 +142,7 @@ Ref: DatasetTypeID.dataset_type_id < DatasetType.dataset_type_id
 
 Ref: SamplingMethodID.sampling_method_id < DatasetSamplingMethod.sampling_method_id 
 
-Ref: DatasetSourcesID.data_source_id < DatasetType.dataset_type_id
+Ref: DatasetSourcesID.data_source_id < DatasetSources.data_source_id
 
 Ref: Samples.sample_id < DatasetSample.sample_id
 Ref: Samples.sample_id < SampleDetail.sample_id
@@ -158,3 +166,5 @@ Ref: Traits.trait_id < TraitsValue.trait_id
 Ref: Datasets.dataset_id < TraitsValue.dataset_id 
 Ref: Samples.sample_id < TraitsValue.sample_id
 Ref: Taxa.taxon_id < TraitsValue.taxon_id
+
+Ref: Samples.sample_id < AbioticData.sample_id
