@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS- Database
+#                 BIODYNAMICS - VegVault
 #
 #                     Config file
 #
