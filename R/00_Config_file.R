@@ -51,6 +51,8 @@ if (
 package_list <-
   c(
     "assertthat",
+    "DBI",
+    "dbplyr",
     "devtools",
     "here",
     "httpgd",
@@ -63,6 +65,7 @@ package_list <-
     "remotes",
     "rlang",
     "roxygen2",
+    "RSQLite",
     "tidyverse",
     "usethis",
     "utils"

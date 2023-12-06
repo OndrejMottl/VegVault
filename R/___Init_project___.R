@@ -86,6 +86,8 @@ if (
 sapply(
   c(
     "assertthat",
+    "DBI",
+    "dbplyr",
     "devtools",
     "here",
     "httpgd",
@@ -98,6 +100,7 @@ sapply(
     "remotes",
     "rlang",
     "roxygen2",
+    "RSQLite",
     "tidyverse",
     "usethis",
     "utils"
