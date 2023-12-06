@@ -72,7 +72,7 @@ Table SampleUncern {
 
 Table SampleTaxa {
   sample_id varchar
-  taxon_id varchar
+  taxon_id int
   value numeric
 }
 
@@ -102,7 +102,7 @@ Table TaxonClassification {
   taxon_id int
   taxon_name_raw int
   taxon_name_agree int
-  taxon_name_exact bool [note: 'Does the name exactly match?']
+  taxon_name_exact int [note: 'Does the name exactly match?']
   taxon_species int
   taxon_genus int
   taxon_family int
