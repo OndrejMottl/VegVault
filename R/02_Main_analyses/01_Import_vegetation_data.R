@@ -145,6 +145,125 @@ copy_to(
   append = TRUE
 )
 
+# 2.3 dataset type
+
+data_splot_dataset_type_id <-
+  data_splot_edit %>%
+  dplyr::distinct(dataset_type) %>%
+  tibble::rowid_to_column() %>%
+  dplyr::rename(dataset_type_id = rowid)
+
+copy_to(
+  con,
+  data_splot_dataset_type_id,
+  name = "DatasetTypeID",
+  append = TRUE
+)
+
+data_splot_dataset_type <-
+  data_splot_edit %>%
+  dplyr::distinct(dataset_id, dataset_type) %>%
+  dplyr::left_join(
+    data_splot_dataset_type_id,
+    by = dplyr::join_by(dataset_type)
+  ) %>%
+  dplyr::distinct(
+    dataset_id, dataset_type_id
+  )
+
+copy_to(
+  con,
+  data_splot_dataset_type,
+  name = "DatasetType",
+  append = TRUE
+)
+
+
+# 2.4 data coordinates
+
+data_splot_dataset_coord <-
+  data_splot_edit %>%
+  dplyr::distinct(dataset_id, coord_long, coord_lat)
+
+copy_to(
+  con,
+  data_splot_dataset_coord,
+  name = "DatasetCoord",
+  append = TRUE
+)
+
+# 2.5 samples
+
+data_splot_samples <-
+  data_splot_edit %>%
+  dplyr::distinct(sample_id)
+
+copy_to(
+  con,
+  data_splot_samples,
+  name = "Samples",
+  append = TRUE
+)
+
+# 2.6 dataset-samples
+
+data_splot_dataset_sample <-
+  data_splot_edit %>%
+  dplyr::distinct(dataset_id, sample_id)
+
+copy_to(
+  con,
+  data_splot_dataset_sample,
+  name = "DatasetSample",
+  append = TRUE
+)
+
+# 2.7 sample - age
+
+data_splot_samples_age <-
+  data_splot_edit %>%
+  dplyr::distinct(sample_id) %>%
+  dplyr::mutate(
+    age = 0
+  )
+
+copy_to(
+  con,
+  data_splot_samples_age,
+  name = "SampleAge",
+  append = TRUE
+)
+
+# 2.8 sample - details
+
+dplyr::tbl(con, "SampleDetail") %>%
+  colnames()
+
+data_splot_samples_detail <-
+  data_splot_edit %>%
+  dplyr::distinct(sample_id, givd_id) %>%
+  dplyr::rename(
+    sample_referecne = givd_id
+  ) %>%
+  dplyr::mutate(
+    sample_details = NA_character_
+  )
+
+copy_to(
+  con,
+  data_splot_samples_detail,
+  name = "SampleDetail",
+  append = TRUE
+)
+
+
+DBI::dbListTables(con)
+
+DBI::dbDisconnect(con)
+
+
+DBI::dbRemoveTable(con, "sqlite_stat1")
+DBI::dbRemoveTable(con, "sqlite_stat4")
 
 #----------------------------------------------------------#
 # 3. BIEN -----
