@@ -31,8 +31,9 @@ source(
 con <-
   DBI::dbConnect(
     RSQLite::SQLite(),
-    here::here(
-      "Data/SQL/VegVault.sqlite"
+    paste0(
+      data_storage_path,
+      "Data/VegVault/VegVault.sqlite"
     )
   )
 
@@ -52,7 +53,7 @@ sql_query_full <-
 # split the query by semicolon
 sql_query_split <-
   paste(sql_query_full, collapse = "") %>%
-  stringr::str_split(., pattern = "\\;")  %>% 
+  stringr::str_split(., pattern = "\\;") %>%
   unlist()
 
 # execute each query

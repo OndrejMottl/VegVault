@@ -55,7 +55,6 @@ package_list <-
     "dbplyr",
     "devtools",
     "here",
-    "httpgd",
     "janitor",
     "jsonlite",
     "knitr",
@@ -112,7 +111,22 @@ if (
 # 4. Authorise the user -----
 #----------------------------------------------------------#
 
-# if applicable
+auth_table <-
+  readr::read_delim(
+    here::here(
+      ".secrets/path.txt"
+    ),
+    show_col_types = FALSE
+  )
+
+data_storage_path <-
+  auth_table %>%
+  dplyr::filter(
+    user == Sys.info()["user"] &
+      nodename == Sys.info()["nodename"]
+  ) %>%
+  purrr::pluck("path")
+
 
 #----------------------------------------------------------#
 # 5. Define variables -----

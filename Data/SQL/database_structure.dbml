@@ -3,156 +3,123 @@
 
 // Datasets
 Table Datasets {
-  dataset_id varchar [primary key, note: 'It can be aslso a plot']
-}
-
-Table DatasetSources {
-  dataset_id varchar
-  data_source_id int
+  dataset_id INTEGER [PRIMARY KEY]
+  dataset_name TEXT 
+  data_source_id INTEGER
+  dataset_type_id INTEGER
+  coord_long REAL 
+  coord_lat REAL
+  sampling_method_id INTEGER
+  dataset_reference INTEGER
 }
 
 Table DatasetSourcesID {
-  data_source_id int [primary key]
-  data_source_desc varchar
-}
-
-Table DatasetType {
-  dataset_id varchar
-  dataset_type_id int
+  data_source_id INTEGER [PRIMARY KEY]
+  data_source_desc TEXT
 }
 
 Table DatasetTypeID {
-  dataset_type_id int [primary key]
-  dataset_type varchar
+  dataset_type_id INTEGER [PRIMARY KEY]
+  dataset_type TEXT
 }
 
-Table DatasetCoord {
-  dataset_id varchar
-  coord_long numeric 
-  coord_lat numeric
-}
-
-// Sampling method
 Table SamplingMethodID {
- sampling_method_id int [primary key]
- sampling_method_details varchar
+ sampling_method_id INTEGER [PRIMARY KEY]
+ sampling_method_details TEXT
 }
 
-Table DatasetSamplingMethod {
-  dataset_id varchar
-  sampling_method_id int
-}
-
-// Sampling
+// Samples
 Table Samples {
-  sample_id varchar [primary key]
+  sample_id INTEGER [PRIMARY KEY]
+  sample_name TEXT
+  sample_details TEXT
+  sample_referecne INTEGER
+  age REAL
+  sample_size_id INTEGER
 }
 
 Table DatasetSample {
-  dataset_id varchar
-  sample_id varchar
+  dataset_id INTEGER
+  sample_id INTEGER
 }
 
-Table SampleDetail {
-  sample_id varchar
-  sample_details varchar
-  sample_referecne varchar
+Table SampleUncertainty {
+  sample_id INTEGER
+  iteration INTEGER
+  age INTEGER
 }
 
-Table SampleAge {
-  sample_id varchar
-  age numeric
-}
-
-Table SampleUncern {
-  sample_id varchar
-  iteration int
-  age int
+Table SampleSizeID {
+  sample_size_id INTEGER [PRIMARY KEY]
+  sample_size REAL
+  description TEXT
 }
 
 Table SampleTaxa {
-  sample_id varchar
-  taxon_id int
-  value numeric
-}
-
-// Sample size
-Table SampleSizeID {
-  sample_size_id int [primary key]
-  sample_size numeric
-}
-
-Table SampleSizeDetails {
-  sample_size_id int
-  description varchar
-}
-
-Table SampleSize {
-  sample_id varchar
-  sample_size_id int 
+  sample_id INTEGER
+  taxon_id INTEGER
+  value REAL
 }
 
 // Taxa
 Table Taxa {
-  taxon_id int [primary key]
-  taxon_name varchar
+  taxon_id INTEGER [PRIMARY KEY]
+  taxon_name TEXT
   }
 
 Table TaxonClassification {
-  taxon_id int
-  taxon_name_raw int
-  taxon_name_agree int
-  taxon_name_exact int [note: 'Does the name exactly match?']
-  taxon_species int
-  taxon_genus int
-  taxon_family int
+  taxon_id INTEGER
+  taxon_name_raw INTEGER
+  taxon_name_agree INTEGER
+  taxon_name_exact INTEGER
+  taxon_species INTEGER
+  taxon_genus INTEGER
+  taxon_family INTEGER
+  taxon_reference INTEGER
 }
 
 // Traits
 table Traits {
-  trait_id int [primary key]
-  trait_name varchar
-  references varchar
+  trait_id INTEGER [PRIMARY KEY]
+  trait_name TEXT
+  trait_reference INTEGER
 }
 
 Table TraitsValue {
-  trait_id int
-  dataset_id varchar
-  sample_id varchar [note: 'observation_id']
-  taxon_id int
-  trait_value numeric
+  trait_id INTEGER
+  dataset_id INTEGER
+  sample_id INTEGER //observation ID
+  taxon_id INTEGER
+  trait_value REAL
 }
 
-// The abiotic data will use geo point as a dataset. Current data will have just
+// The abiotic data will use geo poINTEGER as a dataset. Current data will have just
 //  one sample. Palaeoclimate data will have one sample per each time slice.
 Table AbioticData {
-  sample_id varchar
-  value numeric
-  measure_details varchar
+  sample_id INTEGER
+  value REAL
+  measure_details TEXT
+}
+
+// Referecnes 
+Table Referecnes {
+  reference_id INTEGER [PRIMARY KEY]
+  reference_detail TEXT
 }
 
 // All references
-Ref: Datasets.dataset_id < DatasetCoord.dataset_id
-Ref: Datasets.dataset_id < DatasetType.dataset_id
-Ref: Datasets.dataset_id < DatasetSources.dataset_id
 Ref: Datasets.dataset_id < DatasetSample.dataset_id
-Ref: Datasets.dataset_id < DatasetSamplingMethod.dataset_id
-
-Ref: DatasetTypeID.dataset_type_id < DatasetType.dataset_type_id 
-
-Ref: SamplingMethodID.sampling_method_id < DatasetSamplingMethod.sampling_method_id 
-
-Ref: DatasetSourcesID.data_source_id < DatasetSources.data_source_id
+Ref: DatasetTypeID.dataset_type_id < Datasets.dataset_type_id 
+Ref: SamplingMethodID.sampling_method_id < Datasets.sampling_method_id 
+Ref: DatasetSourcesID.data_source_id < Datasets.data_source_id
+Ref: Datasets.dataset_reference < Referecnes.reference_id
 
 Ref: Samples.sample_id < DatasetSample.sample_id
-Ref: Samples.sample_id < SampleDetail.sample_id
-Ref: Samples.sample_id < SampleAge.sample_id
 Ref: Samples.sample_id < SampleTaxa.sample_id
-Ref: Samples.sample_id < SampleSize.sample_id
-Ref: Samples.sample_id < SampleUncern.sample_id
-
-Ref: SampleSizeID.sample_size_id < SampleSizeDetails.sample_size_id 
-Ref: SampleSizeID.sample_size_id < SampleSize.sample_size_id 
+Ref: Samples.sample_id < SampleUncertainty.sample_id
+Ref: Samples.sample_id < AbioticData.sample_id
+Ref: SampleSizeID.sample_size_id < Samples.sample_size_id 
+Ref: Samples.sample_referecne < Referecnes.reference_id
 
 Ref: Taxa.taxon_id < SampleTaxa.taxon_id
 Ref: Taxa.taxon_id < TaxonClassification.taxon_id
@@ -161,10 +128,10 @@ Ref: Taxa.taxon_id < TaxonClassification.taxon_name_agree
 Ref: Taxa.taxon_id < TaxonClassification.taxon_species
 Ref: Taxa.taxon_id < TaxonClassification.taxon_genus
 Ref: Taxa.taxon_id < TaxonClassification.taxon_family
+Ref: TaxonClassification.taxon_reference < Referecnes.reference_id
 
 Ref: Traits.trait_id < TraitsValue.trait_id
 Ref: Datasets.dataset_id < TraitsValue.dataset_id 
 Ref: Samples.sample_id < TraitsValue.sample_id
 Ref: Taxa.taxon_id < TraitsValue.taxon_id
-
-Ref: Samples.sample_id < AbioticData.sample_id
+Ref: Traits.trait_reference < Referecnes.reference_id
