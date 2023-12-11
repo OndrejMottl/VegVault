@@ -81,23 +81,6 @@ data_splot <-
 
 dplyr::glimpse(data_splot)
 
-data_splot_edit <-
-  data_splot %>%
-  dplyr::mutate(
-    dataset_name = paste0(
-      "splot_",
-      plot_observation_id
-    ),
-    coord_long = longitude,
-    coord_lat = latitude,
-    data_source_desc = givd_id,
-    dataset_type = "splot",
-    sampling_method_details = givd_id,
-    sample_id = paste0(
-      "splot_",
-      dplyr::row_number()
-    ),
-  )
 
 #----------------------------------------------------------#
 # 2. Datasets -----
@@ -180,6 +163,7 @@ splot_dataset_id <-
   dplyr::select(dataset_id, dataset_name) %>%
   dplyr::collect()
 
+
 #----------------------------------------------------------#
 # 3. Samples -----
 #----------------------------------------------------------#
@@ -239,6 +223,7 @@ splot_samples_id <-
   dplyr::select(sample_id, sample_name) %>%
   dplyr::collect()
 
+
 #----------------------------------------------------------#
 # 4. Dataset - Sample -----
 #----------------------------------------------------------#
@@ -263,6 +248,7 @@ dplyr::copy_to(
   name = "DatasetSample",
   append = TRUE
 )
+
 
 #----------------------------------------------------------#
 # 4. Taxa -----
@@ -320,7 +306,7 @@ data_splot_sample_taxa <-
     by = dplyr::join_by(Species == taxon_name)
   ) %>%
   dplyr::rename(
-    value = Relative_cover
+    value = Original_abundance
   ) %>%
   dplyr::select(
     sample_id, taxon_id, value
@@ -332,6 +318,7 @@ dplyr::copy_to(
   name = "SampleTaxa",
   append = TRUE
 )
+
 
 #----------------------------------------------------------#
 # 5. Disconnect -----
