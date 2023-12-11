@@ -98,7 +98,7 @@ CREATE TABLE "AbioticData" (
   "measure_details" TEXT,
   FOREIGN KEY ("sample_id") REFERENCES "Samples" ("sample_id")
 );
-CREATE TABLE "Referecnes" (
+CREATE TABLE "References" (
   "reference_id" INTEGER PRIMARY KEY,
   "reference_detail" TEXT,
   FOREIGN KEY ("reference_id") REFERENCES "Datasets" ("dataset_reference"),

@@ -57,12 +57,15 @@ sql_query_split <-
   unlist()
 
 # execute each query
-purrr::map(
-  .x = sql_query_split,
-  .f = ~ DBI::dbExecute(
-    conn = con,
-    statement = .x
-  )
+try(
+  purrr::map(
+    .x = sql_query_split,
+    .f = ~ DBI::dbExecute(
+      conn = con,
+      statement = .x
+    )
+  ),
+  silent = TRUE
 )
 
 # check the db

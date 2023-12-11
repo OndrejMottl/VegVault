@@ -101,8 +101,8 @@ Table AbioticData {
   measure_details TEXT
 }
 
-// Referecnes 
-Table Referecnes {
+// References 
+Table References {
   reference_id INTEGER [PRIMARY KEY]
   reference_detail TEXT
 }
@@ -112,14 +112,14 @@ Ref: Datasets.dataset_id < DatasetSample.dataset_id
 Ref: DatasetTypeID.dataset_type_id < Datasets.dataset_type_id 
 Ref: SamplingMethodID.sampling_method_id < Datasets.sampling_method_id 
 Ref: DatasetSourcesID.data_source_id < Datasets.data_source_id
-Ref: Datasets.dataset_reference < Referecnes.reference_id
+Ref: Datasets.dataset_reference < References.reference_id
 
 Ref: Samples.sample_id < DatasetSample.sample_id
 Ref: Samples.sample_id < SampleTaxa.sample_id
 Ref: Samples.sample_id < SampleUncertainty.sample_id
 Ref: Samples.sample_id < AbioticData.sample_id
 Ref: SampleSizeID.sample_size_id < Samples.sample_size_id 
-Ref: Samples.sample_referecne < Referecnes.reference_id
+Ref: Samples.sample_referecne < References.reference_id
 
 Ref: Taxa.taxon_id < SampleTaxa.taxon_id
 Ref: Taxa.taxon_id < TaxonClassification.taxon_id
@@ -128,10 +128,10 @@ Ref: Taxa.taxon_id < TaxonClassification.taxon_name_agree
 Ref: Taxa.taxon_id < TaxonClassification.taxon_species
 Ref: Taxa.taxon_id < TaxonClassification.taxon_genus
 Ref: Taxa.taxon_id < TaxonClassification.taxon_family
-Ref: TaxonClassification.taxon_reference < Referecnes.reference_id
+Ref: TaxonClassification.taxon_reference < References.reference_id
 
 Ref: Traits.trait_id < TraitsValue.trait_id
 Ref: Datasets.dataset_id < TraitsValue.dataset_id 
 Ref: Samples.sample_id < TraitsValue.sample_id
 Ref: Taxa.taxon_id < TraitsValue.taxon_id
-Ref: Traits.trait_reference < Referecnes.reference_id
+Ref: Traits.trait_reference < References.reference_id
