@@ -47,38 +47,22 @@ DBI::dbListTables(con)
 # 2. Load data -----
 #----------------------------------------------------------#
 
-url_gh <-
+url_gh_fossilpol <-
   paste0(
     "https://raw.githubusercontent.com/",
     "OndrejMottl/BIODYNAMICS-FOSSILPOL/",
     "main/"
   )
 
-url_fossilpol <-
+url_fossilpol_data <-
   paste0(
-    url_gh,
+    url_gh_fossilpol,
     "Outputs/Data/",
     "data_assembly_light_2023-12-12__305b96031416d8b0c6b5762daacd41dd__.qs"
   )
 
-download.file(
-  url = url_fossilpol,
-  destfile = paste0(
-    tempdir(),
-    "/",
-    "data_fossilpol.qs"
-  ),
-  method = "curl"
-)
-
 data_fossilpol <-
-  qs::qread(
-    file = paste0(
-      tempdir(),
-      "/",
-      "data_fossilpol.qs"
-    )
-  )
+  dowload_and_load(url_fossilpol_data)
 
 dplyr::glimpse(data_fossilpol)
 
@@ -320,6 +304,84 @@ dplyr::copy_to(
   name = "DatasetSample",
   append = TRUE
 )
+
+#----------------------------------------------------------#
+# 5. Sample Uncertainty -----
+#----------------------------------------------------------#
+
+url_uncertainty_a <-
+  paste0(
+    url_gh_fossilpol,
+    "Outputs/Data/",
+    "data_age_uncertainty_A_2023-12-12__3aa5658488292372af2b521ca6e48c14__.qs"
+  )
+
+url_uncertainty_b <-
+  paste0(
+    url_gh_fossilpol,
+    "Outputs/Data/",
+    "data_age_uncertainty_B_2023-12-12__7781fda623c5da21cd6d4766e550985d__.qs"
+  )
+
+data_uncertainty_a <-
+  dowload_and_load(url_uncertainty_a)
+
+data_uncertainty_b <-
+  dowload_and_load(url_uncertainty_b)
+
+data_uncertainty <-
+  dplyr::bind_rows(
+    data_uncertainty_a,
+    data_uncertainty_b
+  ) %>%
+  dplyr::mutate(
+    dataset_name = paste0(
+      "fossilpol_",
+      dataset_id
+    )
+  ) %>%
+  dplyr::select(-dataset_id) %>%
+  dplyr::left_join(
+    fossilpol_dataset_id,
+    by = dplyr::join_by(dataset_name)
+  ) %>%
+  dplyr::mutate(
+    age_uncertainty_nested = purrr::map(
+      .progress = TRUE,
+      .x = age_uncertainty,
+      .f = ~ as.data.frame(.x) %>%
+        tibble::rowid_to_column("iteration") %>%
+        tidyr::pivot_longer(
+          cols = -iteration,
+          names_to = "sample_id",
+          values_to = "age"
+        )
+    )
+  ) %>%
+  dplyr::select(-age_uncertainty) %>%
+  tidyr::unnest(age_uncertainty_nested) %>%
+  dplyr::mutate(
+    sample_name = paste0(
+      "fossilpol_",
+      dataset_id,
+      "_",
+      sample_id
+    )
+  ) %>%
+  dplyr::select(sample_name, iteration, age) %>%
+  dplyr::left_join(
+    fossilpol_samples_id,
+    by = dplyr::join_by(sample_name)
+  ) %>%
+  dplyr::select(-sample_name)
+
+dplyr::copy_to(
+  con,
+  data_uncertainty,
+  name = "SampleUncertainty",
+  append = TRUE
+)
+
 
 #----------------------------------------------------------#
 # 4. Taxa -----
