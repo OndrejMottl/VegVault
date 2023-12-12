@@ -60,24 +60,8 @@ url_splot <-
     "data_splot_2023-12-06__cbf9022330b5d47a5c76bf7ca6b226b4__.qs"
   )
 
-download.file(
-  url = url_splot,
-  destfile = paste0(
-    tempdir(),
-    "/",
-    "data_splot.qs"
-  ),
-  method = "curl"
-)
-
 data_splot <-
-  qs::qread(
-    file = paste0(
-      tempdir(),
-      "/",
-      "data_splot.qs"
-    )
-  )
+  dowload_and_load(url_splot)
 
 dplyr::glimpse(data_splot)
 

@@ -60,24 +60,8 @@ url_bien <-
     "data_bien_2023-12-06__7893b8a80ceb1550103667f95b695e6b__.qs"
   )
 
-download.file(
-  url = url_bien,
-  destfile = paste0(
-    tempdir(),
-    "/",
-    "data_bien.qs"
-  ),
-  method = "curl"
-)
-
 data_bien <-
-  qs::qread(
-    file = paste0(
-      tempdir(),
-      "/",
-      "data_bien.qs"
-    )
-  )
+  dowload_and_load(url_bien)
 
 dplyr::glimpse(data_bien)
 

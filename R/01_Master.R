@@ -50,3 +50,10 @@ source(
     "R/02_Main_analyses/02_Import_BIEN_data.R"
   )
 )
+
+# Import FOSSILPOL data
+source(
+  here::here(
+    "R/02_Main_analyses/03_Import_fossilpol_data.R"
+  )
+)
