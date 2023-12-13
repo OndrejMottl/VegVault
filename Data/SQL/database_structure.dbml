@@ -81,8 +81,14 @@ Table TaxonClassification {
 // Traits
 table Traits {
   trait_id INTEGER [PRIMARY KEY]
+  trait_domain_id INTEGER
   trait_name TEXT
   trait_reference INTEGER
+}
+
+table TraitsDomain {
+  trait_domain_id INTEGER [PRIMARY KEY]
+  trait_domain_name TEXT
 }
 
 Table TraitsValue {
@@ -135,3 +141,4 @@ Ref: Datasets.dataset_id < TraitsValue.dataset_id
 Ref: Samples.sample_id < TraitsValue.sample_id
 Ref: Taxa.taxon_id < TraitsValue.taxon_id
 Ref: Traits.trait_reference < References.reference_id
+Ref: TraitsDomain.trait_domain_id < Traits.trait_domain_id
