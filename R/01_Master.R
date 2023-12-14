@@ -57,3 +57,10 @@ source(
     "R/02_Main_analyses/03_Import_fossilpol_data.R"
   )
 )
+
+# Import TRY data
+source(
+  here::here(
+    "R/02_Main_analyses/04_Import_try_data.R"
+  )
+)

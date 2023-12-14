@@ -1,3 +1,4 @@
+# This function downloads a file from the internet and loads it into R.
 dowload_and_load <- function(sel_url) {
   file_format <- "rds"
   if (

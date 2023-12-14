@@ -68,7 +68,7 @@ dplyr::glimpse(data_fossilpol)
 
 
 #----------------------------------------------------------#
-# 2. Datasets -----
+# 3. Datasets -----
 #----------------------------------------------------------#
 
 fossilpol_dataset_raw <-
@@ -87,65 +87,92 @@ fossilpol_dataset_raw <-
   ) %>%
   dplyr::select(-dataset_id)
 
-# 2.1 dataset source
+# 3.1 dataset source -----
 
 data_fossilpol_data_source_id <-
   fossilpol_dataset_raw %>%
-  dplyr::distinct(data_source_desc)
+  dplyr::distinct(data_source_desc) %>%
+  tidyr::drop_na() %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "DatasetSourcesID") %>%
+      dplyr::select(data_source_desc) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(data_source_desc)
+  )
 
-dplyr::copy_to(
-  con,
-  data_fossilpol_data_source_id,
-  name = "DatasetSourcesID",
-  append = TRUE
+add_to_db(
+  conn = con,
+  data = data_fossilpol_data_source_id,
+  table_name = "DatasetSourcesID"
 )
 
 data_fossilpol_data_source_id_db <-
   dplyr::tbl(con, "DatasetSourcesID") %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    fossilpol_dataset_raw %>%
+      dplyr::distinct(data_source_desc),
+    by = dplyr::join_by(data_source_desc)
+  )
 
-test_unique_row_in_table(data_fossilpol_data_source_id_db)
-
-# 2.2 dataset type
+# 3.2 dataset type -----
 
 data_fossilpol_dataset_type_id <-
   fossilpol_dataset_raw %>%
-  dplyr::distinct(dataset_type)
+  dplyr::distinct(dataset_type) %>%
+  tidyr::drop_na() %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "DatasetTypeID") %>%
+      dplyr::select(dataset_type) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(dataset_type)
+  )
 
-dplyr::copy_to(
-  con,
-  data_fossilpol_dataset_type_id,
-  name = "DatasetTypeID",
-  append = TRUE
+add_to_db(
+  conn = con,
+  data = data_fossilpol_dataset_type_id,
+  table_name = "DatasetTypeID"
 )
 
 data_fossilpol_dataset_type_id_db <-
   dplyr::tbl(con, "DatasetTypeID") %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    fossilpol_dataset_raw %>%
+      dplyr::distinct(dataset_type),
+    by = dplyr::join_by(dataset_type)
+  )
 
-test_unique_row_in_table(data_fossilpol_dataset_type_id_db)
 
-# 2.3 datasets sampling
+# 3.3 datasets sampling ------
 
 data_fossilpol_sampling_method <-
   fossilpol_dataset_raw %>%
   dplyr::distinct(sampling_method_details) %>%
-  tidyr::drop_na()
+  tidyr::drop_na() %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "SamplingMethodID") %>%
+      dplyr::select(sampling_method_details) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(sampling_method_details)
+  )
 
-dplyr::copy_to(
-  con,
-  data_fossilpol_sampling_method,
-  name = "SamplingMethodID",
-  append = TRUE
+add_to_db(
+  conn = con,
+  data = data_fossilpol_sampling_method,
+  table_name = "SamplingMethodID"
 )
 
 data_fossilpol_sampling_method_db <-
   dplyr::tbl(con, "SamplingMethodID") %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    fossilpol_dataset_raw %>%
+      dplyr::distinct(sampling_method_details),
+    by = dplyr::join_by(sampling_method_details)
+  )
 
-test_unique_row_in_table(data_fossilpol_sampling_method_db)
-
-# 2.4 dataset reference
+# 3.4 dataset reference -----
 
 data_fossilpol_reference <-
   fossilpol_dataset_raw %>%
@@ -153,22 +180,30 @@ data_fossilpol_reference <-
   tidyr::drop_na() %>%
   dplyr::rename(
     reference_detail = sampling_reference
+  ) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "References") %>%
+      dplyr::select(reference_detail) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(reference_detail)
   )
 
-dplyr::copy_to(
-  con,
-  data_fossilpol_reference,
-  name = "References",
-  append = TRUE
+add_to_db(
+  conn = con,
+  data = data_fossilpol_reference,
+  table_name = "References"
 )
 
 data_fossilpol_reference_db <-
   dplyr::tbl(con, "References") %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    fossilpol_dataset_raw %>%
+      dplyr::distinct(sampling_reference),
+    by = dplyr::join_by(reference_detail == sampling_reference)
+  )
 
-test_unique_row_in_table(data_fossilpol_reference)
-
-# 2.3 datasets
+# 3.5 datasets -----
 
 fossilpol_dataset <-
   fossilpol_dataset_raw %>%
@@ -193,25 +228,33 @@ fossilpol_dataset <-
     coord_long, coord_lat,
     sampling_method_id,
     dataset_reference = reference_id
+  ) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "Datasets") %>%
+      dplyr::select(dataset_name) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(dataset_name)
   )
 
-dplyr::copy_to(
-  con,
-  fossilpol_dataset,
-  name = "Datasets",
-  append = TRUE
+add_to_db(
+  conn = con,
+  data = fossilpol_dataset,
+  table_name = "Datasets"
 )
 
 fossilpol_dataset_id <-
   dplyr::tbl(con, "Datasets") %>%
   dplyr::select(dataset_id, dataset_name) %>%
-  dplyr::collect()
-
-test_unique_row_in_table(fossilpol_dataset_id)
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    fossilpol_dataset_raw %>%
+      dplyr::distinct(dataset_name),
+    by = dplyr::join_by(dataset_name)
+  )
 
 
 #----------------------------------------------------------#
-# 3. Samples -----
+# 4. Samples -----
 #----------------------------------------------------------#
 
 fossilpol_samples_raw <-
@@ -256,31 +299,37 @@ fossilpol_samples_raw <-
   ) %>%
   dplyr::select(-c(dataset_id, sample_id))
 
-# 3.2 samples
-
 fossilpol_samples <-
   fossilpol_samples_raw %>%
   dplyr::select(
     sample_name, age
+  ) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "Samples") %>%
+      dplyr::select(sample_name) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(sample_name)
   )
 
-dplyr::copy_to(
-  con,
-  fossilpol_samples,
-  name = "Samples",
-  append = TRUE
+add_to_db(
+  conn = con,
+  data = fossilpol_samples,
+  table_name = "Samples"
 )
 
 fossilpol_samples_id <-
   dplyr::tbl(con, "Samples") %>%
   dplyr::select(sample_id, sample_name) %>%
-  dplyr::collect()
-
-test_unique_row_in_table(fossilpol_samples_id)
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    fossilpol_samples_raw %>%
+      dplyr::distinct(sample_name),
+    by = dplyr::join_by(sample_name)
+  )
 
 
 #----------------------------------------------------------#
-# 4. Dataset - Sample -----
+# 5. Dataset - Sample -----
 #----------------------------------------------------------#
 
 data_fossilpol_dataset_sample <-
@@ -306,34 +355,26 @@ dplyr::copy_to(
 )
 
 #----------------------------------------------------------#
-# 5. Sample Uncertainty -----
+# 6. Sample Uncertainty -----
 #----------------------------------------------------------#
 
-url_uncertainty_a <-
-  paste0(
-    url_gh_fossilpol,
-    "Outputs/Data/",
-    "data_age_uncertainty_A_2023-12-12__3aa5658488292372af2b521ca6e48c14__.qs"
-  )
-
-url_uncertainty_b <-
-  paste0(
-    url_gh_fossilpol,
-    "Outputs/Data/",
+data_uncertainty_raw <-
+  c(
+    "data_age_uncertainty_A_2023-12-12__3aa5658488292372af2b521ca6e48c14__.qs",
     "data_age_uncertainty_B_2023-12-12__7781fda623c5da21cd6d4766e550985d__.qs"
-  )
-
-data_uncertainty_a <-
-  dowload_and_load(url_uncertainty_a)
-
-data_uncertainty_b <-
-  dowload_and_load(url_uncertainty_b)
+  ) %>%
+  purrr::map(
+    .f = ~ paste0(
+      url_gh_fossilpol,
+      "Outputs/Data/",
+      .x
+    ) %>%
+      dowload_and_load()
+  ) %>%
+  dplyr::bind_rows()
 
 data_uncertainty <-
-  dplyr::bind_rows(
-    data_uncertainty_a,
-    data_uncertainty_b
-  ) %>%
+  data_uncertainty_raw %>%
   dplyr::mutate(
     dataset_name = paste0(
       "fossilpol_",
@@ -384,12 +425,12 @@ dplyr::copy_to(
 
 
 #----------------------------------------------------------#
-# 4. Taxa -----
+# 7. Taxa -----
 #----------------------------------------------------------#
 
-# 4.1 taxa id
+# 7.1 taxa id -----
 
-data_fossilpol_taxa <-
+data_fossilpol_taxa_raw <-
   fossilpol_samples_raw %>%
   dplyr::select(-c(dataset_name, age)) %>%
   names() %>%
@@ -402,6 +443,10 @@ data_fossilpol_taxa <-
   dplyr::filter(
     taxon_name != "sample_id"
   ) %>%
+  tidyr::drop_na()
+
+data_fossilpol_taxa <-
+  data_fossilpol_taxa_raw %>%
   dplyr::anti_join(
     dplyr::tbl(con, "Taxa") %>%
       dplyr::select(taxon_name) %>%
@@ -409,21 +454,23 @@ data_fossilpol_taxa <-
     by = dplyr::join_by(taxon_name)
   )
 
-dplyr::copy_to(
-  con,
-  data_fossilpol_taxa,
-  name = "Taxa",
-  append = TRUE
+add_to_db(
+  conn = con,
+  data = data_fossilpol_taxa,
+  table_name = "Taxa"
 )
 
 data_fossilpol_taxa_id <-
   dplyr::tbl(con, "Taxa") %>%
   dplyr::select(taxon_id, taxon_name) %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    data_fossilpol_taxa_raw,
+    by = dplyr::join_by(taxon_name)
+  )
 
-test_unique_row_in_table(data_fossilpol_taxa_id)
 
-# 4.3 Sample - taxa
+# 7.2 Sample - taxa -----
 
 data_fossilpol_sample_taxa <-
   fossilpol_samples_raw %>%
