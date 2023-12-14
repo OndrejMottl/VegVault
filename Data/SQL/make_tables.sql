@@ -78,7 +78,7 @@ CREATE TABLE "TaxonClassification" (
 );
 CREATE TABLE "Traits" (
   "trait_id" INTEGER PRIMARY KEY,
-  "trait_domain_id", INTEGER,
+  "trait_domain_id" INTEGER,
   "trait_name" TEXT,
   "trait_reference" INTEGER,
   FOREIGN KEY ("trait_domain_id") REFERENCES "TraitsDomain" ("trait_domain_id")
