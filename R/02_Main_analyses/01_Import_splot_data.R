@@ -88,35 +88,53 @@ splot_dataset_raw <-
 
 data_splot_data_source_id <-
   splot_dataset_raw %>%
-  dplyr::distinct(data_source_desc)
+  dplyr::distinct(data_source_desc) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "DatasetSourcesID") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(data_source_desc)
+  )
 
-dplyr::copy_to(
-  con,
+add_to_db(
+  conn = con,
   data_splot_data_source_id,
-  name = "DatasetSourcesID",
-  append = TRUE
+  table_name = "DatasetSourcesID"
 )
 
 data_splot_data_source_id_db <-
   dplyr::tbl(con, "DatasetSourcesID") %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    splot_dataset_raw %>%
+      dplyr::distinct(data_source_desc),
+    by = dplyr::join_by(data_source_desc)
+  )
 
 # 2.2 dataset type
 
 data_splot_dataset_type_id <-
   splot_dataset_raw %>%
-  dplyr::distinct(dataset_type)
+  dplyr::distinct(dataset_type) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "DatasetTypeID") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(dataset_type)
+  )
 
-dplyr::copy_to(
-  con,
+add_to_db(
+  conn = con,
   data_splot_dataset_type_id,
-  name = "DatasetTypeID",
-  append = TRUE
+  table_name = "DatasetTypeID"
 )
 
 data_splot_dataset_type_id_db <-
   dplyr::tbl(con, "DatasetTypeID") %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    splot_dataset_raw %>%
+      dplyr::distinct(dataset_type),
+    by = dplyr::join_by(dataset_type)
+  )
 
 # 2.3 datasets
 
@@ -133,19 +151,28 @@ splot_dataset <-
   dplyr::select(
     dataset_name, data_source_id, dataset_type_id,
     coord_long, coord_lat
+  ) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "Datasets") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(dataset_name)
   )
 
-dplyr::copy_to(
-  con,
+add_to_db(
+  conn = con,
   splot_dataset,
-  name = "Datasets",
-  append = TRUE
+  table_name = "Datasets"
 )
 
 splot_dataset_id <-
   dplyr::tbl(con, "Datasets") %>%
   dplyr::select(dataset_id, dataset_name) %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    splot_dataset_raw %>%
+      dplyr::distinct(dataset_name),
+    by = dplyr::join_by(dataset_name)
+  )
 
 
 #----------------------------------------------------------#
@@ -170,18 +197,28 @@ data_splot_sample_size <-
   dplyr::distinct(sample_size) %>%
   dplyr::mutate(
     description = "square meters"
-  )
+  ) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "SampleSizeID") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(sample_size)
+  ) %>%
+  dplyr::arrange(sample_size)
 
-dplyr::copy_to(
-  con,
+add_to_db(
+  conn = con,
   data_splot_sample_size,
-  name = "SampleSizeID",
-  append = TRUE
+  table_name = "SampleSizeID"
 )
 
 data_splot_sample_size_id <-
   dplyr::tbl(con, "SampleSizeID") %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    splot_samples_raw %>%
+      dplyr::distinct(sample_size),
+    by = dplyr::join_by(sample_size)
+  )
 
 # 3.2 samples
 
@@ -193,19 +230,28 @@ splot_samples <-
   ) %>%
   dplyr::select(
     sample_name, age, sample_size_id
+  ) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "Samples") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(sample_name)
   )
 
-dplyr::copy_to(
-  con,
+add_to_db(
+  conn = con,
   splot_samples,
-  name = "Samples",
-  append = TRUE
+  table_name = "Samples"
 )
 
 splot_samples_id <-
   dplyr::tbl(con, "Samples") %>%
   dplyr::select(sample_id, sample_name) %>%
-  dplyr::collect()
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    splot_samples_raw %>%
+      dplyr::distinct(sample_name),
+    by = dplyr::join_by(sample_name)
+  )
 
 
 #----------------------------------------------------------#
@@ -238,9 +284,7 @@ dplyr::copy_to(
 # 4. Taxa -----
 #----------------------------------------------------------#
 
-# 4.1 taxa id
-
-data_splot_taxa <-
+data_splot_taxa_raw <-
   splot_samples_raw %>%
   dplyr::select(taxa) %>%
   dplyr::mutate(
@@ -261,17 +305,31 @@ data_splot_taxa <-
     taxon_name != ""
   )
 
-dplyr::copy_to(
-  con,
+# 4.1 taxa id
+
+data_splot_taxa <-
+  data_splot_taxa_raw %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "Taxa") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(taxon_name)
+  )
+
+add_to_db(
+  conn = con,
   data_splot_taxa,
-  name = "Taxa",
-  append = TRUE
+  table_name = "Taxa"
 )
 
 data_splot_taxa_id <-
   dplyr::tbl(con, "Taxa") %>%
   dplyr::select(taxon_id, taxon_name) %>%
-  dplyr::collect()
+  dplyr::collect()  %>% 
+  dplyr::inner_join(
+    data_splot_taxa_raw %>%
+      dplyr::distinct(taxon_name),
+    by = dplyr::join_by(taxon_name)
+  )
 
 # 4.3 Sample - taxa
 
