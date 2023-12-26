@@ -313,3 +313,38 @@ dplyr::copy_to(
   name = "DatasetSample",
   append = TRUE
 )
+
+#----------------------------------------------------------#
+# 6. taxa -----
+#----------------------------------------------------------#
+
+bien_traits_taxa_raw <-
+  bien_traits_samples_raw %>%
+  dplyr::rename(taxon_name = scrubbed_species_binomial)
+
+bien_traits_taxa <-
+  bien_traits_taxa_raw %>%
+  dplyr::distinct(taxon_name) %>%
+  tidyr::drop_na() %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "Taxa") %>%
+      dplyr::select(taxon_name) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(taxon_name)
+  )
+
+add_to_db(
+  conn = con,
+  data = bien_traits_taxa,
+  table_name = "Taxa"
+)
+
+bien_traits_taxa_id <-
+  dplyr::tbl(con, "Taxa") %>%
+  dplyr::select(taxon_id, taxon_name) %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    bien_traits_taxa_raw %>%
+      dplyr::distinct(taxon_name),
+    by = dplyr::join_by(taxon_name)
+  )
