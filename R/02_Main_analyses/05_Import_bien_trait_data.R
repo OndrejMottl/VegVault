@@ -235,3 +235,81 @@ bien_traits_dataset_id <-
       dplyr::distinct(dataset_name),
     by = dplyr::join_by(dataset_name)
   )
+
+#----------------------------------------------------------#
+# 4. Samples -----
+#----------------------------------------------------------#
+
+bien_traits_samples_raw <-
+  bien_traits_dataset_raw %>%
+  dplyr::mutate(
+    sample_name = paste0(
+      "bien_traits_",
+      id
+    )
+  ) %>%
+  dplyr::left_join(
+    bien_traits_dataset_raw_unique,
+    by = dplyr::join_by(
+      dataset_type, data_source_desc,
+      coord_long, coord_lat,
+      sampling_reference
+    )
+  )
+
+# 4.1 samples -----
+
+bien_traits_samples <-
+  bien_traits_samples_raw %>%
+  dplyr::distinct(sample_name) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "Samples") %>%
+      dplyr::select(sample_name) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(sample_name)
+  )
+
+add_to_db(
+  conn = con,
+  data = bien_traits_samples,
+  table_name = "Samples"
+)
+
+bien_traits_samples_id <-
+  dplyr::tbl(con, "Samples") %>%
+  dplyr::select(sample_id, sample_name) %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    bien_traits_samples_raw %>%
+      dplyr::distinct(sample_name),
+    by = dplyr::join_by(sample_name)
+  )
+
+
+#----------------------------------------------------------#
+# 5. Dataset - Sample -----
+#----------------------------------------------------------#
+
+data_bien_traits_dataset_sample <-
+  bien_traits_samples_raw %>%
+  dplyr::distinct(
+    dataset_name, sample_name
+  ) %>%
+  dplyr::left_join(
+    bien_traits_dataset_id,
+    by = dplyr::join_by(dataset_name)
+  ) %>%
+  dplyr::left_join(
+    bien_traits_samples_id,
+    by = dplyr::join_by(sample_name)
+  ) %>%
+  dplyr::select(
+    dataset_id, sample_id
+  )
+
+dplyr::copy_to(
+  con,
+  data_bien_traits_dataset_sample,
+  name = "DatasetSample",
+  append = TRUE
+)
