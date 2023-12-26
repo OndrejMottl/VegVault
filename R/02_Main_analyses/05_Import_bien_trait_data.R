@@ -348,3 +348,136 @@ bien_traits_taxa_id <-
       dplyr::distinct(taxon_name),
     by = dplyr::join_by(taxon_name)
   )
+
+#----------------------------------------------------------#
+# 7. Traits -----
+#----------------------------------------------------------#
+bien_traits_traits_raw <-
+  bien_traits_samples_raw %>%
+  dplyr::mutate(
+    trait_domain_name = dplyr::case_when(
+      trait_name == "stem wood density" ~ "Stem specific density",
+      trait_name == "leaf nitrogen content per leaf dry mass" ~ "Leaf nitrogen content per unit mass",
+      trait_name == "seed mass" ~ "Diaspore mass",
+      trait_name == "whole plant height" ~ "Plant heigh",
+      trait_name == "leaf area" ~ "Leaf Area",
+      trait_name == "leaf area per leaf dry mass" ~ "Leaf mass per area"
+    ),
+    # need to flip the leaf area per leaf dry mass
+    trait_value = ifelse(trait_name == "leaf area per leaf dry mass",
+      1 / trait_value,
+      trait_value
+    ),
+    trait_name = ifelse(trait_name == "leaf area per leaf dry mass",
+      "leaf mass per area",
+      trait_name
+    )
+  )
+
+
+# 7.1 Trait domains -----
+
+bien_traits_trait_domain <-
+  bien_traits_traits_raw %>%
+  dplyr::distinct(trait_domain_name) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "TraitsDomain") %>%
+      dplyr::select(trait_domain_name) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(trait_domain_name)
+  )
+
+add_to_db(
+  conn = con,
+  data = bien_traits_trait_domain,
+  table_name = "TraitsDomain"
+)
+
+trait_domain_id <-
+  dplyr::tbl(con, "TraitsDomain") %>%
+  dplyr::select(trait_domain_id, trait_domain_name) %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    bien_traits_traits_raw %>%
+      dplyr::distinct(trait_domain_name),
+    by = dplyr::join_by(trait_domain_name)
+  )
+
+# 7.2 Traits -----
+
+bien_traits_traits <-
+  bien_traits_traits_raw %>%
+  dplyr::distinct(trait_domain_name, trait_name) %>%
+  dplyr::left_join(
+    trait_domain_id,
+    by = dplyr::join_by(trait_domain_name)
+  ) %>%
+  dplyr::select(-trait_domain_name) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "Traits") %>%
+      dplyr::select(trait_name) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(trait_name)
+  )
+
+add_to_db(
+  conn = con,
+  data = bien_traits_traits,
+  table_name = "Traits"
+)
+
+bien_traits_traits_id <-
+  dplyr::tbl(con, "Traits") %>%
+  dplyr::select(trait_id, trait_name) %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    bien_traits_traits_raw %>%
+      dplyr::distinct(trait_name),
+    by = dplyr::join_by(trait_name)
+  )
+
+# 7.3 Trait value -----
+
+bien_traits_traits_value <-
+  bien_traits_traits_raw %>%
+  dplyr::select(
+    dataset_name, sample_name,
+    trait_name,
+    taxon_name = scrubbed_species_binomial,
+    trait_value
+  ) %>%
+  tidyr::drop_na() %>%
+  dplyr::left_join(
+    bien_traits_dataset_id,
+    by = dplyr::join_by(dataset_name)
+  ) %>%
+  dplyr::left_join(
+    bien_traits_samples_id,
+    by = dplyr::join_by(sample_name)
+  ) %>%
+  dplyr::left_join(
+    bien_traits_traits_id,
+    by = dplyr::join_by(trait_name)
+  ) %>%
+  dplyr::left_join(
+    bien_traits_taxa_id,
+    by = dplyr::join_by(taxon_name)
+  ) %>%
+  dplyr::select(
+    trait_id, dataset_id, sample_id,
+    taxon_id,
+    trait_value
+  )
+
+dplyr::copy_to(
+  con,
+  bien_traits_traits_value,
+  name = "TraitsValue",
+  append = TRUE
+)
+
+#----------------------------------------------------------#
+# 8. Disconect DB -----
+#----------------------------------------------------------#
+
+DBI::dbDisconnect(con)
