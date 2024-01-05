@@ -299,7 +299,7 @@ try_samples <-
     by = dplyr::join_by(sample_name)
   ) %>%
   dplyr::rename(
-    sample_referecne = reference_id
+    sample_reference = reference_id
   )
 
 add_to_db(
