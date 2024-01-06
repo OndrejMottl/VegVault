@@ -112,27 +112,37 @@ data_splot_dataset_type_db <-
   )
 
 # - 2.2 dataset source type -----
-data_splot_dataset_source_type <-
-  splot_dataset_raw %>%
-  dplyr::distinct(dataset_source_type, data_source_type_reference)
-
-data_splot_dataset_source_type_referecne <-
-  data_splot_dataset_source_type %>%
+data_bien_dataset_source_type_referecne <-
+  bien_dataset_raw %>%
   dplyr::distinct(data_source_type_reference) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "References") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(data_source_type_reference == reference_detail)
+  ) %>%
   dplyr::rename(reference_detail = data_source_type_reference)
 
 add_to_db(
   conn = con,
-  data = data_splot_dataset_source_type_referecne,
+  data = data_bien_dataset_source_type_referecne,
   table_name = "References"
 )
 
-data_splot_dataset_source_type_ref_db <-
+data_bien_dataset_source_type_referecne_db <-
   dplyr::tbl(con, "References") %>%
   dplyr::collect() %>%
   dplyr::inner_join(
-    data_splot_dataset_source_type,
+    bien_dataset_raw %>%
+      dplyr::distinct(data_source_type_reference),
     by = dplyr::join_by(reference_detail == data_source_type_reference)
+  )
+
+data_bien_dataset_source_type <-
+  bien_dataset_raw %>%
+  dplyr::distinct(dataset_source_type, data_source_type_reference) %>%
+  dplyr::inner_join(
+    data_bien_dataset_source_type_referecne_db,
+    by = dplyr::join_by(data_source_type_reference == reference_detail)
   ) %>%
   dplyr::select(
     dataset_source_type,
@@ -140,8 +150,8 @@ data_splot_dataset_source_type_ref_db <-
   ) %>%
   dplyr::rename(data_source_type_reference = reference_id)
 
-data_splot_dataset_source_type_unique <-
-  data_splot_dataset_source_type_ref_db %>%
+data_bien_dataset_source_type_unique <-
+  data_bien_dataset_source_type %>%
   dplyr::anti_join(
     dplyr::tbl(con, "DatasetSourceTypeID") %>%
       dplyr::collect(),
@@ -150,19 +160,18 @@ data_splot_dataset_source_type_unique <-
 
 add_to_db(
   conn = con,
-  data = data_splot_dataset_source_type_unique,
+  data = data_bien_dataset_source_type_unique,
   table_name = "DatasetSourceTypeID"
 )
 
-data_splot_dataset_source_type_db <-
+data_bien_dataset_source_type_db <-
   dplyr::tbl(con, "DatasetSourceTypeID") %>%
   dplyr::collect() %>%
   dplyr::inner_join(
-    splot_dataset_raw %>%
+    bien_dataset_raw %>%
       dplyr::distinct(dataset_source_type),
     by = dplyr::join_by(dataset_source_type)
   )
-
 
 # - 2.3 dataset source -----
 
