@@ -80,11 +80,91 @@ splot_dataset_raw <-
     coord_long = longitude,
     coord_lat = latitude,
     data_source_desc = givd_id,
-    dataset_type = "splot",
+    dataset_type = "vegetation_plot",
+    dataset_source_type = "sPlotOpen",
+    data_source_type_reference = "https://doi.org/10.1111/geb.13346",
     sampling_method_details = givd_id
   )
 
-# 2.1 dataset source
+# - 2.1 dataset type -----
+data_splot_dataset_type <-
+  splot_dataset_raw %>%
+  dplyr::distinct(dataset_type) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "DatasetTypeID") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(dataset_type)
+  )
+
+add_to_db(
+  conn = con,
+  data = data_splot_dataset_type,
+  table_name = "DatasetTypeID"
+)
+
+data_splot_dataset_type_db <-
+  dplyr::tbl(con, "DatasetTypeID") %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    splot_dataset_raw %>%
+      dplyr::distinct(dataset_type),
+    by = dplyr::join_by(dataset_type)
+  )
+
+# - 2.2 dataset source type -----
+data_splot_dataset_source_type <-
+  splot_dataset_raw %>%
+  dplyr::distinct(dataset_source_type, data_source_type_reference)
+
+data_splot_dataset_source_type_referecne <-
+  data_splot_dataset_source_type %>%
+  dplyr::distinct(data_source_type_reference) %>%
+  dplyr::rename(reference_detail = data_source_type_reference)
+
+add_to_db(
+  conn = con,
+  data = data_splot_dataset_source_type_referecne,
+  table_name = "References"
+)
+
+data_splot_dataset_source_type_ref_db <-
+  dplyr::tbl(con, "References") %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    data_splot_dataset_source_type,
+    by = dplyr::join_by(reference_detail == data_source_type_reference)
+  ) %>%
+  dplyr::select(
+    dataset_source_type,
+    reference_id
+  ) %>%
+  dplyr::rename(data_source_type_reference = reference_id)
+
+data_splot_dataset_source_type_unique <-
+  data_splot_dataset_source_type_ref_db %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "DatasetSourceTypeID") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(dataset_source_type, data_source_type_reference)
+  )
+
+add_to_db(
+  conn = con,
+  data = data_splot_dataset_source_type_unique,
+  table_name = "DatasetSourceTypeID"
+)
+
+data_splot_dataset_source_type_db <-
+  dplyr::tbl(con, "DatasetSourceTypeID") %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    splot_dataset_raw %>%
+      dplyr::distinct(dataset_source_type),
+    by = dplyr::join_by(dataset_source_type)
+  )
+
+
+# - 2.3 dataset source -----
 
 data_splot_data_source_id <-
   splot_dataset_raw %>%
@@ -97,7 +177,7 @@ data_splot_data_source_id <-
 
 add_to_db(
   conn = con,
-  data_splot_data_source_id,
+  data = data_splot_data_source_id,
   table_name = "DatasetSourcesID"
 )
 
@@ -110,48 +190,29 @@ data_splot_data_source_id_db <-
     by = dplyr::join_by(data_source_desc)
   )
 
-# 2.2 dataset type
-
-data_splot_dataset_type_id <-
-  splot_dataset_raw %>%
-  dplyr::distinct(dataset_type) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetTypeID") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_type)
-  )
-
-add_to_db(
-  conn = con,
-  data_splot_dataset_type_id,
-  table_name = "DatasetTypeID"
-)
-
-data_splot_dataset_type_id_db <-
-  dplyr::tbl(con, "DatasetTypeID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    splot_dataset_raw %>%
-      dplyr::distinct(dataset_type),
-    by = dplyr::join_by(dataset_type)
-  )
-
-# 2.3 datasets
+# - 2.4 datasets -----
 
 splot_dataset <-
   splot_dataset_raw %>%
   dplyr::left_join(
+    data_splot_dataset_type_db,
+    by = dplyr::join_by(dataset_type)
+  ) %>%
+  dplyr::left_join(
+    data_splot_dataset_source_type_db,
+    by = dplyr::join_by(dataset_source_type)
+  ) %>%
+  dplyr::left_join(
     data_splot_data_source_id_db,
     by = dplyr::join_by(data_source_desc)
   ) %>%
-  dplyr::left_join(
-    data_splot_dataset_type_id_db,
-    by = dplyr::join_by(dataset_type)
-  ) %>%
   dplyr::select(
-    dataset_name, data_source_id, dataset_type_id,
+    dataset_name, dataset_type_id, data_source_type_id, data_source_id,
     coord_long, coord_lat
-  ) %>%
+  )
+
+splot_dataset_unique <-
+  splot_dataset %>%
   dplyr::anti_join(
     dplyr::tbl(con, "Datasets") %>%
       dplyr::collect(),
@@ -160,11 +221,11 @@ splot_dataset <-
 
 add_to_db(
   conn = con,
-  splot_dataset,
+  data = splot_dataset_unique,
   table_name = "Datasets"
 )
 
-splot_dataset_id <-
+splot_dataset_id_db <-
   dplyr::tbl(con, "Datasets") %>%
   dplyr::select(dataset_id, dataset_name) %>%
   dplyr::collect() %>%
@@ -211,7 +272,7 @@ add_to_db(
   table_name = "SampleSizeID"
 )
 
-data_splot_sample_size_id <-
+data_splot_sample_size_id_db <-
   dplyr::tbl(con, "SampleSizeID") %>%
   dplyr::collect() %>%
   dplyr::inner_join(
@@ -225,7 +286,7 @@ data_splot_sample_size_id <-
 splot_samples <-
   splot_samples_raw %>%
   dplyr::left_join(
-    data_splot_sample_size_id,
+    data_splot_sample_size_id_db,
     by = dplyr::join_by(sample_size)
   ) %>%
   dplyr::select(
@@ -243,7 +304,7 @@ add_to_db(
   table_name = "Samples"
 )
 
-splot_samples_id <-
+splot_samples_id_db <-
   dplyr::tbl(con, "Samples") %>%
   dplyr::select(sample_id, sample_name) %>%
   dplyr::collect() %>%
@@ -261,11 +322,11 @@ splot_samples_id <-
 data_splot_dataset_sample <-
   splot_samples_raw %>%
   dplyr::left_join(
-    splot_dataset_id,
+    splot_dataset_id_db,
     by = dplyr::join_by(dataset_name)
   ) %>%
   dplyr::left_join(
-    splot_samples_id,
+    splot_samples_id_db,
     by = dplyr::join_by(sample_name)
   ) %>%
   dplyr::select(
@@ -321,10 +382,10 @@ add_to_db(
   table_name = "Taxa"
 )
 
-data_splot_taxa_id <-
+data_splot_taxa_id_db <-
   dplyr::tbl(con, "Taxa") %>%
   dplyr::select(taxon_id, taxon_name) %>%
-  dplyr::collect()  %>% 
+  dplyr::collect() %>%
   dplyr::inner_join(
     data_splot_taxa_raw %>%
       dplyr::distinct(taxon_name),
@@ -344,7 +405,7 @@ data_splot_sample_taxa <-
   ) %>%
   tidyr::unnest(taxa) %>%
   dplyr::left_join(
-    data_splot_taxa_id,
+    data_splot_taxa_id_db,
     by = dplyr::join_by(Species == taxon_name)
   ) %>%
   dplyr::rename(
