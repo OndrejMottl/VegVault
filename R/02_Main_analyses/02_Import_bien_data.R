@@ -79,19 +79,107 @@ bien_dataset_raw <-
     coord_long = longitude,
     coord_lat = latitude,
     data_source_desc = datasource,
-    dataset_type = "bien",
+    dataset_type = "vegetation_plot",
+    dataset_source_type = "BIEN",
+    data_source_type_reference = "https://doi.org/10.7287/peerj.preprints.2615v2",
     sampling_reference = methodology_reference,
     sampling_method_details = methodology_description,
   )
+# - 2.1 dataset type -----
+data_bien_dataset_type <-
+  bien_dataset_raw %>%
+  dplyr::distinct(dataset_type) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "DatasetTypeID") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(dataset_type)
+  )
 
-# 3.1 dataset source -----
+add_to_db(
+  conn = con,
+  data = data_bien_dataset_type,
+  table_name = "DatasetTypeID"
+)
+
+data_bien_dataset_type_db <-
+  dplyr::tbl(con, "DatasetTypeID") %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    bien_dataset_raw %>%
+      dplyr::distinct(dataset_type),
+    by = dplyr::join_by(dataset_type)
+  )
+
+# - 2.2 dataset source type -----
+data_bien_dataset_source_type_referecne <-
+  bien_dataset_raw %>%
+  dplyr::distinct(data_source_type_reference) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "References") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(data_source_type_reference == reference_detail)
+  ) %>%
+  dplyr::rename(reference_detail = data_source_type_reference)
+
+add_to_db(
+  conn = con,
+  data = data_bien_dataset_source_type_referecne,
+  table_name = "References"
+)
+
+data_bien_dataset_source_type_referecne_db <-
+  dplyr::tbl(con, "References") %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    bien_dataset_raw %>%
+      dplyr::distinct(data_source_type_reference),
+    by = dplyr::join_by(reference_detail == data_source_type_reference)
+  )
+
+data_bien_dataset_source_type <-
+  bien_dataset_raw %>%
+  dplyr::distinct(dataset_source_type, data_source_type_reference) %>%
+  dplyr::inner_join(
+    data_bien_dataset_source_type_referecne_db,
+    by = dplyr::join_by(data_source_type_reference == reference_detail)
+  ) %>%
+  dplyr::select(
+    dataset_source_type,
+    reference_id
+  ) %>%
+  dplyr::rename(data_source_type_reference = reference_id)
+
+data_bien_dataset_source_type_unique <-
+  data_bien_dataset_source_type %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "DatasetSourceTypeID") %>%
+      dplyr::collect(),
+    by = dplyr::join_by(dataset_source_type, data_source_type_reference)
+  )
+
+add_to_db(
+  conn = con,
+  data = data_bien_dataset_source_type_unique,
+  table_name = "DatasetSourceTypeID"
+)
+
+data_bien_dataset_source_type_db <-
+  dplyr::tbl(con, "DatasetSourceTypeID") %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    bien_dataset_raw %>%
+      dplyr::distinct(dataset_source_type),
+    by = dplyr::join_by(dataset_source_type)
+  )
+
+
+# - 2.3 dataset source -----
 
 data_bien_data_source_id <-
   bien_dataset_raw %>%
   dplyr::distinct(data_source_desc) %>%
   dplyr::anti_join(
     dplyr::tbl(con, "DatasetSourcesID") %>%
-      dplyr::select(-data_source_id) %>%
       dplyr::collect(),
     by = dplyr::join_by(data_source_desc)
   )
@@ -106,138 +194,47 @@ data_bien_data_source_id_db <-
   dplyr::tbl(con, "DatasetSourcesID") %>%
   dplyr::collect() %>%
   dplyr::inner_join(
-    data_bien_data_source_id,
+    bien_dataset_raw %>%
+      dplyr::distinct(data_source_desc),
     by = dplyr::join_by(data_source_desc)
   )
 
-# 3.2 dataset type -----
-
-data_bien_dataset_type_id <-
-  bien_dataset_raw %>%
-  dplyr::distinct(dataset_type) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetTypeID") %>%
-      dplyr::select(-dataset_type_id) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_type)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_bien_dataset_type_id,
-  table_name = "DatasetTypeID"
-)
-
-data_bien_dataset_type_id_db <-
-  dplyr::tbl(con, "DatasetTypeID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_dataset_raw %>%
-      dplyr::distinct(dataset_type),
-    by = dplyr::join_by(dataset_type)
-  )
-
-# 3.3 datasets sampling -----
-
-data_bien_sampling_method <-
-  bien_dataset_raw %>%
-  dplyr::distinct(sampling_protocol) %>%
-  tidyr::drop_na() %>%
-  dplyr::rename(
-    sampling_method_details = sampling_protocol
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "SamplingMethodID") %>%
-      dplyr::select(-sampling_method_id) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(sampling_method_details)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_bien_sampling_method,
-  table_name = "SamplingMethodID"
-)
-
-data_bien_sampling_method_db <-
-  dplyr::tbl(con, "SamplingMethodID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    data_bien_sampling_method,
-    by = dplyr::join_by(sampling_method_details)
-  )
-
-# 3.4 dataset reference -----
-
-data_bien_reference <-
-  bien_dataset_raw %>%
-  dplyr::distinct(sampling_reference) %>%
-  tidyr::drop_na() %>%
-  dplyr::rename(
-    reference_detail = sampling_reference
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "References") %>%
-      dplyr::select(-reference_id) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(reference_detail)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_bien_reference,
-  table_name = "References"
-)
-
-data_bien_reference_db <-
-  dplyr::tbl(con, "References") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_dataset_raw %>%
-      dplyr::distinct(sampling_reference),
-    by = dplyr::join_by(reference_detail == sampling_reference)
-  )
-
-# 3.5 datasets -----
+# - 2.4 datasets -----
 
 bien_dataset <-
   bien_dataset_raw %>%
   dplyr::left_join(
-    data_bien_data_source_id_db,
-    by = dplyr::join_by(data_source_desc)
-  ) %>%
-  dplyr::left_join(
-    data_bien_dataset_type_id_db,
+    data_bien_dataset_type_db,
     by = dplyr::join_by(dataset_type)
   ) %>%
   dplyr::left_join(
-    data_bien_sampling_method_db,
-    by = dplyr::join_by(sampling_method_details)
+    data_bien_dataset_source_type_db,
+    by = dplyr::join_by(dataset_source_type)
   ) %>%
   dplyr::left_join(
-    data_bien_reference_db,
-    by = dplyr::join_by(sampling_reference == reference_detail)
+    data_bien_data_source_id_db,
+    by = dplyr::join_by(data_source_desc)
   ) %>%
   dplyr::select(
-    dataset_name, data_source_id, dataset_type_id,
-    coord_long, coord_lat,
-    sampling_method_id,
-    dataset_reference = reference_id
-  ) %>%
+    dataset_name, dataset_type_id, data_source_type_id, data_source_id,
+    coord_long, coord_lat
+  )
+
+bien_dataset_unique <-
+  bien_dataset %>%
   dplyr::anti_join(
     dplyr::tbl(con, "Datasets") %>%
-      dplyr::select(-dataset_id) %>%
       dplyr::collect(),
     by = dplyr::join_by(dataset_name)
   )
 
 add_to_db(
   conn = con,
-  data = bien_dataset,
+  data = bien_dataset_unique,
   table_name = "Datasets"
 )
 
-bien_dataset_id <-
+bien_dataset_id_db <-
   dplyr::tbl(con, "Datasets") %>%
   dplyr::select(dataset_id, dataset_name) %>%
   dplyr::collect() %>%
@@ -286,7 +283,7 @@ add_to_db(
   table_name = "SampleSizeID"
 )
 
-data_bien_sample_size_id <-
+data_bien_sample_size_id_db <-
   dplyr::tbl(con, "SampleSizeID") %>%
   dplyr::collect() %>%
   dplyr::inner_join(
@@ -300,7 +297,7 @@ data_bien_sample_size_id <-
 bien_samples <-
   bien_samples_raw %>%
   dplyr::left_join(
-    data_bien_sample_size_id,
+    data_bien_sample_size_id_db,
     by = dplyr::join_by(sample_size)
   ) %>%
   dplyr::select(
@@ -319,7 +316,7 @@ add_to_db(
   table_name = "Samples"
 )
 
-bien_samples_id <-
+bien_samples_id_db <-
   dplyr::tbl(con, "Samples") %>%
   dplyr::select(sample_id, sample_name) %>%
   dplyr::collect() %>%
@@ -337,11 +334,11 @@ bien_samples_id <-
 data_bien_dataset_sample <-
   bien_samples_raw %>%
   dplyr::left_join(
-    bien_dataset_id,
+    bien_dataset_id_db,
     by = dplyr::join_by(dataset_name)
   ) %>%
   dplyr::left_join(
-    bien_samples_id,
+    bien_samples_id_db,
     by = dplyr::join_by(sample_name)
   ) %>%
   dplyr::select(
@@ -398,7 +395,7 @@ add_to_db(
   table_name = "Taxa"
 )
 
-data_bien_taxa_id <-
+data_bien_taxa_id_db <-
   dplyr::tbl(con, "Taxa") %>%
   dplyr::select(taxon_id, taxon_name) %>%
   dplyr::collect() %>%
@@ -413,7 +410,7 @@ data_bien_taxa_id <-
 data_bien_sample_taxa <-
   bien_samples_raw %>%
   dplyr::left_join(
-    bien_samples_id,
+    bien_samples_id_db,
     by = dplyr::join_by(sample_name)
   ) %>%
   dplyr::select(
@@ -421,7 +418,7 @@ data_bien_sample_taxa <-
   ) %>%
   tidyr::unnest(plot_data) %>%
   dplyr::left_join(
-    data_bien_taxa_id,
+    data_bien_taxa_id_db,
     by = dplyr::join_by(name_matched == taxon_name)
   ) %>%
   dplyr::rename(
