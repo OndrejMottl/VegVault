@@ -26,13 +26,6 @@ source(
   )
 )
 
-url_gh <-
-  paste0(
-    "https://raw.githubusercontent.com/",
-    "OndrejMottl/BIODYNAMICS-Vegetation_data/",
-    "main/Outputs/Data/"
-  )
-
 
 #----------------------------------------------------------#
 # 1. Connect to db -----
@@ -53,6 +46,13 @@ DBI::dbListTables(con)
 #----------------------------------------------------------#
 # 2. Load data -----
 #----------------------------------------------------------#
+
+url_gh <-
+  paste0(
+    "https://raw.githubusercontent.com/",
+    "OndrejMottl/BIODYNAMICS-Vegetation_data/",
+    "main/Outputs/Data/"
+  )
 
 url_bien <-
   paste0(
@@ -428,7 +428,7 @@ dplyr::copy_to(
 # 6. Taxa -----
 #----------------------------------------------------------#
 
-# 4.1 taxa id -----
+# - 6.1 taxa id -----
 
 data_bien_taxa_raw <-
   bien_samples_raw %>%
@@ -477,7 +477,7 @@ data_bien_taxa_id_db <-
   )
 
 
-# 4.3 Sample - taxa -----
+# 6.2 Sample - taxa -----
 
 data_bien_sample_taxa <-
   bien_samples_raw %>%
