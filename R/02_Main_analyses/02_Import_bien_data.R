@@ -85,7 +85,8 @@ bien_dataset_raw <-
     sampling_reference = methodology_reference,
     sampling_method_details = methodology_description,
   )
-# - 2.1 dataset type -----
+
+# - 3.1 dataset type -----
 data_bien_dataset_type <-
   bien_dataset_raw %>%
   dplyr::distinct(dataset_type) %>%
@@ -110,7 +111,7 @@ data_bien_dataset_type_db <-
     by = dplyr::join_by(dataset_type)
   )
 
-# - 2.2 dataset source type -----
+# - 3.2 dataset source type -----
 data_bien_dataset_source_type_referecne <-
   bien_dataset_raw %>%
   dplyr::distinct(data_source_type_reference) %>%
@@ -173,7 +174,7 @@ data_bien_dataset_source_type_db <-
   )
 
 
-# - 2.3 dataset source -----
+# - 3.3 dataset source -----
 
 data_bien_data_source_id <-
   bien_dataset_raw %>%
@@ -199,7 +200,72 @@ data_bien_data_source_id_db <-
     by = dplyr::join_by(data_source_desc)
   )
 
-# - 2.4 datasets -----
+# - 3.4 datasets sampling -----
+
+data_bien_sampling_method_reference <-
+  bien_dataset_raw %>%
+  dplyr::distinct(sampling_reference) %>%
+  tidyr::drop_na() %>%
+  tidyr::drop_na() %>%
+  dplyr::rename(
+    reference_detail = sampling_reference
+  ) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "References") %>%
+      dplyr::select(-reference_id) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(reference_detail)
+  )
+
+add_to_db(
+  conn = con,
+  data = data_bien_sampling_method_reference,
+  table_name = "References"
+)
+
+data_bien_reference_db <-
+  dplyr::tbl(con, "References") %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    bien_dataset_raw %>%
+      dplyr::distinct(sampling_reference),
+    by = dplyr::join_by(reference_detail == sampling_reference)
+  )
+
+data_bien_sampling_method <-
+  bien_dataset_raw %>%
+  dplyr::left_join(
+    data_bien_reference_db,
+    by = dplyr::join_by(sampling_reference == reference_detail)
+  ) %>%
+  dplyr::distinct(sampling_protocol, reference_id) %>%
+  tidyr::drop_na(sampling_protocol) %>%
+  dplyr::rename(
+    sampling_method_details = sampling_protocol,
+    sampling_method_reference = reference_id
+  ) %>%
+  dplyr::anti_join(
+    dplyr::tbl(con, "SamplingMethodID") %>%
+      dplyr::select(-sampling_method_id) %>%
+      dplyr::collect(),
+    by = dplyr::join_by(sampling_method_details)
+  )
+
+add_to_db(
+  conn = con,
+  data = data_bien_sampling_method,
+  table_name = "SamplingMethodID"
+)
+
+data_bien_sampling_method_db <-
+  dplyr::tbl(con, "SamplingMethodID") %>%
+  dplyr::collect() %>%
+  dplyr::inner_join(
+    data_bien_sampling_method,
+    by = dplyr::join_by(sampling_method_details, sampling_method_reference)
+  )
+
+# - 3.5 datasets -----
 
 bien_dataset <-
   bien_dataset_raw %>%
@@ -215,8 +281,14 @@ bien_dataset <-
     data_bien_data_source_id_db,
     by = dplyr::join_by(data_source_desc)
   ) %>%
+  dplyr::left_join(
+    data_bien_sampling_method_db,
+    by = dplyr::join_by(sampling_method_details)
+  ) %>%
   dplyr::select(
-    dataset_name, dataset_type_id, data_source_type_id, data_source_id,
+    dataset_name,
+    dataset_type_id, data_source_type_id, data_source_id,
+    sampling_method_id,
     coord_long, coord_lat
   )
 
