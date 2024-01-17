@@ -64,7 +64,6 @@ url_try <-
 data_try <-
   dowload_and_load(url_try)
 
-dplyr::glimpse(data_try)
 
 #----------------------------------------------------------#
 # 3. Datasets -----
@@ -89,7 +88,7 @@ try_dataset_raw_unique <-
     dataset_source_type, data_source_type_reference,
     data_source_desc,
     coord_long, coord_lat,
-    sampling_reference
+    data_source_reference
   ) %>%
   dplyr::mutate(
     dataset_name = paste0(
@@ -264,21 +263,22 @@ data_try_data_source_id_db <-
 try_dataset <-
   try_dataset_raw_unique %>%
   dplyr::left_join(
-    data_try_data_source_id_db,
-    by = dplyr::join_by(data_source_desc)
-  ) %>%
-  dplyr::left_join(
     data_try_dataset_type_id_db,
     by = dplyr::join_by(dataset_type)
   ) %>%
   dplyr::left_join(
-    data_try_reference_db,
-    by = dplyr::join_by(sampling_reference == reference_detail)
+    data_try_dataset_source_type_db,
+    by = dplyr::join_by(
+      dataset_source_type
+    )
+  ) %>%
+  dplyr::left_join(
+    data_try_data_source_id_db,
+    by = dplyr::join_by(data_source_desc)
   ) %>%
   dplyr::select(
-    dataset_name, data_source_id, dataset_type_id,
-    coord_long, coord_lat,
-    dataset_reference = reference_id
+    dataset_name, data_source_type_id, data_source_id, dataset_type_id,
+    coord_long, coord_lat
   ) %>%
   dplyr::anti_join(
     dplyr::tbl(con, "Datasets") %>%
@@ -319,11 +319,9 @@ try_samples_raw <-
     try_dataset_raw_unique,
     by = dplyr::join_by(
       dataset_type, data_source_desc,
-      coord_long, coord_lat,
-      sampling_reference
+      coord_long, coord_lat
     )
   )
-
 
 # 4.1 samples references -----
 
