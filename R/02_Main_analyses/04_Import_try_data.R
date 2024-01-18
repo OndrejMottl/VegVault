@@ -81,7 +81,7 @@ try_dataset_raw <-
     data_source_reference = dataset_reference_citation
   )
 
-try_dataset_raw_unique <-
+try_dataset_raw_distinct <-
   try_dataset_raw %>%
   dplyr::distinct(
     dataset_type,
@@ -95,301 +95,68 @@ try_dataset_raw_unique <-
       "try_",
       dplyr::row_number()
     )
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Datasets") %>%
-      dplyr::select(dataset_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_name)
   )
 
 # - 3.1 dataset type -----
-
-data_try_dataset_type_id <-
-  try_dataset_raw_unique %>%
-  dplyr::distinct(dataset_type) %>%
-  tidyr::drop_na() %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetTypeID") %>%
-      dplyr::select(dataset_type) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_type)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_try_dataset_type_id,
-  table_name = "DatasetTypeID"
-)
-
 data_try_dataset_type_id_db <-
-  dplyr::tbl(con, "DatasetTypeID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    try_dataset_raw_unique %>%
-      dplyr::distinct(dataset_type),
-    by = dplyr::join_by(dataset_type)
+  add_dataset_type(
+    data_source = try_dataset_raw_distinct,
+    con = con
   )
 
 # - 3.2 dataset source type -----
-data_try_dataset_source_type_referecne <-
-  try_dataset_raw_unique %>%
-  dplyr::distinct(data_source_type_reference) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "References") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(data_source_type_reference == reference_detail)
-  ) %>%
-  dplyr::rename(reference_detail = data_source_type_reference)
-
-add_to_db(
-  conn = con,
-  data = data_try_dataset_source_type_referecne,
-  table_name = "References"
-)
-
-data_try_dataset_source_type_referecne_db <-
-  dplyr::tbl(con, "References") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    try_dataset_raw_unique %>%
-      dplyr::distinct(data_source_type_reference),
-    by = dplyr::join_by(reference_detail == data_source_type_reference)
-  )
-
-data_try_dataset_source_type <-
-  try_dataset_raw_unique %>%
-  dplyr::distinct(dataset_source_type, data_source_type_reference) %>%
-  dplyr::inner_join(
-    data_try_dataset_source_type_referecne_db,
-    by = dplyr::join_by(data_source_type_reference == reference_detail)
-  ) %>%
-  dplyr::select(
-    dataset_source_type,
-    reference_id
-  ) %>%
-  dplyr::rename(data_source_type_reference = reference_id)
-
-data_try_dataset_source_type_unique <-
-  data_try_dataset_source_type %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetSourceTypeID") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_source_type, data_source_type_reference)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_try_dataset_source_type_unique,
-  table_name = "DatasetSourceTypeID"
-)
-
 data_try_dataset_source_type_db <-
-  dplyr::tbl(con, "DatasetSourceTypeID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    try_dataset_raw_unique %>%
-      dplyr::distinct(dataset_source_type),
-    by = dplyr::join_by(dataset_source_type)
+  add_dataset_source_type_with_reference(
+    data_source = try_dataset_raw_distinct,
+    con = con
   )
-
 
 # - 3.3 dataset source -----
-
-data_try_data_source_reference <-
-  try_dataset_raw_unique %>%
-  dplyr::distinct(data_source_reference) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "References") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(data_source_reference == reference_detail)
-  ) %>%
-  dplyr::rename(reference_detail = data_source_reference)
-
-add_to_db(
-  conn = con,
-  data = data_try_data_source_reference,
-  table_name = "References"
-)
-
-data_try_data_source_reference_db <-
-  dplyr::tbl(con, "References") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    try_dataset_raw_unique %>%
-      dplyr::distinct(data_source_reference),
-    by = dplyr::join_by(reference_detail == data_source_reference)
-  )
-
-data_try_data_source_id <-
-  try_dataset_raw_unique %>%
-  dplyr::distinct(data_source_desc, data_source_reference) %>%
-  tidyr::drop_na(data_source_desc) %>%
-  dplyr::left_join(
-    data_try_data_source_reference_db,
-    by = dplyr::join_by(data_source_reference == reference_detail)
-  ) %>%
-  dplyr::select(
-    data_source_desc, reference_id
-  ) %>%
-  dplyr::rename(data_source_reference = reference_id)
-
-data_try_data_source_id_unique <-
-  data_try_data_source_id %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetSourcesID") %>%
-      dplyr::select(data_source_desc) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(data_source_desc)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_try_data_source_id_unique,
-  table_name = "DatasetSourcesID"
-)
-
 data_try_data_source_id_db <-
-  dplyr::tbl(con, "DatasetSourcesID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    try_dataset_raw_unique %>%
-      dplyr::distinct(data_source_desc),
-    by = dplyr::join_by(data_source_desc)
+  add_data_source_with_reference(
+    data_source = try_dataset_raw_distinct,
+    con = con
   )
 
 # 3.4 datasets -----
-
-try_dataset <-
-  try_dataset_raw_unique %>%
-  dplyr::left_join(
-    data_try_dataset_type_id_db,
-    by = dplyr::join_by(dataset_type)
-  ) %>%
-  dplyr::left_join(
-    data_try_dataset_source_type_db,
-    by = dplyr::join_by(
-      dataset_source_type
-    )
-  ) %>%
-  dplyr::left_join(
-    data_try_data_source_id_db,
-    by = dplyr::join_by(data_source_desc)
-  ) %>%
-  dplyr::select(
-    dataset_name, data_source_type_id, data_source_id, dataset_type_id,
-    coord_long, coord_lat
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Datasets") %>%
-      dplyr::select(dataset_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = try_dataset,
-  table_name = "Datasets"
-)
-
 try_dataset_id <-
-  dplyr::tbl(con, "Datasets") %>%
-  dplyr::select(dataset_id, dataset_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    try_dataset_raw_unique %>%
-      dplyr::distinct(dataset_name),
-    by = dplyr::join_by(dataset_name)
+  add_datasets(
+    data_source = try_dataset_raw_distinct,
+    con = con,
+    data_type = data_try_dataset_type_id_db,
+    data_source_type = data_try_dataset_source_type_db,
+    dataset_source = data_try_data_source_id_db
   )
 
 #----------------------------------------------------------#
 # 4. Samples -----
 #----------------------------------------------------------#
 
-try_samples_raw <-
+try_sample_raw_id <-
   try_dataset_raw %>%
   dplyr::mutate(
     sample_name = paste0(
       "try_",
       observation_id
     )
-  ) %>%
-  dplyr::left_join(
-    try_dataset_raw_unique,
-    by = dplyr::join_by(
-      dataset_type, data_source_desc,
-      coord_long, coord_lat
+  )
+
+try_samples_raw <
+  try_sample_raw_id %>%
+    dplyr::left_join(
+      try_dataset_raw_distinct,
+      by = dplyr::join_by(
+        dataset_type, data_source_desc,
+        coord_long, coord_lat
+      ),
+      relationship = "many-to-many"
     )
-  )
-
-# 4.1 samples references -----
-
-try_samples_reference <-
-  try_samples_raw %>%
-  dplyr::distinct(reference_source) %>%
-  tidyr::drop_na() %>%
-  dplyr::rename(
-    reference_detail = reference_source
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "References") %>%
-      dplyr::select(reference_detail) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(reference_detail)
-  )
-
-add_to_db(
-  conn = con,
-  data = try_samples_reference,
-  table_name = "References"
-)
-
-try_samples_reference_id <-
-  dplyr::tbl(con, "References") %>%
-  dplyr::select(reference_id, reference_detail) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    try_samples_raw %>%
-      dplyr::distinct(reference_source),
-    by = dplyr::join_by(reference_detail == reference_source)
-  )
-
 
 # 4.1 samples -----
-
-try_samples <-
-  try_samples_raw %>%
-  dplyr::distinct(sample_name, reference_source) %>%
-  dplyr::left_join(
-    try_samples_reference_id,
-    by = dplyr::join_by(reference_source == reference_detail)
-  ) %>%
-  dplyr::select(-reference_source) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Samples") %>%
-      dplyr::select(sample_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(sample_name)
-  ) %>%
-  dplyr::rename(
-    sample_reference = reference_id
-  )
-
-add_to_db(
-  conn = con,
-  data = try_samples,
-  table_name = "Samples"
-)
-
 try_samples_id <-
-  dplyr::tbl(con, "Samples") %>%
-  dplyr::select(sample_id, sample_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    try_samples_raw %>%
-      dplyr::distinct(sample_name),
-    by = dplyr::join_by(sample_name)
+  add_samples_with_reference(
+    data_source = try_samples_raw,
+    con = con
   )
 
 #----------------------------------------------------------#
