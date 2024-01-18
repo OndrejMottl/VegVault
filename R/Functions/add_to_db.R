@@ -1,4 +1,4 @@
-# This function copies a data frame to a table in a database if the data frame 
+# This function copies a data frame to a table in a database if the data frame
 #   is not already in the table.
 add_to_db <- function(
     conn,
@@ -13,6 +13,10 @@ add_to_db <- function(
       ) %>%
       test_unique_row_in_table()
   ) {
+    message(
+      paste("adding", nrow(data), "rows to", table_name, "table")
+    )
+
     dplyr::copy_to(
       conn,
       data,
