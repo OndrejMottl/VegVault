@@ -26,13 +26,6 @@ source(
   )
 )
 
-url_gh <-
-  paste0(
-    "https://raw.githubusercontent.com/",
-    "OndrejMottl/BIODYNAMICS-Vegetation_data/",
-    "main/Outputs/Data/"
-  )
-
 
 #----------------------------------------------------------#
 # 1. Connect to db -----
@@ -54,6 +47,13 @@ DBI::dbListTables(con)
 # 2. Load data -----
 #----------------------------------------------------------#
 
+url_gh <-
+  paste0(
+    "https://raw.githubusercontent.com/",
+    "OndrejMottl/BIODYNAMICS-Vegetation_data/",
+    "main/Outputs/Data/"
+  )
+
 url_splot <-
   paste0(
     url_gh,
@@ -73,176 +73,48 @@ dplyr::glimpse(data_splot)
 splot_dataset_raw <-
   data_splot %>%
   dplyr::mutate(
+    dataset_type = "vegetation_plot",
+    dataset_source_type = "sPlotOpen",
+    data_source_type_reference = "https://doi.org/10.1111/geb.13346",
+    data_source_desc = givd_id,
     dataset_name = paste0(
       "splot_",
       plot_observation_id
     ),
-    coord_long = longitude,
-    coord_lat = latitude,
-    data_source_desc = givd_id,
-    dataset_type = "vegetation_plot",
-    dataset_source_type = "sPlotOpen",
-    data_source_type_reference = "https://doi.org/10.1111/geb.13346"
+    coord_long = as.numeric(longitude),
+    coord_lat = as.numeric(latitude)
   )
 
 # - 3.1 dataset type -----
-data_splot_dataset_type <-
-  splot_dataset_raw %>%
-  dplyr::distinct(dataset_type) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetTypeID") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_type)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_splot_dataset_type,
-  table_name = "DatasetTypeID"
-)
-
 data_splot_dataset_type_db <-
-  dplyr::tbl(con, "DatasetTypeID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    splot_dataset_raw %>%
-      dplyr::distinct(dataset_type),
-    by = dplyr::join_by(dataset_type)
+  add_dataset_type(
+    data_source = splot_dataset_raw,
+    con = con
   )
 
 # - 3.2 dataset source type -----
-data_splot_dataset_source_type_referecne <-
-  splot_dataset_raw %>%
-  dplyr::distinct(data_source_type_reference) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "References") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(data_source_type_reference == reference_detail)
-  ) %>%
-  dplyr::rename(reference_detail = data_source_type_reference)
-
-add_to_db(
-  conn = con,
-  data = data_splot_dataset_source_type_referecne,
-  table_name = "References"
-)
-
-data_splot_dataset_source_type_referecne_db <-
-  dplyr::tbl(con, "References") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    splot_dataset_raw %>%
-      dplyr::distinct(data_source_type_reference),
-    by = dplyr::join_by(reference_detail == data_source_type_reference)
-  )
-
-data_splot_dataset_source_type <-
-  splot_dataset_raw %>%
-  dplyr::distinct(dataset_source_type, data_source_type_reference) %>%
-  dplyr::inner_join(
-    data_splot_dataset_source_type_referecne_db,
-    by = dplyr::join_by(data_source_type_reference == reference_detail)
-  ) %>%
-  dplyr::select(
-    dataset_source_type,
-    reference_id
-  ) %>%
-  dplyr::rename(data_source_type_reference = reference_id)
-
-data_splot_dataset_source_type_unique <-
-  data_splot_dataset_source_type %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetSourceTypeID") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_source_type, data_source_type_reference)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_splot_dataset_source_type_unique,
-  table_name = "DatasetSourceTypeID"
-)
-
 data_splot_dataset_source_type_db <-
-  dplyr::tbl(con, "DatasetSourceTypeID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    splot_dataset_raw %>%
-      dplyr::distinct(dataset_source_type),
-    by = dplyr::join_by(dataset_source_type)
+  add_dataset_source_type_with_reference(
+    data_source = splot_dataset_raw,
+    con = con
   )
 
 # - 3.3 dataset source -----
-
-data_splot_data_source_id <-
-  splot_dataset_raw %>%
-  dplyr::distinct(data_source_desc) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetSourcesID") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(data_source_desc)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_splot_data_source_id,
-  table_name = "DatasetSourcesID"
-)
-
 data_splot_data_source_id_db <-
-  dplyr::tbl(con, "DatasetSourcesID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    splot_dataset_raw %>%
-      dplyr::distinct(data_source_desc),
-    by = dplyr::join_by(data_source_desc)
+  add_data_source(
+    data_source = splot_dataset_raw,
+    con = con
   )
 
 # - 3.4 datasets -----
-
-splot_dataset <-
-  splot_dataset_raw %>%
-  dplyr::left_join(
-    data_splot_dataset_type_db,
-    by = dplyr::join_by(dataset_type)
-  ) %>%
-  dplyr::left_join(
-    data_splot_dataset_source_type_db,
-    by = dplyr::join_by(dataset_source_type)
-  ) %>%
-  dplyr::left_join(
-    data_splot_data_source_id_db,
-    by = dplyr::join_by(data_source_desc)
-  ) %>%
-  dplyr::select(
-    dataset_name, dataset_type_id, data_source_type_id, data_source_id,
-    coord_long, coord_lat
-  )
-
-splot_dataset_unique <-
-  splot_dataset %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Datasets") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = splot_dataset_unique,
-  table_name = "Datasets"
-)
-
 splot_dataset_id_db <-
-  dplyr::tbl(con, "Datasets") %>%
-  dplyr::select(dataset_id, dataset_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    splot_dataset_raw %>%
-      dplyr::distinct(dataset_name),
-    by = dplyr::join_by(dataset_name)
+  add_datasets(
+    data_source = splot_dataset_raw,
+    con = con,
+    data_type = data_splot_dataset_type_db,
+    data_source_type = data_splot_dataset_source_type_db,
+    dataset_source = data_splot_data_source_id_db
   )
-
 
 #----------------------------------------------------------#
 # 4. Samples -----
@@ -256,70 +128,15 @@ splot_samples_raw <-
       plot_observation_id
     ),
     age = 0,
-    sample_size = releve_area
-  )
-
-# - 4.1 sample size -----
-
-data_splot_sample_size <-
-  splot_samples_raw %>%
-  dplyr::distinct(sample_size) %>%
-  dplyr::mutate(
+    sample_size = releve_area,
     description = "square meters"
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "SampleSizeID") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(sample_size)
-  ) %>%
-  dplyr::arrange(sample_size)
-
-add_to_db(
-  conn = con,
-  data_splot_sample_size,
-  table_name = "SampleSizeID"
-)
-
-data_splot_sample_size_id_db <-
-  dplyr::tbl(con, "SampleSizeID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    splot_samples_raw %>%
-      dplyr::distinct(sample_size),
-    by = dplyr::join_by(sample_size)
   )
 
 # - 4.2 samples -----
-
-splot_samples <-
-  splot_samples_raw %>%
-  dplyr::left_join(
-    data_splot_sample_size_id_db,
-    by = dplyr::join_by(sample_size)
-  ) %>%
-  dplyr::select(
-    sample_name, age, sample_size_id
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Samples") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(sample_name)
-  )
-
-add_to_db(
-  conn = con,
-  splot_samples,
-  table_name = "Samples"
-)
-
 splot_samples_id_db <-
-  dplyr::tbl(con, "Samples") %>%
-  dplyr::select(sample_id, sample_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    splot_samples_raw %>%
-      dplyr::distinct(sample_name),
-    by = dplyr::join_by(sample_name)
+  add_samples_with_size(
+    data_source = splot_samples_raw,
+    con = con
   )
 
 
@@ -327,25 +144,11 @@ splot_samples_id_db <-
 # 5. Dataset - Sample -----
 #----------------------------------------------------------#
 
-data_splot_dataset_sample <-
-  splot_samples_raw %>%
-  dplyr::left_join(
-    splot_dataset_id_db,
-    by = dplyr::join_by(dataset_name)
-  ) %>%
-  dplyr::left_join(
-    splot_samples_id_db,
-    by = dplyr::join_by(sample_name)
-  ) %>%
-  dplyr::select(
-    dataset_id, sample_id
-  )
-
-dplyr::copy_to(
-  con,
-  data_splot_dataset_sample,
-  name = "DatasetSample",
-  append = TRUE
+add_dataset_sample(
+  data_source = splot_samples_raw,
+  con = con,
+  dataset_id = splot_dataset_id_db,
+  sample_id = splot_samples_id_db
 )
 
 
@@ -375,59 +178,28 @@ data_splot_taxa_raw <-
   )
 
 # - 6.1 taxa id -----
-
-data_splot_taxa <-
-  data_splot_taxa_raw %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Taxa") %>%
-      dplyr::collect(),
-    by = dplyr::join_by(taxon_name)
-  )
-
-add_to_db(
-  conn = con,
-  data_splot_taxa,
-  table_name = "Taxa"
-)
-
 data_splot_taxa_id_db <-
-  dplyr::tbl(con, "Taxa") %>%
-  dplyr::select(taxon_id, taxon_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    data_splot_taxa_raw %>%
-      dplyr::distinct(taxon_name),
-    by = dplyr::join_by(taxon_name)
+  add_taxa(
+    data_source = data_splot_taxa_raw,
+    con = con
   )
 
 # - 6.2 Sample - taxa -----
-
-data_splot_sample_taxa <-
+data_splot_sample_taxa_raw <-
   splot_samples_raw %>%
-  dplyr::left_join(
-    splot_samples_id_db,
-    by = dplyr::join_by(sample_name)
-  ) %>%
-  dplyr::select(
-    sample_id, taxa
-  ) %>%
+  dplyr::select(sample_name, taxa) %>%
   tidyr::unnest(taxa) %>%
-  dplyr::left_join(
-    data_splot_taxa_id_db,
-    by = dplyr::join_by(Species == taxon_name)
-  ) %>%
   dplyr::rename(
+    taxon_name = Species,
     value = Original_abundance
   ) %>%
-  dplyr::select(
-    sample_id, taxon_id, value
-  )
+  dplyr::select(sample_name, taxon_name, value)
 
-dplyr::copy_to(
-  con,
-  data_splot_sample_taxa,
-  name = "SampleTaxa",
-  append = TRUE
+add_sample_taxa(
+  data_source = data_splot_sample_taxa_raw,
+  con = con,
+  samples_id = splot_samples_id_db,
+  taxa_id = data_splot_taxa_id_db
 )
 
 
