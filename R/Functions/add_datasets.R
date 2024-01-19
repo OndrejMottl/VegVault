@@ -3,7 +3,8 @@ add_datasets <- function(
     data_type = NULL,
     data_source_type = NULL,
     dataset_source = NULL,
-    sampling_method = NULL) {
+    sampling_method = NULL,
+    dataset_reference = NULL) {
   assertthat::has_name(
     data_source,
     c(
@@ -19,6 +20,7 @@ add_datasets <- function(
     isFALSE(is.null(dataset_source))
   ) {
     assertthat::has_name(dataset_source, "data_source_desc")
+    assertthat::has_name(dataset, "data_source_desc")
 
     dataset <-
       dataset %>%
@@ -32,6 +34,8 @@ add_datasets <- function(
     isFALSE(is.null(data_type))
   ) {
     assertthat::has_name(data_type, "dataset_type")
+    assertthat::has_name(dataset, "dataset_type")
+
     dataset <-
       dataset %>%
       dplyr::left_join(
@@ -44,6 +48,7 @@ add_datasets <- function(
     isFALSE(is.null(data_source_type))
   ) {
     assertthat::has_name(data_source_type, "dataset_source_type")
+    assertthat::has_name(dataset, "dataset_source_type")
 
     dataset <-
       dataset %>%
@@ -57,6 +62,7 @@ add_datasets <- function(
     isFALSE(is.null(sampling_method))
   ) {
     assertthat::has_name(sampling_method, "sampling_method_details")
+    assertthat::has_name(dataset, "sampling_method_details")
 
     dataset <-
       dataset %>%
@@ -65,6 +71,27 @@ add_datasets <- function(
         by = dplyr::join_by(sampling_method_details)
       )
   }
+
+  if (
+    isFALSE(is.null(dataset_reference))
+  ) {
+    assertthat::has_name(dataset_reference, "reference_detail")
+    assertthat::has_name(dataset, "dataset_reference")
+
+    dataset <-
+      dataset %>%
+      dplyr::rename(
+        reference_detail = dataset_reference
+      ) %>%
+      dplyr::left_join(
+        dataset_reference,
+        by = dplyr::join_by(reference_detail)
+      ) %>%
+      dplyr::mutate(
+        dataset_reference = reference_id
+      )
+  }
+
 
   dataset_unique <-
     dataset %>%
@@ -81,7 +108,8 @@ add_datasets <- function(
           "dataset_type_id",
           "data_source_type_id",
           "data_source_id",
-          "sampling_method_id"
+          "sampling_method_id",
+          "dataset_reference"
         )
       )
     ) %>%
