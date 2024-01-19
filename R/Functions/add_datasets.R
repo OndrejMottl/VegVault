@@ -2,7 +2,8 @@ add_datasets <- function(
     data_source, con,
     data_type = NULL,
     data_source_type = NULL,
-    dataset_source = NULL) {
+    dataset_source = NULL,
+    sampling_method = NULL) {
   assertthat::has_name(
     data_source,
     c(
@@ -52,6 +53,19 @@ add_datasets <- function(
       )
   }
 
+  if (
+    isFALSE(is.null(sampling_method))
+  ) {
+    assertthat::has_name(sampling_method, "sampling_method_details")
+
+    dataset <-
+      dataset %>%
+      dplyr::left_join(
+        sampling_method,
+        by = dplyr::join_by(sampling_method_details)
+      )
+  }
+
   dataset_unique <-
     dataset %>%
     dplyr::select(
@@ -66,7 +80,8 @@ add_datasets <- function(
         c(
           "dataset_type_id",
           "data_source_type_id",
-          "data_source_id"
+          "data_source_id",
+          "sampling_method_id"
         )
       )
     ) %>%
