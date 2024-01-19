@@ -1,4 +1,12 @@
 add_dataset_sample <- function(data_source, dataset_id, sample_id, con) {
+  assertthat::has_name(
+    data_source,
+    c(
+      "dataset_name",
+      "sample_name"
+    )
+  )
+
   dataset_sample <-
     data_source %>%
     dplyr::distinct(

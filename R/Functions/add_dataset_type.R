@@ -1,4 +1,5 @@
 add_dataset_type <- function(data_source, con) {
+  assertthat::has_name(data_source, "data_source")
   dataset_type_id <-
     data_source %>%
     dplyr::distinct(dataset_type) %>%

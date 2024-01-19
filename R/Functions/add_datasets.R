@@ -3,11 +3,22 @@ add_datasets <- function(
     data_type = NULL,
     data_source_type = NULL,
     dataset_source = NULL) {
+  assertthat::has_name(
+    data_source,
+    c(
+      "dataset_name",
+      "coord_long",
+      "coord_lat"
+    )
+  )
+
   dataset <- data_source
 
   if (
     isFALSE(is.null(dataset_source))
   ) {
+    assertthat::has_name(dataset_source, "data_source_desc")
+
     dataset <-
       dataset %>%
       dplyr::left_join(
@@ -19,6 +30,7 @@ add_datasets <- function(
   if (
     isFALSE(is.null(data_type))
   ) {
+    assertthat::has_name(data_type, "dataset_type")
     dataset <-
       dataset %>%
       dplyr::left_join(
@@ -30,6 +42,8 @@ add_datasets <- function(
   if (
     isFALSE(is.null(data_source_type))
   ) {
+    assertthat::has_name(data_source_type, "dataset_source_type")
+
     dataset <-
       dataset %>%
       dplyr::left_join(

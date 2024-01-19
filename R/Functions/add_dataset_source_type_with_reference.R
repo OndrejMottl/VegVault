@@ -1,4 +1,12 @@
 add_dataset_source_type_with_reference <- function(data_source, con) {
+  assertthat::has_name(
+    data_source,
+    c(
+      "dataset_source_type",
+      "data_source_type_reference"
+    )
+  )
+
   dataset_source_type_referecne_db <-
     add_dataset_source_type_reference(
       data_source = data_source,
