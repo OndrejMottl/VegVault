@@ -1,0 +1,34 @@
+add_dataset_reference <- function(data_source, con) {
+  assertthat::has_name(data_source, "reference_detail")
+
+  reference <-
+    fossilpol_dataset_raw %>%
+    dplyr::distinct(dataset_reference) %>%
+    tidyr::drop_na() %>%
+    dplyr::rename(
+      reference_detail = dataset_reference
+    ) %>%
+    dplyr::anti_join(
+      dplyr::tbl(con, "References") %>%
+        dplyr::select(reference_detail) %>%
+        dplyr::collect(),
+      by = dplyr::join_by(reference_detail)
+    )
+
+  add_to_db(
+    conn = con,
+    data = reference,
+    table_name = "References"
+  )
+
+  reference_db <-
+    dplyr::tbl(con, "References") %>%
+    dplyr::collect() %>%
+    dplyr::inner_join(
+      fossilpol_dataset_raw %>%
+        dplyr::distinct(dataset_reference),
+      by = dplyr::join_by(reference_detail == dataset_reference)
+    )
+
+  return(reference_db)
+}
