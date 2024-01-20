@@ -66,6 +66,23 @@ data_fossilpol <-
 
 dplyr::glimpse(data_fossilpol)
 
+data_uncertainty_raw <-
+  c(
+    "data_age_uncertainty_A_2023-12-12__3aa5658488292372af2b521ca6e48c14__.qs",
+    "data_age_uncertainty_B_2023-12-12__7781fda623c5da21cd6d4766e550985d__.qs"
+  ) %>%
+  purrr::map(
+    .f = ~ paste0(
+      url_gh_fossilpol,
+      "Outputs/Data/",
+      .x
+    ) %>%
+      dowload_and_load()
+  ) %>%
+  dplyr::bind_rows()
+
+dplyr::glimpse(data_uncertainty_raw)
+
 
 #----------------------------------------------------------#
 # 3. Datasets -----
@@ -188,33 +205,12 @@ fossilpol_samples_raw <-
   ) %>%
   dplyr::select(-c(dataset_id, sample_id))
 
-fossilpol_samples <-
-  fossilpol_samples_raw %>%
-  dplyr::select(
-    sample_name, age
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Samples") %>%
-      dplyr::select(sample_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(sample_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = fossilpol_samples,
-  table_name = "Samples"
-)
-
 fossilpol_samples_id <-
-  dplyr::tbl(con, "Samples") %>%
-  dplyr::select(sample_id, sample_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    fossilpol_samples_raw %>%
-      dplyr::distinct(sample_name),
-    by = dplyr::join_by(sample_name)
+  add_samples(
+    data_source = fossilpol_samples_raw,
+    con = con
   )
+
 
 
 #----------------------------------------------------------#
@@ -223,46 +219,21 @@ fossilpol_samples_id <-
 
 data_fossilpol_dataset_sample <-
   fossilpol_samples_raw %>%
-  dplyr::select(dataset_name, sample_name) %>%
-  dplyr::left_join(
-    fossilpol_dataset_id,
-    by = dplyr::join_by(dataset_name)
-  ) %>%
-  dplyr::left_join(
-    fossilpol_samples_id,
-    by = dplyr::join_by(sample_name)
-  ) %>%
-  dplyr::select(
-    dataset_id, sample_id
-  )
+  dplyr::select(dataset_name, sample_name)
 
-dplyr::copy_to(
-  con,
-  data_fossilpol_dataset_sample,
-  name = "DatasetSample",
-  append = TRUE
+add_dataset_sample(
+  data_source = data_fossilpol_dataset_sample,
+  dataset_id = fossilpol_dataset_id,
+  sample_id = fossilpol_samples_id,
+  con = con
 )
+
 
 #----------------------------------------------------------#
 # 6. Sample Uncertainty -----
 #----------------------------------------------------------#
 
-data_uncertainty_raw <-
-  c(
-    "data_age_uncertainty_A_2023-12-12__3aa5658488292372af2b521ca6e48c14__.qs",
-    "data_age_uncertainty_B_2023-12-12__7781fda623c5da21cd6d4766e550985d__.qs"
-  ) %>%
-  purrr::map(
-    .f = ~ paste0(
-      url_gh_fossilpol,
-      "Outputs/Data/",
-      .x
-    ) %>%
-      dowload_and_load()
-  ) %>%
-  dplyr::bind_rows()
-
-data_uncertainty <-
+data_fossilpol_uncertainty_raw <-
   data_uncertainty_raw %>%
   dplyr::mutate(
     dataset_name = paste0(
@@ -271,10 +242,6 @@ data_uncertainty <-
     )
   ) %>%
   dplyr::select(-dataset_id) %>%
-  dplyr::left_join(
-    fossilpol_dataset_id,
-    by = dplyr::join_by(dataset_name)
-  ) %>%
   dplyr::mutate(
     age_uncertainty_nested = purrr::map(
       .progress = TRUE,
@@ -289,36 +256,21 @@ data_uncertainty <-
     )
   ) %>%
   dplyr::select(-age_uncertainty) %>%
-  tidyr::unnest(age_uncertainty_nested) %>%
-  dplyr::mutate(
-    sample_name = paste0(
-      "fossilpol_",
-      dataset_id,
-      "_",
-      sample_id
-    )
-  ) %>%
-  dplyr::select(sample_name, iteration, age) %>%
-  dplyr::left_join(
-    fossilpol_samples_id,
-    by = dplyr::join_by(sample_name)
-  ) %>%
-  dplyr::select(-sample_name)
+  tidyr::unnest(age_uncertainty_nested)
 
-dplyr::copy_to(
-  con,
-  data_uncertainty,
-  name = "SampleUncertainty",
-  append = TRUE
+add_sample_age_uncertainty(
+  data_source = data_fossilpol_uncertainty_raw,
+  dataset_id = fossilpol_dataset_id,
+  samples_id = fossilpol_samples_id,
+  con = con,
+  sel_name = "fossilpol_"
 )
-
 
 #----------------------------------------------------------#
 # 7. Taxa -----
 #----------------------------------------------------------#
 
 # 7.1 taxa id -----
-
 data_fossilpol_taxa_raw <-
   fossilpol_samples_raw %>%
   dplyr::select(-c(dataset_name, age)) %>%
@@ -334,40 +286,18 @@ data_fossilpol_taxa_raw <-
   ) %>%
   tidyr::drop_na()
 
-data_fossilpol_taxa <-
-  data_fossilpol_taxa_raw %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Taxa") %>%
-      dplyr::select(taxon_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(taxon_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_fossilpol_taxa,
-  table_name = "Taxa"
-)
-
 data_fossilpol_taxa_id <-
-  dplyr::tbl(con, "Taxa") %>%
-  dplyr::select(taxon_id, taxon_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    data_fossilpol_taxa_raw,
-    by = dplyr::join_by(taxon_name)
+  add_taxa(
+    data_source = data_fossilpol_taxa_raw,
+    con = con
   )
 
 
 # 7.2 Sample - taxa -----
-
-data_fossilpol_sample_taxa <-
+data_fossilpol_sample_taxa_raw <-
   fossilpol_samples_raw %>%
   dplyr::select(-dataset_name, -age) %>%
-  dplyr::left_join(
-    fossilpol_samples_id,
-    by = dplyr::join_by(sample_name)
-  ) %>%
+  # TODO: finish the proper seleciton of samples, datasets etc
   dplyr::select(-sample_name) %>%
   tidyr::pivot_longer(
     cols = -sample_id,
@@ -377,19 +307,16 @@ data_fossilpol_sample_taxa <-
   dplyr::filter(
     value > 0
   ) %>%
-  dplyr::left_join(
-    data_fossilpol_taxa_id,
-    by = dplyr::join_by(taxon_name)
-  ) %>%
   dplyr::select(
-    sample_id, taxon_id, value
+    sample_id, taxon_name, value
   )
 
-dplyr::copy_to(
-  con,
-  data_fossilpol_sample_taxa,
-  name = "SampleTaxa",
-  append = TRUE
+
+add_sample_taxa(
+  data_source = data_fossilpol_sample_taxa_raw,
+  taxa_id = data_fossilpol_taxa_id,
+  samples_id = fossilpol_samples_id,
+  con = con
 )
 
 
