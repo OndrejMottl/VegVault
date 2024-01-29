@@ -71,218 +71,107 @@ data_bien_traits <-
   ) %>%
   dplyr::bind_rows()
 
+dplyr::glimpse(data_bien_traits)
+
+
 #----------------------------------------------------------#
 # 3. Datasets -----
 #----------------------------------------------------------#
 
-dplyr::glimpse(data_bien_traits)
-
 bien_traits_dataset_raw <-
   data_bien_traits %>%
   dplyr::mutate(
-    dataset_type = "bien_traits",
+    dataset_type = "traits",
+    dataset_source_type = "BIEN",
+    data_source_type_reference = "https://doi.org/10.7287/peerj.preprints.2615v2",
     data_source_desc = project_pi,
     coord_long = as.numeric(longitude),
     coord_lat = as.numeric(latitude),
-    sampling_reference = source_citation
+    data_source_reference = source_citation
   )
 
-bien_traits_dataset_raw_unique <-
+bien_traits_dataset_raw_distinct <-
   bien_traits_dataset_raw %>%
   dplyr::distinct(
-    dataset_type, data_source_desc,
+    dataset_type,
+    dataset_source_type, data_source_type_reference,
+    data_source_desc,
     coord_long, coord_lat,
-    sampling_reference
+    data_source_reference
   ) %>%
   dplyr::mutate(
     dataset_name = paste0(
       "bien_traits_",
       dplyr::row_number()
     )
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Datasets") %>%
-      dplyr::select(dataset_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_name)
   )
 
-# 3.1 dataset source -----
-
-data_bien_traits_data_source_id <-
-  bien_traits_dataset_raw_unique %>%
-  dplyr::distinct(data_source_desc) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetSourcesID") %>%
-      dplyr::select(data_source_desc) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(data_source_desc)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_bien_traits_data_source_id,
-  table_name = "DatasetSourcesID"
-)
-
-data_bien_traits_data_source_id_db <-
-  dplyr::tbl(con, "DatasetSourcesID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_traits_dataset_raw %>%
-      dplyr::distinct(data_source_desc),
-    by = dplyr::join_by(data_source_desc)
-  )
-
-# 3.2 dataset type -----
-
-data_bien_traits_dataset_type_id <-
-  bien_traits_dataset_raw_unique %>%
-  dplyr::distinct(dataset_type) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "DatasetTypeID") %>%
-      dplyr::select(dataset_type) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_type)
-  )
-
-add_to_db(
-  conn = con,
-  data = data_bien_traits_dataset_type_id,
-  table_name = "DatasetTypeID"
-)
-
+# - 3.1 dataset type -----
 data_bien_traits_dataset_type_id_db <-
-  dplyr::tbl(con, "DatasetTypeID") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_traits_dataset_raw %>%
-      dplyr::distinct(dataset_type),
-    by = dplyr::join_by(dataset_type)
+  add_dataset_type(
+    data_source = bien_traits_dataset_raw_distinct,
+    con = con
   )
 
-# 3.3 dataset reference -----
-
-data_bien_traits_reference <-
-  bien_traits_dataset_raw_unique %>%
-  dplyr::distinct(sampling_reference) %>%
-  tidyr::drop_na() %>%
-  dplyr::rename(
-    reference_detail = sampling_reference
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "References") %>%
-      dplyr::select(reference_detail) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(reference_detail)
+# - 3.2 dataset source type -----
+data_bien_traits_dataset_source_type_db <-
+  add_dataset_source_type_with_reference(
+    data_source = bien_traits_dataset_raw_distinct,
+    con = con
   )
 
-add_to_db(
-  conn = con,
-  data = data_bien_traits_reference,
-  table_name = "References"
-)
-
-data_bien_traits_reference_db <-
-  dplyr::tbl(con, "References") %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_traits_dataset_raw_unique %>%
-      dplyr::distinct(sampling_reference),
-    by = dplyr::join_by(reference_detail == sampling_reference)
+# - 3.3 dataset source -----
+data_bien_traits_data_source_id_db <-
+  add_data_source_with_reference(
+    data_source = bien_traits_dataset_raw_distinct,
+    con = con
   )
 
 # 3.4 datasets -----
-
-bien_traits_dataset <-
-  bien_traits_dataset_raw_unique %>%
-  dplyr::left_join(
-    data_bien_traits_data_source_id_db,
-    by = dplyr::join_by(data_source_desc)
-  ) %>%
-  dplyr::left_join(
-    data_bien_traits_dataset_type_id_db,
-    by = dplyr::join_by(dataset_type)
-  ) %>%
-  dplyr::left_join(
-    data_bien_traits_reference_db,
-    by = dplyr::join_by(sampling_reference == reference_detail)
-  ) %>%
-  dplyr::select(
-    dataset_name, data_source_id, dataset_type_id,
-    coord_long, coord_lat,
-    dataset_reference = reference_id
-  ) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Datasets") %>%
-      dplyr::select(dataset_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(dataset_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = bien_traits_dataset,
-  table_name = "Datasets"
-)
-
 bien_traits_dataset_id <-
-  dplyr::tbl(con, "Datasets") %>%
-  dplyr::select(dataset_id, dataset_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_traits_dataset_raw_unique %>%
-      dplyr::distinct(dataset_name),
-    by = dplyr::join_by(dataset_name)
+  add_datasets(
+    data_source = bien_traits_dataset_raw_distinct,
+    con = con,
+    data_type = data_bien_traits_dataset_type_id_db,
+    data_source_type = data_bien_traits_dataset_source_type_db,
+    dataset_source = data_bien_traits_data_source_id_db
   )
+
 
 #----------------------------------------------------------#
 # 4. Samples -----
 #----------------------------------------------------------#
 
-bien_traits_samples_raw <-
+bien_traits_samples_raw_id <-
   bien_traits_dataset_raw %>%
   dplyr::mutate(
     sample_name = paste0(
       "bien_traits_",
       id
     )
-  ) %>%
+  )
+
+bien_traits_samples_raw <-
+  bien_traits_samples_raw_id %>%
   dplyr::left_join(
-    bien_traits_dataset_raw_unique,
+    bien_traits_dataset_raw_distinct,
     by = dplyr::join_by(
       dataset_type, data_source_desc,
       coord_long, coord_lat,
-      sampling_reference
+      dataset_source_type,
+      data_source_type_reference,
+      data_source_reference
     )
+  ) %>%
+  dplyr::mutate(
+    age = 0
   )
 
 # 4.1 samples -----
-
-bien_traits_samples <-
-  bien_traits_samples_raw %>%
-  dplyr::distinct(sample_name) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Samples") %>%
-      dplyr::select(sample_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(sample_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = bien_traits_samples,
-  table_name = "Samples"
-)
-
 bien_traits_samples_id <-
-  dplyr::tbl(con, "Samples") %>%
-  dplyr::select(sample_id, sample_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_traits_samples_raw %>%
-      dplyr::distinct(sample_name),
-    by = dplyr::join_by(sample_name)
+  add_samples(
+    data_source = bien_traits_samples_raw,
+    con = con
   )
 
 
@@ -290,29 +179,13 @@ bien_traits_samples_id <-
 # 5. Dataset - Sample -----
 #----------------------------------------------------------#
 
-data_bien_traits_dataset_sample <-
-  bien_traits_samples_raw %>%
-  dplyr::distinct(
-    dataset_name, sample_name
-  ) %>%
-  dplyr::left_join(
-    bien_traits_dataset_id,
-    by = dplyr::join_by(dataset_name)
-  ) %>%
-  dplyr::left_join(
-    bien_traits_samples_id,
-    by = dplyr::join_by(sample_name)
-  ) %>%
-  dplyr::select(
-    dataset_id, sample_id
-  )
-
-dplyr::copy_to(
-  con,
-  data_bien_traits_dataset_sample,
-  name = "DatasetSample",
-  append = TRUE
+add_dataset_sample(
+  data_source = bien_traits_samples_raw,
+  dataset_id = bien_traits_dataset_id,
+  sample_id = bien_traits_samples_id,
+  con = con
 )
+
 
 #----------------------------------------------------------#
 # 6. taxa -----
@@ -322,38 +195,19 @@ bien_traits_taxa_raw <-
   bien_traits_samples_raw %>%
   dplyr::rename(taxon_name = scrubbed_species_binomial)
 
-bien_traits_taxa <-
-  bien_traits_taxa_raw %>%
-  dplyr::distinct(taxon_name) %>%
-  tidyr::drop_na() %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Taxa") %>%
-      dplyr::select(taxon_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(taxon_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = bien_traits_taxa,
-  table_name = "Taxa"
-)
-
 bien_traits_taxa_id <-
-  dplyr::tbl(con, "Taxa") %>%
-  dplyr::select(taxon_id, taxon_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_traits_taxa_raw %>%
-      dplyr::distinct(taxon_name),
-    by = dplyr::join_by(taxon_name)
+  add_taxa(
+    data_source = bien_traits_taxa_raw,
+    con = con
   )
+
 
 #----------------------------------------------------------#
 # 7. Traits -----
 #----------------------------------------------------------#
+
 bien_traits_traits_raw <-
-  bien_traits_samples_raw %>%
+  bien_traits_taxa_raw %>%
   dplyr::mutate(
     trait_domain_name = dplyr::case_when(
       trait_name == "stem wood density" ~ "Stem specific density",
@@ -372,109 +226,46 @@ bien_traits_traits_raw <-
       "leaf mass per area",
       trait_name
     )
+  ) %>%
+  dplyr::rename(
+    trait_full_name = trait_name
   )
 
 
 # 7.1 Trait domains -----
-
-bien_traits_trait_domain <-
-  bien_traits_traits_raw %>%
-  dplyr::distinct(trait_domain_name) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "TraitsDomain") %>%
-      dplyr::select(trait_domain_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(trait_domain_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = bien_traits_trait_domain,
-  table_name = "TraitsDomain"
-)
-
 trait_domain_id <-
-  dplyr::tbl(con, "TraitsDomain") %>%
-  dplyr::select(trait_domain_id, trait_domain_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_traits_traits_raw %>%
-      dplyr::distinct(trait_domain_name),
-    by = dplyr::join_by(trait_domain_name)
+  add_trait_domain(
+    data_source = bien_traits_traits_raw,
+    con = con
   )
 
 # 7.2 Traits -----
-
-bien_traits_traits <-
-  bien_traits_traits_raw %>%
-  dplyr::distinct(trait_domain_name, trait_name) %>%
-  dplyr::left_join(
-    trait_domain_id,
-    by = dplyr::join_by(trait_domain_name)
-  ) %>%
-  dplyr::select(-trait_domain_name) %>%
-  dplyr::anti_join(
-    dplyr::tbl(con, "Traits") %>%
-      dplyr::select(trait_name) %>%
-      dplyr::collect(),
-    by = dplyr::join_by(trait_name)
-  )
-
-add_to_db(
-  conn = con,
-  data = bien_traits_traits,
-  table_name = "Traits"
-)
-
 bien_traits_traits_id <-
-  dplyr::tbl(con, "Traits") %>%
-  dplyr::select(trait_id, trait_name) %>%
-  dplyr::collect() %>%
-  dplyr::inner_join(
-    bien_traits_traits_raw %>%
-      dplyr::distinct(trait_name),
-    by = dplyr::join_by(trait_name)
+  add_traits(
+    data_source = bien_traits_traits_raw,
+    trait_domain_id = trait_domain_id,
+    con = con
   )
 
 # 7.3 Trait value -----
 
-bien_traits_traits_value <-
-  bien_traits_traits_raw %>%
+bien_traits_traits_raw %>%
   dplyr::select(
     dataset_name, sample_name,
-    trait_name,
-    taxon_name = scrubbed_species_binomial,
+    trait_name = trait_full_name,
+    taxon_name,
     trait_value
   ) %>%
   tidyr::drop_na() %>%
-  dplyr::left_join(
-    bien_traits_dataset_id,
-    by = dplyr::join_by(dataset_name)
-  ) %>%
-  dplyr::left_join(
-    bien_traits_samples_id,
-    by = dplyr::join_by(sample_name)
-  ) %>%
-  dplyr::left_join(
-    bien_traits_traits_id,
-    by = dplyr::join_by(trait_name)
-  ) %>%
-  dplyr::left_join(
-    bien_traits_taxa_id,
-    by = dplyr::join_by(taxon_name)
-  ) %>%
-  dplyr::select(
-    trait_id, dataset_id, sample_id,
-    taxon_id,
-    trait_value
+  add_trait_value(
+    data_source = .,
+    con = con,
+    dataset_id = bien_traits_dataset_id,
+    samples_id = bien_traits_samples_id,
+    traits_id = bien_traits_traits_id,
+    taxa_id = bien_traits_taxa_id
   )
 
-dplyr::copy_to(
-  con,
-  bien_traits_traits_value,
-  name = "TraitsValue",
-  append = TRUE
-)
 
 #----------------------------------------------------------#
 # 8. Disconect DB -----
