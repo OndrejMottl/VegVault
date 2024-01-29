@@ -38,7 +38,7 @@ add_sample_age_uncertainty <- function(data_source, dataset_id, samples_id, con,
       data_source = data_source,
       dataset_id = dataset_id,
       con = con,
-      sel_name = sel_name
+      ...
     ) %>%
     dplyr::select(sample_name, iteration, age) %>%
     dplyr::left_join(

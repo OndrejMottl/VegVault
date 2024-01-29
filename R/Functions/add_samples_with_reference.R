@@ -7,7 +7,7 @@ add_samples_with_reference <- function(data_source, con) {
         "reference_source"
       )
     ),
-    msg = "data_source must have a column named sample_name and reference_source"
+    msg = "data_source must have a column named sample_name, age, and reference_source"
   )
 
   samples_reference_id <-

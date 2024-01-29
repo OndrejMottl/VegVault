@@ -17,7 +17,9 @@ add_data_source_with_reference <- function(data_source, con) {
 
   data_source_id <-
     data_source %>%
-    dplyr::distinct(data_source_desc, data_source_reference) %>%
+    # TODO: find out a way to keep multiple references per data source #18
+    dplyr::distinct(data_source_desc, .keep_all = TRUE) %>%
+    dplyr::select(data_source_desc, data_source_reference) %>%
     tidyr::drop_na(data_source_desc) %>%
     dplyr::left_join(
       data_source_reference_db,
