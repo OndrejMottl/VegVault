@@ -150,6 +150,9 @@ try_samples_raw <-
       coord_long, coord_lat
     ),
     relationship = "many-to-many"
+  ) %>%
+  dplyr::mutate(
+    age = 0
   )
 
 # 4.1 samples -----
