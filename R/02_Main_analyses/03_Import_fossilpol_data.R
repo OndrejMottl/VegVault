@@ -292,15 +292,12 @@ data_fossilpol_taxa_id <-
     con = con
   )
 
-
 # 7.2 Sample - taxa -----
 data_fossilpol_sample_taxa_raw <-
   fossilpol_samples_raw %>%
   dplyr::select(-dataset_name, -age) %>%
-  # TODO: finish the proper seleciton of samples, datasets etc
-  dplyr::select(-sample_name) %>%
   tidyr::pivot_longer(
-    cols = -sample_id,
+    cols = -sample_name,
     names_to = "taxon_name",
     values_to = "value"
   ) %>%
@@ -308,9 +305,8 @@ data_fossilpol_sample_taxa_raw <-
     value > 0
   ) %>%
   dplyr::select(
-    sample_id, taxon_name, value
+    sample_name, taxon_name, value
   )
-
 
 add_sample_taxa(
   data_source = data_fossilpol_sample_taxa_raw,
