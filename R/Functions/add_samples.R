@@ -1,10 +1,13 @@
 add_samples <- function(data_source, con) {
-  assertthat::has_name(
-    data_source,
-    c(
-      "sample_name",
-      "age"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source,
+      c(
+        "sample_name",
+        "age"
+      )
+    ),
+    msg = "data_source must have columns 'sample_name' and 'age'"
   )
 
   samples <-

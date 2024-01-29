@@ -1,18 +1,24 @@
 add_dataset_sample_name <- function(data_source, dataset_id, con, sel_name = NULL) {
-  assertthat::has_name(
-    data_source,
-    c(
-      "dataset_name",
-      "sample_id"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source,
+      c(
+        "dataset_name",
+        "sample_id"
+      )
+    ),
+    msg = "data_source must have columns 'dataset_name' and 'sample_id'"
   )
 
-  assertthat::has_name(
-    dataset_id,
-    c(
-      "dataset_name",
-      "dataset_id"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      dataset_id,
+      c(
+        "dataset_name",
+        "dataset_id"
+      )
+    ),
+    msg = "dataset_id must have columns 'dataset_name' and 'dataset_id'"
   )
 
   data_source %>%

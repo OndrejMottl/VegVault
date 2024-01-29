@@ -1,5 +1,10 @@
 add_dataset_type <- function(data_source, con) {
-  assertthat::has_name(data_source, "data_source")
+  assertthat::assert_that(
+    assertthat::has_name(data_source, "data_source"),
+    msg = "data_source must have column 'data_source'"
+  )
+
+
   dataset_type_id <-
     data_source %>%
     dplyr::distinct(dataset_type) %>%

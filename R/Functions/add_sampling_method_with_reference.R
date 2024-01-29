@@ -1,10 +1,13 @@
 add_sampling_method_with_reference <- function(data_source, con) {
-  assertthat::has_name(
-    data_source,
-    c(
-      "sampling_protocol",
-      "sampling_reference"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source,
+      c(
+        "sampling_protocol",
+        "sampling_reference"
+      )
+    ),
+    msg = "data_source must have columns 'sampling_protocol' and 'sampling_reference'"
   )
 
   reference_db <-

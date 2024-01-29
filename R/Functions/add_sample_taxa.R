@@ -1,14 +1,23 @@
 add_sample_taxa <- function(data_source, samples_id, taxa_id, con) {
-  assertthat::has_name(
-    data_source,
-    c(
-      "sample_name",
-      "taxon_name",
-      "value"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source,
+      c(
+        "sample_name",
+        "taxon_name",
+        "value"
+      )
+    ),
+    msg = "data_source must have columns 'sample_name', 'taxon_name' and 'value'"
   )
-  assertthat::has_name(samples_id, "sample_name")
-  assertthat::has_name(taxa_id, "taxon_name")
+  assertthat::assert_that(
+    assertthat::has_name(samples_id, "sample_name"),
+    msg = "samples_id must have column 'sample_name'"
+  )
+  assertthat::assert_that(
+    assertthat::has_name(taxa_id, "taxon_name"),
+    msg = "taxa_id must have column 'taxon_name'"
+  )
 
   sample_taxa <-
     data_source %>%

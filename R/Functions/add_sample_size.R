@@ -1,10 +1,13 @@
 add_sample_size <- function(data_source, con) {
-  assertthat::has_name(
-    data_source,
-    c(
-      "sample_size",
-      "description"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source,
+      c(
+        "sample_size",
+        "description"
+      )
+    ),
+    msg = "data_source must have columns 'sample_size' and 'description'"
   )
 
   sample_size <-

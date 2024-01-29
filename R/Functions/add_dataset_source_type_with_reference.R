@@ -1,10 +1,13 @@
 add_dataset_source_type_with_reference <- function(data_source, con) {
-  assertthat::has_name(
-    data_source,
-    c(
-      "dataset_source_type",
-      "data_source_type_reference"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source,
+      c(
+        "dataset_source_type",
+        "data_source_type_reference"
+      )
+    ),
+    msg = "data_source must have columns 'dataset_source_type' and 'data_source_type_reference'"
   )
 
   dataset_source_type_referecne_db <-

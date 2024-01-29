@@ -1,5 +1,8 @@
 add_dataset_reference <- function(data_source, con) {
-  assertthat::has_name(data_source, "reference_detail")
+ assertthat::assert_that(
+   assertthat::has_name(data_source, "reference_detail"),
+    msg = "data_source must have column 'reference_detail'"
+ )
 
   reference <-
     fossilpol_dataset_raw %>%

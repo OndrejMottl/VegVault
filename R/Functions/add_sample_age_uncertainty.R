@@ -1,27 +1,36 @@
 add_sample_age_uncertainty <- function(data_source, dataset_id, samples_id, con, ...) {
-  assertthat::has_name(
-    data_source,
-    c(
-      "dataset_name",
-      "age",
-      "iteration"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source,
+      c(
+        "dataset_name",
+        "age",
+        "iteration"
+      )
+    ),
+    msg = "data_source must have columns 'dataset_name', 'age' and 'iteration'"
   )
 
-  assertthat::has_name(
-    dataset_id,
-    c(
-      "dataset_name",
-      "dataset_id"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      dataset_id,
+      c(
+        "dataset_name",
+        "dataset_id"
+      )
+    ),
+    msg = "dataset_id must have columns 'dataset_name' and 'dataset_id'"
   )
 
-  assertthat::has_name(
-    samples_id,
-    c(
-      "sample_id",
-      "sample_name"
-    )
+  assertthat::assert_that(
+    assertthat::has_name(
+      samples_id,
+      c(
+        "sample_id",
+        "sample_name"
+      )
+    ),
+    msg = "samples_id must have columns 'sample_id' and 'sample_name'"
   )
 
   data_uncertainty <-
@@ -29,7 +38,7 @@ add_sample_age_uncertainty <- function(data_source, dataset_id, samples_id, con,
       data_source = data_source,
       dataset_id = dataset_id,
       con = con,
-      sel_name = sel_name 
+      sel_name = sel_name
     ) %>%
     dplyr::select(sample_name, iteration, age) %>%
     dplyr::left_join(
