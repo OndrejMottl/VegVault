@@ -1,4 +1,9 @@
 add_trait_domain <- function(data_source, con) {
+  assertthat::assert_that(
+    assertthat::has_name(data_source, "trait_domain_name"),
+    msg = "data_source must have a column named trait_domain_name"
+  )
+
   trait_domain <-
     data_source %>%
     dplyr::distinct(trait_domain_name) %>%
@@ -25,5 +30,5 @@ add_trait_domain <- function(data_source, con) {
       by = dplyr::join_by(trait_domain_name)
     )
 
-    return(trait_domain_id)
+  return(trait_domain_id)
 }

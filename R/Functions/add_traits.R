@@ -1,4 +1,26 @@
 add_traits <- function(data_source, trait_domain_id, con) {
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source,
+      c(
+        "trait_domain_name",
+        "trait_full_name"
+      )
+    ),
+    msg = "data_source must have a column named trait_domain_name and trait_full_name"
+  )
+
+  assertthat::assert_that(
+    assertthat::has_name(
+      trait_domain_id,
+      c(
+        "trait_domain_id",
+        "trait_domain_name"
+      )
+    ),
+    msg = "trait_domain_id must have a column named trait_domain_id and trait_domain_name"
+  )
+
   traits <-
     data_source %>%
     dplyr::distinct(trait_domain_name, trait_full_name) %>%
@@ -32,4 +54,6 @@ add_traits <- function(data_source, trait_domain_id, con) {
         dplyr::distinct(trait_full_name),
       by = dplyr::join_by(trait_name == trait_full_name)
     )
+
+    return(traits_id)
 }

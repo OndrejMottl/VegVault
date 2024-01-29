@@ -1,4 +1,14 @@
-add_data_source_with_reference <- function(data_source, con){
+add_data_source_with_reference <- function(data_source, con) {
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source, c(
+        "data_source_desc",
+        "data_source_reference"
+      )
+    ),
+    msg = "data_source must have a column named data_source_desc and data_source_reference"
+  )
+
   data_source_reference_db <-
     add_data_source_referecne(
       data_source = data_source,
@@ -42,5 +52,5 @@ add_data_source_with_reference <- function(data_source, con){
       by = dplyr::join_by(data_source_desc)
     )
 
-    return(data_source_id_db)
+  return(data_source_id_db)
 }

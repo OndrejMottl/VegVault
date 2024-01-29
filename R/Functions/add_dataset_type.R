@@ -1,9 +1,8 @@
 add_dataset_type <- function(data_source, con) {
   assertthat::assert_that(
-    assertthat::has_name(data_source, "data_source"),
-    msg = "data_source must have column 'data_source'"
+    assertthat::has_name(data_source, "dataset_type"),
+    msg = "data_source must have column 'dataset_type'"
   )
-
 
   dataset_type_id <-
     data_source %>%

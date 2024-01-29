@@ -1,4 +1,9 @@
 add_sample_reference <- function(data_source, con) {
+  assertthat::assert_that(
+    assertthat::has_name(data_source, "reference_source"),
+    msg = "data_source must have a column named reference_source"
+  )
+
   samples_reference <-
     data_source %>%
     dplyr::distinct(reference_source) %>%

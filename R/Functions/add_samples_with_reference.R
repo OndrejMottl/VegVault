@@ -1,4 +1,15 @@
 add_samples_with_reference <- function(data_source, con) {
+  assertthat::assert_that(
+    assertthat::has_name(
+      data_source, c(
+        "sample_name",
+        "age",
+        "reference_source"
+      )
+    ),
+    msg = "data_source must have a column named sample_name and reference_source"
+  )
+
   samples_reference_id <-
     add_sample_reference(
       data_source = data_source,
@@ -7,7 +18,7 @@ add_samples_with_reference <- function(data_source, con) {
 
   samples <-
     data_source %>%
-    dplyr::distinct(sample_name, reference_source) %>%
+    dplyr::distinct(sample_name, age, reference_source) %>%
     dplyr::left_join(
       samples_reference_id,
       by = dplyr::join_by(reference_source == reference_detail)

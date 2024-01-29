@@ -1,4 +1,10 @@
 add_data_source_referecne <- function(data_source, con) {
+
+assertthat::assert_that(
+  assertthat::has_name(data_source, "data_source_reference"),
+  msg = "data_source must have a column named data_source_reference"
+)
+
   data_source_reference <-
     data_source %>%
     dplyr::distinct(data_source_reference) %>%
