@@ -64,3 +64,9 @@ source(
     "R/02_Main_analyses/04_Import_try_data.R"
   )
 )
+
+source(
+  here::here(
+    "R/02_Main_analyses//05_Import_bien_trait_data.R"
+  )
+)
