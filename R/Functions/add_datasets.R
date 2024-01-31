@@ -124,6 +124,12 @@ add_datasets <- function(
       )
   }
 
+  dataset_id_db <-
+    dplyr::tbl(con, "Datasets") %>%
+    dplyr::distinct(dataset_name) %>%
+    dplyr::collect() %>%
+    purrr::chuck("dataset_name")
+
   dataset_unique <-
     dataset %>%
     dplyr::select(
@@ -144,11 +150,8 @@ add_datasets <- function(
         )
       )
     ) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "Datasets") %>%
-        dplyr::select(dataset_name) %>%
-        dplyr::collect(),
-      by = dplyr::join_by(dataset_name)
+    dplyr::filter(
+      !dataset_name %in% dataset_id_db
     )
 
   add_to_db(

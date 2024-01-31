@@ -10,6 +10,16 @@ add_dataset_sample <- function(data_source, dataset_id, sample_id, con) {
     msg = "data_source must have columns 'dataset_name' and 'sample_name'"
   )
 
+  assertthat::assert_that(
+    assertthat::has_name(dataset_id, "dataset_id"),
+    msg = "dataset_id must have column 'dataset_id'"
+  )
+
+  assertthat::assert_that(
+    assertthat::has_name(sample_id, "sample_id"),
+    msg = "sample_id must have column 'sample_id'"
+  )
+
   dataset_sample <-
     data_source %>%
     dplyr::distinct(

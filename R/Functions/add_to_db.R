@@ -13,13 +13,15 @@ add_to_db <- function(
   ) {
     is_valid <- TRUE
   } else {
-    is_valid <-
+    data_bind <-
       dplyr::tbl(conn, table_name) %>%
       dplyr::collect() %>%
       dplyr::bind_rows(
         data
-      ) %>%
-      test_unique_row_in_table()
+      )
+
+    is_valid <-
+      test_unique_row_in_table(data_bind)
   }
 
   if (
