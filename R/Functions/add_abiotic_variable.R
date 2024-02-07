@@ -46,10 +46,10 @@ add_abiotic_variable <- function(
     ) %>%
     dplyr::select(-variable_reference) %>%
     dplyr::select(
-      abiotic_variable_name = variable_name,
-      abiotic_variable_unit = variable_unit,
+      abiotic_variable_name,
+      abiotic_variable_unit = var_unit,
       abiotic_variable_reference = reference_id,
-      measure_details = variable_detail
+      measure_details = var_detail
     ) %>%
     dplyr::distinct()
 
