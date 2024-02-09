@@ -65,8 +65,30 @@ source(
   )
 )
 
+# Import BIEN trait data
 source(
   here::here(
     "R/02_Main_analyses//05_Import_bien_trait_data.R"
+  )
+)
+
+# Import CHELSA-TRACE21K climate data
+source(
+  here::here(
+    "R/02_Main_analyses/06_Import_chelsa_trace21k_climate_data.R"
+  )
+)
+
+# Import CHELSA climate data
+source(
+  here::here(
+    "R/02_Main_analyses/07_Import_chelsa_neo_climate_data.R"
+  )
+)
+
+# Import WOSIS soil data
+source(
+  here::here(
+    "R/02_Main_analyses/08_Import_wosis_soil_data.R"
   )
 )
