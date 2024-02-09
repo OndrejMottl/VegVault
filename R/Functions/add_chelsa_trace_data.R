@@ -104,7 +104,7 @@ add_chelsa_trace_data <- function(
         age
       ),
       sample_size = NA_real_,
-      abiotic_variable_name = var_name,
+      abiotic_variable_name = sel_var_name,
       var_unit = sel_var_unit,
       var_reference = sel_var_reference,
       var_detail = sel_var_detail
