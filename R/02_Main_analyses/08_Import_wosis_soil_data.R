@@ -114,10 +114,10 @@ wosis_dataset_id_db <-
 
 
 # samples -----
-data_soil_samples_raw <-
-  data_soil_dataset_raw %>%
+data_wosis_samples_raw <-
+  data_wosis_dataset_raw %>%
   dplyr::left_join(
-    soil_dataset_id_db,
+    wosis_dataset_id_db,
     by = dplyr::join_by(dataset_name)
   ) %>%
   dplyr::mutate(
@@ -134,30 +134,30 @@ data_soil_samples_raw <-
     var_detail = "WoSIS-SoilGrids"
   )
 
-soil_samples_id_db <-
+wosis_samples_id_db <-
   add_samples(
-    data_source = data_soil_samples_raw,
+    data_source = data_wosis_samples_raw,
     con = con
   )
 
 # Dataset - Sample -----
 add_dataset_sample(
-  data_source = data_soil_samples_raw,
+  data_source = data_wosis_samples_raw,
   con = con,
-  dataset_id = soil_dataset_id_db,
-  sample_id = soil_samples_id_db
+  dataset_id = wosis_dataset_id_db,
+  sample_id = wosis_samples_id_db
 )
 
 # Abiotic varibale
 abiotic_variabe_id <-
   add_abiotic_variable(
-    data_source = data_soil_samples_raw,
+    data_source = data_wosis_samples_raw,
     con = con
   )
 
 add_sample_abiotic_value(
-  data_source = data_soil_samples_raw,
+  data_source = data_wosis_samples_raw,
   con = con,
-  sample_id = soil_samples_id_db,
+  sample_id = wosis_samples_id_db,
   abiotic_variable_id = abiotic_variabe_id
 )
