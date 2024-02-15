@@ -92,3 +92,10 @@ source(
     "R/02_Main_analyses/08_Import_wosis_soil_data.R"
   )
 )
+
+# Classify all taxa in DB
+source(
+  here::here(
+    "/R/02_Main_analyses/09_Classify_taxa.R"
+  )
+)
