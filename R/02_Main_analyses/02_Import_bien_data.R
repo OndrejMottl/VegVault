@@ -74,7 +74,7 @@ bien_dataset_raw <-
   dplyr::mutate(
     dataset_type = "vegetation_plot",
     dataset_source_type = "BIEN",
-    data_source_type_reference = "https://doi.org/10.7287/peerj.preprints.2615v2",
+    data_source_type_reference = list("https://doi.org/10.7287/peerj.preprints.2615v2"),
     data_source_desc = datasource,
     dataset_name = paste0(
       "bien_",
@@ -95,10 +95,16 @@ data_bien_dataset_type_db <-
 
 # - 3.2 dataset source type -----
 data_bien_dataset_source_type_db <-
-  add_dataset_source_type_with_reference(
+  add_dataset_source_type(
     data_source = bien_dataset_raw,
     con = con
   )
+
+add_dataset_source_type_reference(
+  data_source = bien_dataset_raw,
+  data_source_type_id = data_bien_dataset_source_type_db,
+  con = con
+)
 
 # - 3.3 dataset source -----
 data_bien_data_source_id_db <-
@@ -109,10 +115,17 @@ data_bien_data_source_id_db <-
 
 # - 3.4 datasets sampling -----
 data_bien_sampling_method_db <-
-  add_sampling_method_with_reference(
+  add_sampling_method(
     data_source = bien_dataset_raw,
     con = con
   )
+
+add_sampling_method_reference(
+  data_source = bien_dataset_raw,
+  sampling_method_id = data_bien_sampling_method_db,
+  con = con
+
+)
 
 # - 3.5 datasets -----
 bien_dataset_id_db <-
