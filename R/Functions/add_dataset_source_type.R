@@ -1,36 +1,21 @@
-add_dataset_source_type_with_reference <- function(data_source, con) {
+add_dataset_source_type <- function(data_source, con) {
   assertthat::assert_that(
     assertthat::has_name(
       data_source,
       c(
-        "dataset_source_type",
-        "data_source_type_reference"
+        "dataset_source_type"
       )
     ),
-    msg = "data_source must have columns 'dataset_source_type' and 'data_source_type_reference'"
+    msg = "data_source must have columns 'dataset_source_type'"
   )
-
-  dataset_source_type_referecne_db <-
-    add_dataset_source_type_reference(
-      data_source = data_source,
-      con = con
-    )
 
   dataset_source_type <-
     data_source %>%
-    dplyr::distinct(dataset_source_type, data_source_type_reference) %>%
-    dplyr::inner_join(
-      dataset_source_type_referecne_db,
-      by = dplyr::join_by(data_source_type_reference == reference_detail)
-    ) %>%
-    dplyr::select(
-      dataset_source_type,
-      reference_id
-    ) %>%
-    dplyr::rename(data_source_type_reference = reference_id)
+    dplyr::distinct(dataset_source_type)
+
 
   data_source_type_id_db <-
-    dplyr::tbl(con, "References") %>%
+    dplyr::tbl(con, "DatasetSourceTypeID") %>%
     dplyr::distinct(dataset_source_type) %>%
     dplyr::collect() %>%
     purrr::chuck("dataset_source_type")
