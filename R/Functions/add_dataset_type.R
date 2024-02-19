@@ -4,15 +4,18 @@ add_dataset_type <- function(data_source, con) {
     msg = "data_source must have column 'dataset_type'"
   )
 
+  dataset_type_db <-
+    dplyr::tbl(con, "DatasetTypeID") %>%
+    dplyr::distinct(dataset_type) %>%
+    dplyr::collect() %>%
+    purrr::pluck("dataset_type")
+
   dataset_type_id <-
     data_source %>%
     dplyr::distinct(dataset_type) %>%
     tidyr::drop_na() %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "DatasetTypeID") %>%
-        dplyr::select(dataset_type) %>%
-        dplyr::collect(),
-      by = dplyr::join_by(dataset_type)
+    dplyr::filter(
+      !dataset_type %in% dataset_type_db
     )
 
   add_to_db(

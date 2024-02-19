@@ -4,13 +4,17 @@ add_abiotic_referecne <- function(data_source, con) {
     msg = "data_source must have a column named variable_reference"
   )
 
+  variable_reference_db <-
+    dplyr::tbl(con, "References") %>%
+    dplyr::distinct(reference_detail) %>%
+    dplyr::collect() %>%
+    purrr::chuck("reference_detail")
+
   data_source_reference <-
     data_source %>%
     dplyr::distinct(variable_reference) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "References") %>%
-        dplyr::collect(),
-      by = dplyr::join_by(variable_reference == reference_detail)
+    dplyr::filter(
+      !variable_reference %in% variable_reference_db
     ) %>%
     dplyr::rename(reference_detail = variable_reference)
 

@@ -1,17 +1,20 @@
 add_data_source_referecne <- function(data_source, con) {
+  assertthat::assert_that(
+    assertthat::has_name(data_source, "data_source_reference"),
+    msg = "data_source must have a column named data_source_reference"
+  )
 
-assertthat::assert_that(
-  assertthat::has_name(data_source, "data_source_reference"),
-  msg = "data_source must have a column named data_source_reference"
-)
+  reference_detail_db <-
+    dplyr::tbl(con, "References") %>%
+    dplyr::distinct(reference_detail) %>%
+    dplyr::collect() %>%
+    purrr::chuck("reference_detail")
 
   data_source_reference <-
     data_source %>%
     dplyr::distinct(data_source_reference) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "References") %>%
-        dplyr::collect(),
-      by = dplyr::join_by(data_source_reference == reference_detail)
+    dplyr::filter(
+      !data_source_reference %in% reference_detail_db
     ) %>%
     dplyr::rename(reference_detail = data_source_reference)
 

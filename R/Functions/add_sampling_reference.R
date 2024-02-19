@@ -4,6 +4,12 @@ add_sampling_reference <- function(data_source, con) {
     msg = "data_source must have column 'sampling_reference'"
   )
 
+  reference_detail_db <-
+    dplyr::tbl(con, "References") %>%
+    dplyr::distinct(reference_detail) %>%
+    dplyr::collect() %>%
+    purrr::chuck("reference_detail")
+
   sampling_method_reference <-
     data_source %>%
     dplyr::distinct(sampling_reference) %>%
@@ -11,11 +17,8 @@ add_sampling_reference <- function(data_source, con) {
     dplyr::rename(
       reference_detail = sampling_reference
     ) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "References") %>%
-        dplyr::select(-reference_id) %>%
-        dplyr::collect(),
-      by = dplyr::join_by(reference_detail)
+    dplyr::filter(
+      !reference_detail %in% reference_detail_db
     )
 
   add_to_db(

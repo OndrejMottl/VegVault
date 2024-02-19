@@ -29,12 +29,16 @@ add_dataset_source_type_with_reference <- function(data_source, con) {
     ) %>%
     dplyr::rename(data_source_type_reference = reference_id)
 
+  data_source_type_id_db <-
+    dplyr::tbl(con, "References") %>%
+    dplyr::distinct(dataset_source_type) %>%
+    dplyr::collect() %>%
+    purrr::chuck("dataset_source_type")
+
   dataset_source_type_unique <-
     dataset_source_type %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "DatasetSourceTypeID") %>%
-        dplyr::collect(),
-      by = dplyr::join_by(dataset_source_type, data_source_type_reference)
+    dplyr::filter(
+      !dataset_source_type %in% data_source_type_id_db
     )
 
   add_to_db(

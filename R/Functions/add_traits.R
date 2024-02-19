@@ -21,6 +21,12 @@ add_traits <- function(data_source, trait_domain_id, con) {
     msg = "trait_domain_id must have a column named trait_domain_id and trait_domain_name"
   )
 
+  trait_name_db <-
+    dplyr::tbl(con, "Traits") %>%
+    dplyr::distinct(trait_name) %>%
+    dplyr::collect() %>%
+    purrr::chuck("trait_name")
+
   traits <-
     data_source %>%
     dplyr::distinct(trait_domain_name, trait_full_name) %>%
@@ -32,11 +38,8 @@ add_traits <- function(data_source, trait_domain_id, con) {
     dplyr::rename(
       trait_name = trait_full_name
     ) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "Traits") %>%
-        dplyr::select(trait_name) %>%
-        dplyr::collect(),
-      by = dplyr::join_by(trait_name)
+    dplyr::filter(
+      !trait_name %in% trait_name_db
     )
 
   add_to_db(
@@ -55,5 +58,5 @@ add_traits <- function(data_source, trait_domain_id, con) {
       by = dplyr::join_by(trait_name == trait_full_name)
     )
 
-    return(traits_id)
+  return(traits_id)
 }
