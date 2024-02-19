@@ -75,7 +75,7 @@ splot_dataset_raw <-
   dplyr::mutate(
     dataset_type = "vegetation_plot",
     dataset_source_type = "sPlotOpen",
-    data_source_type_reference = "https://doi.org/10.1111/geb.13346",
+    data_source_type_reference = list("https://doi.org/10.1111/geb.13346"),
     data_source_desc = givd_id,
     dataset_name = paste0(
       "splot_",
@@ -94,10 +94,16 @@ data_splot_dataset_type_db <-
 
 # - 3.2 dataset source type -----
 data_splot_dataset_source_type_db <-
-  add_dataset_source_type_with_reference(
+  add_dataset_source_type(
     data_source = splot_dataset_raw,
     con = con
   )
+
+add_dataset_source_type_reference(
+  data_source = splot_dataset_raw,
+  data_source_type_id = data_splot_dataset_source_type_db,
+  con = con
+)
 
 # - 3.3 dataset source -----
 data_splot_data_source_id_db <-
