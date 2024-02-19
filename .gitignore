@@ -51,3 +51,6 @@ rsconnect/
 
 # secrets
 .secrets/
+
+# Large files
+Outputs/Data/VegVault/VegVault.sqlite

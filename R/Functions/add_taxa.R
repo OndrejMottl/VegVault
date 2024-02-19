@@ -4,14 +4,18 @@ add_taxa <- function(data_source, con) {
     msg = "data_source must have a column named taxon_name"
   )
 
+  taxon_name_db <-
+    dplyr::tbl(con, "Taxa") %>%
+    dplyr::distinct(taxon_name) %>%
+    dplyr::collect() %>%
+    purrr::chuck("taxon_name")
+
   taxa <-
     data_source %>%
     dplyr::distinct(taxon_name) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "Taxa") %>%
-        dplyr::select(taxon_name) %>%
-        dplyr::collect(),
-      by = dplyr::join_by(taxon_name)
+    tidyr::drop_na() %>%
+    dplyr::filter(
+      !taxon_name %in% taxon_name_db
     )
 
   add_to_db(

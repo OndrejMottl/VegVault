@@ -53,13 +53,16 @@ add_abiotic_variable <- function(
     ) %>%
     dplyr::distinct()
 
+  abiotic_variable_name_db <-
+    dplyr::tbl(con, "AbioticVariable") %>%
+    dplyr::distinct(abiotic_variable_name) %>%
+    dplyr::collect() %>%
+    purrr::chuck("abiotic_variable_name")
+
   data_abiotic_variable_with_reference_unique <-
     data_abiotic_variable_with_reference %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "AbioticVariable") %>%
-        dplyr::distinct(abiotic_variable_name) %>%
-        dplyr::collect(),
-      by = dplyr::join_by(abiotic_variable_name)
+    dplyr::filter(
+      !abiotic_variable_name %in% abiotic_variable_name_db
     )
 
   add_to_db(

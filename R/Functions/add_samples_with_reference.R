@@ -16,6 +16,12 @@ add_samples_with_reference <- function(data_source, con) {
       con = con
     )
 
+  sample_db <-
+    dplyr::tbl(con, "Samples") %>%
+    dplyr::distinct(sample_name) %>%
+    dplyr::collect() %>%
+    purrr::chuck("sample_name")
+
   samples <-
     data_source %>%
     dplyr::distinct(sample_name, age, reference_source) %>%
@@ -24,11 +30,8 @@ add_samples_with_reference <- function(data_source, con) {
       by = dplyr::join_by(reference_source == reference_detail)
     ) %>%
     dplyr::select(-reference_source) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "Samples") %>%
-        dplyr::select(sample_name) %>%
-        dplyr::collect(),
-      by = dplyr::join_by(sample_name)
+    dplyr::filter(
+      !sample_name %in% sample_db
     ) %>%
     dplyr::rename(
       sample_reference = reference_id

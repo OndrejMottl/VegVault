@@ -4,13 +4,17 @@ add_dataset_source_type_reference <- function(data_source, con) {
     msg = "data_source must have a column named data_source_type_reference"
   )
 
+  dataset_reference_detail_db <-
+    dplyr::tbl(con, "References") %>%
+    dplyr::distinct(reference_detail) %>%
+    dplyr::collect() %>%
+    purrr::pluck("reference_detail")
+
   dataset_source_type_referecne <-
     data_source %>%
     dplyr::distinct(data_source_type_reference) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "References") %>%
-        dplyr::collect(),
-      by = dplyr::join_by(data_source_type_reference == reference_detail)
+    dplyr::filter(
+      !data_source_type_reference %in% dataset_reference_detail_db
     ) %>%
     dplyr::rename(reference_detail = data_source_type_reference)
 

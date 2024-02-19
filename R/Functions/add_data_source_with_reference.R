@@ -30,13 +30,16 @@ add_data_source_with_reference <- function(data_source, con) {
     ) %>%
     dplyr::rename(data_source_reference = reference_id)
 
+  data_source_desc_db <-
+    dplyr::tbl(con, "DatasetSourcesID") %>%
+    dplyr::distinct(data_source_desc) %>%
+    dplyr::collect() %>%
+    purrr::chuck("data_source_desc")
+
   data_source_id_unique <-
     data_source_id %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "DatasetSourcesID") %>%
-        dplyr::select(data_source_desc) %>%
-        dplyr::collect(),
-      by = dplyr::join_by(data_source_desc)
+    dplyr::filter(
+      !data_source_desc %in% data_source_desc_db
     )
 
   add_to_db(

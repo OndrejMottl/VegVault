@@ -17,6 +17,12 @@ add_samples_with_size <- function(data_source, con) {
       con = con
     )
 
+  samples_db <-
+    dplyr::tbl(con, "Samples") %>%
+    dplyr::distinct(sample_name) %>%
+    dplyr::collect() %>%
+    purrr::chuck("sample_name")
+
   samples <-
     data_source %>%
     dplyr::left_join(
@@ -26,10 +32,8 @@ add_samples_with_size <- function(data_source, con) {
     dplyr::select(
       sample_name, age, sample_size_id
     ) %>%
-    dplyr::anti_join(
-      dplyr::tbl(con, "Samples") %>%
-        dplyr::collect(),
-      by = dplyr::join_by(sample_name)
+    dplyr::filter(
+      !sample_name %in% samples_db
     )
 
   add_to_db(
