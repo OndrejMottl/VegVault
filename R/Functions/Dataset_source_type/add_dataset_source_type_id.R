@@ -1,4 +1,4 @@
-add_dataset_source_type <- function(data_source, con) {
+add_dataset_source_type_id <- function(data_source, con) {
   assertthat::assert_that(
     assertthat::has_name(
       data_source,
