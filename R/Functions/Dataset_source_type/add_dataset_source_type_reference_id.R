@@ -15,6 +15,7 @@ add_dataset_source_type_reference_id <- function(data_source, con) {
     dplyr::select(data_source_type_reference) %>%
     tidyr::unnest(data_source_type_reference) %>%
     dplyr::distinct(data_source_type_reference) %>%
+    tidyr::drop_na() %>%
     dplyr::filter(
       !data_source_type_reference %in% dataset_reference_detail_db
     ) %>%
