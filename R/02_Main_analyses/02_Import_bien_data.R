@@ -76,6 +76,7 @@ bien_dataset_raw <-
     dataset_source_type = "BIEN",
     data_source_type_reference = list("https://doi.org/10.7287/peerj.preprints.2615v2"),
     data_source_desc = datasource,
+    data_source_reference = NA_character_,
     dataset_name = paste0(
       "bien_",
       dplyr::row_number()
@@ -100,12 +101,6 @@ data_bien_dataset_source_type_db <-
     con = con
   )
 
-add_dataset_source_type_reference(
-  data_source = bien_dataset_raw,
-  data_source_type_id = data_bien_dataset_source_type_db,
-  con = con
-)
-
 # - 3.3 dataset source -----
 data_bien_data_source_id_db <-
   add_data_source(
@@ -119,13 +114,6 @@ data_bien_sampling_method_db <-
     data_source = bien_dataset_raw,
     con = con
   )
-
-add_sampling_method_reference(
-  data_source = bien_dataset_raw,
-  sampling_method_id = data_bien_sampling_method_db,
-  con = con
-
-)
 
 # - 3.5 datasets -----
 bien_dataset_id_db <-

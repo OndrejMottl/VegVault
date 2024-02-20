@@ -108,6 +108,7 @@ fossilpol_dataset_raw <-
     coord_long = long,
     coord_lat = lat,
     sampling_method_details = depositionalenvironment,
+    sampling_reference = NA_character_
   ) %>%
   dplyr::select(-dataset_id)
 
@@ -120,14 +121,14 @@ data_fossilpol_dataset_type_id_db <-
 
 # - 3.2 dataset source type -----
 data_fossilpol_dataset_source_type_db <-
-  add_dataset_source_type_with_reference(
+  add_dataset_source_type(
     data_source = fossilpol_dataset_raw,
     con = con
   )
 
 # - 3.3 dataset source -----
 data_fossilpol_data_source_id_db <-
-  add_data_source_with_reference(
+  add_data_source(
     data_source = fossilpol_dataset_raw,
     con = con
   )
@@ -135,13 +136,6 @@ data_fossilpol_data_source_id_db <-
 # - 3.5 datasets sampling ------
 data_fossilpol_sampling_method_db <-
   add_sampling_method(
-    data_source = fossilpol_dataset_raw,
-    con = con
-  )
-
-# - 3.7 dataset reference -----
-data_fossilpol_reference_db <-
-  add_dataset_reference(
     data_source = fossilpol_dataset_raw,
     con = con
   )
@@ -154,8 +148,7 @@ fossilpol_dataset_id <-
     data_type = data_fossilpol_dataset_type_id_db,
     data_source_type = data_fossilpol_dataset_source_type_db,
     dataset_source = data_fossilpol_data_source_id_db,
-    sampling_method = data_fossilpol_sampling_method_db,
-    dataset_reference = data_fossilpol_reference_db
+    sampling_method = data_fossilpol_sampling_method_db
   )
 
 
