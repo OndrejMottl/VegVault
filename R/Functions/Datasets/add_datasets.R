@@ -3,8 +3,7 @@ add_datasets <- function(
     data_type = NULL,
     data_source_type = NULL,
     dataset_source = NULL,
-    sampling_method = NULL,
-    dataset_reference = NULL) {
+    sampling_method = NULL) {
   assertthat::assert_that(
     assertthat::has_name(
       data_source,
@@ -98,32 +97,6 @@ add_datasets <- function(
       )
   }
 
-  if (
-    isFALSE(is.null(dataset_reference))
-  ) {
-    assertthat::assert_that(
-      assertthat::has_name(dataset_reference, "reference_detail"),
-      msg = "dataset_reference must have column 'reference_detail'"
-    )
-    assertthat::assert_that(
-      assertthat::has_name(dataset, "dataset_reference"),
-      msg = "dataset must have column 'dataset_reference'"
-    )
-
-    dataset <-
-      dataset %>%
-      dplyr::rename(
-        reference_detail = dataset_reference
-      ) %>%
-      dplyr::left_join(
-        dataset_reference,
-        by = dplyr::join_by(reference_detail)
-      ) %>%
-      dplyr::mutate(
-        dataset_reference = reference_id
-      )
-  }
-
   dataset_id_db <-
     dplyr::tbl(con, "Datasets") %>%
     dplyr::distinct(dataset_name) %>%
@@ -145,8 +118,7 @@ add_datasets <- function(
           "dataset_type_id",
           "data_source_type_id",
           "data_source_id",
-          "sampling_method_id",
-          "dataset_reference"
+          "sampling_method_id"
         )
       )
     ) %>%
@@ -169,6 +141,12 @@ add_datasets <- function(
         dplyr::distinct(dataset_name),
       by = dplyr::join_by(dataset_name)
     )
+
+  add_dataset_reference(
+    data_source = data_source,
+    dataset_id = dataset_id,
+    con = con
+  )
 
   return(dataset_id)
 }

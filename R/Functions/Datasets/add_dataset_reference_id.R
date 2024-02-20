@@ -1,4 +1,4 @@
-add_dataset_reference <- function(data_source, con) {
+add_dataset_reference_id <- function(data_source, con) {
   assertthat::assert_that(
     assertthat::has_name(data_source, "dataset_reference"),
     msg = "data_source must have column 'reference_detail'"
