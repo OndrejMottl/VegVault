@@ -3,10 +3,10 @@ add_sampling_method_reference <- function(data_source, sampling_method_id, con) 
     assertthat::has_name(
       data_source,
       c(
-        "sampling_protocol"
+        "sampling_method_details"
       )
     ),
-    msg = "data_source must have columns 'sampling_protocol'"
+    msg = "data_source must have columns 'sampling_method_details'"
   )
 
   reference_db <-
