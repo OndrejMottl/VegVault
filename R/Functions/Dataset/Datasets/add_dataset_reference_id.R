@@ -11,7 +11,7 @@ add_dataset_reference_id <- function(data_source, con) {
     purrr::chuck("reference_detail")
 
   reference <-
-    fossilpol_dataset_raw %>%
+    data_source %>%
     dplyr::distinct(dataset_reference) %>%
     tidyr::drop_na() %>%
     dplyr::rename(
@@ -31,7 +31,7 @@ add_dataset_reference_id <- function(data_source, con) {
     dplyr::tbl(con, "References") %>%
     dplyr::collect() %>%
     dplyr::inner_join(
-      fossilpol_dataset_raw %>%
+      data_source %>%
         dplyr::distinct(dataset_reference),
       by = dplyr::join_by(reference_detail == dataset_reference)
     )
