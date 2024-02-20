@@ -1,4 +1,4 @@
-add_sampling_reference <- function(data_source, con) {
+add_sampling_method_reference_id <- function(data_source, con) {
   assertthat::assert_that(
     assertthat::has_name(data_source, "sampling_reference"),
     msg = "data_source must have column 'sampling_reference'"

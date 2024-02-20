@@ -10,7 +10,7 @@ add_sampling_method_reference <- function(data_source, sampling_method_id, con) 
   )
 
   reference_db <-
-    add_sampling_reference(
+    add_sampling_method_reference_id(
       data_source = data_source,
       con = con
     )
