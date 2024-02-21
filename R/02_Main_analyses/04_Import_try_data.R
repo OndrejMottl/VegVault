@@ -186,7 +186,10 @@ add_dataset_sample(
 
 try_taxa_raw <-
   try_samples_raw %>%
-  dplyr::rename(taxon_name = acc_species_name)
+  dplyr::rename(taxon_name = acc_species_name) %>%
+  dplyr::mutate(
+    taxon_reference = NA_character_
+  )
 
 try_taxa_id <-
   add_taxa(
@@ -201,21 +204,15 @@ try_taxa_id <-
 
 try_traits_raw <-
   try_samples_raw %>%
-  dplyr::rename(trait_domain_name = trait_domain)
-
-
-# 7.1 Trait domains -----
-try_trait_domain_id <-
-  add_trait_domain(
-    data_source = try_traits_raw,
-    con = con
+  dplyr::rename(trait_domain_name = trait_domain) %>%
+  dplyr::mutate(
+    trait_reference = NA_character_
   )
 
-# 7.2 Traits -----
+# 7.1 Traits -----
 try_traits_id <-
   add_traits(
     data_source = try_traits_raw,
-    trait_domain_id = try_trait_domain_id,
     con = con
   )
 

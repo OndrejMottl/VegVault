@@ -198,7 +198,10 @@ add_dataset_sample(
 
 bien_traits_taxa_raw <-
   bien_traits_samples_raw %>%
-  dplyr::rename(taxon_name = scrubbed_species_binomial)
+  dplyr::rename(taxon_name = scrubbed_species_binomial)  %>% 
+  dplyr::mutate(
+    taxon_reference = NA_character_ 
+  )
 
 bien_traits_taxa_id <-
   add_taxa(
@@ -234,21 +237,15 @@ bien_traits_traits_raw <-
   ) %>%
   dplyr::rename(
     trait_full_name = trait_name
+  ) %>%
+  dplyr::mutate(
+    trait_reference = NA_character_
   )
 
-
-# 7.1 Trait domains -----
-trait_domain_id <-
-  add_trait_domain(
-    data_source = bien_traits_traits_raw,
-    con = con
-  )
-
-# 7.2 Traits -----
+# 7.1 Traits -----
 bien_traits_traits_id <-
   add_traits(
     data_source = bien_traits_traits_raw,
-    trait_domain_id = trait_domain_id,
     con = con
   )
 

@@ -188,7 +188,10 @@ data_bien_taxa_raw <-
   dplyr::filter(
     taxon_name != ""
   ) %>%
-  tidyr::drop_na()
+  tidyr::drop_na() %>%
+  dplyr::mutate(
+    taxon_reference = NA_character_
+  )
 
 # 6.1 taxa id -----
 data_bien_taxa_id_db <-

@@ -178,6 +178,9 @@ data_splot_taxa_raw <-
   ) %>%
   dplyr::filter(
     taxon_name != ""
+  ) %>%
+  dplyr::mutate(
+    taxon_reference = NA_character_
   )
 
 # - 6.1 taxa id -----

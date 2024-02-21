@@ -279,7 +279,10 @@ data_fossilpol_taxa_raw <-
   dplyr::filter(
     taxon_name != "sample_id"
   ) %>%
-  tidyr::drop_na()
+  tidyr::drop_na()  %>% 
+  dplyr::mutate(
+    taxon_reference = NA_character_
+  )
 
 data_fossilpol_taxa_id <-
   add_taxa(
@@ -290,7 +293,9 @@ data_fossilpol_taxa_id <-
 # 7.2 Sample - taxa -----
 data_fossilpol_sample_taxa_raw <-
   fossilpol_samples_raw %>%
-  dplyr::select(-dataset_name, -age) %>%
+  dplyr::select(
+    -c(dataset_name, age, description, sample_reference)
+  ) %>%
   tidyr::pivot_longer(
     cols = -sample_name,
     names_to = "taxon_name",
