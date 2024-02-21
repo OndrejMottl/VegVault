@@ -1,7 +1,7 @@
-add_sample_reference <- function(data_source, con) {
+add_sample_reference_id <- function(data_source, con) {
   assertthat::assert_that(
-    assertthat::has_name(data_source, "reference_source"),
-    msg = "data_source must have a column named reference_source"
+    assertthat::has_name(data_source, "sample_reference"),
+    msg = "data_source must have a column named sample_reference"
   )
 
   reference_detail_db <-
@@ -12,10 +12,10 @@ add_sample_reference <- function(data_source, con) {
 
   samples_reference <-
     data_source %>%
-    dplyr::distinct(reference_source) %>%
+    dplyr::distinct(sample_reference) %>%
     tidyr::drop_na() %>%
     dplyr::rename(
-      reference_detail = reference_source
+      reference_detail = sample_reference
     ) %>%
     dplyr::filter(
       !reference_detail %in% reference_detail_db
@@ -33,8 +33,8 @@ add_sample_reference <- function(data_source, con) {
     dplyr::collect() %>%
     dplyr::inner_join(
       data_source %>%
-        dplyr::distinct(reference_source),
-      by = dplyr::join_by(reference_detail == reference_source)
+        dplyr::distinct(sample_reference),
+      by = dplyr::join_by(reference_detail == sample_reference)
     )
 
   return(samples_reference_id)

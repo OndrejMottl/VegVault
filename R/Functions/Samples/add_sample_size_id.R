@@ -1,4 +1,4 @@
-add_sample_size <- function(data_source, con) {
+add_sample_size_id <- function(data_source, con) {
   assertthat::assert_that(
     assertthat::has_name(
       data_source,
@@ -13,16 +13,20 @@ add_sample_size <- function(data_source, con) {
   sample_size <-
     data_source %>%
     dplyr::distinct(sample_size, description) %>%
+    tidyr::drop_na() %>%
+    dplyr::arrange(sample_size)
+
+  samples_size_unique <-
+    sample_size %>%
     dplyr::anti_join(
       dplyr::tbl(con, "SampleSizeID") %>%
         dplyr::collect(),
       by = dplyr::join_by(sample_size, description)
-    ) %>%
-    dplyr::arrange(sample_size)
+    )
 
   add_to_db(
     conn = con,
-    sample_size,
+    data = samples_size_unique,
     table_name = "SampleSizeID"
   )
 
@@ -31,10 +35,11 @@ add_sample_size <- function(data_source, con) {
     dplyr::collect() %>%
     dplyr::inner_join(
       data_source %>%
-        dplyr::distinct(sample_size, description),
+        dplyr::distinct(sample_size, description) %>%
+        tidyr::drop_na(),
       by = dplyr::join_by(sample_size, description)
     ) %>%
-    dplyr::select(sample_size_id, sample_size)
+    dplyr::select(sample_size_id, sample_size, description)
 
   return(sample_size_id_db)
 }
