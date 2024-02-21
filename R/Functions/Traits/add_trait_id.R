@@ -1,4 +1,4 @@
-add_traits <- function(data_source, trait_domain_id, con) {
+add_trait_id <- function(data_source, trait_domain_id, con) {
   assertthat::assert_that(
     assertthat::has_name(
       data_source,
