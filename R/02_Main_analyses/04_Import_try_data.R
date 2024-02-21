@@ -78,7 +78,8 @@ try_dataset_raw <-
     data_source_desc = dataset,
     coord_long = as.numeric(longitude),
     coord_lat = as.numeric(latitude),
-    data_source_reference = dataset_reference_citation
+    data_source_reference = reference_source,
+    dataset_reference = NA_character_
   )
 
 try_dataset_raw_distinct <-
@@ -88,7 +89,8 @@ try_dataset_raw_distinct <-
     dataset_source_type, data_source_type_reference,
     data_source_desc,
     coord_long, coord_lat,
-    data_source_reference
+    data_source_reference,
+    dataset_reference
   ) %>%
   dplyr::mutate(
     dataset_name = paste0(
@@ -106,14 +108,14 @@ data_try_dataset_type_id_db <-
 
 # - 3.2 dataset source type -----
 data_try_dataset_source_type_db <-
-  add_dataset_source_type_with_reference(
+  add_dataset_source_type(
     data_source = try_dataset_raw_distinct,
     con = con
   )
 
 # - 3.3 dataset source -----
 data_try_data_source_id_db <-
-  add_data_source_with_reference(
+  add_data_source(
     data_source = try_dataset_raw_distinct,
     con = con
   )
