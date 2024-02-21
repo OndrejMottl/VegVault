@@ -166,7 +166,10 @@ bien_traits_samples_raw <-
     )
   ) %>%
   dplyr::mutate(
-    age = 0
+    age = 0,
+    sample_size = NA_real_,
+    description = NA_character_,
+    sample_reference = NA_character_
   )
 
 # 4.1 samples -----

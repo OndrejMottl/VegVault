@@ -131,12 +131,13 @@ splot_samples_raw <-
     ),
     age = 0,
     sample_size = releve_area,
-    description = "square meters"
+    description = "square meters",
+    sample_reference = NA_character_
   )
 
 # - 4.2 samples -----
 splot_samples_id_db <-
-  add_samples_with_size(
+  add_samples(
     data_source = splot_samples_raw,
     con = con
   )

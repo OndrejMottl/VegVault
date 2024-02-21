@@ -194,7 +194,9 @@ fossilpol_samples_raw <-
       "_",
       sample_id
     ),
-    sample_size = NA_real_
+    sample_size = NA_real_,
+    description = NA_character_,
+    sample_reference = NA_character_
   ) %>%
   dplyr::select(-c(dataset_id, sample_id))
 

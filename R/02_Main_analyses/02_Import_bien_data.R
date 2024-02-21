@@ -85,6 +85,7 @@ bien_dataset_raw <-
     coord_lat = latitude,
     sampling_reference = methodology_reference,
     sampling_method_details = methodology_description,
+    dataset_reference = NA_character_
   )
 
 # - 3.1 dataset type -----
@@ -140,11 +141,12 @@ bien_samples_raw <-
     ),
     age = 0,
     sample_size = plot_area_ha * 10000,
-    description = "square meters"
+    description = "square meters",
+    sample_reference = NA_character_
   )
 
 bien_samples_id_db <-
-  add_samples_with_size(
+  add_samples(
     data_source = bien_samples_raw,
     con = con
   )

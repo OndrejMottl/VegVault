@@ -79,6 +79,7 @@ try_dataset_raw <-
     coord_long = as.numeric(longitude),
     coord_lat = as.numeric(latitude),
     data_source_reference = reference_source,
+    sample_reference = dataset_reference_citation,
     dataset_reference = NA_character_
   )
 
@@ -148,18 +149,22 @@ try_samples_raw <-
   dplyr::left_join(
     try_dataset_raw_distinct,
     by = dplyr::join_by(
-      dataset_type, data_source_desc,
-      coord_long, coord_lat
-    ),
-    relationship = "many-to-many"
+      dataset_type,
+      dataset_source_type, data_source_type_reference,
+      data_source_desc, data_source_reference,
+      coord_long, coord_lat,
+      dataset_reference
+    )
   ) %>%
   dplyr::mutate(
-    age = 0
+    age = 0,
+    sample_size = NA_real_,
+    description = NA_character_
   )
 
 # 4.1 samples -----
 try_samples_id <-
-  add_samples_with_reference(
+  add_samples(
     data_source = try_samples_raw,
     con = con
   )
