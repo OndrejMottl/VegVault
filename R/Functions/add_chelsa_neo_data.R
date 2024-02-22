@@ -27,6 +27,7 @@ add_chelsa_neo_data <- function(
       data_source_type_reference = "artificially created by O. Mottl",
       data_source_desc = "gridpoints",
       data_source_reference = "artificially created by O. Mottl",
+      dataset_reference = "artificially created by O. Mottl",
       coord_long = as.numeric(long),
       coord_lat = as.numeric(lat),
       age = 0
@@ -47,14 +48,14 @@ add_chelsa_neo_data <- function(
 
   # dataset source type -----
   data_climate_dataset_source_type_db <-
-    add_dataset_source_type_with_reference(
+    add_dataset_source_type(
       data_source = data_climate_dataset_raw,
       con = con
     )
 
   # dataset source -----
   data_climate_data_source_id_db <-
-    add_data_source_with_reference(
+    add_data_source(
       data_source = data_climate_dataset_raw,
       con = con
     )
@@ -84,6 +85,8 @@ add_chelsa_neo_data <- function(
         age
       ),
       sample_size = NA_real_,
+      description = "gridpoint",
+      sample_reference = "artificially created by O. Mottl",
       abiotic_variable_name = sel_var_name,
       var_unit = sel_var_unit,
       var_reference = sel_var_reference,

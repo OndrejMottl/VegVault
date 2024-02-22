@@ -1,4 +1,4 @@
-add_taxa <- function(data_source, con) {
+add_taxa_id <- function(data_source, con) {
   assertthat::assert_that(
     assertthat::has_name(data_source, "taxon_name"),
     msg = "data_source must have a column named taxon_name"

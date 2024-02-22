@@ -1,7 +1,7 @@
-add_abiotic_referecne <- function(data_source, con) {
+add_abiotic_referecne_id <- function(data_source, con) {
   assertthat::assert_that(
-    assertthat::has_name(data_source, "variable_reference"),
-    msg = "data_source must have a column named variable_reference"
+    assertthat::has_name(data_source, "var_reference"),
+    msg = "data_source must have a column named var_reference"
   )
 
   variable_reference_db <-
@@ -12,11 +12,11 @@ add_abiotic_referecne <- function(data_source, con) {
 
   data_source_reference <-
     data_source %>%
-    dplyr::distinct(variable_reference) %>%
+    dplyr::distinct(var_reference) %>%
     dplyr::filter(
-      !variable_reference %in% variable_reference_db
+      !var_reference %in% variable_reference_db
     ) %>%
-    dplyr::rename(reference_detail = variable_reference)
+    dplyr::rename(reference_detail = var_reference)
 
   add_to_db(
     conn = con,
@@ -29,8 +29,8 @@ add_abiotic_referecne <- function(data_source, con) {
     dplyr::collect() %>%
     dplyr::inner_join(
       data_source %>%
-        dplyr::distinct(variable_reference),
-      by = dplyr::join_by(reference_detail == variable_reference)
+        dplyr::distinct(var_reference),
+      by = dplyr::join_by(reference_detail == var_reference)
     )
 
   return(data_source_reference_db)

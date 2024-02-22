@@ -70,6 +70,7 @@ data_wosis_dataset_raw <-
     data_source_type_reference = "artificially created by O. Mottl",
     data_source_desc = "gridpoints",
     data_source_reference = "artificially created by O. Mottl",
+    dataset_reference = "artificially created by O. Mottl",
     coord_long = as.numeric(long),
     coord_lat = as.numeric(lat),
     age = 0
@@ -90,14 +91,14 @@ data_wosis_dataset_type_db <-
 
 # dataset source type -----
 data_wosis_dataset_source_type_db <-
-  add_dataset_source_type_with_reference(
+  add_dataset_source_type(
     data_source = data_wosis_dataset_raw,
     con = con
   )
 
 # dataset source -----
 data_wosis_data_source_id_db <-
-  add_data_source_with_reference(
+  add_data_source(
     data_source = data_wosis_dataset_raw,
     con = con
   )
@@ -128,6 +129,8 @@ data_wosis_samples_raw <-
       age
     ),
     sample_size = NA_real_,
+    description = "gridpoint",
+    sample_reference = "artificially created by O. Mottl",
     abiotic_variable_name = var_name,
     var_unit = "Unitless",
     var_reference = "https://doi.org/10.5194/soil-7-217-2021",

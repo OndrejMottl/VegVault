@@ -74,8 +74,9 @@ bien_dataset_raw <-
   dplyr::mutate(
     dataset_type = "vegetation_plot",
     dataset_source_type = "BIEN",
-    data_source_type_reference = "https://doi.org/10.7287/peerj.preprints.2615v2",
+    data_source_type_reference = list("https://doi.org/10.7287/peerj.preprints.2615v2"),
     data_source_desc = datasource,
+    data_source_reference = NA_character_,
     dataset_name = paste0(
       "bien_",
       dplyr::row_number()
@@ -84,6 +85,7 @@ bien_dataset_raw <-
     coord_lat = latitude,
     sampling_reference = methodology_reference,
     sampling_method_details = methodology_description,
+    dataset_reference = NA_character_
   )
 
 # - 3.1 dataset type -----
@@ -95,7 +97,7 @@ data_bien_dataset_type_db <-
 
 # - 3.2 dataset source type -----
 data_bien_dataset_source_type_db <-
-  add_dataset_source_type_with_reference(
+  add_dataset_source_type(
     data_source = bien_dataset_raw,
     con = con
   )
@@ -109,7 +111,7 @@ data_bien_data_source_id_db <-
 
 # - 3.4 datasets sampling -----
 data_bien_sampling_method_db <-
-  add_sampling_method_with_reference(
+  add_sampling_method(
     data_source = bien_dataset_raw,
     con = con
   )
@@ -139,11 +141,12 @@ bien_samples_raw <-
     ),
     age = 0,
     sample_size = plot_area_ha * 10000,
-    description = "square meters"
+    description = "square meters",
+    sample_reference = NA_character_
   )
 
 bien_samples_id_db <-
-  add_samples_with_size(
+  add_samples(
     data_source = bien_samples_raw,
     con = con
   )
@@ -185,7 +188,10 @@ data_bien_taxa_raw <-
   dplyr::filter(
     taxon_name != ""
   ) %>%
-  tidyr::drop_na()
+  tidyr::drop_na() %>%
+  dplyr::mutate(
+    taxon_reference = NA_character_
+  )
 
 # 6.1 taxa id -----
 data_bien_taxa_id_db <-

@@ -1,4 +1,4 @@
-add_data_source <- function(data_source, con) {
+add_data_source_id <- function(data_source, con) {
   assertthat::assert_that(
     assertthat::has_name(data_source, "data_source_desc"),
     msg = "data_source must have column 'data_source_desc'"

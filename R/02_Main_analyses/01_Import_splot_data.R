@@ -77,12 +77,14 @@ splot_dataset_raw <-
     dataset_source_type = "sPlotOpen",
     data_source_type_reference = "https://doi.org/10.1111/geb.13346",
     data_source_desc = givd_id,
+    data_source_reference = NA_character_,
     dataset_name = paste0(
       "splot_",
       plot_observation_id
     ),
     coord_long = as.numeric(longitude),
-    coord_lat = as.numeric(latitude)
+    coord_lat = as.numeric(latitude),
+    dataset_reference = NA_character_
   )
 
 # - 3.1 dataset type -----
@@ -94,7 +96,7 @@ data_splot_dataset_type_db <-
 
 # - 3.2 dataset source type -----
 data_splot_dataset_source_type_db <-
-  add_dataset_source_type_with_reference(
+  add_dataset_source_type(
     data_source = splot_dataset_raw,
     con = con
   )
@@ -129,12 +131,13 @@ splot_samples_raw <-
     ),
     age = 0,
     sample_size = releve_area,
-    description = "square meters"
+    description = "square meters",
+    sample_reference = NA_character_
   )
 
 # - 4.2 samples -----
 splot_samples_id_db <-
-  add_samples_with_size(
+  add_samples(
     data_source = splot_samples_raw,
     con = con
   )
@@ -175,6 +178,9 @@ data_splot_taxa_raw <-
   ) %>%
   dplyr::filter(
     taxon_name != ""
+  ) %>%
+  dplyr::mutate(
+    taxon_reference = NA_character_
   )
 
 # - 6.1 taxa id -----

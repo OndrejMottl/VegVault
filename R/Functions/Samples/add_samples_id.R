@@ -1,21 +1,16 @@
-add_samples_with_size <- function(data_source, con) {
+add_samples_id <- function(data_source, samples_size_id, con) {
   assertthat::assert_that(
     assertthat::has_name(
       data_source,
       c(
         "sample_name",
         "age",
-        "sample_size"
+        "sample_size",
+        "description"
       )
     ),
-    msg = "data_source must have columns 'sample_name', 'age' and 'sample_size'"
+    msg = "data_source must have columns 'sample_name', 'age', 'sample_size', and 'description'"
   )
-
-  sample_size_id_db <-
-    add_sample_size(
-      data_source = data_source,
-      con = con
-    )
 
   samples_db <-
     dplyr::tbl(con, "Samples") %>%
@@ -25,32 +20,37 @@ add_samples_with_size <- function(data_source, con) {
 
   samples <-
     data_source %>%
+    dplyr::distinct(
+      sample_name, age, sample_size, description
+    ) %>%
+    tidyr::drop_na(sample_name, age) %>%
     dplyr::left_join(
-      sample_size_id_db,
-      by = dplyr::join_by(sample_size)
-    ) %>%
-    dplyr::select(
-      sample_name, age, sample_size_id
-    ) %>%
+      samples_size_id,
+      by = dplyr::join_by(sample_size, description)
+    )  %>% 
+    dplyr::select(-sample_size, -description) 
+
+  samples_unique <-
+    samples %>%
     dplyr::filter(
       !sample_name %in% samples_db
     )
 
   add_to_db(
     conn = con,
-    samples,
+    data = samples_unique,
     table_name = "Samples"
   )
 
-  samples_id_db <-
+  samples_id <-
     dplyr::tbl(con, "Samples") %>%
     dplyr::select(sample_id, sample_name) %>%
     dplyr::collect() %>%
     dplyr::inner_join(
-      data_source %>%
+      samples %>%
         dplyr::distinct(sample_name),
       by = dplyr::join_by(sample_name)
     )
 
-  return(samples_id_db)
+  return(samples_id)
 }

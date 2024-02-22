@@ -1,4 +1,4 @@
-add_dataset_source_type_reference <- function(data_source, con) {
+add_dataset_source_type_reference_id <- function(data_source, con) {
   assertthat::assert_that(
     assertthat::has_name(data_source, "data_source_type_reference"),
     msg = "data_source must have a column named data_source_type_reference"
@@ -12,7 +12,10 @@ add_dataset_source_type_reference <- function(data_source, con) {
 
   dataset_source_type_referecne <-
     data_source %>%
+    dplyr::select(data_source_type_reference) %>%
+    tidyr::unnest(data_source_type_reference) %>%
     dplyr::distinct(data_source_type_reference) %>%
+    tidyr::drop_na() %>%
     dplyr::filter(
       !data_source_type_reference %in% dataset_reference_detail_db
     ) %>%
@@ -29,6 +32,8 @@ add_dataset_source_type_reference <- function(data_source, con) {
     dplyr::collect() %>%
     dplyr::inner_join(
       data_source %>%
+        dplyr::select(data_source_type_reference) %>%
+        tidyr::unnest(data_source_type_reference) %>%
         dplyr::distinct(data_source_type_reference),
       by = dplyr::join_by(reference_detail == data_source_type_reference)
     )

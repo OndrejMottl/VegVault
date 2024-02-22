@@ -11,7 +11,11 @@ Table Datasets {
   coord_long REAL 
   coord_lat REAL
   sampling_method_id INTEGER
-  dataset_reference INTEGER
+}
+
+Table DatasetReference {
+  dataset_id INTEGER
+  reference_id INTEGER
 }
 
 // Dataset types (vegetation plot, trait, abiotic,...)
@@ -24,20 +28,32 @@ Table DatasetTypeID {
 Table DatasetSourceTypeID {
   data_source_type_id INTEGER [PRIMARY KEY]
   dataset_source_type TEXT
-  data_source_type_reference INTEGER
+}
+
+Table DatasetSourceTypeReference {
+  data_source_type_id INTEGER
+  reference_id INTEGER 
 }
 
 // ID from the original data source (subdatabase)
 Table DatasetSourcesID {
   data_source_id INTEGER [PRIMARY KEY]
   data_source_desc TEXT
-  data_source_reference INTEGER
+}
+
+table DatasetSourcesReference {
+  data_source_id INTEGER
+  reference_id INTEGER
 }
 
 Table SamplingMethodID {
  sampling_method_id INTEGER [PRIMARY KEY]
  sampling_method_details TEXT
- sampling_method_reference INTEGER
+}
+
+Table SamplingMethodReference {
+  sampling_method_id INTEGER
+  reference_id INTEGER
 }
 
 // Samples
@@ -45,9 +61,13 @@ Table Samples {
   sample_id INTEGER [PRIMARY KEY]
   sample_name TEXT
   sample_details TEXT
-  sample_reference INTEGER
   age REAL
   sample_size_id INTEGER
+}
+
+Table SampleReference {
+  sample_id INTEGER
+  reference_id INTEGER
 }
 
 Table DatasetSample {
@@ -86,21 +106,24 @@ Table TaxonClassification {
   taxon_species INTEGER
   taxon_genus INTEGER
   taxon_family INTEGER
-  taxon_reference INTEGER
+}
+
+Table TaxonReference {
+  taxon_id INTEGER
+  reference_id INTEGER
 }
 
 // Traits
-table Traits {
-  trait_id INTEGER [PRIMARY KEY]
-  trait_domain_id INTEGER
-  trait_name TEXT
-  trait_reference INTEGER
-}
-
 table TraitsDomain {
   trait_domain_id INTEGER [PRIMARY KEY]
   trait_domain_name TEXT
   trait_domanin_description TEXT
+}
+
+table Traits {
+  trait_id INTEGER [PRIMARY KEY]
+  trait_domain_id INTEGER
+  trait_name TEXT
 }
 
 Table TraitsValue {
@@ -110,6 +133,12 @@ Table TraitsValue {
   taxon_id INTEGER
   trait_value REAL
 }
+
+Table TraitsReference {
+  trait_id INTEGER
+  reference_id INTEGER
+}
+
 
 // The abiotic data will use geopoint as a dataset. Current data will have just
 //  one sample. Palaeoclimate data will have one sample per each time slice.
@@ -123,8 +152,12 @@ Table AbioticVariable {
   abiotic_variable_id INTEGER [PRIMARY KEY]
   abiotic_variable_name TEXT
   abiotic_variable_unit TEXT
-  abiotic_variable_reference INTEGER
   measure_details TEXT
+}
+
+Table AbioticVariableReference {
+  abiotic_variable_id INTEGER
+  reference_id INTEGER
 }
 
 // References 
@@ -138,13 +171,18 @@ Ref: Datasets.data_source_type_id > DatasetSourceTypeID.data_source_type_id
 Ref: Datasets.dataset_type_id  > DatasetTypeID.dataset_type_id 
 Ref: Datasets.sampling_method_id > SamplingMethodID.sampling_method_id   
 Ref: Datasets.data_source_id > DatasetSourcesID.data_source_id 
-Ref: Datasets.dataset_reference > References.reference_id 
 
-Ref: DatasetSourcesID.data_source_reference > References.reference_id
+Ref: DatasetReference.dataset_id > Datasets.dataset_id
+Ref: DatasetReference.reference_id > References.reference_id
 
-Ref: DatasetSourceTypeID.data_source_type_reference > References.reference_id
+Ref: DatasetSourcesReference.data_source_id > DatasetSourcesID.data_source_id 
+Ref: DatasetSourcesReference.reference_id > References.reference_id
 
-Ref: SamplingMethodID.sampling_method_reference > References.reference_id
+Ref: DatasetSourceTypeReference.data_source_type_id > DatasetSourceTypeID.data_source_type_id
+Ref: DatasetSourceTypeReference.reference_id > References.reference_id
+
+Ref: SamplingMethodReference.sampling_method_id > SamplingMethodID.sampling_method_id
+Ref: SamplingMethodReference.reference_id > References.reference_id
 
 Ref: DatasetSample.dataset_id > Datasets.dataset_id 
 Ref: DatasetSample.sample_id > Samples.sample_id 
@@ -153,7 +191,9 @@ Ref: Samples.sample_id < SampleTaxa.sample_id
 Ref: Samples.sample_id < SampleUncertainty.sample_id
 Ref: Samples.sample_id < AbioticData.sample_id
 Ref: Samples.sample_size_id > SampleSizeID.sample_size_id   
-Ref: Samples.sample_reference > References.reference_id
+
+Ref: SampleReference.sample_id > Samples.sample_id
+Ref: SampleReference.reference_id > References.reference_id
 
 Ref: Taxa.taxon_id < SampleTaxa.taxon_id
 
@@ -162,15 +202,21 @@ Ref: TaxonClassification.taxon_name_raw > Taxa.taxon_id
 Ref: TaxonClassification.taxon_species > Taxa.taxon_id 
 Ref: TaxonClassification.taxon_genus > Taxa.taxon_id 
 Ref: TaxonClassification.taxon_family > Taxa.taxon_id 
-Ref: TaxonClassification.taxon_reference > References.reference_id
+
+Ref: TaxonReference.taxon_id > Taxa.taxon_id
+Ref: TaxonReference.reference_id > References.reference_id
 
 Ref: Traits.trait_id < TraitsValue.trait_id   
-Ref: Traits.trait_reference > References.reference_id
 Ref: Traits.trait_domain_id > TraitsDomain.trait_domain_id 
+
+Ref: TraitsReference.trait_id > Traits.trait_id
+Ref: TraitsReference.reference_id > References.reference_id
 
 Ref: TraitsValue.dataset_id > Datasets.dataset_id  
 Ref: TraitsValue.sample_id > Samples.sample_id 
 Ref: TraitsValue.taxon_id > Taxa.taxon_id 
 
 Ref: AbioticVariable.abiotic_variable_id < AbioticData.abiotic_variable_id
-Ref: AbioticVariable.abiotic_variable_reference > References.reference_id
+
+Ref: AbioticVariableReference.abiotic_variable_id > AbioticVariable.abiotic_variable_id
+Ref: AbioticVariableReference.reference_id > References.reference_id

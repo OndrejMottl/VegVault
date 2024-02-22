@@ -78,7 +78,9 @@ try_dataset_raw <-
     data_source_desc = dataset,
     coord_long = as.numeric(longitude),
     coord_lat = as.numeric(latitude),
-    data_source_reference = dataset_reference_citation
+    data_source_reference = reference_source,
+    sample_reference = dataset_reference_citation,
+    dataset_reference = NA_character_
   )
 
 try_dataset_raw_distinct <-
@@ -88,7 +90,8 @@ try_dataset_raw_distinct <-
     dataset_source_type, data_source_type_reference,
     data_source_desc,
     coord_long, coord_lat,
-    data_source_reference
+    data_source_reference,
+    dataset_reference
   ) %>%
   dplyr::mutate(
     dataset_name = paste0(
@@ -106,14 +109,14 @@ data_try_dataset_type_id_db <-
 
 # - 3.2 dataset source type -----
 data_try_dataset_source_type_db <-
-  add_dataset_source_type_with_reference(
+  add_dataset_source_type(
     data_source = try_dataset_raw_distinct,
     con = con
   )
 
 # - 3.3 dataset source -----
 data_try_data_source_id_db <-
-  add_data_source_with_reference(
+  add_data_source(
     data_source = try_dataset_raw_distinct,
     con = con
   )
@@ -146,18 +149,22 @@ try_samples_raw <-
   dplyr::left_join(
     try_dataset_raw_distinct,
     by = dplyr::join_by(
-      dataset_type, data_source_desc,
-      coord_long, coord_lat
-    ),
-    relationship = "many-to-many"
+      dataset_type,
+      dataset_source_type, data_source_type_reference,
+      data_source_desc, data_source_reference,
+      coord_long, coord_lat,
+      dataset_reference
+    )
   ) %>%
   dplyr::mutate(
-    age = 0
+    age = 0,
+    sample_size = NA_real_,
+    description = NA_character_
   )
 
 # 4.1 samples -----
 try_samples_id <-
-  add_samples_with_reference(
+  add_samples(
     data_source = try_samples_raw,
     con = con
   )
@@ -179,7 +186,10 @@ add_dataset_sample(
 
 try_taxa_raw <-
   try_samples_raw %>%
-  dplyr::rename(taxon_name = acc_species_name)
+  dplyr::rename(taxon_name = acc_species_name) %>%
+  dplyr::mutate(
+    taxon_reference = NA_character_
+  )
 
 try_taxa_id <-
   add_taxa(
@@ -194,21 +204,15 @@ try_taxa_id <-
 
 try_traits_raw <-
   try_samples_raw %>%
-  dplyr::rename(trait_domain_name = trait_domain)
-
-
-# 7.1 Trait domains -----
-try_trait_domain_id <-
-  add_trait_domain(
-    data_source = try_traits_raw,
-    con = con
+  dplyr::rename(trait_domain_name = trait_domain) %>%
+  dplyr::mutate(
+    trait_reference = NA_character_
   )
 
-# 7.2 Traits -----
+# 7.1 Traits -----
 try_traits_id <-
   add_traits(
     data_source = try_traits_raw,
-    trait_domain_id = try_trait_domain_id,
     con = con
   )
 
