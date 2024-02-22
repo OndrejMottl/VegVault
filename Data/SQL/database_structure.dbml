@@ -1,6 +1,17 @@
 // Use DBML to define your database structure
 // Docs: https://dbml.dbdiagram.io/docs
-
+Project VegVault {
+  database_type: 'SQLite'
+  Note: '''
+    # VegVault database
+    Interdisciplinary database containing
+    - current vegetation plot data
+    - past vegetation plot data (fossil pollen reocrds)
+    - trait data
+    - current abiotic data (climate, soil)
+    - past abiotic data (climate)
+  '''
+}
 // Datasets
 Table Datasets {
   dataset_id INTEGER [PRIMARY KEY]
@@ -101,8 +112,6 @@ Table Taxa {
 
 Table TaxonClassification {
   taxon_id INTEGER
-  taxon_name_exact INTEGER
-  taxon_name_raw INTEGER
   taxon_species INTEGER
   taxon_genus INTEGER
   taxon_family INTEGER
@@ -198,7 +207,6 @@ Ref: SampleReference.reference_id > References.reference_id
 Ref: Taxa.taxon_id < SampleTaxa.taxon_id
 
 Ref: TaxonClassification.taxon_id > Taxa.taxon_id 
-Ref: TaxonClassification.taxon_name_raw > Taxa.taxon_id 
 Ref: TaxonClassification.taxon_species > Taxa.taxon_id 
 Ref: TaxonClassification.taxon_genus > Taxa.taxon_id 
 Ref: TaxonClassification.taxon_family > Taxa.taxon_id 

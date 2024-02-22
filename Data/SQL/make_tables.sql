@@ -96,14 +96,10 @@ CREATE TABLE "Taxa" (
 );
 CREATE TABLE "TaxonClassification" (
   "taxon_id" INTEGER,
-  "taxon_name_exact" INTEGER,
-  "taxon_name_raw" INTEGER,
   "taxon_species" INTEGER,
   "taxon_genus" INTEGER,
   "taxon_family" INTEGER,
   FOREIGN KEY ("taxon_id") REFERENCES "Taxa" ("taxon_id"),
-  FOREIGN KEY ("taxon_name_exact") REFERENCES "Taxa" ("taxon_id"),
-  FOREIGN KEY ("taxon_name_raw") REFERENCES "Taxa" ("taxon_id"),
   FOREIGN KEY ("taxon_species") REFERENCES "Taxa" ("taxon_id"),
   FOREIGN KEY ("taxon_genus") REFERENCES "Taxa" ("taxon_id"),
   FOREIGN KEY ("taxon_family") REFERENCES "Taxa" ("taxon_id")
