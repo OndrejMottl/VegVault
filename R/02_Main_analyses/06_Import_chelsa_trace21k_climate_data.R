@@ -74,7 +74,7 @@ add_chelsa_trace_data(
   sel_var_name = "bio1",
   sel_var_unit = "°C",
   sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA-TRACE21K",
+  sel_var_detail = "CHELSA-TRACE21K"
 )
 
 #----------------------------------------------------------#
