@@ -54,3 +54,4 @@ rsconnect/
 
 # Large files
 Outputs/Data/VegVault/VegVault.sqlite
+Data/Processed/Classified_taxa/*

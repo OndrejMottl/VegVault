@@ -60,9 +60,45 @@ taxa_db <-
   dplyr::collect()
 
 
+# load all classified data
+taxa_db_classified <-
+  here::here(
+    "Data/Processed/Classified_taxa/"
+  ) %>%
+  list.files() %>%
+  purrr::map(
+    .f = ~ RUtilpol::get_clean_name(.x)
+  ) %>%
+  unique() %>%
+  purrr::map(
+    .progress = TRUE,
+    .f = ~ RUtilpol::get_latest_file(
+      file_name = .x,
+      dir = here::here("Data/Processed/Classified_taxa/"),
+      verbose = FALSE
+    )
+  ) %>%
+  dplyr::bind_rows()
+
+taxa_already_present <-
+  taxa_db_classified %>%
+  purrr::chuck("sel_name")
+
+data_to_classify <-
+  taxa_db %>%
+  dplyr::filter(
+    !taxon_name %in% taxa_already_present
+  )
+
 taxa_db_chuncked <-
+  taxa_db %>%
+  # There are ceratin taxa that are unable to be classified.
+  # These are removed from the list and classified separately
+  dplyr::filter(
+    taxon_name != "Atriplex hortensis" &
+      taxon_name != "Hydrocotyle bonariensis"
+  ) %>%
   dplyr::mutate(
-    taxa_db,
     chunk_id = (dplyr::row_number() - 1) %/% chunk_size
   ) %>%
   dplyr::group_by(chunk_id) %>%
@@ -74,21 +110,54 @@ taxa_db_chuncked <-
 # 3. Classify taxa using {taxospace} -----
 #----------------------------------------------------------#
 
-taxa_db_classified <-
-  taxa_db_chuncked %>%
-  dplyr::mutate(
-    data_classified = purrr::map(
-      .progress = TRUE,
-      .x = data_nested,
-      .f = ~ taxospace::get_classification(
+# classify all taxa
+purrr::walk(
+  .progress = TRUE,
+  .x = taxa_db_chuncked$data_nested,
+  .f = ~ {
+    sel_class <-
+      taxospace::get_classification(
         taxa_vec = .x$taxon_name,
         sel_db_name = "gnr",
         sel_db_class = "gbif",
         use_cache = TRUE,
         verbose = FALSE
       )
+
+    sel_class %>%
+      split(., .$sel_name) %>%
+      purrr::iwalk(
+        .f = ~ RUtilpol::save_latest_file(
+          file_name = janitor::make_clean_names(.y),
+          object_to_save = .x,
+          dir = here::here("Data/Processed/Classified_taxa/"),
+          prefered_format = "rds",
+          verbose = FALSE
+        )
+      )
+  }
+)
+
+# load all classified data
+taxa_db_classified <-
+  here::here(
+    "Data/Processed/Classified_taxa/"
+  ) %>%
+  list.files() %>%
+  purrr::map(
+    .f = ~ RUtilpol::get_clean_name(.x)
+  ) %>%
+  unique() %>%
+  purrr::map(
+    .progress = TRUE,
+    .f = ~ RUtilpol::get_latest_file(
+      file_name = .x,
+      dir = here::here("Data/Processed/Classified_taxa/"),
+      verbose = FALSE
     )
-  )
+  ) %>%
+  dplyr::bind_rows()
+
 
 data_classified_up_to_family <-
   taxa_db_classified %>%
