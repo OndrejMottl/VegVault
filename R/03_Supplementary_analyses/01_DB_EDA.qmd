@@ -1,23 +1,64 @@
-#----------------------------------------------------------#
-#
-#
-#                 BIODYNAMICS - VegVault
-#
-#                         EDA
-#
-#
-#                       O. Mottl
-#                         2023
-#
-#----------------------------------------------------------#
+---
+title: "EDA of the VegVault database"
+date: last-modified
+author: Ondřej Mottl
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    fig-width: 10
+    self_contained: yes
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    fig-width: 10
+editor: 
+  markdown: 
+    wrap: sentence
+---
 
-# EDA of the VegVault database
+# VegVault database
 
-#----------------------------------------------------------#
-# 0. Setup -----
-#----------------------------------------------------------#
+## Section I: Description of VegVaul
+
+VegVault is a SQLite interdisciplinary database linking plot-based vegation data with functinal traits and climate. Specifically, it contains:
+
+ - current vegetation plot data
+ - past vegetation plot data (fossil pollen reocrds)
+ - trait data
+ - current abiotic data (climate, soil)
+ - past abiotic data (climate)
+
+The goal of the 
+
+
+## Section II: Overview of VegVault 1.0.0
+
+```{r}
+#| label: chunk setup
+#| include: FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.path = "figures/"
+)
+```
+
+
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
 
 library(here)
+
+here::i_am("R/03_Supplementary_analyses/01_DB_EDA.qmd")
 
 # Load configuration
 source(
@@ -26,10 +67,77 @@ source(
   )
 )
 
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
 
-#----------------------------------------------------------#
-# 1. Connect to db -----
-#----------------------------------------------------------#
+```{r}
+#| label: chunk theme
+#| include: FALSE
+ggplot2::theme_set(
+  ggplot2::theme_bw() +
+    ggplot2::theme(
+      axis.title = ggplot2::element_text(size = 25),
+      axis.text = ggplot2::element_text(size = 15),
+      strip.text = ggplot2::element_text(size = 15),
+      panel.grid = ggplot2::element_blank()
+    )
+)
+
+fig_width_def <- 60 # this is used to wrap text.
+
+#' @description
+#' A helper function to colour the facets
+color_facets <-
+  function(sel_plot,
+           sel_palette,
+           direction = c("vertical", "horizontal"),
+           return_raw = FALSE) {
+    direction <- match.arg(direction)
+    g <-
+      ggplot2::ggplot_gtable(
+        ggplot2::ggplot_build(sel_plot)
+      )
+    stripr <-
+      which(grepl("strip-t", g$layout$name))
+
+    for (i in seq_along(stripr)) {
+      obejct_val <-
+        sort(stripr,
+          decreasing = ifelse(direction == "vertical",
+            TRUE,
+            FALSE
+          )
+        )[i]
+
+      j <-
+        which(grepl("rect", g$grobs[[obejct_val]]$grobs[[1]]$childrenOrder))
+
+      g$grobs[[obejct_val]]$grobs[[1]]$children[[j]]$gp$fill <-
+        sel_palette[i]
+    }
+
+    if (
+      return_raw == TRUE
+    ) {
+      return(g)
+    } else {
+      grid::grid.draw(g)
+    }
+  }
+```
+
+```{r}
+# |label: connect to DB
 
 con <-
   DBI::dbConnect(
@@ -39,9 +147,9 @@ con <-
       "Data/VegVault/VegVault.sqlite"
     )
   )
+```
 
-DBI::dbListTables(con)
-
+```{r}
 #----------------------------------------------------------#
 # 2. Datasets -----
 #----------------------------------------------------------#
@@ -127,7 +235,10 @@ plot_waffle(
   one_point_is = 1e3,
   n_rows = 50
 )
+```
 
+
+```{r}
 n_datasetes_per_type_per_source_type <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
@@ -206,3 +317,45 @@ n_datasetes_per_type_per_source_type %>%
     size = 3,
     position = ggplot2::position_dodge(0.5)
   )
+
+n_dataset_sources <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSourcesID"),
+    by = "data_source_id"
+  ) %>%
+  dplyr::distinct(dataset_type, data_source_desc) %>%
+  dplyr::group_by(dataset_type) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+
+View(n_dataset_sources)
+
+n_datasetes_per_source <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetSourcesID"),
+    by = "data_source_id"
+  ) %>%
+  dplyr::group_by(data_source_desc) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+
+plot_waffle(
+  n_datasetes_per_source,
+  data_source_desc,
+  plot_title = "Datasets source",
+  one_point_is = 1e3,
+  n_rows = 50
+)
+```
+
+## Section III: Assebly details of VegVault 1.0.0
