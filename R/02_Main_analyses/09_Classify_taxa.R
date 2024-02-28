@@ -59,9 +59,8 @@ taxa_db <-
   dplyr::tbl(con, "Taxa") %>%
   dplyr::collect()
 
-
 # load all classified data
-taxa_db_classified <-
+taxa_already_present <-
   here::here(
     "Data/Processed/Classified_taxa/"
   ) %>%
@@ -69,34 +68,47 @@ taxa_db_classified <-
   purrr::map(
     .f = ~ RUtilpol::get_clean_name(.x)
   ) %>%
+  unlist() %>%
   unique() %>%
-  purrr::map(
-    .progress = TRUE,
-    .f = ~ RUtilpol::get_latest_file(
-      file_name = .x,
-      dir = here::here("Data/Processed/Classified_taxa/"),
-      verbose = FALSE
+  as.list()
+
+if (
+  length(taxa_already_present) > 0
+) {
+  taxa_already_classified <-
+    taxa_already_present %>%
+    purrr::map(
+      .progress = TRUE,
+      .f = ~ RUtilpol::get_latest_file(
+        file_name = .x,
+        dir = here::here("Data/Processed/Classified_taxa/"),
+        verbose = FALSE
+      )
+    ) %>%
+    dplyr::bind_rows()
+
+  taxa_already_classified_vec <-
+    taxa_already_classified %>%
+    purrr::chuck("sel_name")
+
+  taxa_to_classify <-
+    taxa_db %>%
+    dplyr::filter(
+      !taxon_name %in% taxa_already_classified_vec
     )
-  ) %>%
-  dplyr::bind_rows()
-
-taxa_already_present <-
-  taxa_db_classified %>%
-  purrr::chuck("sel_name")
-
-data_to_classify <-
-  taxa_db %>%
-  dplyr::filter(
-    !taxon_name %in% taxa_already_present
-  )
+} else {
+  taxa_to_classify <- taxa_db
+}
 
 taxa_db_chuncked <-
-  taxa_db %>%
+  taxa_to_classify %>%
   # There are ceratin taxa that are unable to be classified.
   # These are removed from the list and classified separately
   dplyr::filter(
-    taxon_name != "Atriplex hortensis" &
-      taxon_name != "Hydrocotyle bonariensis"
+    !taxon_name %in% c(
+      "Atriplex hortensis",
+      "Hydrocotyle bonariensis"
+    )
   ) %>%
   dplyr::mutate(
     chunk_id = (dplyr::row_number() - 1) %/% chunk_size
