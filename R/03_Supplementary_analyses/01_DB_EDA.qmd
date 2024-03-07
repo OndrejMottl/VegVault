@@ -1,5 +1,5 @@
 ---
-title: "EDA of the VegVault database"
+title: "VegVault database"
 date: last-modified
 author: Ondřej Mottl
 output:
@@ -17,23 +17,6 @@ editor:
     wrap: sentence
 ---
 
-# VegVault database
-
-## Section I: Description of VegVaul
-
-VegVault is a SQLite interdisciplinary database linking plot-based vegation data with functinal traits and climate. Specifically, it contains:
-
- - current vegetation plot data
- - past vegetation plot data (fossil pollen reocrds)
- - trait data
- - current abiotic data (climate, soil)
- - past abiotic data (climate)
-
-The goal of the 
-
-
-## Section II: Overview of VegVault 1.0.0
-
 ```{r}
 #| label: chunk setup
 #| include: FALSE
@@ -47,7 +30,6 @@ knitr::opts_chunk$set(
   fig.path = "figures/"
 )
 ```
-
 
 ```{r}
 #| label: source config
@@ -86,7 +68,8 @@ invisible(
 ggplot2::theme_set(
   ggplot2::theme_bw() +
     ggplot2::theme(
-      axis.title = ggplot2::element_text(size = 25),
+      plot.title = ggplot2::element_text(size = 15),
+      axis.title = ggplot2::element_text(size = 15),
       axis.text = ggplot2::element_text(size = 15),
       strip.text = ggplot2::element_text(size = 15),
       panel.grid = ggplot2::element_blank()
@@ -137,7 +120,7 @@ color_facets <-
 ```
 
 ```{r}
-# |label: connect to DB
+#| label: connect to DB
 
 con <-
   DBI::dbConnect(
@@ -149,17 +132,58 @@ con <-
   )
 ```
 
+# Section I: Description of VegVaul
+
+**VegVault** is a SQLite interdisciplinary database linking plot-based vegation data with functinal traits and climate. Specifically, it contains:
+
+ - current vegetation plot data
+ - past vegetation plot data (fossil pollen reocrds)
+ - functional trait data
+ - current abiotic data (climate, soil)
+ - past abiotic data (climate)
+
+The goal of the database is to compilate interdisciplinary data ...
+
+
+# Section II: Overview of VegVault 1.0.0
+
+Database is strucutred in sseveral logical levels, such as `Dataset`, `Sample`, `Taxa`, `Trait`, etc. 
+
+## Dataset
+
+`Dataset` represent the heighest levels in the hiearchy. It is the main keystone in the VegVauls structure. 
+
 ```{r}
-#----------------------------------------------------------#
-# 2. Datasets -----
-#----------------------------------------------------------#
+#| label: Dataset scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/Datasets.png"
+  )
+)
+```
 
-n_datasetes <-
-  dplyr::tbl(con, "Datasets") %>%
-  dplyr::count() %>%
-  dplyr::collect() %>%
-  purrr::chuck("n")
+### Dataset Type
 
+`dataset_type_id` define the basic type of a dataset. This is the heighest level of classification of the data
+
+Currently, there **VegVault** cosist of those types:
+
+* **vegetation_plot** -  current vegetation plot dataset
+* **fossil_pollen_archive** - past vegetation plot dataset
+* **traits** - dataset containting functional traits
+* **gridpoints** - artificially created dataset to hold abiotic data 
+
+```{r}
+#| label: Dataset Type scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/DatasetTypeID.png"
+  )
+)
+```
+
+```{r}
+#| label: Dataset type - plots
 n_datasetes_per_type <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
@@ -175,8 +199,7 @@ plot_waffle(
   n_datasetes_per_type,
   dataset_type,
   plot_title = "Datasets type",
-  one_point_is = 1e3,
-  n_rows = 50
+  one_point_is = 1e3
 )
 
 n_datasetes_per_type %>%
@@ -216,7 +239,31 @@ n_datasetes_per_type %>%
     vjust = -0.5,
     size = 3
   )
+```
 
+### Dataset Source-Type
+
+`dataset_source_type_id` defines the general provider of the dataset. This should help to clasify, which data pipeline was used to import the dataset into the **VegVault**, This is also the first general point of reference of data, as all large databases have a citation statement.
+
+Currently, there **VegVault** cosist of those source-types:
+
+* **BIEN** - [Botanical Information and Ecology Network](https://bien.nceas.ucsb.edu/bien/)
+* **sPlotOpen** - [The open-access version of sPlot](https://idiv-biodiversity.de/en/splot/splotopen.html)
+* **TRY** - [TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php)
+* **FOSSILPOL** - [The workflow that aims to process and standardise global palaeoecological pollen data](https://hope-uib-bio.github.io/FOSSILPOL-website/) 
+* **gridpoints** - artificially created dataset to hold abiotic data 
+
+```{r}
+#| label: Dataset Source Type scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/DatasetSourceTypeID.png"
+  )
+)
+```
+
+```{r}
+#| label: dataset source type - plots
 n_datasetes_per_source_type <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
@@ -232,13 +279,9 @@ plot_waffle(
   n_datasetes_per_source_type,
   dataset_source_type,
   plot_title = "Datasets source type",
-  one_point_is = 1e3,
-  n_rows = 50
+  one_point_is = 1e3
 )
-```
 
-
-```{r}
 n_datasetes_per_type_per_source_type <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
@@ -278,7 +321,7 @@ n_datasetes_per_type_per_source_type %>%
     )
   ) +
   ggplot2::scale_y_continuous(
-    trans = "log10",
+    transform = scales::transform_log10(),
     breaks = scales::trans_breaks("log10", function(x) 10^x),
     labels = scales::trans_format("log10", scales::math_format(10^.x))
   ) +
@@ -317,7 +360,23 @@ n_datasetes_per_type_per_source_type %>%
     size = 3,
     position = ggplot2::position_dodge(0.5)
   )
+```
 
+### Dataset Source
+
+Each individal dataset form a specific *Data Source-Type* can have an information of the source of the data (i.e. subdatabse). This should help to promote better findability of the primar source of data and referencing.
+
+```{r}
+#| label: Dataset Source ID scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/DatasetSourcesID.png"
+  )
+)
+```
+
+```{r}
+#| label: Dataset ID
 n_dataset_sources <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
@@ -334,28 +393,169 @@ n_dataset_sources <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-
-View(n_dataset_sources)
+n_total_sources <-
+  sum(n_dataset_sources$N)
 
 n_datasetes_per_source <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::inner_join(
     dplyr::tbl(con, "DatasetSourcesID"),
     by = "data_source_id"
   ) %>%
-  dplyr::group_by(data_source_desc) %>%
+  dplyr::group_by(dataset_type, data_source_desc) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup() %>%
+  tidyr::drop_na(data_source_desc)
+```
+
+Currently, there are `{r} n_total_sources` individual sources of dataset
+
+```{r}
+#| label: Dataset ID - plots
+n_datasetes_per_source %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = dataset_type,
+      y = N,
+      fill = dataset_type
+    )
+  ) +
+  ggplot2::geom_violin(
+    col = NA
+  ) +
+  ggplot2::geom_boxplot(
+    width = 0.2,
+    fill = "white",
+    col = "gray50",
+    outlier.shape = NA
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = scales::transform_log10(),
+    breaks = scales::trans_breaks("log10", function(x) 10^x),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))
+  ) +
+  ggplot2::labs(
+    title = "Number of sources per Dataset-Type",
+    y = "Number of sources",
+    x = ""
+  )
+```
+
+### Sampling method
+
+Some dataset may differ in the way they have been sampled. This could be represented by differwent way vegetation data have been sampled for *Dataset Type* of `vegetation_plot`, or  depositioal environement for *Dataset Type* of `fossil_pollen_archive`.
+
+```{r}
+#| label: Dataset Sampling method scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/SamplingMethodID.png"
+  )
+)
+```
+
+```{r}
+#| label: Dataset Sampling method - plots
+n_sampling_methods_per_dataset_type <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "SamplingMethodID"),
+    by = "sampling_method_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::distinct(dataset_type, sampling_method_details) %>%
+  dplyr::group_by(dataset_type) %>%
   dplyr::count(name = "N") %>%
   dplyr::collect() %>%
   dplyr::ungroup()
 
-
 plot_waffle(
-  n_datasetes_per_source,
-  data_source_desc,
-  plot_title = "Datasets source",
-  one_point_is = 1e3,
-  n_rows = 50
+  n_sampling_methods_per_dataset_type,
+  dataset_type,
+  plot_title = "Number of Sampling method per Datasets type",
+  one_point_is = 1
 )
 ```
 
-## Section III: Assebly details of VegVault 1.0.0
+### References
+
+*Dataset Source-Type*, *Dataset Source*, and *Sampling Method* can have their own references. Moreover, each individual dataset can have one or more references directly to that specific data.
+
+```{r}
+#| label: Dataset reference method scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/DatasetReference.png"
+  )
+)
+```
+
+This mean that one dataset can have one/several references from each of those parts. Let's take a look at an example, what that could mean in practice.
+
+```{r}
+#| label: Dataset reference example
+
+sel_dataset_for_example <- 91256
+
+dataset_ref_example <-
+  dplyr::tbl(con, "Datasets") %>%
+  dplyr::filter(dataset_id == sel_dataset_for_example) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSourceTypeReference"),
+    by = "data_source_type_id"
+  ) %>%
+  dplyr::left_join(
+    dplyr::tbl(con, "References"),
+    by = "reference_id"
+  ) %>%
+  dplyr::rename(
+    source_type_ref = reference_detail
+  ) %>%
+  dplyr::select(-reference_id) %>%
+  dplyr::left_join(
+    dplyr::tbl(con, "SamplingMethodReference"),
+    by = "sampling_method_id"
+  ) %>%
+  dplyr::left_join(
+    dplyr::tbl(con, "References"),
+    by = "reference_id"
+  ) %>%
+  dplyr::rename(
+    sampling_method_ref = reference_detail
+  ) %>%
+  dplyr::select(-reference_id) %>%
+  dplyr::left_join(
+    dplyr::tbl(con, "DatasetSourcesReference"),
+    by = "data_source_id"
+  ) %>%
+  dplyr::left_join(
+    dplyr::tbl(con, "References"),
+    by = "reference_id"
+  ) %>%
+  dplyr::rename(
+    source_ref = reference_detail
+  ) %>%
+  dplyr::select(-reference_id) %>%
+  dplyr::collect()
+
+```
+
+We have selected dataset ID:` {r} sel_dataset_for_example`, which is fossil pollen archive. Therefore, it has the reference of the *Dataser Source-Type*:
+
+` {r} dataset_ref_example$source_type_ref `
+
+and refrence for the individual dataset:
+
+` {r} dataset_ref_example$source_ref `
+
+
+
+# Section III: Assebly details of VegVault 1.0.0

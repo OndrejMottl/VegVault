@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ondřej Mottl">
-<meta name="dcterms.date" content="2024-02-28">
+<meta name="dcterms.date" content="2024-03-07">
 
-<title>EDA of the VegVault database</title>
+<title>VegVault database</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">EDA of the VegVault database</h1>
+<h1 class="title">VegVault database</h1>
 </div>
 
 
@@ -64,7 +64,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 28, 2024</p>
+      <p class="date">March 7, 2024</p>
     </div>
   </div>
   
@@ -72,45 +72,50 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
-
 </header>
 
-
-<section id="vegvault-database" class="level1">
-<h1>VegVault database</h1>
-<section id="section-i-description-of-vegvaul" class="level2">
-<h2 class="anchored" data-anchor-id="section-i-description-of-vegvaul">Section I: Description of VegVaul</h2>
-<p>VegVault is a SQLite interdisciplinary database linking plot-based vegation data with functinal traits and climate. Specifically, it contains:</p>
+<section id="section-i-description-of-vegvaul" class="level1">
+<h1>Section I: Description of VegVaul</h1>
+<p><strong>VegVault</strong> is a SQLite interdisciplinary database linking plot-based vegation data with functinal traits and climate. Specifically, it contains:</p>
 <ul>
 <li>current vegetation plot data</li>
 <li>past vegetation plot data (fossil pollen reocrds)</li>
-<li>trait data</li>
+<li>functional trait data</li>
 <li>current abiotic data (climate, soil)</li>
 <li>past abiotic data (climate)</li>
 </ul>
-<p>The goal</p>
+<p>The goal of the database is to compilate interdisciplinary data …</p>
 </section>
-<section id="section-ii-overview-of-vegvault-1.0.0" class="level2">
-<h2 class="anchored" data-anchor-id="section-ii-overview-of-vegvault-1.0.0">Section II: Overview of VegVault 1.0.0</h2>
+<section id="section-ii-overview-of-vegvault-1.0.0" class="level1">
+<h1>Section II: Overview of VegVault 1.0.0</h1>
+<p>Database is strucutred in sseveral logical levels, such as <code>Dataset</code>, <code>Sample</code>, <code>Taxa</code>, <code>Trait</code>, etc.</p>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p><code>Dataset</code> represent the heighest levels in the hiearchy. It is the main keystone in the VegVauls structure.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="DB_scheme_visualisation/Datasets.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
+</div>
+<section id="dataset-type" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-type">Dataset Type</h3>
+<p><code>dataset_type_id</code> define the basic type of a dataset. This is the heighest level of classification of the data</p>
+<p>Currently, there <strong>VegVault</strong> cosist of those types:</p>
+<ul>
+<li><strong>vegetation_plot</strong> - current vegetation plot dataset</li>
+<li><strong>fossil_pollen_archive</strong> - past vegetation plot dataset</li>
+<li><strong>traits</strong> - dataset containting functional traits</li>
+<li><strong>gridpoints</strong> - artificially created dataset to hold abiotic data</li>
+</ul>
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/unnamed-chunk-5-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figures/unnamed-chunk-5-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="DB_scheme_visualisation/DatasetTypeID.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -119,22 +124,127 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="figures/Dataset%20type%20-%20plots-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/unnamed-chunk-6-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="figures/Dataset%20type%20-%20plots-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="section-iii-assebly-details-of-vegvault-1.0.0" class="level2">
-<h2 class="anchored" data-anchor-id="section-iii-assebly-details-of-vegvault-1.0.0">Section III: Assebly details of VegVault 1.0.0</h2>
+<section id="dataset-source-type" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-source-type">Dataset Source-Type</h3>
+<p><code>dataset_source_type_id</code> defines the general provider of the dataset. This should help to clasify, which data pipeline was used to import the dataset into the <strong>VegVault</strong>, This is also the first general point of reference of data, as all large databases have a citation statement.</p>
+<p>Currently, there <strong>VegVault</strong> cosist of those source-types:</p>
+<ul>
+<li><strong>BIEN</strong> - <a href="https://bien.nceas.ucsb.edu/bien/">Botanical Information and Ecology Network</a></li>
+<li><strong>sPlotOpen</strong> - <a href="https://idiv-biodiversity.de/en/splot/splotopen.html">The open-access version of sPlot</a></li>
+<li><strong>TRY</strong> - <a href="https://www.try-db.org/TryWeb/Home.php">TRY Plant Trait Database</a></li>
+<li><strong>FOSSILPOL</strong> - <a href="https://hope-uib-bio.github.io/FOSSILPOL-website/">The workflow that aims to process and standardise global palaeoecological pollen data</a></li>
+<li><strong>gridpoints</strong> - artificially created dataset to hold abiotic data</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/DatasetSourceTypeID.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/dataset%20source%20type%20-%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/dataset%20source%20type%20-%20plots-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
+<section id="dataset-source" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-source">Dataset Source</h3>
+<p>Each individal dataset form a specific <em>Data Source-Type</em> can have an information of the source of the data (i.e.&nbsp;subdatabse). This should help to promote better findability of the primar source of data and referencing.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/DatasetSourcesID.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Currently, there are <code>{r} n_total_sources</code> individual sources of dataset</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/Dataset%20ID%20-%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sampling-method" class="level3">
+<h3 class="anchored" data-anchor-id="sampling-method">Sampling method</h3>
+<p>Some dataset may differ in the way they have been sampled. This could be represented by differwent way vegetation data have been sampled for <em>Dataset Type</em> of <code>vegetation_plot</code>, or depositioal environement for <em>Dataset Type</em> of <code>fossil_pollen_archive</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/SamplingMethodID.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/Dataset%20Sampling%20method%20-%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+<p><em>Dataset Source-Type</em>, <em>Dataset Source</em>, and <em>Sampling Method</em> can have their own references. Moreover, each individual dataset can have one or more references directly to that specific data.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/DatasetReference.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This mean that one dataset can have one/several references from each of those parts. Let’s take a look at an example, what that could mean in practice.</p>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; [1] "https://doi.org/10.1111/geb.13693"
+#&gt; [1] "Grimm, E.C., 2008. Neotoma: an ecosystem database for the Pliocene, Pleistocene, and Holocene. Illinois State Museum Scientific Papers E Series, 1."</code></pre>
+</div>
+<p>We have selected dataset ID:<code>{r} sel_dataset_for_example</code>, which is fossil pollen archive. Therefore, it has the reference of the <em>Dataser Source-Type</em>:</p>
+<p><code>{r} dataset_ref_example$source_type_ref</code></p>
+<p>and refrence for the individual dataset:</p>
+<p><code>{r} dataset_ref_example$source_ref</code></p>
+</section>
+</section>
+</section>
+<section id="section-iii-assebly-details-of-vegvault-1.0.0" class="level1">
+<h1>Section III: Assebly details of VegVault 1.0.0</h1>
 </section>
 
 </main>
@@ -218,9 +328,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -230,17 +341,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -253,125 +355,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -415,7 +398,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -441,32 +423,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -527,7 +483,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-
 
 
 
