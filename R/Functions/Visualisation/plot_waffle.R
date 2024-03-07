@@ -3,14 +3,26 @@ plot_waffle <- function(
     var_name,
     facet_var = NULL,
     one_point_is = 1,
-    n_rows = 10,
+    n_rows = NULL,
     plot_title = "",
     ...) {
-  p0 <-
+  data_work <-
     data_source %>%
     dplyr::mutate(
       N_work = floor(N / one_point_is)
-    ) %>%
+    )
+
+  if (
+    is.null(n_rows)
+  ) {
+    n_rows <-
+      sum(data_work$N_work) %>%
+      sqrt() %>%
+      floor()
+  }
+
+  p0 <-
+    data_work %>%
     ggplot2::ggplot() +
     ggplot2::theme_bw() +
     ggplot2::guides(
