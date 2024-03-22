@@ -134,10 +134,10 @@ con <-
 
 # Section I: Description of VegVaul
 
-**VegVault** is a SQLite interdisciplinary database linking plot-based vegation data with functinal traits and climate. Specifically, it contains:
+**VegVault** is a SQLite interdisciplinary database linking plot-based vegetation data with functional traits and climate. Specifically, it contains:
 
  - current vegetation plot data
- - past vegetation plot data (fossil pollen reocrds)
+ - past vegetation plot data (fossil pollen records)
  - functional trait data
  - current abiotic data (climate, soil)
  - past abiotic data (climate)
@@ -147,11 +147,11 @@ The goal of the database is to compilate interdisciplinary data ...
 
 # Section II: Overview of VegVault 1.0.0
 
-Database is strucutred in sseveral logical levels, such as `Dataset`, `Sample`, `Taxa`, `Trait`, etc. 
+The database is structured in several logical levels, such as `Dataset`, `Sample`, `Taxa`, `Trait`, etc. 
 
 ## Dataset
 
-`Dataset` represent the heighest levels in the hiearchy. It is the main keystone in the VegVauls structure. 
+`Dataset` represents the highest levels in the hierarchy. It is the main keystone in the VegVauls structure. 
 
 ```{r}
 #| label: Dataset scheme structure
@@ -164,13 +164,13 @@ knitr::include_graphics(
 
 ### Dataset Type
 
-`dataset_type_id` define the basic type of a dataset. This is the heighest level of classification of the data
+`dataset_type_id` defines the basic type of a dataset. This is the highest level of classification of the data
 
-Currently, there **VegVault** cosist of those types:
+Currently, there **VegVault** consist of those types:
 
 * **vegetation_plot** -  current vegetation plot dataset
 * **fossil_pollen_archive** - past vegetation plot dataset
-* **traits** - dataset containting functional traits
+* **traits** - dataset containing functional traits
 * **gridpoints** - artificially created dataset to hold abiotic data 
 
 ```{r}
@@ -243,9 +243,9 @@ n_datasetes_per_type %>%
 
 ### Dataset Source-Type
 
-`dataset_source_type_id` defines the general provider of the dataset. This should help to clasify, which data pipeline was used to import the dataset into the **VegVault**, This is also the first general point of reference of data, as all large databases have a citation statement.
+`dataset_source_type_id` defines the general provider of the dataset. This should help to classify, which data pipeline was used to import the dataset into the **VegVault**, This is also the first general point of reference of data, as all large databases have a citation statement.
 
-Currently, there **VegVault** cosist of those source-types:
+Currently, there **VegVault** consist of those source-types:
 
 * **BIEN** - [Botanical Information and Ecology Network](https://bien.nceas.ucsb.edu/bien/)
 * **sPlotOpen** - [The open-access version of sPlot](https://idiv-biodiversity.de/en/splot/splotopen.html)
@@ -364,7 +364,7 @@ n_datasetes_per_type_per_source_type %>%
 
 ### Dataset Source
 
-Each individal dataset form a specific *Data Source-Type* can have an information of the source of the data (i.e. subdatabse). This should help to promote better findability of the primar source of data and referencing.
+Each individual dataset from a specific *Data Source-Type* can have information on the source of the data (i.e. sub-database). This should help to promote better findability of the primary source of data and referencing.
 
 ```{r}
 #| label: Dataset Source ID scheme structure
@@ -413,7 +413,7 @@ n_datasetes_per_source <-
   tidyr::drop_na(data_source_desc)
 ```
 
-Currently, there are `{r} n_total_sources` individual sources of dataset
+Currently, there are `r n_total_sources` sources of dataset
 
 ```{r}
 #| label: Dataset ID - plots
@@ -448,7 +448,7 @@ n_datasetes_per_source %>%
 
 ### Sampling method
 
-Some dataset may differ in the way they have been sampled. This could be represented by differwent way vegetation data have been sampled for *Dataset Type* of `vegetation_plot`, or  depositioal environement for *Dataset Type* of `fossil_pollen_archive`.
+Some datasets may differ in the way they have been sampled. This could be represented by different ways vegetation data have been sampled for *Dataset Type* of `vegetation_plot`, or depositional environment for *Dataset Type* of `fossil_pollen_archive`.
 
 ```{r}
 #| label: Dataset Sampling method scheme structure
@@ -487,7 +487,7 @@ plot_waffle(
 
 ### References
 
-*Dataset Source-Type*, *Dataset Source*, and *Sampling Method* can have their own references. Moreover, each individual dataset can have one or more references directly to that specific data.
+*Dataset Source-Type*, *Dataset Source*, and *Sampling Method* can have their own references. Moreover, each dataset can have one or more references directly to that specific data.
 
 ```{r}
 #| label: Dataset reference method scheme structure
@@ -498,7 +498,7 @@ knitr::include_graphics(
 )
 ```
 
-This mean that one dataset can have one/several references from each of those parts. Let's take a look at an example, what that could mean in practice.
+This means that one dataset can have one/several references from each of those parts. Let's take a look at an example, of what that could mean in practice.
 
 ```{r}
 #| label: Dataset reference example
@@ -548,14 +548,6 @@ dataset_ref_example <-
 
 ```
 
-We have selected dataset ID:` {r} sel_dataset_for_example`, which is fossil pollen archive. Therefore, it has the reference of the *Dataser Source-Type*:
+We have selected dataset ID: `r as.character(sel_dataset_for_example)`, which is a fossil pollen archive. Therefore, it has the reference of the *Dataser Source-Type*: *`r dataset_ref_example$source_type_ref`* and reference for the individual dataset: *`r dataset_ref_example$source_ref`*
 
-` {r} dataset_ref_example$source_type_ref `
-
-and refrence for the individual dataset:
-
-` {r} dataset_ref_example$source_ref `
-
-
-
-# Section III: Assebly details of VegVault 1.0.0
+# Section III: Assembly details of VegVault 1.0.0
