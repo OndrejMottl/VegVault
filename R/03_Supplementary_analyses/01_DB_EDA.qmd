@@ -52,7 +52,7 @@ source(
 invisible(
   lapply(
     list.files(
-      path = here::here("R/functions"),
+      path = here::here("R/Functions"),
       pattern = "*.R",
       recursive = TRUE,
       full.names = TRUE
@@ -413,7 +413,7 @@ n_datasetes_per_source <-
   tidyr::drop_na(data_source_desc)
 ```
 
-Currently, there are `r n_total_sources` sources of dataset
+Currently, there are `r n_total_sources` sources of datasets.
 
 ```{r}
 #| label: Dataset ID - plots
@@ -549,5 +549,65 @@ dataset_ref_example <-
 ```
 
 We have selected dataset ID: `r as.character(sel_dataset_for_example)`, which is a fossil pollen archive. Therefore, it has the reference of the *Dataser Source-Type*: *`r dataset_ref_example$source_type_ref`* and reference for the individual dataset: *`r dataset_ref_example$source_ref`*
+
+## Samples
+
+`Sample` represents the main unit of data in the **VegVault** database. 
+
+```{r}
+#| label: Samples scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/Samples.png"
+  )
+)
+```
+
+### Dataset-Sample
+
+First `Samples` are linked to `Datasets` via the `Dataset-Sample` table.
+
+```{r}
+#| label: DatasetSample scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/DatasetSample.png"
+  )
+)
+```
+
+```{r}
+#| label: Number of samples plot
+n_samples_per_dataset_type <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(dataset_type, sample_id) %>%
+  dplyr::group_by(dataset_type) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+plot_waffle(
+  n_samples_per_dataset_type,
+  dataset_type,
+  plot_title = "Number of samples per Dataset type",
+  one_point_is = 10e3
+)
+```
+
+### Sample-size
+
+Vegetation plots can have different sizes, which can have a huge impact on analyses. Therefore, the information about the 
 
 # Section III: Assembly details of VegVault 1.0.0
