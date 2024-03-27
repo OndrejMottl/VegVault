@@ -773,4 +773,414 @@ knitr::include_graphics(
 )
 ```
 
+## Taxa
+
+The **Vegvault** database contais taxa names dirrectly from main *Data Source-types*. 
+
+```{r}
+#| label: Taxa scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/Taxa.png"
+  )
+)
+```
+
+Individual taxa names are linked to the *Samples* by *SampleTaxa* table. 
+
+```{r}
+#| label: SampleTaxa scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/SampleTaxa.png"
+  )
+)
+```
+
+```{r}
+#| label: Number of taxa per data souce type
+n_taxa_per_source_type <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::filter(
+    dataset_type == "vegetation_plot"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSourceTypeID"),
+    by = "data_source_type_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "SampleTaxa"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(dataset_source_type, taxon_id) %>%
+  dplyr::group_by(dataset_source_type) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+
+n_taxa_per_source_type %>%
+  dplyr::arrange(-N) %>%
+  dplyr::mutate(
+    dataset_source_type = factor(
+      dataset_source_type,
+      levels = unique(dataset_source_type)
+    )
+  ) %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = N,
+      x = dataset_source_type
+    )
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = scales::transform_log10(),
+    breaks = scales::trans_breaks("log10", function(x) 10^x),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))
+  ) +
+  ggplot2::labs(
+    title = "Taxa per source type",
+    x = "",
+    y = "Number of taxa"
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = dataset_source_type,
+      xend = dataset_source_type,
+      yend = 0
+    ),
+    color = "grey",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      fill = dataset_source_type
+    ),
+    size = 3,
+    shape = 21,
+    col = "black",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_label(
+    mapping = ggplot2::aes(
+      label = scales::number(N)
+    ),
+    vjust = -0.5,
+    size = 3,
+    position = ggplot2::position_dodge(0.5)
+  )
+```
+
+### Classification
+
+In order to obtain classification of all taxa present in the **Vegvault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package has been utilized, automatically aligning the names to [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from [Global Biodiversity Information Facility](https://www.gbif.org/).
+
+Classification up to the family level is then saved for each taxon.
+
+```{r}
+#| label: TaxonClassification scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/TaxonClassification.png"
+  )
+)
+```
+
+```{r}
+#| label: taxa classification plot
+data_classification_raw <-
+  dplyr::tbl(con, "TaxonClassification") %>%
+  dplyr::distinct(
+    taxon_species,
+    taxon_genus,
+    taxon_family
+  ) %>%
+  dplyr::collect()
+
+n_taxa_per_class <-
+  tibble::tribble(
+    ~class, ~N,
+    "species", length(unique(data_classification_raw$taxon_species)),
+    "genus", length(unique(data_classification_raw$taxon_genus)),
+    "family", length(unique(data_classification_raw$taxon_family)),
+  )
+
+
+n_taxa_per_class %>%
+  dplyr::arrange(-N) %>%
+  dplyr::mutate(
+    class = factor(
+      class,
+      levels = unique(class)
+    )
+  ) %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = N,
+      x = class
+    )
+  ) +
+  ggplot2::labs(
+    title = "Taxa classification",
+    x = "",
+    y = "Number of taxa"
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = class,
+      xend = class,
+      yend = 0
+    ),
+    color = "grey",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      fill = class
+    ),
+    size = 3,
+    shape = 21,
+    col = "black",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_label(
+    mapping = ggplot2::aes(
+      label = scales::number(N)
+    ),
+    vjust = -0.5,
+    size = 3,
+    position = ggplot2::position_dodge(0.5)
+  )
+
+```
+
+## Traits
+
+Functional traits of vegetation taxa follow the same structure of *Dataset* and *Samples* obtained directly from *Dataset Source-types*.
+
+```{r}
+#| label: Traits scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/Traits.png"
+  )
+)
+```
+
+### Trait domain
+
+As there are many varying names for the same "traits", the **Vegvault** database contains *Trait Domain* information to group traits together.  
+
+```{r}
+#| label: TraitsDomain scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/TraitsDomain.png"
+  )
+)
+```
+
+There are currently 6 trait domains following the [Diaz et al. (2016)](https://www.nature.com/articles/nature16489)
+
+```{r}
+#| label: show trait domains
+dplyr::tbl(con, "TraitsDomain") %>%
+  dplyr::distinct(trait_domain_name) %>%
+  dplyr::collect() %>%
+  rlang::set_names(
+    nm = "Trait domain"
+  ) %>%
+  tinytable::tt()
+```
+
+```{r}
+#| label: trait per domain plot
+
+n_traits_per_domain <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "TraitsDomain"),
+    dplyr::tbl(con, "Traits"),
+    by = "trait_domain_id"
+  ) %>%
+  dplyr::distinct(trait_domain_name, trait_name) %>%
+  dplyr::group_by(trait_domain_name) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+n_traits_per_domain %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = N,
+      x = trait_domain_name
+    )
+  ) +
+  ggplot2::labs(
+    title = "Trait domains",
+    x = "",
+    y = "Number of traits"
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = trait_domain_name,
+      xend = trait_domain_name,
+      yend = 0
+    ),
+    color = "grey",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      fill = trait_domain_name
+    ),
+    size = 3,
+    shape = 21,
+    col = "black",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_label(
+    mapping = ggplot2::aes(
+      label = scales::number(N)
+    ),
+    vjust = -0.5,
+    size = 3,
+    position = ggplot2::position_dodge(0.5)
+  )
+
+```
+
+### Trait Values
+
+To store a trait value, information needs to be linked among *Dataset*, *Sample*, *Taxa*, and *Trait*.
+
+```{r}
+#| label: TraitsValue scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/TraitsValue.png"
+  )
+)
+```
+
+```{r}
+#| label: trait value occurences plot
+
+n_occurences_per_dommain <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "TraitsDomain"),
+    dplyr::tbl(con, "Traits"),
+    by = "trait_domain_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "TraitsValue"),
+    by = "trait_id"
+  ) %>%
+  dplyr::group_by(trait_domain_name) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+
+
+n_occurences_per_dommain %>%
+  dplyr::arrange(-N) %>%
+  dplyr::mutate(
+    trait_domain_name = factor(
+      trait_domain_name,
+      levels = unique(trait_domain_name)
+    )
+  ) %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = N,
+      x = trait_domain_name
+    )
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = scales::transform_log10(),
+    breaks = scales::trans_breaks("log10", function(x) 10^x),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))
+  ) +
+  ggplot2::labs(
+    title = "Occurences of trait values",
+    x = "",
+    y = "Number of occurrences (values)"
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = trait_domain_name,
+      xend = trait_domain_name,
+      yend = 0
+    ),
+    color = "grey",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      fill = trait_domain_name
+    ),
+    size = 3,
+    shape = 21,
+    col = "black",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_label(
+    mapping = ggplot2::aes(
+      label = scales::number(N)
+    ),
+    vjust = -0.5,
+    size = 3,
+    position = ggplot2::position_dodge(0.5)
+  )
+```
+
+### Trait reference
+
+For full clarity, on top of *Dataset* and *Sample*, each *Trait* can have additional references.
+
+```{r}
+#| label: TraitsReference scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/TraitsReference.png"
+  )
+)
+```
+
+## Abiotic data
+
 # Section III: Assembly details of VegVault 1.0.0
+
+# Section IV: Examples of usage
+
+## Example 1: 
+
+## Example 2: 
+
+## Example 3: 
+
+# Section V: Outlook and future directions
