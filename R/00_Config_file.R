@@ -64,6 +64,7 @@ package_list <-
     "roxygen2",
     "RSQLite",
     "tidyverse",
+    "tinytable",
     "usethis",
     "utils"
   )

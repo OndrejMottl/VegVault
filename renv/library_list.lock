@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.2.3",
+    "Version": "4.3.2",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -702,13 +702,6 @@
       ],
       "Hash": "f20c47fd52fae58b4e377c37bb8c335b"
     },
-    "commonmark": {
-      "Package": "commonmark",
-      "Version": "1.9.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "d691c61bff84bd63c383874d2d0c3307"
-    },
     "conditionz": {
       "Package": "conditionz",
       "Version": "0.1.0",
@@ -1200,18 +1193,6 @@
         "methods"
       ],
       "Hash": "e0b3a53876554bd45879e596cdb10a52"
-    },
-    "gridBase": {
-      "Package": "gridBase",
-      "Version": "0.4-7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "graphics",
-        "grid"
-      ],
-      "Hash": "c6b1256546a22b4b9f4fae3ba5117b97"
     },
     "gridExtra": {
       "Package": "gridExtra",
@@ -2344,40 +2325,6 @@
       ],
       "Hash": "f432b3379fb1a47046e253468b6b6b6d"
     },
-    "shiny": {
-      "Package": "shiny",
-      "Version": "1.7.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "R6",
-        "bslib",
-        "cachem",
-        "commonmark",
-        "crayon",
-        "ellipsis",
-        "fastmap",
-        "fontawesome",
-        "glue",
-        "grDevices",
-        "htmltools",
-        "httpuv",
-        "jsonlite",
-        "later",
-        "lifecycle",
-        "methods",
-        "mime",
-        "promises",
-        "rlang",
-        "sourcetools",
-        "tools",
-        "utils",
-        "withr",
-        "xtable"
-      ],
-      "Hash": "438b99792adbe82a8329ad8697d45afe"
-    },
     "snakecase": {
       "Package": "snakecase",
       "Version": "0.11.1",
@@ -2406,16 +2353,6 @@
         "xml2"
       ],
       "Hash": "800aa9821db0c0742a691146aaf6c042"
-    },
-    "sourcetools": {
-      "Package": "sourcetools",
-      "Version": "0.1.7-1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "5f5a7629f956619d519205ec475fe647"
     },
     "sp": {
       "Package": "sp",
@@ -2669,6 +2606,22 @@
       ],
       "Hash": "c5f3c201b931cd6474d17d8700ccb1c8"
     },
+    "tinytable": {
+      "Package": "tinytable",
+      "Version": "0.2.0.9002",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "tinytable",
+      "RemoteUsername": "vincentarelbundock",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "6e313f8d96781d18d65630f17eb9bab6d1af3c23",
+      "Requirements": [
+        "R",
+        "methods"
+      ],
+      "Hash": "3906088f53ba87dc8bf9c89f03d3b7e5"
+    },
     "tinytex": {
       "Package": "tinytex",
       "Version": "0.49",
@@ -2678,25 +2631,6 @@
         "xfun"
       ],
       "Hash": "5ac22900ae0f386e54f1c307eca7d843"
-    },
-    "treemap": {
-      "Package": "treemap",
-      "Version": "2.4-4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "RColorBrewer",
-        "colorspace",
-        "data.table",
-        "ggplot2",
-        "grid",
-        "gridBase",
-        "igraph",
-        "methods",
-        "shiny"
-      ],
-      "Hash": "4f81151a925c017e2cdd712cbfaf3d09"
     },
     "triebeard": {
       "Package": "triebeard",
@@ -2987,18 +2921,6 @@
         "rlang"
       ],
       "Hash": "1d0336142f4cd25d8d23cd3ba7a8fb61"
-    },
-    "xtable": {
-      "Package": "xtable",
-      "Version": "1.8-4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "stats",
-        "utils"
-      ],
-      "Hash": "b8acdf8af494d9ec19ccb2481a9b11c2"
     },
     "yaml": {
       "Package": "yaml",
