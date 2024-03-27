@@ -52,7 +52,7 @@ source(
 invisible(
   lapply(
     list.files(
-      path = here::here("R/functions"),
+      path = here::here("R/Functions"),
       pattern = "*.R",
       recursive = TRUE,
       full.names = TRUE
@@ -413,7 +413,7 @@ n_datasetes_per_source <-
   tidyr::drop_na(data_source_desc)
 ```
 
-Currently, there are `r n_total_sources` sources of dataset
+Currently, there are `r n_total_sources` sources of datasets.
 
 ```{r}
 #| label: Dataset ID - plots
@@ -549,5 +549,228 @@ dataset_ref_example <-
 ```
 
 We have selected dataset ID: `r as.character(sel_dataset_for_example)`, which is a fossil pollen archive. Therefore, it has the reference of the *Dataser Source-Type*: *`r dataset_ref_example$source_type_ref`* and reference for the individual dataset: *`r dataset_ref_example$source_ref`*
+
+## Samples
+
+`Sample` represents the main unit of data in the **VegVault** database. 
+
+```{r}
+#| label: Samples scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/Samples.png"
+  )
+)
+```
+
+### Dataset-Sample
+
+First `Samples` are linked to `Datasets` via the `Dataset-Sample` table.
+
+```{r}
+#| label: DatasetSample scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/DatasetSample.png"
+  )
+)
+```
+
+```{r}
+#| label: Number of samples plot
+n_samples_per_dataset_type <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(dataset_type, sample_id) %>%
+  dplyr::group_by(dataset_type) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+plot_waffle(
+  n_samples_per_dataset_type,
+  dataset_type,
+  plot_title = "Number of samples per Dataset type",
+  one_point_is = 10e3
+)
+```
+
+### Sample-size
+
+Vegetation plots can have different sizes, which can have a huge impact on analyses. Therefore, the information about the plot is saved separately. 
+
+```{r}
+#| label: SampleSizeID scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/SampleSizeID.png"
+  )
+)
+```
+
+```{r}
+#| label: plot-size plot
+plot_size_types <-
+  dplyr::tbl(con, "SampleSizeID") %>%
+  dplyr::distinct(description) %>%
+  dplyr::collect()
+
+if (
+  nrow(plot_size_types) == 1
+) {
+  data_samples_plot_size <-
+    dplyr::inner_join(
+      dplyr::tbl(con, "Datasets"),
+      dplyr::tbl(con, "DatasetTypeID"),
+      by = "dataset_type_id"
+    ) %>%
+    dplyr::filter(
+      dataset_type == "vegetation_plot"
+    ) %>%
+    dplyr::inner_join(
+      dplyr::tbl(con, "DatasetSample"),
+      by = "dataset_id"
+    ) %>%
+    dplyr::inner_join(
+      dplyr::tbl(con, "Samples"),
+      by = "sample_id"
+    ) %>%
+    dplyr::left_join(
+      dplyr::tbl(con, "SampleSizeID"),
+      by = "sample_size_id"
+    ) %>%
+    dplyr::select(sample_size) %>%
+    dplyr::collect()
+
+  data_samples_plot_size %>%
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = sample_size,
+      )
+    ) +
+    ggplot2::scale_x_continuous(
+      trans = "log10"
+    ) +
+    ggplot2::scale_y_continuous(
+      trans = "log10",
+      breaks = scales::trans_breaks("log10", function(x) 10^x),
+      labels = scales::trans_format("log10", scales::math_format(10^.x))
+    ) +
+    ggplot2::labs(
+      title = "Vegetation plot size",
+      x = paste0("plot size (", plot_size_types$description, ")"),
+      y = "Number of Samples"
+    ) +
+    ggplot2::geom_histogram(
+      fill = "grey50",
+      col = NA,
+      bins = 15
+    )
+}
+```
+
+### Sample age
+
+The **Vegvault** database deals with both current and paleo data. therefore, each *Sample* has indication of *age*, wich modern samples being set to 0. To embrace the uncertainty from age-depth modeling paleo-record, the **Vegvault** database has a structure to hold an uncertainty matrix containing information about all *potential ages* of each *Sample* from a paleo *Dataset*. 
+
+```{r}
+#| label: SampleUncertainty scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/SampleUncertainty.png"
+  )
+)
+```
+
+We can show this on the previously selected fossil pollen archive with dataset ID: `r as.character(sel_dataset_for_example)`.
+
+```{r}
+#| label: Sample poential age - plot
+dataset_age_example <-
+  dplyr::tbl(con, "Datasets") %>%
+  dplyr::filter(dataset_id == sel_dataset_for_example) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(sample_id, age) %>%
+  dplyr::collect()
+
+dataset_age_example_iterations <-
+  dplyr::tbl(con, "Datasets") %>%
+  dplyr::filter(dataset_id == sel_dataset_for_example) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(sample_id) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "SampleUncertainty"),
+    by = "sample_id"
+  ) %>%
+  dplyr::select(
+    sample_id,
+    age_it = age
+  ) %>%
+  dplyr::collect()
+
+dplyr::left_join(
+  dataset_age_example_iterations,
+  dataset_age_example,
+  by = "sample_id"
+) %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      y = age,
+      group = as.factor(age),
+      x = age_it
+    )
+  ) +
+  ggplot2::coord_fixed() +
+  ggplot2::labs(
+    title = paste0(
+      "Dataset ID:",
+      as.character(sel_dataset_for_example)
+    ),
+    y = "Sample age (cal yr BP)",
+    x = "Potential age of Samples (cal yr BP)"
+  ) +
+  ggplot2::geom_boxplot(
+    outlier.shape = NA
+  )
+
+```
+
+### Sample reference
+
+Individual *Samples* can have specific references on top of the reference to *Dataset*
+
+```{r}
+#| label: SampleReference scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Supplementary_analyses/DB_scheme_visualisation/SampleReference.png"
+  )
+)
+```
 
 # Section III: Assembly details of VegVault 1.0.0
