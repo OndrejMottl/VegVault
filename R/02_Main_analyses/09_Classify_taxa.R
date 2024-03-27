@@ -35,6 +35,12 @@ if (
 
 chunk_size <- 500
 
+vec_problematictaxa_names <-
+  c(
+    "Atriplex hortensis",
+    "Hydrocotyle bonariensis"
+  )
+
 #----------------------------------------------------------#
 # 1. Connect to db -----
 #----------------------------------------------------------#
@@ -59,10 +65,52 @@ taxa_db <-
   dplyr::tbl(con, "Taxa") %>%
   dplyr::collect()
 
+# load all classified data
+taxa_already_present_raw <-
+  here::here(
+    "Data/Processed/Classified_taxa/"
+  ) %>%
+  list.files(
+    pattern = ".rds",
+    full.names = TRUE
+  )
+
+if (
+  length(taxa_already_present_raw) > 0
+) {
+  taxa_already_classified <-
+    taxa_already_present_raw %>%
+    purrr::map(
+      .progress = TRUE,
+      .f = ~ readr::read_rds(.x)
+    ) %>%
+    dplyr::bind_rows() %>%
+    dplyr::distinct(sel_name, .keep_all = TRUE)
+
+  taxa_already_classified_vec <-
+    taxa_already_classified %>%
+    dplyr::filter(
+      is.na(id) == FALSE
+    ) %>%
+    purrr::chuck("sel_name")
+
+  taxa_to_classify <-
+    taxa_db %>%
+    dplyr::filter(
+      !taxon_name %in% taxa_already_classified_vec
+    )
+} else {
+  taxa_to_classify <- taxa_db
+}
 
 taxa_db_chuncked <-
+  taxa_to_classify %>%
+  # There are ceratin taxa that are unable to be classified.
+  # These are removed from the list and classified separately
+  dplyr::filter(
+    !taxon_name %in% vec_problematictaxa_names
+  ) %>%
   dplyr::mutate(
-    taxa_db,
     chunk_id = (dplyr::row_number() - 1) %/% chunk_size
   ) %>%
   dplyr::group_by(chunk_id) %>%
@@ -74,63 +122,172 @@ taxa_db_chuncked <-
 # 3. Classify taxa using {taxospace} -----
 #----------------------------------------------------------#
 
-taxa_db_classified <-
-  taxa_db_chuncked %>%
-  dplyr::mutate(
-    data_classified = purrr::map(
-      .progress = TRUE,
-      .x = data_nested,
-      .f = ~ taxospace::get_classification(
+# classify all taxa
+purrr::walk(
+  .progress = TRUE,
+  .x = taxa_db_chuncked$data_nested,
+  .f = ~ {
+    sel_class <-
+      taxospace::get_classification(
         taxa_vec = .x$taxon_name,
         sel_db_name = "gnr",
         sel_db_class = "gbif",
         use_cache = TRUE,
         verbose = FALSE
       )
-    )
+
+    sel_class %>%
+      split(., .$sel_name) %>%
+      purrr::iwalk(
+        .f = ~ RUtilpol::save_latest_file(
+          file_name = janitor::make_clean_names(.y),
+          object_to_save = .x,
+          dir = here::here("Data/Processed/Classified_taxa/"),
+          prefered_format = "rds",
+          verbose = FALSE
+        )
+      )
+  }
+)
+
+#----------------------------------------------------------#
+# 4. Classify taxa using {taxospace} without `cache` -----
+#----------------------------------------------------------#
+
+# load all classified data
+taxa_already_classified <-
+  here::here(
+    "Data/Processed/Classified_taxa/"
+  ) %>%
+  list.files(
+    pattern = ".rds",
+    full.names = TRUE
+  ) %>%
+  purrr::map(
+    .progress = TRUE,
+    .f = ~ readr::read_rds(.x)
+  ) %>%
+  dplyr::bind_rows() %>%
+  dplyr::distinct(sel_name, .keep_all = TRUE)
+
+
+taxa_already_classified_vec <-
+  taxa_already_classified %>%
+  # only consider taxa that have been classified successfully
+  dplyr::filter(
+    is.na(id) == FALSE
+  ) %>%
+  purrr::chuck("sel_name")
+
+taxa_to_classify <-
+  taxa_db %>%
+  dplyr::filter(
+    !taxon_name %in% taxa_already_classified_vec
+  )
+
+taxa_db_chuncked <-
+  taxa_to_classify %>%
+  dplyr::mutate(
+    chunk_id = (dplyr::row_number() - 1) %/% (chunk_size / 5) # decrease the size
+  ) %>%
+  dplyr::group_by(chunk_id) %>%
+  tidyr::nest(data_nested = -chunk_id) %>%
+  dplyr::ungroup()
+
+# classify all taxa
+purrr::walk(
+  .progress = TRUE,
+  .x = taxa_db_chuncked$data_nested,
+  .f = ~ {
+    sel_class <-
+      taxospace::get_classification(
+        taxa_vec = .x$taxon_name,
+        sel_db_name = "gnr",
+        sel_db_class = "gbif",
+        # do not use cache, this will take time
+        #   but solve some issues with weird names
+        use_cache = FALSE,
+        verbose = FALSE
+      )
+
+    sel_class %>%
+      split(., .$sel_name) %>%
+      purrr::iwalk(
+        .f = ~ RUtilpol::save_latest_file(
+          file_name = janitor::make_clean_names(.y),
+          object_to_save = .x,
+          dir = here::here("Data/Processed/Classified_taxa/"),
+          prefered_format = "rds",
+          verbose = FALSE
+        )
+      )
+  }
+)
+
+
+#----------------------------------------------------------#
+# 5. Classify taxa using up to family -----
+#----------------------------------------------------------#
+
+# load all classified data
+taxa_all_classified <-
+  here::here(
+    "Data/Processed/Classified_taxa/"
+  ) %>%
+  list.files(
+    pattern = ".rds",
+    full.names = TRUE
+  ) %>%
+  purrr::map(
+    .progress = TRUE,
+    .f = ~ readr::read_rds(.x)
+  ) %>%
+  dplyr::bind_rows() %>%
+  dplyr::distinct(sel_name, .keep_all = TRUE) %>%
+  # only consider taxa that have been classified successfully
+  dplyr::filter(
+    is.na(id) == FALSE
+  ) %>%
+  dplyr::inner_join(
+    taxa_db,
+    by = dplyr::join_by("sel_name" == "taxon_name")
   )
 
 data_classified_up_to_family <-
-  taxa_db_classified %>%
-  dplyr::mutate(
-    data_merged = purrr::map(
-      .progress = TRUE,
-      .x = data_classified,
-      .f = ~ .x %>%
-        dplyr::select(sel_name, classification) %>%
-        dplyr::distinct(sel_name, .keep_all = TRUE) %>%
-        tidyr::unnest(cols = classification) %>%
-        dplyr::select(-id) %>%
-        dplyr::filter(
-          rank == "species" |
-            rank == "genus" |
-            rank == "family"
-        ) %>%
-        tidyr::pivot_wider(
-          names_from = rank,
-          values_from = name,
-          values_fill = NA_character_
-        )
-    )
+  taxa_all_classified %>%
+  dplyr::select(sel_name, classification) %>%
+  dplyr::distinct(sel_name, .keep_all = TRUE) %>%
+  tidyr::unnest(cols = classification) %>%
+  dplyr::select(-id) %>%
+  dplyr::filter(
+    rank == "species" |
+      rank == "genus" |
+      rank == "family"
+  ) %>%
+  tidyr::pivot_wider(
+    names_from = rank,
+    values_from = name,
+    values_fill = NA_character_
   )
+
+
 
 #----------------------------------------------------------#
 # 4. add new taxa to DB -----
 #----------------------------------------------------------#
 
-purrr::walk(
-  .progress = TRUE,
-  .x = data_classified_up_to_family$data_merged,
-  .f = ~ .x %>%
-    tidyr::pivot_longer(
-      cols = c("species", "genus", "family"),
-      names_to = "rank",
-      values_to = "taxon_name"
-    ) %>%
-    dplyr::distinct(taxon_name) %>%
-    tidyr::drop_na() %>%
-    add_taxa(con = con)
-)
+data_classified_up_to_family %>%
+  tidyr::pivot_longer(
+    cols = c("species", "genus", "family"),
+    names_to = "rank",
+    values_to = "taxon_name"
+  ) %>%
+  dplyr::distinct(taxon_name) %>%
+  tidyr::drop_na() %>%
+  dplyr::mutate(
+    taxon_reference = "added manually by Ondrej Mottl",
+  ) %>%
+  add_taxa(con = con)
 
 
 #----------------------------------------------------------#
@@ -143,34 +300,30 @@ taxa_db <-
   dplyr::collect()
 
 
-purrr::walk(
-  .progress = TRUE,
-  .x = data_classified_up_to_family$data_merged,
-  .f = ~ .x %>%
-    tidyr::pivot_longer(
-      cols = c("species", "genus", "family"),
-      names_to = "rank",
-      values_to = "taxon_name"
-    ) %>%
-    dplyr::left_join(
-      taxa_db,
-      by = dplyr::join_by("taxon_name")
-    ) %>%
-    dplyr::select(-taxon_name) %>%
-    tidyr::pivot_wider(
-      names_from = rank,
-      values_from = taxon_id,
-      values_fill = NA_integer_,
-      names_prefix = "taxon_"
-    ) %>%
-    dplyr::left_join(
-      taxa_db,
-      by = dplyr::join_by("sel_name" == "taxon_name")
-    ) %>%
-    dplyr::select(-sel_name) %>%
-    dplyr::relocate(taxon_id) %>%
-    add_taxa_classification(con = con)
-)
+data_classified_up_to_family %>%
+  tidyr::pivot_longer(
+    cols = c("species", "genus", "family"),
+    names_to = "rank",
+    values_to = "taxon_name"
+  ) %>%
+  dplyr::left_join(
+    taxa_db,
+    by = dplyr::join_by("taxon_name")
+  ) %>%
+  dplyr::select(-taxon_name) %>%
+  tidyr::pivot_wider(
+    names_from = rank,
+    values_from = taxon_id,
+    values_fill = NA_integer_,
+    names_prefix = "taxon_"
+  ) %>%
+  dplyr::left_join(
+    taxa_db,
+    by = dplyr::join_by("sel_name" == "taxon_name")
+  ) %>%
+  dplyr::select(-sel_name) %>%
+  dplyr::relocate(taxon_id) %>%
+  add_taxa_classification(con = con)
 
 #----------------------------------------------------------#
 # 6. Disconect DB -----
