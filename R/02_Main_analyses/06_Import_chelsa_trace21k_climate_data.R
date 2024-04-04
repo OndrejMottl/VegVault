@@ -74,7 +74,7 @@ add_chelsa_trace_data(
   sel_var_name = "bio1",
   sel_var_unit = "°C",
   sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA-TRACE21K"
+  sel_var_detail = "CHELSA"
 )
 
 #----------------------------------------------------------#
@@ -96,7 +96,7 @@ add_chelsa_trace_data(
   sel_var_name = "bio4",
   sel_var_unit = "°C",
   sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA-TRACE21K"
+  sel_var_detail = "CHELSA"
 )
 
 #----------------------------------------------------------#
@@ -118,7 +118,7 @@ add_chelsa_trace_data(
   sel_var_name = "bio6",
   sel_var_unit = "°C",
   sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA-TRACE21K"
+  sel_var_detail = "CHELSA"
 )
 
 #----------------------------------------------------------#
@@ -140,7 +140,7 @@ add_chelsa_trace_data(
   sel_var_name = "bio12",
   sel_var_unit = "kg m-2 year-1",
   sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA-TRACE21K"
+  sel_var_detail = "CHELSA"
 )
 
 #----------------------------------------------------------#
@@ -162,7 +162,7 @@ add_chelsa_trace_data(
   sel_var_name = "bio15",
   sel_var_unit = "Unitless",
   sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA-TRACE21K"
+  sel_var_detail = "CHELSA"
 )
 
 #----------------------------------------------------------#
@@ -184,7 +184,7 @@ add_chelsa_trace_data(
   sel_var_name = "bio18",
   sel_var_unit = "kg m-2 quarter-1",
   sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA-TRACE21K"
+  sel_var_detail = "CHELSA"
 )
 
 #----------------------------------------------------------#
@@ -206,5 +206,5 @@ add_chelsa_trace_data(
   sel_var_name = "bio19",
   sel_var_unit = "kg m-2 quarter-1",
   sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA-TRACE21K"
+  sel_var_detail = "CHELSA"
 )

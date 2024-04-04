@@ -64,6 +64,7 @@ package_list <-
     "roxygen2",
     "RSQLite",
     "tidyverse",
+    "tinytable",
     "usethis",
     "utils"
   )
@@ -138,7 +139,7 @@ data_storage_path <-
 ## examples
 # set ggplot output
 ggplot2::theme_set(
-  ggplot2::theme_classic()
+  ggplot2::theme_bw()
 )
 
 # define general
