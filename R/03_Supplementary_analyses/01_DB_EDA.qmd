@@ -563,8 +563,8 @@ n_datasetes_per_source %>%
     labels = scales::trans_format("log10", scales::math_format(10^.x))
   ) +
   ggplot2::labs(
-    title = "Number of sources per Dataset-Type",
-    y = "Number of sources",
+    title = "Number of datasets per Dataset-Type",
+    y = "Number of datasets",
     x = ""
   ) +
   ggplot2::scale_fill_manual(
