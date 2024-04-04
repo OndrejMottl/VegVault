@@ -42,6 +42,9 @@ add_chelsa_trace_data <- function(
       age = (-as.numeric(time_id) * 100) + 2000
     ) %>%
     dplyr::select(-time_id) %>%
+    # we do not want to use the 0 age
+    #   as it would get confused with modern values
+    dplyr::filter(age != 0) %>%
     tidyr::nest(
       data_samples = c(
         age,

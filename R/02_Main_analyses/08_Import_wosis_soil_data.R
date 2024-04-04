@@ -59,7 +59,7 @@ data_wosis <-
 
 
 #----------------------------------------------------------#
-# 3. Datasets -----
+# 3. Add data -----
 #----------------------------------------------------------#
 
 data_wosis_dataset_raw <-
@@ -164,3 +164,9 @@ add_sample_abiotic_value(
   sample_id = wosis_samples_id_db,
   abiotic_variable_id = abiotic_variabe_id
 )
+
+#----------------------------------------------------------#
+# 4. Disconect DB -----
+#----------------------------------------------------------#
+
+DBI::dbDisconnect(con)
