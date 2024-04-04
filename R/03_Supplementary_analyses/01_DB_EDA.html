@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ondřej Mottl">
-<meta name="dcterms.date" content="2024-03-07">
+<meta name="dcterms.date" content="2024-04-04">
 
 <title>VegVault database</title>
 <style>
@@ -64,7 +64,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 7, 2024</p>
+      <p class="date">April 4, 2024</p>
     </div>
   </div>
   
@@ -72,14 +72,16 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
+
 </header>
+
 
 <section id="section-i-description-of-vegvaul" class="level1">
 <h1>Section I: Description of VegVaul</h1>
-<p><strong>VegVault</strong> is a SQLite interdisciplinary database linking plot-based vegation data with functinal traits and climate. Specifically, it contains:</p>
+<p><strong>VegVault</strong> is a SQLite interdisciplinary database linking plot-based vegetation data with functional traits and climate. Specifically, it contains:</p>
 <ul>
 <li>current vegetation plot data</li>
-<li>past vegetation plot data (fossil pollen reocrds)</li>
+<li>past vegetation plot data (fossil pollen records)</li>
 <li>functional trait data</li>
 <li>current abiotic data (climate, soil)</li>
 <li>past abiotic data (climate)</li>
@@ -88,34 +90,34 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="section-ii-overview-of-vegvault-1.0.0" class="level1">
 <h1>Section II: Overview of VegVault 1.0.0</h1>
-<p>Database is strucutred in sseveral logical levels, such as <code>Dataset</code>, <code>Sample</code>, <code>Taxa</code>, <code>Trait</code>, etc.</p>
+<p>The database is structured in several logical levels, such as <code>Dataset</code>, <code>Sample</code>, <code>Taxa</code>, <code>Trait</code>, etc.</p>
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
-<p><code>Dataset</code> represent the heighest levels in the hiearchy. It is the main keystone in the VegVauls structure.</p>
+<p><code>Dataset</code> represents the highest levels in the hierarchy. It is the main keystone in the VegVauls structure.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="DB_scheme_visualisation/Datasets.png" class="img-fluid figure-img"></p>
+<p><img src="DB_scheme_visualisation/Datasets.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <section id="dataset-type" class="level3">
 <h3 class="anchored" data-anchor-id="dataset-type">Dataset Type</h3>
-<p><code>dataset_type_id</code> define the basic type of a dataset. This is the heighest level of classification of the data</p>
-<p>Currently, there <strong>VegVault</strong> cosist of those types:</p>
+<p><code>dataset_type_id</code> defines the basic type of a dataset. This is the highest level of classification of the data</p>
+<p>Currently, there <strong>VegVault</strong> consist of those types:</p>
 <ul>
 <li><strong>vegetation_plot</strong> - current vegetation plot dataset</li>
 <li><strong>fossil_pollen_archive</strong> - past vegetation plot dataset</li>
-<li><strong>traits</strong> - dataset containting functional traits</li>
+<li><strong>traits</strong> - dataset containing functional traits</li>
 <li><strong>gridpoints</strong> - artificially created dataset to hold abiotic data</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="DB_scheme_visualisation/DatasetTypeID.png" class="img-fluid figure-img"></p>
+<p><img src="DB_scheme_visualisation/DatasetTypeID.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </div>
@@ -124,14 +126,21 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/Dataset%20type%20-%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="figures/Dataset%20type%20-%20plots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/Dataset%20type%20-%20plots-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="figures/Dataset%20type%20-%20plots-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/Dataset%20type%20-%20plots-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -139,8 +148,8 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="dataset-source-type" class="level3">
 <h3 class="anchored" data-anchor-id="dataset-source-type">Dataset Source-Type</h3>
-<p><code>dataset_source_type_id</code> defines the general provider of the dataset. This should help to clasify, which data pipeline was used to import the dataset into the <strong>VegVault</strong>, This is also the first general point of reference of data, as all large databases have a citation statement.</p>
-<p>Currently, there <strong>VegVault</strong> cosist of those source-types:</p>
+<p><code>dataset_source_type_id</code> defines the general provider of the dataset. This should help to classify, which data pipeline was used to import the dataset into the <strong>VegVault</strong>, This is also the first general point of reference of data, as all large databases have a citation statement.</p>
+<p>Currently, there <strong>VegVault</strong> consist of those source-types:</p>
 <ul>
 <li><strong>BIEN</strong> - <a href="https://bien.nceas.ucsb.edu/bien/">Botanical Information and Ecology Network</a></li>
 <li><strong>sPlotOpen</strong> - <a href="https://idiv-biodiversity.de/en/splot/splotopen.html">The open-access version of sPlot</a></li>
@@ -152,7 +161,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="DB_scheme_visualisation/DatasetSourceTypeID.png" class="img-fluid figure-img"></p>
+<p><img src="DB_scheme_visualisation/DatasetSourceTypeID.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </div>
@@ -161,14 +170,21 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/dataset%20source%20type%20-%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="figures/dataset%20source%20type%20-%20plots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/dataset%20source%20type%20-%20plots-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="figures/dataset%20source%20type%20-%20plots-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/dataset%20source%20type%20-%20plots-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -176,22 +192,22 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="dataset-source" class="level3">
 <h3 class="anchored" data-anchor-id="dataset-source">Dataset Source</h3>
-<p>Each individal dataset form a specific <em>Data Source-Type</em> can have an information of the source of the data (i.e.&nbsp;subdatabse). This should help to promote better findability of the primar source of data and referencing.</p>
+<p>Each individual dataset from a specific <em>Data Source-Type</em> can have information on the source of the data (i.e.&nbsp;sub-database). This should help to promote better findability of the primary source of data and referencing.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="DB_scheme_visualisation/DatasetSourcesID.png" class="img-fluid figure-img"></p>
+<p><img src="DB_scheme_visualisation/DatasetSourcesID.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Currently, there are <code>{r} n_total_sources</code> individual sources of dataset</p>
+<p>Currently, there are 706 sources of datasets.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/Dataset%20ID%20-%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="figures/Dataset%20ID%20-%20plots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -199,12 +215,12 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="sampling-method" class="level3">
 <h3 class="anchored" data-anchor-id="sampling-method">Sampling method</h3>
-<p>Some dataset may differ in the way they have been sampled. This could be represented by differwent way vegetation data have been sampled for <em>Dataset Type</em> of <code>vegetation_plot</code>, or depositioal environement for <em>Dataset Type</em> of <code>fossil_pollen_archive</code>.</p>
+<p>Some datasets may differ in the way they have been sampled. This could be represented by different ways vegetation data have been sampled for <em>Dataset Type</em> of <code>vegetation_plot</code>, or depositional environment for <em>Dataset Type</em> of <code>fossil_pollen_archive</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="DB_scheme_visualisation/SamplingMethodID.png" class="img-fluid figure-img"></p>
+<p><img src="DB_scheme_visualisation/SamplingMethodID.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </div>
@@ -213,7 +229,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/Dataset%20Sampling%20method%20-%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="figures/Dataset%20Sampling%20method%20-%20plots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -221,30 +237,550 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="references" class="level3">
 <h3 class="anchored" data-anchor-id="references">References</h3>
-<p><em>Dataset Source-Type</em>, <em>Dataset Source</em>, and <em>Sampling Method</em> can have their own references. Moreover, each individual dataset can have one or more references directly to that specific data.</p>
+<p><em>Dataset Source-Type</em>, <em>Dataset Source</em>, and <em>Sampling Method</em> can have their own references. Moreover, each dataset can have one or more references directly to that specific data.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="DB_scheme_visualisation/DatasetReference.png" class="img-fluid figure-img"></p>
+<p><img src="DB_scheme_visualisation/DatasetReference.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>This mean that one dataset can have one/several references from each of those parts. Let’s take a look at an example, what that could mean in practice.</p>
+<p>This means that one dataset can have one/several references from each of those parts. Let’s take a look at an example, of what that could mean in practice.</p>
+<p>We have selected dataset ID: 91256, which is a fossil pollen archive. Therefore, it has the reference of the <em>Dataser Source-Type</em>: <em>https://doi.org/10.1111/geb.13693</em> and reference for the individual dataset: <em>Grimm, E.C., 2008. Neotoma: an ecosystem database for the Pliocene, Pleistocene, and Holocene. Illinois State Museum Scientific Papers E Series, 1.</em></p>
+</section>
+</section>
+<section id="samples" class="level2">
+<h2 class="anchored" data-anchor-id="samples">Samples</h2>
+<p><code>Sample</code> represents the main unit of data in the <strong>VegVault</strong> database.</p>
 <div class="cell" data-layout-align="center">
-<pre><code>#&gt; [1] "https://doi.org/10.1111/geb.13693"
-#&gt; [1] "Grimm, E.C., 2008. Neotoma: an ecosystem database for the Pliocene, Pleistocene, and Holocene. Illinois State Museum Scientific Papers E Series, 1."</code></pre>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/Samples.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
 </div>
-<p>We have selected dataset ID:<code>{r} sel_dataset_for_example</code>, which is fossil pollen archive. Therefore, it has the reference of the <em>Dataser Source-Type</em>:</p>
-<p><code>{r} dataset_ref_example$source_type_ref</code></p>
-<p>and refrence for the individual dataset:</p>
-<p><code>{r} dataset_ref_example$source_ref</code></p>
+</div>
+</div>
+<section id="dataset-sample" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-sample">Dataset-Sample</h3>
+<p>First <code>Samples</code> are linked to <code>Datasets</code> via the <code>Dataset-Sample</code> table.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/DatasetSample.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/Number%20of%20samples%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/Number%20of%20samples%20plot-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sample-size" class="level3">
+<h3 class="anchored" data-anchor-id="sample-size">Sample-size</h3>
+<p>Vegetation plots can have different sizes, which can have a huge impact on analyses. Therefore, the information about the plot is saved separately.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/SampleSizeID.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/plot-size%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sample-age" class="level3">
+<h3 class="anchored" data-anchor-id="sample-age">Sample age</h3>
+<p>The <strong>Vegvault</strong> database deals with both current and paleo data. therefore, each <em>Sample</em> has indication of <em>age</em>, wich modern samples being set to 0. To embrace the uncertainty from age-depth modeling paleo-record, the <strong>Vegvault</strong> database has a structure to hold an uncertainty matrix containing information about all <em>potential ages</em> of each <em>Sample</em> from a paleo <em>Dataset</em>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/SampleUncertainty.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can show this on the previously selected fossil pollen archive with dataset ID: 91256.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/Sample%20poential%20age%20-%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sample-reference" class="level3">
+<h3 class="anchored" data-anchor-id="sample-reference">Sample reference</h3>
+<p>Individual <em>Samples</em> can have specific references on top of the reference to <em>Dataset</em></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/SampleReference.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
+<section id="taxa" class="level2">
+<h2 class="anchored" data-anchor-id="taxa">Taxa</h2>
+<p>The <strong>Vegvault</strong> database contais taxa names dirrectly from main <em>Data Source-types</em>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/Taxa.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Individual taxa names are linked to the <em>Samples</em> by <em>SampleTaxa</em> table.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/SampleTaxa.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/Number%20of%20taxa%20per%20data%20souce%20type-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="classification" class="level3">
+<h3 class="anchored" data-anchor-id="classification">Classification</h3>
+<p>In order to obtain classification of all taxa present in the <strong>Vegvault</strong> database, the {<a href="https://github.com/OndrejMottl/taxospace">taxospace</a>} R package has been utilized, automatically aligning the names to <a href="https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c">Taxonomy Backbone</a> from <a href="https://www.gbif.org/">Global Biodiversity Information Facility</a>.</p>
+<p>Classification up to the family level is then saved for each taxon.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/TaxonClassification.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/taxa%20classification%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="section-iii-assebly-details-of-vegvault-1.0.0" class="level1">
-<h1>Section III: Assebly details of VegVault 1.0.0</h1>
+</section>
+<section id="traits" class="level2">
+<h2 class="anchored" data-anchor-id="traits">Traits</h2>
+<p>Functional traits of vegetation taxa follow the same structure of <em>Dataset</em> and <em>Samples</em> obtained directly from <em>Dataset Source-types</em>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/Traits.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="trait-domain" class="level3">
+<h3 class="anchored" data-anchor-id="trait-domain">Trait domain</h3>
+<p>As there are many varying names for the same “traits”, the <strong>Vegvault</strong> database contains <em>Trait Domain</em> information to group traits together.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/TraitsDomain.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There are currently 6 trait domains following the <a href="https://www.nature.com/articles/nature16489">Diaz et al.&nbsp;(2016)</a></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+ 
+
+  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_lyf2l9lo2ipm5j6v5qb7</title>
+    <style>
+.table td.tinytable_css_0zri8tgl5kkvcg151faz, .table th.tinytable_css_0zri8tgl5kkvcg151faz {    border-bottom: solid 0.1em #d3d8dc; }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+  
+
+  
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_lyf2l9lo2ipm5j6v5qb7" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col">Trait domain</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>Stem specific density              </td>
+                </tr>
+                <tr>
+                  <td>Leaf nitrogen content per unit mass</td>
+                </tr>
+                <tr>
+                  <td>Diaspore mass                      </td>
+                </tr>
+                <tr>
+                  <td>Plant heigh                        </td>
+                </tr>
+                <tr>
+                  <td>Leaf Area                          </td>
+                </tr>
+                <tr>
+                  <td>Leaf mass per area                 </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      function styleCell_tinytable_rfl84f3xlp5edd33kj2z(i, j, css_id) {
+        var table = document.getElementById("tinytable_lyf2l9lo2ipm5j6v5qb7");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_lyf2l9lo2ipm5j6v5qb7');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_rfl84f3xlp5edd33kj2z(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_lyf2l9lo2ipm5j6v5qb7");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+
+window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd33kj2z(0, 0, 'tinytable_css_0zri8tgl5kkvcg151faz') })
+    </script>
+
+  
+
+
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/trait%20per%20domain%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="trait-values" class="level3">
+<h3 class="anchored" data-anchor-id="trait-values">Trait Values</h3>
+<p>To store a trait value, information needs to be linked among <em>Dataset</em>, <em>Sample</em>, <em>Taxa</em>, and <em>Trait</em>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/TraitsValue.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/trait%20value%20occurences%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="trait-reference" class="level3">
+<h3 class="anchored" data-anchor-id="trait-reference">Trait reference</h3>
+<p>For full clarity, on top of <em>Dataset</em> and <em>Sample</em>, each <em>Trait</em> can have additional references.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/TraitsReference.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="abiotic-data" class="level2">
+<h2 class="anchored" data-anchor-id="abiotic-data">Abiotic data</h2>
+<p>Abiotic data is aimed to procide the information about all relevant abiotic information affecting vegetation disctribution and its traits.</p>
+<p>Abiotic data is linked to the structure of the <strong>VegVault</strong> Database by <code>gridpoints</code>, which are articfically cretaed pointed to <em>reasonably</em> cover the resolution of both modern and past data for vegetation and abiotic data.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/distribution%20of%20gridpoints-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There are currently abiotic from <a href="https://chelsa-climate.org/">CHELSA</a> and <a href="https://chelsa-climate.org/chelsa-trace21k/">CHELSA-TRACE21</a> and <a href="https://www.isric.org/explore/wosis">WoSIS</a>. CHELSA and CHELSA-TRACE21 is build on the same same structure of variables (visit the websites for more info).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+ 
+
+  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_52zzayws0tri9kcbsuw9</title>
+    <style>
+.table td.tinytable_css_lcqhmu1nodavrwwvek9x, .table th.tinytable_css_lcqhmu1nodavrwwvek9x {    border-bottom: solid 0.1em #d3d8dc; }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+  
+
+  
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_52zzayws0tri9kcbsuw9" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col">Variable name</th>
+                <th scope="col">Variable unit</th>
+                <th scope="col">source of data</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>bio1 </td>
+                  <td>°C              </td>
+                  <td>CHELSA         </td>
+                </tr>
+                <tr>
+                  <td>bio4 </td>
+                  <td>°C              </td>
+                  <td>CHELSA         </td>
+                </tr>
+                <tr>
+                  <td>bio6 </td>
+                  <td>°C              </td>
+                  <td>CHELSA         </td>
+                </tr>
+                <tr>
+                  <td>bio12</td>
+                  <td>kg m-2 year-1   </td>
+                  <td>CHELSA         </td>
+                </tr>
+                <tr>
+                  <td>bio15</td>
+                  <td>Unitless        </td>
+                  <td>CHELSA         </td>
+                </tr>
+                <tr>
+                  <td>bio18</td>
+                  <td>kg m-2 quarter-1</td>
+                  <td>CHELSA         </td>
+                </tr>
+                <tr>
+                  <td>bio19</td>
+                  <td>kg m-2 quarter-1</td>
+                  <td>CHELSA         </td>
+                </tr>
+                <tr>
+                  <td>HWSD2</td>
+                  <td>Unitless        </td>
+                  <td>WoSIS-SoilGrids</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      function styleCell_tinytable_vgoy1t9lyof8jbg2lhti(i, j, css_id) {
+        var table = document.getElementById("tinytable_52zzayws0tri9kcbsuw9");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_52zzayws0tri9kcbsuw9');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_vgoy1t9lyof8jbg2lhti(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_52zzayws0tri9kcbsuw9");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+
+window.addEventListener('load', function () { styleCell_tinytable_vgoy1t9lyof8jbg2lhti(0, 0, 'tinytable_css_lcqhmu1nodavrwwvek9x') })
+window.addEventListener('load', function () { styleCell_tinytable_vgoy1t9lyof8jbg2lhti(0, 1, 'tinytable_css_lcqhmu1nodavrwwvek9x') })
+window.addEventListener('load', function () { styleCell_tinytable_vgoy1t9lyof8jbg2lhti(0, 2, 'tinytable_css_lcqhmu1nodavrwwvek9x') })
+    </script>
+
+  
+
+
+</div>
+</div>
+<p>Abitic data is simply linked to <code>Samples</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_scheme_visualisation/AbioticData.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/exampe%20of%20abitic%20data%20-%20bio1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that the spatial resolution is higer for modern climate data than for the past. this is to reduce the size of the past climate data.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/exampe%20of%20abitic%20data%20-%20soil-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="section-iii-assembly-details-of-vegvault-1.0.0" class="level1">
+<h1>Section III: Assembly details of VegVault 1.0.0</h1>
+</section>
+<section id="section-iv-examples-of-usage" class="level1">
+<h1>Section IV: Examples of usage</h1>
+<section id="example-1" class="level2">
+<h2 class="anchored" data-anchor-id="example-1">Example 1:</h2>
+</section>
+<section id="example-2" class="level2">
+<h2 class="anchored" data-anchor-id="example-2">Example 2:</h2>
+</section>
+<section id="example-3" class="level2">
+<h2 class="anchored" data-anchor-id="example-3">Example 3:</h2>
+</section>
+</section>
+<section id="section-v-outlook-and-future-directions" class="level1">
+<h1>Section V: Outlook and future directions</h1>
 </section>
 
 </main>
@@ -328,10 +864,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -341,8 +876,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -355,6 +899,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -398,6 +1061,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -423,6 +1087,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -483,6 +1173,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 
