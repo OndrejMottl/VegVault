@@ -181,13 +181,6 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 </div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figures/dataset%20source%20type%20-%20plots-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
-</div>
-</div>
 </div>
 </section>
 <section id="dataset-source" class="level3">
@@ -316,7 +309,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="sample-age" class="level3">
 <h3 class="anchored" data-anchor-id="sample-age">Sample age</h3>
-<p>The <strong>Vegvault</strong> database deals with both current and paleo data. therefore, each <em>Sample</em> has indication of <em>age</em>, wich modern samples being set to 0. To embrace the uncertainty from age-depth modeling paleo-record, the <strong>Vegvault</strong> database has a structure to hold an uncertainty matrix containing information about all <em>potential ages</em> of each <em>Sample</em> from a paleo <em>Dataset</em>.</p>
+<p>The <strong>Vegvault</strong> database deals with both current and paleo data. therefore, each <code>Sample</code> has the indication of <em>age</em>, with modern samples being set to 0. To embrace the uncertainty from age-depth modeling paleo-record, the <strong>Vegvault</strong> database has a structure to hold an uncertainty matrix containing information about all <em>potential ages</em> of each <code>Sample</code> from a paleo <code>Dataset</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -339,7 +332,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="sample-reference" class="level3">
 <h3 class="anchored" data-anchor-id="sample-reference">Sample reference</h3>
-<p>Individual <em>Samples</em> can have specific references on top of the reference to <em>Dataset</em></p>
+<p>Individual <code>Sample</code> can have specific references on top of the reference to <code>Dataset</code></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -353,7 +346,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="taxa" class="level2">
 <h2 class="anchored" data-anchor-id="taxa">Taxa</h2>
-<p>The <strong>Vegvault</strong> database contais taxa names dirrectly from main <em>Data Source-types</em>.</p>
+<p>The <strong>Vegvault</strong> database contains taxa names directly from main <em>Data Source-types</em>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -363,7 +356,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<p>Individual taxa names are linked to the <em>Samples</em> by <em>SampleTaxa</em> table.</p>
+<p>Individual taxa names are linked to the <code>Samples</code> by the <code>SampleTaxa</code> table.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -377,7 +370,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/Number%20of%20taxa%20per%20data%20souce%20type-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="figures/Number%20of%20taxa%20per%20data%20source%20type-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -408,7 +401,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="traits" class="level2">
 <h2 class="anchored" data-anchor-id="traits">Traits</h2>
-<p>Functional traits of vegetation taxa follow the same structure of <em>Dataset</em> and <em>Samples</em> obtained directly from <em>Dataset Source-types</em>.</p>
+<p>Functional traits of vegetation taxa follow the same structure of <code>Dataset</code> and <code>Samples</code> obtained directly from <em>Dataset Source-types</em>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -551,7 +544,7 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 </section>
 <section id="trait-values" class="level3">
 <h3 class="anchored" data-anchor-id="trait-values">Trait Values</h3>
-<p>To store a trait value, information needs to be linked among <em>Dataset</em>, <em>Sample</em>, <em>Taxa</em>, and <em>Trait</em>.</p>
+<p>To store a trait value, information needs to be linked among <code>Dataset</code>, <code>Sample</code>, <code>Taxa</code>, and <code>Trait</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -573,7 +566,7 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 </section>
 <section id="trait-reference" class="level3">
 <h3 class="anchored" data-anchor-id="trait-reference">Trait reference</h3>
-<p>For full clarity, on top of <em>Dataset</em> and <em>Sample</em>, each <em>Trait</em> can have additional references.</p>
+<p>For full clarity, on top of <code>Dataset</code> and <code>Sample</code>, each <code>Trait</code> can have additional references.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -587,8 +580,8 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 </section>
 <section id="abiotic-data" class="level2">
 <h2 class="anchored" data-anchor-id="abiotic-data">Abiotic data</h2>
-<p>Abiotic data is aimed to procide the information about all relevant abiotic information affecting vegetation disctribution and its traits.</p>
-<p>Abiotic data is linked to the structure of the <strong>VegVault</strong> Database by <code>gridpoints</code>, which are articfically cretaed pointed to <em>reasonably</em> cover the resolution of both modern and past data for vegetation and abiotic data.</p>
+<p>Abiotic data is aimed to provide information about all relevant abiotic information affecting vegetation distribution and its traits.</p>
+<p>Abiotic data is linked to the structure of the <strong>VegVault</strong> Database by the <code>gridpoints</code>, which are artificially created points to <em>reasonably</em> cover the resolution of both modern and past data for vegetation and abiotic data.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -598,7 +591,7 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 </div>
 </div>
 </div>
-<p>There are currently abiotic from <a href="https://chelsa-climate.org/">CHELSA</a> and <a href="https://chelsa-climate.org/chelsa-trace21k/">CHELSA-TRACE21</a> and <a href="https://www.isric.org/explore/wosis">WoSIS</a>. CHELSA and CHELSA-TRACE21 is build on the same same structure of variables (visit the websites for more info).</p>
+<p>There are currently abiotic from <a href="https://chelsa-climate.org/">CHELSA</a> and <a href="https://chelsa-climate.org/chelsa-trace21k/">CHELSA-TRACE21</a> and <a href="https://www.isric.org/explore/wosis">WoSIS</a>. CHELSA and CHELSA-TRACE21 are built on the same structure of variables (visit the websites for more info).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
  
@@ -733,7 +726,7 @@ window.addEventListener('load', function () { styleCell_tinytable_vgoy1t9lyof8jb
 
 </div>
 </div>
-<p>Abitic data is simply linked to <code>Samples</code>.</p>
+<p>Abiotic data is simply linked to <code>Samples</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -752,7 +745,7 @@ window.addEventListener('load', function () { styleCell_tinytable_vgoy1t9lyof8jb
 </div>
 </div>
 </div>
-<p>Note that the spatial resolution is higer for modern climate data than for the past. this is to reduce the size of the past climate data.</p>
+<p>Note that the spatial resolution is higher for modern climate data than for the past. this is to reduce the size of the past climate data.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -766,21 +759,27 @@ window.addEventListener('load', function () { styleCell_tinytable_vgoy1t9lyof8jb
 </section>
 <section id="section-iii-assembly-details-of-vegvault-1.0.0" class="level1">
 <h1>Section III: Assembly details of VegVault 1.0.0</h1>
+<p>WIP</p>
 </section>
 <section id="section-iv-examples-of-usage" class="level1">
 <h1>Section IV: Examples of usage</h1>
+<p>WIP</p>
 <section id="example-1" class="level2">
 <h2 class="anchored" data-anchor-id="example-1">Example 1:</h2>
+<p>WIP</p>
 </section>
 <section id="example-2" class="level2">
 <h2 class="anchored" data-anchor-id="example-2">Example 2:</h2>
+<p>WIP</p>
 </section>
 <section id="example-3" class="level2">
 <h2 class="anchored" data-anchor-id="example-3">Example 3:</h2>
+<p>WIP</p>
 </section>
 </section>
 <section id="section-v-outlook-and-future-directions" class="level1">
 <h1>Section V: Outlook and future directions</h1>
+<p>WIP</p>
 </section>
 
 </main>
