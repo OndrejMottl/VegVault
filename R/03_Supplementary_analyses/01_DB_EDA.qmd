@@ -80,6 +80,60 @@ ggplot2::theme_set(
 
 fig_width_def <- 60 # this is used to wrap text.
 
+palette_dataset_type <-
+  c(
+    "#3DDC97",
+    "#AA6DA3",
+    "#156064",
+    "#5F634F"
+  ) %>%
+  rlang::set_names(
+    nm = c(
+      "vegetation_plot",
+      "fossil_pollen_archive",
+      "traits",
+      "gridpoints"
+    )
+  )
+
+palette_dataset_source_type <-
+  c(
+    "#3DDC97",
+    "#3DDC47",
+    "#AA6DA3",
+    "#156064",
+    "#5F634F"
+  ) %>%
+  rlang::set_names(
+    nm = c(
+      "BIEN",
+      "sPlotOpen",
+      "FOSSILPOL",
+      "TRY",
+      "gridpoints"
+    )
+  )
+
+palette_trait_dommanins <-
+  c(
+    "#156064",
+    "#1C6C84",
+    "#47749F",
+    "#7C78AD",
+    "#AE7AAC",
+    "#D57F9C"
+  ) %>%
+  rlang::set_names(
+    nm = c(
+      "Diaspore mass",
+      "Leaf Area",
+      "Leaf mass pr area",
+      "Leaf nitrogen content per unit mass",
+      "Plant heigh",
+      "Stem specific density"
+    )
+  )
+
 #' @description
 #' A helper function to colour the facets
 color_facets <-
@@ -96,7 +150,7 @@ color_facets <-
       which(grepl("strip-t", g$layout$name))
 
     for (i in seq_along(stripr)) {
-      obejct_val <-
+      object_val <-
         sort(stripr,
           decreasing = ifelse(direction == "vertical",
             TRUE,
@@ -105,9 +159,9 @@ color_facets <-
         )[i]
 
       j <-
-        which(grepl("rect", g$grobs[[obejct_val]]$grobs[[1]]$childrenOrder))
+        which(grepl("rect", g$grobs[[object_val]]$grobs[[1]]$childrenOrder))
 
-      g$grobs[[obejct_val]]$grobs[[1]]$children[[j]]$gp$fill <-
+      g$grobs[[object_val]]$grobs[[1]]$children[[j]]$gp$fill <-
         sel_palette[i]
     }
 
@@ -202,7 +256,10 @@ plot_waffle(
   dataset_type,
   plot_title = "Datasets type",
   one_point_is = 30e3
-)
+) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type
+  )
 
 plot_waffle(
   n_datasetes_per_type %>%
@@ -210,7 +267,10 @@ plot_waffle(
   dataset_type,
   plot_title = "Datasets type - no gridpoints",
   one_point_is = 1e3
-)
+) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type
+  )
 
 n_datasetes_per_type %>%
   ggplot2::ggplot(
@@ -229,6 +289,12 @@ n_datasetes_per_type %>%
     x = "",
     y = "Number of datasets"
   ) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type
+  ) +
+  ggplot2::theme(
+    legend.position = "none"
+  ) +
   ggplot2::geom_segment(
     ggplot2::aes(
       xend = dataset_type,
@@ -237,10 +303,12 @@ n_datasetes_per_type %>%
     color = "grey"
   ) +
   ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      fill = dataset_type
+    ),
     size = 3,
     shape = 21,
     col = "black",
-    fill = "white"
   ) +
   ggplot2::geom_label(
     ggplot2::aes(
@@ -290,7 +358,10 @@ plot_waffle(
   dataset_source_type,
   plot_title = "Datasets source type",
   one_point_is = 30e3
-)
+) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_source_type
+  )
 
 plot_waffle(
   n_datasetes_per_source_type %>%
@@ -300,7 +371,10 @@ plot_waffle(
   dataset_source_type,
   plot_title = "Datasets source type - no gridpoints",
   one_point_is = 1e3
-)
+) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_source_type
+  )
 
 n_datasetes_per_type_per_source_type <-
   dplyr::inner_join(
@@ -317,7 +391,8 @@ n_datasetes_per_type_per_source_type <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-n_datasetes_per_type_per_source_type %>%
+p_n_datasetes_per_type_per_source_type <-
+  n_datasetes_per_type_per_source_type %>%
   dplyr::group_by(dataset_type) %>%
   dplyr::mutate(
     n_datasetes_per_type = sum(N)
@@ -350,8 +425,12 @@ n_datasetes_per_type_per_source_type %>%
     x = "",
     y = "Number of datasets"
   ) +
-  ggplot2::guides(
-    fill = "none"
+  ggplot2::theme(
+    legend.position = "none",
+    strip.text = ggplot2::element_text(colour = "white")
+  ) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_source_type
   ) +
   ggplot2::facet_wrap(~dataset_type, nrow = 1, scales = "free_x") +
   ggplot2::geom_segment(
@@ -380,6 +459,18 @@ n_datasetes_per_type_per_source_type %>%
     size = 3,
     position = ggplot2::position_dodge(0.5)
   )
+
+color_facets(
+  sel_plot = p_n_datasetes_per_type_per_source_type,
+  # need to manually sort the colors due to previous reorder
+  sel_palette = c(
+    palette_dataset_type["gridpoints"],
+    palette_dataset_type["traits"],
+    palette_dataset_type["vegetation_plot"],
+    palette_dataset_type["fossil_pollen_archive"]
+  ),
+  direction = "horizontal"
+)
 ```
 
 ### Dataset Source
@@ -454,6 +545,18 @@ n_datasetes_per_source %>%
     col = "gray50",
     outlier.shape = NA
   ) +
+  ggplot2::geom_point(
+    data = n_datasetes_per_source %>%
+      dplyr::group_by(dataset_type) %>%
+      dplyr::summarise(
+        N = median(N)
+      ),
+    mapping = ggplot2::aes(
+      fill = dataset_type
+    ),
+    shape = 22,
+    size = 3
+  ) +
   ggplot2::scale_y_continuous(
     transform = scales::transform_log10(),
     breaks = scales::trans_breaks("log10", function(x) 10^x),
@@ -463,6 +566,12 @@ n_datasetes_per_source %>%
     title = "Number of sources per Dataset-Type",
     y = "Number of sources",
     x = ""
+  ) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type
+  ) +
+  ggplot2::theme(
+    legend.position = "none"
   )
 ```
 
@@ -502,7 +611,10 @@ plot_waffle(
   dataset_type,
   plot_title = "Number of Sampling method per Datasets type",
   one_point_is = 1
-)
+) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type
+  )
 ```
 
 ### References
@@ -620,7 +732,10 @@ plot_waffle(
   dataset_type,
   plot_title = "Number of samples per Dataset type",
   one_point_is = 25e3
-)
+) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type
+  )
 
 plot_waffle(
   n_samples_per_dataset_type %>%
@@ -630,7 +745,10 @@ plot_waffle(
   dataset_type,
   plot_title = "Number of samples per Dataset type - no gridpoints",
   one_point_is = 25e3
-)
+) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type
+  )
 ```
 
 ### Sample-size
@@ -709,7 +827,7 @@ if (
 
 ### Sample age
 
-The **Vegvault** database deals with both current and paleo data. therefore, each *Sample* has indication of *age*, wich modern samples being set to 0. To embrace the uncertainty from age-depth modeling paleo-record, the **Vegvault** database has a structure to hold an uncertainty matrix containing information about all *potential ages* of each *Sample* from a paleo *Dataset*. 
+The **Vegvault** database deals with both current and paleo data. therefore, each `Sample` has the indication of *age*, with modern samples being set to 0. To embrace the uncertainty from age-depth modeling paleo-record, the **Vegvault** database has a structure to hold an uncertainty matrix containing information about all *potential ages* of each `Sample` from a paleo `Dataset`. 
 
 ```{r}
 #| label: SampleUncertainty scheme structure
@@ -789,7 +907,7 @@ dplyr::left_join(
 
 ### Sample reference
 
-Individual *Samples* can have specific references on top of the reference to *Dataset*
+Individual `Sample` can have specific references on top of the reference to `Dataset`
 
 ```{r}
 #| label: SampleReference scheme structure
@@ -802,7 +920,7 @@ knitr::include_graphics(
 
 ## Taxa
 
-The **Vegvault** database contais taxa names dirrectly from main *Data Source-types*. 
+The **Vegvault** database contains taxa names directly from main *Data Source-types*. 
 
 ```{r}
 #| label: Taxa scheme structure
@@ -813,7 +931,7 @@ knitr::include_graphics(
 )
 ```
 
-Individual taxa names are linked to the *Samples* by *SampleTaxa* table. 
+Individual taxa names are linked to the `Samples` by the `SampleTaxa` table. 
 
 ```{r}
 #| label: SampleTaxa scheme structure
@@ -825,7 +943,7 @@ knitr::include_graphics(
 ```
 
 ```{r}
-#| label: Number of taxa per data souce type
+#| label: Number of taxa per data source type
 n_taxa_per_source_type <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
@@ -857,7 +975,6 @@ n_taxa_per_source_type <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-
 n_taxa_per_source_type %>%
   dplyr::arrange(-N) %>%
   dplyr::mutate(
@@ -884,6 +1001,9 @@ n_taxa_per_source_type %>%
   ) +
   ggplot2::guides(
     fill = "none"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_source_type
   ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
@@ -990,6 +1110,15 @@ n_taxa_per_class %>%
   ggplot2::guides(
     fill = "none"
   ) +
+  ggplot2::scale_fill_manual(
+    values = c(
+      "#FCFCFC",
+      "#FFE6F5",
+      "#FFDEC9",
+      "#FFE593",
+      "#D8DBE0"
+    )
+  ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
       x = class,
@@ -1020,7 +1149,7 @@ n_taxa_per_class %>%
 
 ## Traits
 
-Functional traits of vegetation taxa follow the same structure of *Dataset* and *Samples* obtained directly from *Dataset Source-types*.
+Functional traits of vegetation taxa follow the same structure of `Dataset` and `Samples` obtained directly from *Dataset Source-types*.
 
 ```{r}
 #| label: Traits scheme structure
@@ -1087,6 +1216,9 @@ n_traits_per_domain %>%
   ggplot2::guides(
     fill = "none"
   ) +
+  ggplot2::scale_fill_manual(
+    values = palette_trait_dommanins
+  ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
       x = trait_domain_name,
@@ -1118,7 +1250,7 @@ n_traits_per_domain %>%
 
 ### Trait Values
 
-To store a trait value, information needs to be linked among *Dataset*, *Sample*, *Taxa*, and *Trait*.
+To store a trait value, information needs to be linked among `Dataset`, `Sample`, `Taxa`, and `Trait`.
 
 ```{r}
 #| label: TraitsValue scheme structure
@@ -1147,8 +1279,6 @@ n_occurences_per_dommain <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-
-
 n_occurences_per_dommain %>%
   dplyr::arrange(-N) %>%
   dplyr::mutate(
@@ -1175,6 +1305,9 @@ n_occurences_per_dommain %>%
   ) +
   ggplot2::guides(
     fill = "none"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = palette_trait_dommanins
   ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
@@ -1206,7 +1339,7 @@ n_occurences_per_dommain %>%
 
 ### Trait reference
 
-For full clarity, on top of *Dataset* and *Sample*, each *Trait* can have additional references.
+For full clarity, on top of `Dataset` and `Sample`, each `Trait` can have additional references.
 
 ```{r}
 #| label: TraitsReference scheme structure
@@ -1219,9 +1352,9 @@ knitr::include_graphics(
 
 ## Abiotic data
 
-Abiotic data is aimed to procide the information about all relevant abiotic information affecting vegetation disctribution and its traits.
+Abiotic data is aimed to provide information about all relevant abiotic information affecting vegetation distribution and its traits.
 
-Abiotic data is linked to the structure of the **VegVault** Database by `gridpoints`, which are articfically cretaed pointed to *reasonably* cover the resolution of both modern and past data for vegetation and abiotic data.
+Abiotic data is linked to the structure of the **VegVault** Database by the `gridpoints`, which are artificially created points to *reasonably* cover the resolution of both modern and past data for vegetation and abiotic data.
 
 ```{r}
 #| label: distribution of gridpoints
@@ -1274,7 +1407,7 @@ data_grid_coord %>%
 ```
 
 
-There are currently abiotic from [CHELSA](https://chelsa-climate.org/) and [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/) and [WoSIS](https://www.isric.org/explore/wosis). CHELSA and CHELSA-TRACE21 is build on the same same structure of variables (visit the websites for more info).
+There are currently abiotic from [CHELSA](https://chelsa-climate.org/) and [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/) and [WoSIS](https://www.isric.org/explore/wosis). CHELSA and CHELSA-TRACE21 are built on the same structure of variables (visit the websites for more info).
 
 ```{r}
 #| label: show abitotic variables
@@ -1291,7 +1424,7 @@ dplyr::tbl(con, "AbioticVariable") %>%
   tinytable::tt()
 ```
 
-Abitic data is simply linked to `Samples`.
+Abiotic data is simply linked to `Samples`.
 
 ```{r}
 #| label: AbioticData scheme structure
@@ -1335,7 +1468,7 @@ data_bio1_example %>%
     ylim = y_lim
   ) +
   ggplot2::labs(
-    title = "Example Mean Annual temprateture at diferent age slices (cal yr BP)",
+    title = stringr::str_wrap("Example Mean Annual temprateture at diferent age slices (cal yr BP)", fig_width_def),
     x = "Longtitude",
     y = "Latitude",
     col = "Temperature (°C)",
@@ -1362,7 +1495,7 @@ data_bio1_example %>%
 
 ```
 
-Note that the spatial resolution is higer for modern climate data than for the past. this is to reduce the size of the past climate data.
+Note that the spatial resolution is higher for modern climate data than for the past. this is to reduce the size of the past climate data.
 
 ```{r}
 #| label: exampe of abitic data - soil
@@ -1423,12 +1556,24 @@ data_soil_example %>%
 
 # Section III: Assembly details of VegVault 1.0.0
 
+WIP
+
 # Section IV: Examples of usage
+
+WIP
 
 ## Example 1: 
 
+WIP
+
 ## Example 2: 
+
+WIP
 
 ## Example 3: 
 
+WIP
+
 # Section V: Outlook and future directions
+
+WIP
