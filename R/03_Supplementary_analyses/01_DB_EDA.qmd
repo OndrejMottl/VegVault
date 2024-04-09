@@ -8,6 +8,7 @@ output:
     toc_float: yes
     fig-width: 10
     self_contained: yes
+    embed-resources: true
   pdf_document:
     toc: yes
     toc_depth: 3
