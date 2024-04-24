@@ -51,7 +51,7 @@ url_gh <-
   paste0(
     "https://raw.githubusercontent.com/",
     "OndrejMottl/VegVault-Vegetation_data/",
-    "main/Outputs/Data/"
+    "v1.0.0/Outputs/Data/"
   )
 
 url_bien <-

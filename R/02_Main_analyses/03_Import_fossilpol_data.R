@@ -51,7 +51,7 @@ url_gh_fossilpol <-
   paste0(
     "https://raw.githubusercontent.com/",
     "OndrejMottl/VegVault-FOSSILPOL/",
-    "main/"
+    "v1.0.0/"
   )
 
 url_fossilpol_data <-

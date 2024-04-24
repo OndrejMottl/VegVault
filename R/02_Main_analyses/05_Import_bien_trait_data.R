@@ -51,7 +51,7 @@ url_gh_veg_data <-
   paste0(
     "https://raw.githubusercontent.com/",
     "OndrejMottl/VegVault-Vegetation_data/",
-    "main/"
+    "v1.0.0/"
   )
 
 data_bien_traits <-

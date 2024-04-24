@@ -49,7 +49,7 @@ url_gh_wosis <-
   paste0(
     "https://raw.githubusercontent.com/",
     "OndrejMottl/VegVault-abiotic_data/",
-    "main/",
+    "v1.0.0/",
     "Outputs/Data/WoSIS/",
     "wosis_data_2024-01-03__3552eb2fc1af7f991c10e4fc6c2decb7__.qs"
   )

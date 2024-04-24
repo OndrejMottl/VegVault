@@ -49,7 +49,7 @@ url_gh_abiotic <-
   paste0(
     "https://raw.githubusercontent.com/",
     "OndrejMottl/VegVault-abiotic_data/",
-    "main/",
+    "v1.0.0/",
     "Outputs/Data/Neoclimate/"
   )
 
