@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS - VegVault
+#                       VegVault
 #
 #              Import CHELSA-TRACE21K climate data
 #
@@ -50,7 +50,7 @@ DBI::dbListTables(con)
 url_gh_abiotic <-
   paste0(
     "https://raw.githubusercontent.com/",
-    "OndrejMottl/BIODYNAMICS-abiotic_data/",
+    "OndrejMottl/VegVault-abiotic_data/",
     "main/",
     "Outputs/Data/Palaoclimate/"
   )

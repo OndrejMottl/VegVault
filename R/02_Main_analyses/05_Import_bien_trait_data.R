@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS - VegVault
+#                       VegVault
 #
 #              Import BIEN trait data
 #
@@ -50,7 +50,7 @@ DBI::dbListTables(con)
 url_gh_veg_data <-
   paste0(
     "https://raw.githubusercontent.com/",
-    "OndrejMottl/BIODYNAMICS-Vegetation_data/",
+    "OndrejMottl/VegVault-Vegetation_data/",
     "main/"
   )
 

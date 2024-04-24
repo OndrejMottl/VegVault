@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS - VegVault
+#                       VegVault
 #
 #                     Import TRY trait data
 #
@@ -50,7 +50,7 @@ DBI::dbListTables(con)
 url_gh_traits <-
   paste0(
     "https://raw.githubusercontent.com/",
-    "OndrejMottl/BIODYNAMICS-Trait_data/",
+    "OndrejMottl/VegVault-Trait_data/",
     "main/"
   )
 

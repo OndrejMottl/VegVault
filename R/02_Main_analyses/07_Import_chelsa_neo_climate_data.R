@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS - VegVault
+#                       VegVault
 #
 #              Import CHELSA climate data
 #
@@ -48,7 +48,7 @@ con <-
 url_gh_abiotic <-
   paste0(
     "https://raw.githubusercontent.com/",
-    "OndrejMottl/BIODYNAMICS-abiotic_data/",
+    "OndrejMottl/VegVault-abiotic_data/",
     "main/",
     "Outputs/Data/Neoclimate/"
   )
