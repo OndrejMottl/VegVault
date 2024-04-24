@@ -51,7 +51,7 @@ url_gh_traits <-
   paste0(
     "https://raw.githubusercontent.com/",
     "OndrejMottl/VegVault-Trait_data/",
-    "main/"
+    "v1.0.0/"
   )
 
 url_try <-
