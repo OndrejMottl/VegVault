@@ -1,4 +1,4 @@
-# BIODYNAMICS: VegVault database
+# VegVault database
 
 This is part of the [BIODYNAMICS project](https://ondrejmottl.github.io/projects/BIODYNAMICS/).
 

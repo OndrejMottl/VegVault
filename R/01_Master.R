@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS - VegVault
+#                       VegVault
 #
 #                  Import Vegetation data
 #

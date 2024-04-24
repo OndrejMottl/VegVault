@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS - VegVault
+#                       VegVault
 #
 #              Import fossil pollen data
 #
@@ -50,8 +50,8 @@ DBI::dbListTables(con)
 url_gh_fossilpol <-
   paste0(
     "https://raw.githubusercontent.com/",
-    "OndrejMottl/BIODYNAMICS-FOSSILPOL/",
-    "main/"
+    "OndrejMottl/VegVault-FOSSILPOL/",
+    "v1.0.0/"
   )
 
 url_fossilpol_data <-

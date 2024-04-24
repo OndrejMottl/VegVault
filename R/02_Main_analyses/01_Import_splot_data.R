@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS - VegVault
+#                       VegVault
 #
 #                  Import Vegetation data
 #
@@ -50,8 +50,8 @@ DBI::dbListTables(con)
 url_gh <-
   paste0(
     "https://raw.githubusercontent.com/",
-    "OndrejMottl/BIODYNAMICS-Vegetation_data/",
-    "main/Outputs/Data/"
+    "OndrejMottl/VegVault-Vegetation_data/",
+    "v1.0.0/Outputs/Data/"
   )
 
 url_splot <-

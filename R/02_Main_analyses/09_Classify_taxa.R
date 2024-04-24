@@ -1,7 +1,7 @@
 #----------------------------------------------------------#
 #
 #
-#                 BIODYNAMICS - VegVault
+#                       VegVault
 #
 #                Classify all taxa is DB
 #
