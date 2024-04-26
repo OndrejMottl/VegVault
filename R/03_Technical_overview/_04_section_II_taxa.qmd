@@ -1,0 +1,302 @@
+---
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+    self_contained: true
+    embed-resources: true
+  pdf:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+  gfm:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+    standalone: true
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r}
+#| label: chunk setup
+#| include: FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.path = "figures/",
+  out.width = "100%"
+)
+```
+
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("R/03_Technical_overview/_04_section_II_taxa.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Technical_overview/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
+
+## Taxa
+
+The **Vegvault** database contains taxa names directly from main *Data Source-types*. 
+
+```{r}
+#| label: Taxa scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Technical_overview/DB_scheme_visualisation/Taxa.png"
+  )
+)
+```
+
+Individual taxa names are linked to the `Samples` by the `SampleTaxa` table. 
+
+```{r}
+#| label: SampleTaxa scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Technical_overview/DB_scheme_visualisation/SampleTaxa.png"
+  )
+)
+```
+
+```{r}
+#| label: Number of taxa per data source type
+n_taxa_per_source_type <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::filter(
+    dataset_type == "vegetation_plot"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSourceTypeID"),
+    by = "data_source_type_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "SampleTaxa"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(dataset_source_type, taxon_id) %>%
+  dplyr::group_by(dataset_source_type) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+n_taxa_per_source_type %>%
+  dplyr::arrange(-N) %>%
+  dplyr::mutate(
+    dataset_source_type = factor(
+      dataset_source_type,
+      levels = unique(dataset_source_type)
+    )
+  ) %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = N,
+      x = dataset_source_type
+    )
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = scales::transform_log10(),
+    breaks = scales::trans_breaks("log10", function(x) 10^x),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))
+  ) +
+  ggplot2::labs(
+    title = "Taxa per source type",
+    x = "",
+    y = "Number of taxa"
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_source_type
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = dataset_source_type,
+      xend = dataset_source_type,
+      yend = 0
+    ),
+    color = "grey",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      fill = dataset_source_type
+    ),
+    size = 3,
+    shape = 21,
+    col = "black",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_label(
+    mapping = ggplot2::aes(
+      label = scales::number(N)
+    ),
+    vjust = -0.5,
+    size = 3,
+    position = ggplot2::position_dodge(0.5)
+  )
+```
+
+### Classification
+
+In order to obtain classification of all taxa present in the **Vegvault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package has been utilized, automatically aligning the names to [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from [Global Biodiversity Information Facility](https://www.gbif.org/).
+
+Classification up to the family level is then saved for each taxon.
+
+```{r}
+#| label: TaxonClassification scheme structure
+knitr::include_graphics(
+  here::here(
+    "R/03_Technical_overview/DB_scheme_visualisation/TaxonClassification.png"
+  )
+)
+```
+
+```{r}
+#| label: taxa classification plot
+get_n_taxa_per_level <- function(sel_level) {
+  dplyr::tbl(con, "TaxonClassification") %>%
+    dplyr::distinct({{ sel_level }}) %>%
+    dplyr::collect() %>%
+    nrow() %>%
+    return()
+}
+
+n_taxa_total <-
+  dplyr::tbl(con, "Taxa") %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  purrr::chuck("N")
+
+n_taxa_not_classificed <-
+  dplyr::left_join(
+    dplyr::tbl(con, "Taxa"),
+    dplyr::tbl(con, "TaxonClassification"),
+    by = "taxon_id"
+  ) %>%
+  dplyr::filter(
+    is.na(taxon_species) &
+      is.na(taxon_genus) &
+      is.na(taxon_family)
+  ) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  purrr::chuck("N")
+
+n_taxa_per_class <-
+  tibble::tribble(
+    ~class, ~N,
+    "total taxa", n_taxa_total,
+    "species", get_n_taxa_per_level(taxon_species),
+    "genus", get_n_taxa_per_level(taxon_genus),
+    "family", get_n_taxa_per_level(taxon_family),
+    "not classified", n_taxa_not_classificed
+  )
+
+n_taxa_per_class %>%
+  dplyr::mutate(
+    class = factor(
+      class,
+      levels = n_taxa_per_class$class
+    )
+  ) %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = N,
+      x = class
+    )
+  ) +
+  ggplot2::labs(
+    title = "Taxa classification",
+    x = "",
+    y = "Number of taxa"
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = c(
+      "#FCFCFC",
+      "#FFE6F5",
+      "#FFDEC9",
+      "#FFE593",
+      "#D8DBE0"
+    )
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = class,
+      xend = class,
+      yend = 0
+    ),
+    color = "grey",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      fill = class
+    ),
+    size = 3,
+    shape = 21,
+    col = "black",
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_label(
+    mapping = ggplot2::aes(
+      label = scales::number(N)
+    ),
+    vjust = -0.5,
+    size = 3,
+    position = ggplot2::position_dodge(0.5)
+  )
+```

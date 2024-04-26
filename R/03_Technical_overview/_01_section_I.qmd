@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
   warning = FALSE,
   fig.align = "center",
   fig.path = "figures/",
-  out.width = 10
+  out.width = "100%"
 )
 ```
 
