@@ -1,0 +1,84 @@
+---
+title: "Section I: Description of VegVaul"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+    self_contained: true
+    embed-resources: true
+  pdf:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+  gfm:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+    standalone: true
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r}
+#| label: chunk setup
+#| include: FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.path = "figures/",
+  out.width = 10
+)
+```
+
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("R/03_Technical_overview/_01_section_I.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Technical_overview/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
+
+**VegVault** is a SQLite interdisciplinary database linking plot-based vegetation data with functional traits and climate. Specifically, it contains:
+
+ - current vegetation plot data
+ - past vegetation plot data (fossil pollen records)
+ - functional trait data
+ - current abiotic data (climate, soil)
+ - past abiotic data (climate)
+
+The goal of the database is to compilate interdisciplinary data ...

@@ -1,0 +1,80 @@
+---
+title: "VegVault database"
+date: last-modified
+author: Ondřej Mottl
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+    self_contained: true
+    embed-resources: true
+  pdf:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+  gfm:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+    standalone: true
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r}
+#| label: chunk setup
+#| include: FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.path = "figures/",
+  out.width = "100%"
+)
+```
+
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("R/03_Technical_overview/Technical_overview_master.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Technical_overview/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
+
+{{< include _01_section_I.md >}}
+
+{{< include _02_section_II_datasets.md >}}
