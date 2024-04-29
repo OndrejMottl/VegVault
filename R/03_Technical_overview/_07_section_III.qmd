@@ -1,0 +1,48 @@
+---
+title: "Section III: Assembly details of VegVault 1.0.0"
+format:
+  html:
+    fig-width: 10
+  gfm:
+    fig-width: 10
+editor: 
+  markdown: 
+    wrap: sentence
+---
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("R/03_Technical_overview/_07_section_III.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Technical_overview/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
+
