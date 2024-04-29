@@ -63,7 +63,81 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-
+<p>The <strong>VegVault</strong> version <strong>1.0.0</strong> has been assembled from other publicly available databases.</p>
+<section id="assembly-process" class="level2">
+<h2 class="anchored" data-anchor-id="assembly-process">Assembly process</h2>
+<p>Here is a general visualisation of the assembly process:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DB_assembly_visualisation/assembly_viz_01.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Figure legend</strong>:</p>
+<ol type="1">
+<li><strong><a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a></strong> - open, community-curated data and services for paleoecological and paleoenvironmental data
+<ul>
+<li>source of fossil pollen data</li>
+</ul></li>
+<li><strong><a href="https://idiv-biodiversity.de/en/splot/splotopen.html">sPlotOpen</a></strong> - The open-access version of sPlot
+<ul>
+<li>source of current vegetation plot data</li>
+</ul></li>
+<li><strong><a href="https://bien.nceas.ucsb.edu/bien/">Botanical Information and Ecology Network</a></strong> - global patterns of plot inventories and surveys
+<ul>
+<li>source of current vegetation plot and vegetation trait data</li>
+</ul></li>
+<li><strong><a href="https://www.try-db.org/TryWeb/Home.php">TRY Plant Trait Database</a></strong> - open access plant trait data
+<ul>
+<li>source of vegetation trait data</li>
+</ul></li>
+<li><strong><a href="https://chelsa-climate.org/">Climatologies at High resolution for the Earth’s Land Surface Area</a></strong> - Long-term, transient modern- and paleo-climate data
+<ul>
+<li>source of abiotic data</li>
+</ul></li>
+<li><strong><a href="https://www.isric.org/explore/wosis">World Soil Information Service</a></strong> - harmonised soil profile database
+<ul>
+<li>source of abiotic data</li>
+</ul></li>
+<li><strong><a href="https://hope-uib-bio.github.io/FOSSILPOL-website/">FOSSILPOL</a></strong> - The workflow that aims to process and standardise global palaeoecological pollen data for macroecological studies
+<ul>
+<li>a method to obtain and process fossil pollen data</li>
+</ul></li>
+<li><strong><a href="https://github.com/bmaitner/RBIEN">RBIEN R package</a></strong> - Tools for accessing the BIEN database
+<ul>
+<li>a method to obtain current vegetation plot data</li>
+</ul></li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v1.0.0">VegVault-FOSSILPOL GitHub repo</a></strong>
+<ul>
+<li>a Tag (v1.0.0) to obtain and process fossil pollen data</li>
+</ul></li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.0.0">VegVault-Vegetation_data GitHub repo</a></strong>
+<ul>
+<li>a Tag (v1.0.0) to process current vegetation plot data</li>
+</ul></li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.0.0">VegVault-Trait_data GitHub repo</a></strong>
+<ul>
+<li>a Tag (v1.0.0) to process vegetation trait data</li>
+</ul></li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.0.0">VegVault-abiotic_data GitHub repo</a></strong>
+<ul>
+<li>a Tag (v1.0.0) to process abiotic data</li>
+</ul></li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault">VegVault GitHub repo</a></strong>
+<ul>
+<li>a Tag (v1.0.0) to transfer the data into the SQLite database</li>
+</ul></li>
+<li><strong>VegVault</strong> - SQLite database (v1.0.0)</li>
+</ol>
+<section id="note-on-github-tags" class="level3">
+<h3 class="anchored" data-anchor-id="note-on-github-tags">Note on GitHub Tags</h3>
+<p><em>…Tags are ref’s that point to specific points in Git history. Tagging is generally used to capture a point in history…</em></p>
+<p>Here, the Tags have been used to ensure reproducibility of this version of **VegVault*. GitHub repo can change but the specific Tag used here (and also used in the code to source the data) ensure the transparency of the state of the database.</p>
+</section>
+</section>
 
 </main>
 <!-- /main column -->
