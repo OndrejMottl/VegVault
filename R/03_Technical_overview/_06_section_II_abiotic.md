@@ -41,7 +41,7 @@ data-fig-align="center" />
 style="width:100.0%" data-fig-align="center" />
 
 Note that the spatial resolution is higher for modern climate data than
-for the past. this is to reduce the size of the past climate data.
+for the past. This is to reduce the size of the past climate data.
 
 <img src="figures/exampe%20of%20abitic%20data%20-%20soil-1.png"
 style="width:100.0%" data-fig-align="center" />

@@ -15,7 +15,7 @@ data-fig-align="center" />
 
 ### Trait domain
 
-As there are many varying names for the same “traits”, the **Vegvault**
+As there are many varying names for the same “traits”, the **VegVault**
 database contains *Trait Domain* information to group traits together.
 
 <img src="DB_scheme_visualisation/TraitsDomain.png" style="width:100.0%"

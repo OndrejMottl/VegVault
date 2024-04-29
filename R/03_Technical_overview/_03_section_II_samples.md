@@ -40,10 +40,10 @@ data-fig-align="center" />
 
 ### Sample age
 
-The **Vegvault** database deals with both current and paleo data.
-therefore, each `Sample` has the indication of *age*, with modern
+The **VegVault** database deals with both current and paleo data.
+Therefore, each `Sample` has the indication of *age*, with modern
 samples being set to 0. To embrace the uncertainty from age-depth
-modeling paleo-record, the **Vegvault** database has a structure to hold
+modeling paleo-record, the **VegVault** database has a structure to hold
 an uncertainty matrix containing information about all *potential ages*
 of each `Sample` from a paleo `Dataset`.
 

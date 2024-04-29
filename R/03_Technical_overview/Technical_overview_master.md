@@ -2,7 +2,8 @@
 Ondřej Mottl
 2024-04-29
 
-- [Section I: Description of VegVaul](#section-i-description-of-vegvaul)
+- [Section I: Description of
+  VegVault](#section-i-description-of-vegvault)
 - [Section II: Overview of VegVault
   1.0.0](#section-ii-overview-of-vegvault-100)
   - [Dataset](#dataset)
@@ -23,7 +24,6 @@ Ondřej Mottl
     - [Trait Values](#trait-values)
     - [Trait reference](#trait-reference)
   - [Abiotic data](#abiotic-data)
-  - [Abiotic data](#abiotic-data-1)
 - [Section III: Assembly details of VegVault
   1.0.0](#section-iii-assembly-details-of-vegvault-100)
 - [Section IV: Examples of usage](#section-iv-examples-of-usage)
@@ -33,7 +33,7 @@ Ondřej Mottl
 - [Section V: Outlook and future
   directions](#section-v-outlook-and-future-directions)
 
-# Section I: Description of VegVaul
+# Section I: Description of VegVault
 
 **VegVault** is a SQLite interdisciplinary database linking plot-based
 vegetation data with functional traits and climate. Specifically, it
@@ -45,7 +45,7 @@ contains:
 - current abiotic data (climate, soil)
 - past abiotic data (climate)
 
-The goal of the database is to compilate interdisciplinary data …
+The goal of the database is to compile interdisciplinary data …
 
 # Section II: Overview of VegVault 1.0.0
 
@@ -62,7 +62,7 @@ The database is structured in several logical levels, such as `Dataset`,
 ## Dataset
 
 `Dataset` represents the highest levels in the hierarchy. It is the main
-keystone in the VegVauls structure.
+keystone in the VegVault structure.
 
 <img src="DB_scheme_visualisation/Datasets.png" style="width:100.0%"
 data-fig-align="center" />
@@ -98,7 +98,7 @@ This should help to classify, which data pipeline was used to import the
 dataset into the **VegVault**, This is also the first general point of
 reference of data, as all large databases have a citation statement.
 
-Currently, there **VegVault** consist of those source-types:
+Currently, the **VegVault** consist of those source-types:
 
 - **BIEN** - [Botanical Information and Ecology
   Network](https://bien.nceas.ucsb.edu/bien/)
@@ -208,10 +208,10 @@ data-fig-align="center" />
 
 ### Sample age
 
-The **Vegvault** database deals with both current and paleo data.
-therefore, each `Sample` has the indication of *age*, with modern
+The **VegVault** database deals with both current and paleo data.
+Therefore, each `Sample` has the indication of *age*, with modern
 samples being set to 0. To embrace the uncertainty from age-depth
-modeling paleo-record, the **Vegvault** database has a structure to hold
+modeling paleo-record, the **VegVault** database has a structure to hold
 an uncertainty matrix containing information about all *potential ages*
 of each `Sample` from a paleo `Dataset`.
 
@@ -237,7 +237,7 @@ style="width:100.0%" data-fig-align="center" />
 
 ## Taxa
 
-The **Vegvault** database contains taxa names directly from main *Data
+The **VegVault** database contains taxa names directly from main *Data
 Source-types*.
 
 <img src="DB_scheme_visualisation/Taxa.png" style="width:100.0%"
@@ -255,7 +255,7 @@ style="width:100.0%" data-fig-align="center" />
 ### Classification
 
 In order to obtain classification of all taxa present in the
-**Vegvault** database, the
+**VegVault** database, the
 {[taxospace](https://github.com/OndrejMottl/taxospace)} R package has
 been utilized, automatically aligning the names to [Taxonomy
 Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c)
@@ -284,7 +284,7 @@ data-fig-align="center" />
 
 ### Trait domain
 
-As there are many varying names for the same “traits”, the **Vegvault**
+As there are many varying names for the same “traits”, the **VegVault**
 database contains *Trait Domain* information to group traits together.
 
 <img src="DB_scheme_visualisation/TraitsDomain.png" style="width:100.0%"
@@ -365,53 +365,7 @@ data-fig-align="center" />
 style="width:100.0%" data-fig-align="center" />
 
 Note that the spatial resolution is higher for modern climate data than
-for the past. this is to reduce the size of the past climate data.
-
-<img src="figures/exampe%20of%20abitic%20data%20-%20soil-1.png"
-style="width:100.0%" data-fig-align="center" />
-
-- [Abiotic data](#abiotic-data)
-
-## Abiotic data
-
-Abiotic data is aimed to provide information about all relevant abiotic
-information affecting vegetation distribution and its traits.
-
-Abiotic data is linked to the structure of the **VegVault** Database by
-the `gridpoints`, which are artificially created points to *reasonably*
-cover the resolution of both modern and past data for vegetation and
-abiotic data.
-
-<img src="figures/distribution%20of%20gridpoints-1.png"
-style="width:100.0%" data-fig-align="center" />
-
-There are currently abiotic from [CHELSA](https://chelsa-climate.org/)
-and [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/) and
-[WoSIS](https://www.isric.org/explore/wosis). CHELSA and CHELSA-TRACE21
-are built on the same structure of variables (visit the websites for
-more info).
-
-| Variable name | Variable unit    | source of data  |
-|---------------|------------------|-----------------|
-| bio1          | °C               | CHELSA          |
-| bio4          | °C               | CHELSA          |
-| bio6          | °C               | CHELSA          |
-| bio12         | kg m-2 year-1    | CHELSA          |
-| bio15         | Unitless         | CHELSA          |
-| bio18         | kg m-2 quarter-1 | CHELSA          |
-| bio19         | kg m-2 quarter-1 | CHELSA          |
-| HWSD2         | Unitless         | WoSIS-SoilGrids |
-
-Abiotic data is simply linked to `Samples`.
-
-<img src="DB_scheme_visualisation/AbioticData.png" style="width:100.0%"
-data-fig-align="center" />
-
-<img src="figures/exampe%20of%20abitic%20data%20-%20bio1-1.png"
-style="width:100.0%" data-fig-align="center" />
-
-Note that the spatial resolution is higher for modern climate data than
-for the past. this is to reduce the size of the past climate data.
+for the past. This is to reduce the size of the past climate data.
 
 <img src="figures/exampe%20of%20abitic%20data%20-%20soil-1.png"
 style="width:100.0%" data-fig-align="center" />

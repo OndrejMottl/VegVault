@@ -71,8 +71,6 @@ invisible(
 
 {{< include _06_section_II_abiotic.md >}}
 
-{{< include _06_section_II_abiotic.md >}}
-
 {{< include _07_section_III.md >}}
 
 {{< include _08_section_IV.md >}}

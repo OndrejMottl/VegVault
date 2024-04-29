@@ -14,7 +14,7 @@ The database is structured in several logical levels, such as `Dataset`,
 ## Dataset
 
 `Dataset` represents the highest levels in the hierarchy. It is the main
-keystone in the VegVauls structure.
+keystone in the VegVault structure.
 
 <img src="DB_scheme_visualisation/Datasets.png" style="width:100.0%"
 data-fig-align="center" />
@@ -50,7 +50,7 @@ This should help to classify, which data pipeline was used to import the
 dataset into the **VegVault**, This is also the first general point of
 reference of data, as all large databases have a citation statement.
 
-Currently, there **VegVault** consist of those source-types:
+Currently, the **VegVault** consist of those source-types:
 
 - **BIEN** - [Botanical Information and Ecology
   Network](https://bien.nceas.ucsb.edu/bien/)

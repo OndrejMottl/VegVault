@@ -5,7 +5,7 @@
 
 ## Taxa
 
-The **Vegvault** database contains taxa names directly from main *Data
+The **VegVault** database contains taxa names directly from main *Data
 Source-types*.
 
 <img src="DB_scheme_visualisation/Taxa.png" style="width:100.0%"
@@ -23,7 +23,7 @@ style="width:100.0%" data-fig-align="center" />
 ### Classification
 
 In order to obtain classification of all taxa present in the
-**Vegvault** database, the
+**VegVault** database, the
 {[taxospace](https://github.com/OndrejMottl/taxospace)} R package has
 been utilized, automatically aligning the names to [Taxonomy
 Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c)

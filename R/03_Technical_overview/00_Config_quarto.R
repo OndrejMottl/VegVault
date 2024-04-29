@@ -68,6 +68,8 @@ knitr::opts_chunk$set(
 ggplot2::theme_set(
   ggplot2::theme_bw() +
     ggplot2::theme(
+      text = ggplot2::element_text(size = text_size), # [config]
+      line = ggplot2::element_line(size = line_size), # [config]
       plot.title = ggplot2::element_text(size = 15),
       axis.title = ggplot2::element_text(size = 15),
       axis.text = ggplot2::element_text(size = 15),

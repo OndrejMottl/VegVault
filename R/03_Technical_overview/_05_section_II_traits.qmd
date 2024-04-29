@@ -67,7 +67,7 @@ knitr::include_graphics(
 
 ### Trait domain
 
-As there are many varying names for the same "traits", the **Vegvault** database contains *Trait Domain* information to group traits together.  
+As there are many varying names for the same "traits", the **VegVault** database contains *Trait Domain* information to group traits together.  
 
 ```{r}
 #| label: TraitsDomain scheme structure

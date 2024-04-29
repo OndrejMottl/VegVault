@@ -92,7 +92,7 @@ data_grid_coord %>%
     ylim = y_lim
   ) +
   ggplot2::labs(
-    title = "Example of gridpoinds resolution",
+    title = "Example of gridpoints resolution",
     x = "Longtitude",
     y = "Latitude"
   ) +
@@ -197,7 +197,7 @@ data_bio1_example %>%
 
 ```
 
-Note that the spatial resolution is higher for modern climate data than for the past. this is to reduce the size of the past climate data.
+Note that the spatial resolution is higher for modern climate data than for the past. This is to reduce the size of the past climate data.
 
 ```{r}
 #| label: exampe of abitic data - soil

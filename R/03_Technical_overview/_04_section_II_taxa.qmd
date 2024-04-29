@@ -54,7 +54,7 @@ invisible(
 
 ## Taxa
 
-The **Vegvault** database contains taxa names directly from main *Data Source-types*. 
+The **VegVault** database contains taxa names directly from main *Data Source-types*. 
 
 ```{r}
 #| label: Taxa scheme structure
@@ -169,7 +169,7 @@ n_taxa_per_source_type %>%
 
 ### Classification
 
-In order to obtain classification of all taxa present in the **Vegvault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package has been utilized, automatically aligning the names to [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from [Global Biodiversity Information Facility](https://www.gbif.org/).
+In order to obtain classification of all taxa present in the **VegVault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package has been utilized, automatically aligning the names to [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from [Global Biodiversity Information Facility](https://www.gbif.org/).
 
 Classification up to the family level is then saved for each taxon.
 
