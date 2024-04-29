@@ -52,6 +52,19 @@ con <-
 # 3. Graphical settings -----
 #----------------------------------------------------------#
 
+# chunk setup
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.path = "figures/",
+  out.width = "100%"
+)
+
+# theme setup
 ggplot2::theme_set(
   ggplot2::theme_bw() +
     ggplot2::theme(
@@ -63,8 +76,10 @@ ggplot2::theme_set(
     )
 )
 
+# N characters for wrapping text
 fig_width_def <- 60 # this is used to wrap text.
 
+# 3.1 palette setup -----
 palette_dataset_type <-
   c(
     "#3DDC97",
@@ -118,6 +133,8 @@ palette_trait_dommanins <-
       "Stem specific density"
     )
   )
+
+# 3.2 helper functions -----
 
 #' @description
 #' A helper function to colour the facets

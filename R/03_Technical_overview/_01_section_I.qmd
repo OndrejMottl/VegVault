@@ -7,10 +7,6 @@ format:
     fig-width: 10
     self_contained: true
     embed-resources: true
-  pdf:
-    toc: true
-    toc-depth: 3
-    fig-width: 10
   gfm:
     toc: true
     toc-depth: 3
@@ -20,22 +16,6 @@ editor:
   markdown: 
     wrap: sentence
 ---
-
-```{r}
-#| label: chunk setup
-#| include: FALSE
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  echo = FALSE,
-  message = FALSE,
-  warning = FALSE,
-  fig.align = "center",
-  fig.path = "figures/",
-  out.width = "100%"
-)
-```
-
 ```{r}
 #| label: source config
 #| include: FALSE
