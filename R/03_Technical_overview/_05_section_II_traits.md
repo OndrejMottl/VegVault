@@ -1,10 +1,5 @@
 
 
-- [Traits](#traits)
-  - [Trait domain](#trait-domain)
-  - [Trait Values](#trait-values)
-  - [Trait reference](#trait-reference)
-
 ## Traits
 
 Functional traits of vegetation taxa follow the same structure of

@@ -1,11 +1,5 @@
 
 
-- [Samples](#samples)
-  - [Dataset-Sample](#dataset-sample)
-  - [Sample-size](#sample-size)
-  - [Sample age](#sample-age)
-  - [Sample reference](#sample-reference)
-
 ## Samples
 
 `Sample` represents the main unit of data in the **VegVault** database.

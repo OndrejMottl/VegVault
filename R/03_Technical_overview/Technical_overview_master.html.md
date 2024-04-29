@@ -1,39 +1,24 @@
-# VegVault database
-Ondřej Mottl
-2024-04-29
+---
+title: "VegVault database"
+date: last-modified
+author: Ondřej Mottl
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+    self_contained: true
+    embed-resources: true
+    keep-md: true
+editor: 
+  markdown: 
+    wrap: sentence
+---
 
-- [Section I: Description of
-  VegVault](#section-i-description-of-vegvault)
-- [Section II: Overview of VegVault
-  1.0.0](#section-ii-overview-of-vegvault-100)
-  - [Dataset](#dataset)
-    - [Dataset Type](#dataset-type)
-    - [Dataset Source-Type](#dataset-source-type)
-    - [Dataset Source](#dataset-source)
-    - [Sampling method](#sampling-method)
-    - [References](#references)
-  - [Samples](#samples)
-    - [Dataset-Sample](#dataset-sample)
-    - [Sample-size](#sample-size)
-    - [Sample age](#sample-age)
-    - [Sample reference](#sample-reference)
-  - [Taxa](#taxa)
-    - [Classification](#classification)
-  - [Traits](#traits)
-    - [Trait domain](#trait-domain)
-    - [Trait Values](#trait-values)
-    - [Trait reference](#trait-reference)
-  - [Abiotic data](#abiotic-data)
-- [Section III: Assembly details of VegVault
-  1.0.0](#section-iii-assembly-details-of-vegvault-100)
-- [Section IV: Examples of usage](#section-iv-examples-of-usage)
-  - [Example 1](#example-1)
-  - [Example 2](#example-2)
-  - [Example 3](#example-3)
-- [Section V: Outlook and future
-  directions](#section-v-outlook-and-future-directions)
+
 
 # Section I: Description of VegVault
+
 
 **VegVault** is a SQLite interdisciplinary database linking plot-based
 vegetation data with functional traits and climate. Specifically, it
@@ -49,12 +34,6 @@ The goal of the database is to compile interdisciplinary data …
 
 # Section II: Overview of VegVault 1.0.0
 
-- [Dataset](#dataset)
-  - [Dataset Type](#dataset-type)
-  - [Dataset Source-Type](#dataset-source-type)
-  - [Dataset Source](#dataset-source)
-  - [Sampling method](#sampling-method)
-  - [References](#references)
 
 The database is structured in several logical levels, such as `Dataset`,
 `Sample`, `Taxa`, `Trait`, etc.
@@ -168,11 +147,7 @@ dataset: *Grimm, E.C., 2008. Neotoma: an ecosystem database for the
 Pliocene, Pleistocene, and Holocene. Illinois State Museum Scientific
 Papers E Series, 1.*
 
-- [Samples](#samples)
-  - [Dataset-Sample](#dataset-sample)
-  - [Sample-size](#sample-size)
-  - [Sample age](#sample-age)
-  - [Sample reference](#sample-reference)
+
 
 ## Samples
 
@@ -232,8 +207,7 @@ to `Dataset`
 <img src="DB_scheme_visualisation/SampleReference.png"
 style="width:100.0%" data-fig-align="center" />
 
-- [Taxa](#taxa)
-  - [Classification](#classification)
+
 
 ## Taxa
 
@@ -269,10 +243,7 @@ style="width:100.0%" data-fig-align="center" />
 <img src="figures/taxa%20classification%20plot-1.png"
 style="width:100.0%" data-fig-align="center" />
 
-- [Traits](#traits)
-  - [Trait domain](#trait-domain)
-  - [Trait Values](#trait-values)
-  - [Trait reference](#trait-reference)
+
 
 ## Traits
 
@@ -324,7 +295,7 @@ have additional references.
 <img src="DB_scheme_visualisation/TraitsReference.png"
 style="width:100.0%" data-fig-align="center" />
 
-- [Abiotic data](#abiotic-data)
+
 
 ## Abiotic data
 
@@ -372,11 +343,10 @@ style="width:100.0%" data-fig-align="center" />
 
 # Section III: Assembly details of VegVault 1.0.0
 
+
+
 # Section IV: Examples of usage
 
-- [Example 1](#example-1)
-- [Example 2](#example-2)
-- [Example 3](#example-3)
 
 ## Example 1
 
@@ -385,3 +355,6 @@ style="width:100.0%" data-fig-align="center" />
 ## Example 3
 
 # Section V: Outlook and future directions
+
+
+

@@ -1,7 +1,5 @@
 
 
-- [Abiotic data](#abiotic-data)
-
 ## Abiotic data
 
 Abiotic data is aimed to provide information about all relevant abiotic

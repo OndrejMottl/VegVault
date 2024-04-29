@@ -9,15 +9,7 @@ format:
     fig-width: 10
     self_contained: true
     embed-resources: true
-  pdf:
-    toc: true
-    toc-depth: 3
-    fig-width: 10
-  gfm:
-    toc: true
-    toc-depth: 3
-    fig-width: 10
-    standalone: true
+    keep-md: true
 editor: 
   markdown: 
     wrap: sentence

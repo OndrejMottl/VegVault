@@ -1,16 +1,9 @@
 ---
 format:
   html:
-    toc: true
-    toc-depth: 3
     fig-width: 10
-    self_contained: true
-    embed-resources: true
   gfm:
-    toc: true
-    toc-depth: 3
     fig-width: 10
-    standalone: true
 editor: 
   markdown: 
     wrap: sentence

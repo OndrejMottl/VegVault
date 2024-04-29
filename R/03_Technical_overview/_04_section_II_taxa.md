@@ -1,8 +1,5 @@
 
 
-- [Taxa](#taxa)
-  - [Classification](#classification)
-
 ## Taxa
 
 The **VegVault** database contains taxa names directly from main *Data

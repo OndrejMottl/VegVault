@@ -1,13 +1,6 @@
 # Section II: Overview of VegVault 1.0.0
 
 
-- [Dataset](#dataset)
-  - [Dataset Type](#dataset-type)
-  - [Dataset Source-Type](#dataset-source-type)
-  - [Dataset Source](#dataset-source)
-  - [Sampling method](#sampling-method)
-  - [References](#references)
-
 The database is structured in several logical levels, such as `Dataset`,
 `Sample`, `Taxa`, `Trait`, etc.
 

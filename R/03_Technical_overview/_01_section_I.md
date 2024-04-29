@@ -1,5 +1,6 @@
 # Section I: Description of VegVault
 
+
 **VegVault** is a SQLite interdisciplinary database linking plot-based
 vegetation data with functional traits and climate. Specifically, it
 contains:
