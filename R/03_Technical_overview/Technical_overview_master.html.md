@@ -408,7 +408,7 @@ style="width:100.0%" data-fig-align="center" />
 is generally used to capture a point in history…*
 
 Here, the Tags have been used to ensure reproducibility of this version
-of \*\*VegVault\*. GitHub repo can change but the specific Tag used here
+of **VegVault**. GitHub repo can change but the specific Tag used here
 (and also used in the code to source the data) ensure the transparency
 of the state of the database.
 

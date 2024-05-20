@@ -96,4 +96,4 @@ knitr::include_graphics(
 
 *...Tags are ref's that point to specific points in Git history. Tagging is generally used to capture a point in history...* 
 
-Here, the Tags have been used to ensure reproducibility of this version of **VegVault*. GitHub repo can change but the specific Tag used here (and also used in the code to source the data) ensure the transparency of the state of the database. 
+Here, the Tags have been used to ensure reproducibility of this version of **VegVault**. GitHub repo can change but the specific Tag used here (and also used in the code to source the data) ensure the transparency of the state of the database. 
