@@ -48,314 +48,58 @@ invisible(
 
 ## Example 1
 
-```{r}
-#| label: Example 1 - setup
-time_step <- 2500
-
-open_vault <- function(path) {
-  # test various things
-
-  db_con <-
-    DBI::dbConnect(
-      RSQLite::SQLite(),
-      path
-    )
-
-  dummy <-
-    structure(
-      list(
-        data = tibble::tibble(),
-        db_con = db_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(dummy)
-}
-
-get_datasets <- function(con) {
-  sel_data <- con$data
-
-  if (
-    nrow(sel_data) > 0
-  ) {
-    stop("Vault already has some data. `get_datasets()` should be selected first")
-  }
-
-  # test various things
-  sel_con <- con$db_con
-
-  dat_res <-
-    dplyr::tbl(sel_con, "Datasets")
-
-  res <-
-    structure(
-      list(
-        data = dat_res,
-        db_con = sel_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(res)
-}
-
-select_dataset_by_type <- function(con, sel_type) {
-  # test various things
-
-  sel_data <- con$data
-
-  sel_con <- con$db_con
-
-  dat_res <-
-    sel_data %>%
-    dplyr::inner_join(
-      dplyr::tbl(sel_con, "DatasetTypeID"),
-      by = "dataset_type_id"
-    ) %>%
-    dplyr::filter(
-      dataset_type %in% sel_type
-    )
-
-  res <-
-    structure(
-      list(
-        data = dat_res,
-        db_con = sel_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(res)
-}
-
-select_dataset_by_geo <- function(con, long_lim = c(-180, 180), lat_lim = c(-90, 90)) {
-  # test various things
-  sel_con <- con$db_con
-
-  sel_data <- con$data
-
-
-  long_lim_min <- as.numeric(eval(min(long_lim)))
-  long_lim_max <- as.numeric(eval(max(long_lim)))
-
-  lat_lim_min <- as.numeric(eval(min(lat_lim)))
-  lat_lim_max <- as.numeric(eval(max(lat_lim)))
-
-
-  assertthat::assert_that(
-    all(c("coord_long", "coord_lat") %in% colnames(sel_data))
-  )
-
-  data_filter <-
-    sel_data %>%
-    dplyr::filter(!is.na(coord_long)) %>%
-    dplyr::filter(!is.na(coord_lat))
-
-  data_res <-
-    data_filter %>%
-    dplyr::filter(
-      coord_long >= long_lim_min
-    ) %>%
-    dplyr::filter(
-      coord_long <= long_lim_max
-    ) %>%
-    dplyr::filter(
-      coord_lat >= lat_lim_min
-    ) %>%
-    dplyr::filter(
-      coord_lat <= lat_lim_max
-    )
-
-  res <-
-    structure(
-      list(
-        data = data_res,
-        db_con = sel_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(res)
-}
-
-get_samples <- function(con) {
-  # test various things
-  sel_con <- con$db_con
-
-  sel_data <- con$data
-
-  data_res <-
-    sel_data %>%
-    dplyr::inner_join(
-      dplyr::tbl(sel_con, "DatasetSample"),
-      by = "dataset_id"
-    ) %>%
-    dplyr::inner_join(
-      dplyr::tbl(sel_con, "Samples"),
-      by = "sample_id"
-    )
-
-  res <-
-    structure(
-      list(
-        data = data_res,
-        db_con = sel_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(res)
-}
-
-get_taxa <- function(con) {
-  # test various things
-  sel_con <- con$db_con
-
-  sel_data <- con$data
-
-  data_res <-
-    sel_data %>%
-    dplyr::inner_join(
-      dplyr::tbl(sel_con, "SampleTaxa"),
-      by = "sample_id"
-    )
-
-  res <-
-    structure(
-      list(
-        data = data_res,
-        db_con = sel_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(res)
-}
-
-select_by_taxa <- function(con, sel_taxa) {
-  # test various things
-  sel_con <- con$db_con
-
-  sel_data <- con$data
-
-  data_res <-
-    sel_data %>%
-    dplyr::inner_join(
-      dplyr::tbl(sel_con, "Taxa"),
-      by = "taxon_id"
-    ) %>%
-    dplyr::filter(
-      taxon_name %in% sel_taxa
-    )
-
-  res <-
-    structure(
-      list(
-        data = data_res,
-        db_con = sel_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(res)
-}
-
-harmonise_taxa <- function(con, to = c("original", "species", "genus", "family")) {
-  # test various things
-  sel_con <- con$db_con
-
-  sel_data <- con$data
-
-  to_long <- switch(to,
-    species = "taxon_species",
-    genus = "taxon_genus",
-    family = "taxon_family",
-  )
-
-  data_class_sub <-
-    dplyr::tbl(sel_con, "TaxonClassification") %>%
-    dplyr::select(
-      taxon_id,
-      dplyr::all_of(to_long)
-    ) %>%
-    dplyr::rename(
-      taxon_id_new = !!to_long
-    )
-
-  data_res <-
-    sel_data %>%
-    dplyr::inner_join(
-      data_class_sub,
-      by = "taxon_id"
-    ) %>%
-    dplyr::select(
-      -taxon_id
-    ) %>%
-    dplyr::rename(
-      taxon_id = taxon_id_new
-    )
-
-  res <-
-    structure(
-      list(
-        data = data_res,
-        db_con = sel_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(res)
-}
-
-extract_data <- function(con) {
-  # test various things
-  sel_data <- con$data
-
-  sel_data %>%
-    dplyr::collect() %>%
-    return()
-}
-```
+In the first example, we can imagine a scenario, where we are interested in spatiotemporal patterns of the *Picea* genus across North America for modern data and since the Last Glacial Maximum. Obtaining such data is straightforward:
 
 ```{r}
 #| label: Example 1 - North America Picea
 #| echo: true
-# create the plan
+# First create a plan
 plan_na_plots_picea <-
+  # Access the VegVault
   open_vault(
     path = paste0(
       data_storage_path,
       "Data/VegVault/VegVault.sqlite"
     )
   ) %>%
+  # Start by adding dataset information
   get_datasets() %>%
-  # select both modern and paleo plot data
+  # Select both modern and paleo plot data
   select_dataset_by_type(
     sel_type = c(
       "vegetation_plot",
       "fossil_pollen_archive"
     )
   ) %>%
-  # limit data to North America
+  # Limit data to North America
   select_dataset_by_geo(
     lat_lim = c(22, 60),
     long_lim = c(-135, -60)
   ) %>%
+  # Add samples
   get_samples() %>%
+  # Limit the samples by age
+  select_samples_by_age(
+    age_lim = c(0, 15e3)
+  ) %>%
+  # Add taxa
   get_taxa() %>%
   # Harmonise all data to a genus level
   harmonise_taxa(to = "genus") %>%
   # Extract only Picea data
-  select_by_taxa(sel_taxa = c("Picea"))
+  select_taxa(sel_taxa = c("Picea"))
 
-# execute the plan
+# Execute the plan
 data_na_plots_picea <-
   extract_data(plan_na_plots_picea)
 ```
 
+Now, we plot the presence of *Picea* in each 2500-year bin. 
+
 ```{r}
-#| label: Example 1 - plot
+#| label: Example 1 - plot distribution
+
+time_step <- 2500
 
 data_dummy <-
   tidyr::expand_grid(
@@ -366,10 +110,10 @@ data_dummy <-
 
 fig_na_plots_picea <-
   data_na_plots_picea %>%
+  dplyr::filter(value > 0) %>%
   dplyr::distinct(
     dataset_type, dataset_id, coord_long, coord_lat, sample_id, age
   ) %>%
-  dplyr::filter(age >= 0 & age <= 15e3) %>%
   dplyr::mutate(
     age_bin = floor(age / time_step) * time_step
   ) %>%
@@ -389,7 +133,8 @@ fig_na_plots_picea <-
     )
   ) +
   ggplot2::borders(
-    fill = "grey80"
+    fill = "grey80",
+    col = NA
   ) +
   ggplot2::geom_point(
     data = data_dummy,
@@ -408,11 +153,128 @@ fig_na_plots_picea <-
   ggplot2::coord_quickmap(
     xlim = c(-135, -60),
     ylim = c(22, 60)
+  ) +
+  ggplot2::labs(
+    x = "Latitude",
+    y = "Longitude"
   )
 
 fig_na_plots_picea
 ```
 
 ## Example 2
+
+In the second example, let's imagine we want to do Joined - Species Distribution Modeling for all plant taxa in the Czech Republic. We will extract modern plot-based data and climate.
+
+```{r}
+#| label: Example 2 - CZ JSDM
+#| echo: true
+# Again start by creating a plan
+plan_cz_modern <-
+  # Acess the VegVault file
+  open_vault(
+    path = paste0(
+      data_storage_path,
+      "Data/VegVault/VegVault.sqlite"
+    )
+  ) %>%
+  # Add the dataset information
+  get_datasets() %>%
+  # Select modern plot data and climate
+  select_dataset_by_type(
+    sel_type = c(
+      "vegetation_plot",
+      "gridpoints"
+    )
+  ) %>%
+  # Limit data to Czech Republic
+  select_dataset_by_geo(
+    lat_lim = c(48.5, 51.1),
+    long_lim = c(12, 18.9)
+  ) %>%
+  # Add samples
+  get_samples() %>%
+  # Now it is a good idea to make sure to only keep modern data
+  select_samples_by_age(
+    age_lim = c(0, 0)
+  ) %>%
+  # Add abiotic data
+  get_abiotic() %>%
+  # Select only Mean Anual Temperature (bio1)
+  select_abiotic_by_var(
+    sel_var = c("bio1")
+  ) %>%
+  # add taxa
+  get_taxa()
+
+# Execute the plan
+data_cz_modern <-
+  extract_data(plan_cz_modern)
+
+```
+
+Now we can simply plot both the climatic data and the plot vegetation data:
+
+```{r}
+#| label: Example 2 - plot
+data_climate <-
+  data_cz_modern %>%
+  dplyr::filter(dataset_type == "gridpoints") %>%
+  dplyr::select(dataset_type, dataset_id, coord_long, coord_lat, sample_id, value) %>%
+  tidyr::drop_na() %>%
+  dplyr::distinct()
+
+data_plots <-
+  data_cz_modern %>%
+  dplyr::filter(dataset_type == "vegetation_plot") %>%
+  dplyr::select(dataset_type, dataset_id, coord_long, coord_lat, sample_id) %>%
+  dplyr::distinct()
+
+fig_cz_modern <-
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      x = coord_long,
+      y = coord_lat
+    )
+  ) +
+  ggplot2::coord_quickmap(
+    xlim = c(12, 18.9),
+    ylim = c(48.5, 51.1)
+  ) +
+  ggplot2::labs(
+    title = stringr::str_wrap("Example 2: Distribution of plots", fig_width_def), # [quarto config]
+    x = "Longtitude",
+    y = "Latitude",
+    col = "Mean Annual Temperature (°C)",
+    fill = "Mean Annual Temperature (°C)",
+    caption = "Each point represents one community dataset"
+  ) +
+  ggplot2::scale_fill_viridis_c() +
+  ggplot2::scale_color_viridis_c() +
+  ggplot2::theme(
+    legend.position = "bottom"
+  ) +
+  ggplot2::geom_tile(
+    data = data_climate,
+    mapping = ggplot2::aes(
+      fill = value,
+      col = value
+    ),
+    width = 0.05,
+    height = 0.05,
+    alpha = 0.75,
+    linewidth = 0.1
+  ) +
+  ggplot2::borders(
+    fill = NA,
+    col = "red"
+  ) +
+  ggplot2::geom_point(
+    data = data_plots,
+    col = "black"
+  )
+
+fig_cz_modern
+```
 
 ## Example 3
