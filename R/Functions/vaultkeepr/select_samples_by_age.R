@@ -34,13 +34,13 @@ select_samples_by_age <- function(con, age_lim = c(-Inf, Inf)) {
             "fossil_pollen_archive",
             "gridpoints"
           )) ~ FALSE,
-        (age <= age_lim_min) &
+        (age < age_lim_min) &
           (dataset_type %in% c(
             "vegetation_plot",
             "fossil_pollen_archive",
             "gridpoints"
           )) ~ FALSE,
-        (age >= age_lim_max) &
+        (age > age_lim_max) &
           (dataset_type %in% c(
             "vegetation_plot",
             "fossil_pollen_archive",

@@ -42,25 +42,25 @@ select_dataset_by_geo <- function(con, long_lim = c(-180, 180), lat_lim = c(-90,
             "fossil_pollen_archive",
             "gridpoints"
           )) ~ FALSE,
-        (coord_long <= long_lim_min) &
+        (coord_long < long_lim_min) &
           (dataset_type %in% c(
             "vegetation_plot",
             "fossil_pollen_archive",
             "gridpoints"
           )) ~ FALSE,
-        (coord_long >= long_lim_max) &
+        (coord_long > long_lim_max) &
           (dataset_type %in% c(
             "vegetation_plot",
             "fossil_pollen_archive",
             "gridpoints"
           )) ~ FALSE,
-        (coord_lat <= lat_lim_min) &
+        (coord_lat < lat_lim_min) &
           (dataset_type %in% c(
             "vegetation_plot",
             "fossil_pollen_archive",
             "gridpoints"
           )) ~ FALSE,
-        (coord_lat >= lat_lim_max) &
+        (coord_lat > lat_lim_max) &
           (dataset_type %in% c(
             "vegetation_plot",
             "fossil_pollen_archive",
