@@ -278,3 +278,88 @@ fig_cz_modern
 ```
 
 ## Example 3
+
+In the last example, let's imagine we want to recostruct the Community Weighted Mean (CWM) of plant heigh for Latin America between 6-12 ka yr BP.
+
+```{r}
+#| label: Example 3 - LA CWM
+#| echo: true
+# Again start by creating a plan
+plan_la_traits <-
+  # Acess the VegVault file
+  open_vault(
+    path = paste0(
+      data_storage_path,
+      "Data/VegVault/VegVault.sqlite"
+    )
+  ) %>%
+  # Add the dataset information
+  get_datasets() %>%
+  # Select modern plot data and climate
+  select_dataset_by_type(
+    sel_type = c(
+      "fossil_pollen_archive",
+      "traits"
+    )
+  ) %>%
+  # Limit data to Latin America
+  select_dataset_by_geo(
+    lat_lim = c(-53, 28),
+    long_lim = c(-110, -38)
+  ) %>%
+  # Add samples
+  get_samples() %>%
+  # Limit to 6-12 ka yr BP
+  select_samples_by_age(
+    age_lim = c(6e3, 12e3)
+  ) %>%
+  # add taxa
+  get_taxa() %>%
+  # add trait information
+  get_traits() %>%
+  # Only select the plant height
+  select_traits_by_domain(
+    sel_domain = "Plant heigh"
+  )
+
+# Execute the plan
+data_la_traits <-
+  extract_data(plan_la_traits)
+```
+
+Now lets plot the overview of the data
+
+```{r}
+#| label: Example 3 - plot
+
+data_la_datasets <-
+  data_la_traits %>%
+  dplyr::filter(dataset_type == "fossil_pollen_archive") %>%
+  dplyr::distinct(dataset_id, sample_id, age) %>%
+  dplyr::group_by(dataset_id) %>%
+  dplyr::summarise(
+    .groups = "drop",
+    age_min = min(age),
+    age_mean = mean(age),
+    age_max = max(age)
+  )
+
+data_la_taxa <-
+  data_la_traits %>%
+  dplyr::filter(dataset_type == "fossil_pollen_archive") %>%
+  dplyr::distinct(dataset_id, sample_id, taxon_id) %>%
+  dplyr::group_by(dataset_id, sample_id) %>%
+  dplyr::count()
+
+data_la_height <-
+  data_la_traits %>%
+  dplyr::filter(dataset_type == "traits") %>%
+  dplyr::distinct(dataset_id, taxon_id_trait, .keep_all = TRUE) %>%
+  dplyr::select(taxon_id_trait, trait_value) %>%
+  dplyr::group_by(taxon_id_trait) %>%
+  dplyr::summarise(
+    mean_value = mean(trait_value)
+  ) %>%
+  tidyr::drop_na(mean_value)
+
+```
