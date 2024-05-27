@@ -349,7 +349,8 @@ data_la_taxa <-
   dplyr::filter(dataset_type == "fossil_pollen_archive") %>%
   dplyr::distinct(dataset_id, sample_id, taxon_id) %>%
   dplyr::group_by(dataset_id, sample_id) %>%
-  dplyr::count()
+  dplyr::count() %>%
+  dplyr::ungroup()
 
 data_la_height <-
   data_la_traits %>%
@@ -362,4 +363,97 @@ data_la_height <-
   ) %>%
   tidyr::drop_na(mean_value)
 
+fig_la_datasets <-
+  data_la_datasets %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      y = reorder(dataset_id, -age_mean),
+      yend = reorder(dataset_id, -age_mean),
+      x = age_min,
+      xend = age_max
+    )
+  ) +
+  ggplot2::geom_segment() +
+  ggplot2::theme(
+    axis.text.y = ggplot2::element_blank(),
+    axis.ticks.y = ggplot2::element_blank(),
+    legend.title = ggplot2::element_blank(),
+    legend.position = "none"
+  ) +
+  ggplot2::scale_x_continuous(
+    transform = "reverse",
+    breaks = seq(12e3, 6e3, -2e3),
+    labels = seq(12, 6, -2)
+  ) +
+  ggplot2::labs(
+    x = "Age (ka cal yr BP)",
+    y = "Records"
+  ) +
+  ggplot2::coord_cartesian(
+    #  xlim = c(min(limits), max(limits))
+  )
+
+fig_la_taxa <-
+  data_la_taxa %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      x = 1,
+      y = n
+    )
+  ) +
+  ggplot2::geom_violin() +
+  ggplot2::geom_boxplot(
+    width = 0.2,
+    outlier.shape = NA
+  ) +
+  ggplot2::theme(
+    axis.title.x = ggplot2::element_blank(),
+    axis.text.x = ggplot2::element_blank(),
+    axis.ticks.x = ggplot2::element_blank(),
+    legend.title = ggplot2::element_blank(),
+    legend.position = "none"
+  ) +
+  ggplot2::labs(
+    y = "N taxa per sample"
+  ) +
+  ggplot2::coord_cartesian(
+    #  xlim = c(min(limits), max(limits))
+  )
+
+fig_la_height <-
+  data_la_height %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      x = 1,
+      y = mean_value
+    )
+  ) +
+  ggplot2::geom_violin() +
+  ggplot2::geom_boxplot(
+    width = 0.2,
+    outlier.shape = NA
+  ) +
+  ggplot2::theme(
+    axis.title.x = ggplot2::element_blank(),
+    axis.text.x = ggplot2::element_blank(),
+    axis.ticks.x = ggplot2::element_blank(),
+    legend.title = ggplot2::element_blank(),
+    legend.position = "none"
+  ) +
+  ggplot2::labs(
+    y = "Average Plant heigh per taxa"
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = "log1p",
+    breaks = c(0, 10, 100, 1e3, 1e4, 1e5),
+    labels = scales::label_number()
+    #  xlim = c(min(limits), max(limits))
+  )
+
+cowplot::plot_grid(
+  fig_la_datasets,
+  fig_la_taxa,
+  fig_la_height,
+  nrow = 1
+)
 ```
