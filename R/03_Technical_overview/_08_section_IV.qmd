@@ -46,8 +46,435 @@ invisible(
 )
 ```
 
+The **VegVault** database can be accessed via our newly developed [{vaultkeepr} R-package](https://github.com/OndrejMottl/vaultkeepr), which provides a series of easy-to-use functions in [R programming language](https://en.wikipedia.org/wiki/R_(programming_language)).
+
+The {vaultkeepr} can be installed from [GitHub](https://github.com/) with:
+
+```{r}
+#| label: install
+#| eval: false
+#| echo: true
+# install.packages("remotes")
+remotes::install_github("OndrejMottl/vaultkeepr")
+```
+
+and then all functions will be made available by attaching as: 
+
+```{r}
+#| label: example
+#| eval: false
+#| echo: true
+library(vaultkeepr)
+```
+
 ## Example 1
+
+In the first example, we can imagine a scenario, where we are interested in spatiotemporal patterns of the *Picea* genus across North America for modern data and since the Last Glacial Maximum. Obtaining such data is straightforward:
+
+```{r}
+#| label: Example 1 - North America Picea
+#| echo: true
+# First create a plan
+plan_na_plots_picea <-
+  # Access the VegVault
+  open_vault(
+    path = paste0(
+      data_storage_path,
+      "Data/VegVault/VegVault.sqlite"
+    )
+  ) %>%
+  # Start by adding dataset information
+  get_datasets() %>%
+  # Select both modern and paleo plot data
+  select_dataset_by_type(
+    sel_type = c(
+      "vegetation_plot",
+      "fossil_pollen_archive"
+    )
+  ) %>%
+  # Limit data to North America
+  select_dataset_by_geo(
+    lat_lim = c(22, 60),
+    long_lim = c(-135, -60)
+  ) %>%
+  # Add samples
+  get_samples() %>%
+  # Limit the samples by age
+  select_samples_by_age(
+    age_lim = c(0, 15e3)
+  ) %>%
+  # Add taxa
+  get_taxa() %>%
+  # Harmonise all data to a genus level
+  harmonise_taxa(to = "genus") %>%
+  # Extract only Picea data
+  select_taxa(sel_taxa = c("Picea"))
+
+# Execute the plan
+data_na_plots_picea <-
+  extract_data(plan_na_plots_picea)
+```
+
+Now, we plot the presence of *Picea* in each 2500-year bin. 
+
+```{r}
+#| label: Example 1 - plot distribution
+
+time_step <- 2500
+
+data_dummy <-
+  tidyr::expand_grid(
+    data_na_plots_picea %>%
+      dplyr::distinct(coord_long, coord_lat),
+    age_bin = seq(0, 15e3, time_step)
+  )
+
+fig_na_plots_picea <-
+  data_na_plots_picea %>%
+  dplyr::filter(value > 0) %>%
+  dplyr::distinct(
+    dataset_type, dataset_id, coord_long, coord_lat, sample_id, age
+  ) %>%
+  dplyr::mutate(
+    age_bin = floor(age / time_step) * time_step
+  ) %>%
+  dplyr::mutate(
+    age_bin_class = dplyr::case_when(
+      .default = paste("paleo:", age_bin),
+      dataset_type == "vegetation_plot" ~ "modern",
+    ),
+    age_bin_class = factor(age_bin_class,
+      levels = c("modern", paste("paleo:", seq(0, 15e3, time_step)))
+    )
+  ) %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      x = coord_long,
+      y = coord_lat,
+    )
+  ) +
+  ggplot2::borders(
+    fill = "grey80",
+    col = NA
+  ) +
+  ggplot2::geom_point(
+    data = data_dummy,
+    shape = 20,
+    size = 1,
+    col = "grey50",
+  ) +
+  ggplot2::geom_point(
+    col = "blue",
+    size = 1
+  ) +
+  ggplot2::facet_wrap(
+    ~age_bin_class
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::coord_quickmap(
+    xlim = c(-135, -60),
+    ylim = c(22, 60)
+  ) +
+  ggplot2::labs(
+    x = "Latitude",
+    y = "Longitude"
+  )
+
+fig_na_plots_picea
+```
 
 ## Example 2
 
+In the second example, let's imagine we want to do Joined - Species Distribution Modeling for all plant taxa in the Czech Republic. We will extract modern plot-based data and climate.
+
+```{r}
+#| label: Example 2 - CZ JSDM
+#| echo: true
+# Again start by creating a plan
+plan_cz_modern <-
+  # Acess the VegVault file
+  open_vault(
+    path = paste0(
+      data_storage_path,
+      "Data/VegVault/VegVault.sqlite"
+    )
+  ) %>%
+  # Add the dataset information
+  get_datasets() %>%
+  # Select modern plot data and climate
+  select_dataset_by_type(
+    sel_type = c(
+      "vegetation_plot",
+      "gridpoints"
+    )
+  ) %>%
+  # Limit data to Czech Republic
+  select_dataset_by_geo(
+    lat_lim = c(48.5, 51.1),
+    long_lim = c(12, 18.9)
+  ) %>%
+  # Add samples
+  get_samples() %>%
+  # Now it is a good idea to make sure to only keep modern data
+  select_samples_by_age(
+    age_lim = c(0, 0)
+  ) %>%
+  # Add abiotic data
+  get_abiotic() %>%
+  # Select only Mean Anual Temperature (bio1)
+  select_abiotic_by_var(
+    sel_var = c("bio1")
+  ) %>%
+  # add taxa
+  get_taxa()
+
+# Execute the plan
+data_cz_modern <-
+  extract_data(plan_cz_modern)
+
+```
+
+Now we can simply plot both the climatic data and the plot vegetation data:
+
+```{r}
+#| label: Example 2 - plot
+data_climate <-
+  data_cz_modern %>%
+  dplyr::filter(dataset_type == "gridpoints") %>%
+  dplyr::select(dataset_type, dataset_id, coord_long, coord_lat, sample_id, value) %>%
+  tidyr::drop_na() %>%
+  dplyr::distinct()
+
+data_plots <-
+  data_cz_modern %>%
+  dplyr::filter(dataset_type == "vegetation_plot") %>%
+  dplyr::select(dataset_type, dataset_id, coord_long, coord_lat, sample_id) %>%
+  dplyr::distinct()
+
+fig_cz_modern <-
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      x = coord_long,
+      y = coord_lat
+    )
+  ) +
+  ggplot2::coord_quickmap(
+    xlim = c(12, 18.9),
+    ylim = c(48.5, 51.1)
+  ) +
+  ggplot2::labs(
+    title = stringr::str_wrap("Example 2: Distribution of plots", fig_width_def), # [quarto config]
+    x = "Longtitude",
+    y = "Latitude",
+    col = "Mean Annual Temperature (°C)",
+    fill = "Mean Annual Temperature (°C)",
+    caption = "Each point represents one community dataset"
+  ) +
+  ggplot2::scale_fill_viridis_c() +
+  ggplot2::scale_color_viridis_c() +
+  ggplot2::theme(
+    legend.position = "bottom"
+  ) +
+  ggplot2::geom_tile(
+    data = data_climate,
+    mapping = ggplot2::aes(
+      fill = value,
+      col = value
+    ),
+    width = 0.05,
+    height = 0.05,
+    alpha = 0.75,
+    linewidth = 0.1
+  ) +
+  ggplot2::borders(
+    fill = NA,
+    col = "red"
+  ) +
+  ggplot2::geom_point(
+    data = data_plots,
+    col = "black"
+  )
+
+fig_cz_modern
+```
+
 ## Example 3
+
+In the last example, let's imagine we want to reconstruct the Community Weighted Mean (CWM) of plant height for Latin America between 6-12 ka yr BP.
+
+```{r}
+#| label: Example 3 - LA CWM
+#| echo: true
+# Again start by creating a plan
+plan_la_traits <-
+  # Acess the VegVault file
+  open_vault(
+    path = paste0(
+      data_storage_path,
+      "Data/VegVault/VegVault.sqlite"
+    )
+  ) %>%
+  # Add the dataset information
+  get_datasets() %>%
+  # Select modern plot data and climate
+  select_dataset_by_type(
+    sel_type = c(
+      "fossil_pollen_archive",
+      "traits"
+    )
+  ) %>%
+  # Limit data to Latin America
+  select_dataset_by_geo(
+    lat_lim = c(-53, 28),
+    long_lim = c(-110, -38)
+  ) %>%
+  # Add samples
+  get_samples() %>%
+  # Limit to 6-12 ka yr BP
+  select_samples_by_age(
+    age_lim = c(6e3, 12e3)
+  ) %>%
+  # add taxa
+  get_taxa() %>%
+  # add trait information
+  get_traits() %>%
+  # Only select the plant height
+  select_traits_by_domain(
+    sel_domain = "Plant heigh"
+  )
+
+# Execute the plan
+data_la_traits <-
+  extract_data(plan_la_traits)
+```
+
+Now let's plot the overview of the data
+
+```{r}
+#| label: Example 3 - plot
+
+data_la_datasets <-
+  data_la_traits %>%
+  dplyr::filter(dataset_type == "fossil_pollen_archive") %>%
+  dplyr::distinct(dataset_id, sample_id, age) %>%
+  dplyr::group_by(dataset_id) %>%
+  dplyr::summarise(
+    .groups = "drop",
+    age_min = min(age),
+    age_mean = mean(age),
+    age_max = max(age)
+  )
+
+data_la_taxa <-
+  data_la_traits %>%
+  dplyr::filter(dataset_type == "fossil_pollen_archive") %>%
+  dplyr::distinct(dataset_id, sample_id, taxon_id) %>%
+  dplyr::group_by(dataset_id, sample_id) %>%
+  dplyr::count() %>%
+  dplyr::ungroup()
+
+data_la_height <-
+  data_la_traits %>%
+  dplyr::filter(dataset_type == "traits") %>%
+  dplyr::distinct(dataset_id, taxon_id_trait, .keep_all = TRUE) %>%
+  dplyr::select(taxon_id_trait, trait_value) %>%
+  dplyr::group_by(taxon_id_trait) %>%
+  dplyr::summarise(
+    mean_value = mean(trait_value)
+  ) %>%
+  tidyr::drop_na(mean_value)
+
+fig_la_datasets <-
+  data_la_datasets %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      y = reorder(dataset_id, -age_mean),
+      yend = reorder(dataset_id, -age_mean),
+      x = age_min,
+      xend = age_max
+    )
+  ) +
+  ggplot2::geom_segment() +
+  ggplot2::theme(
+    axis.text.y = ggplot2::element_blank(),
+    axis.ticks.y = ggplot2::element_blank(),
+    legend.title = ggplot2::element_blank(),
+    legend.position = "none"
+  ) +
+  ggplot2::scale_x_continuous(
+    transform = "reverse",
+    breaks = seq(12e3, 6e3, -2e3),
+    labels = seq(12, 6, -2)
+  ) +
+  ggplot2::labs(
+    x = "Age (ka cal yr BP)",
+    y = "Records"
+  ) +
+  ggplot2::coord_cartesian(
+    #  xlim = c(min(limits), max(limits))
+  )
+
+fig_la_taxa <-
+  data_la_taxa %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      x = 1,
+      y = n
+    )
+  ) +
+  ggplot2::geom_violin() +
+  ggplot2::geom_boxplot(
+    width = 0.2,
+    outlier.shape = NA
+  ) +
+  ggplot2::theme(
+    axis.title.x = ggplot2::element_blank(),
+    axis.text.x = ggplot2::element_blank(),
+    axis.ticks.x = ggplot2::element_blank(),
+    legend.title = ggplot2::element_blank(),
+    legend.position = "none"
+  ) +
+  ggplot2::labs(
+    y = "N taxa per sample"
+  ) +
+  ggplot2::coord_cartesian(
+    #  xlim = c(min(limits), max(limits))
+  )
+
+fig_la_height <-
+  data_la_height %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      x = 1,
+      y = mean_value
+    )
+  ) +
+  ggplot2::geom_violin() +
+  ggplot2::geom_boxplot(
+    width = 0.2,
+    outlier.shape = NA
+  ) +
+  ggplot2::theme(
+    axis.title.x = ggplot2::element_blank(),
+    axis.text.x = ggplot2::element_blank(),
+    axis.ticks.x = ggplot2::element_blank(),
+    legend.title = ggplot2::element_blank(),
+    legend.position = "none"
+  ) +
+  ggplot2::labs(
+    y = "Average Plant heigh per taxa"
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = "log1p",
+    breaks = c(0, 10, 100, 1e3, 1e4, 1e5),
+    labels = scales::label_number()
+    #  xlim = c(min(limits), max(limits))
+  )
+
+cowplot::plot_grid(
+  fig_la_datasets,
+  fig_la_taxa,
+  fig_la_height,
+  nrow = 1
+)
+```
