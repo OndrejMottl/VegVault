@@ -415,6 +415,26 @@ of the state of the database.
 # Section IV: Examples of usage
 
 
+The **VegVault** database can be accessed via our newly developed
+[{vaultkeepr} R-package](https://github.com/OndrejMottl/vaultkeepr),
+which provides a series of easy-to-use functions in [R programming
+language](https://en.wikipedia.org/wiki/R_(programming_language)).
+
+The {vaultkeepr} can be installed from [GitHub](https://github.com/)
+with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("OndrejMottl/vaultkeepr")
+```
+
+and then all functions will be made available by attaching as:
+
+``` r
+# install.packages("remotes")
+library(vaultkeepr)
+```
+
 ## Example 1
 
 In the first example, we can imagine a scenario, where we are interested
@@ -527,8 +547,8 @@ data-fig-align="center" />
 
 ## Example 3
 
-In the last example, let’s imagine we want to recostruct the Community
-Weighted Mean (CWM) of plant heigh for Latin America between 6-12 ka yr
+In the last example, let’s imagine we want to reconstruct the Community
+Weighted Mean (CWM) of plant height for Latin America between 6-12 ka yr
 BP.
 
 ``` r
@@ -575,7 +595,7 @@ data_la_traits <-
   extract_data(plan_la_traits)
 ```
 
-Now lets plot the overview of the data
+Now let’s plot the overview of the data
 
 <img src="figures/Example%203%20-%20plot-1.png" style="width:100.0%"
 data-fig-align="center" />

@@ -97,6 +97,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>The <strong>VegVault</strong> database can be accessed via our newly developed <a href="https://github.com/OndrejMottl/vaultkeepr">{vaultkeepr} R-package</a>, which provides a series of easy-to-use functions in <a href="https://en.wikipedia.org/wiki/R_(programming_language)">R programming language</a>.</p>
+<p>The {vaultkeepr} can be installed from <a href="https://github.com/">GitHub</a> with:</p>
+<p>and then all functions will be made available by attaching as:</p>
 <section id="example-1" class="level2">
 <h2 class="anchored" data-anchor-id="example-1">Example 1</h2>
 <p>In the first example, we can imagine a scenario, where we are interested in spatiotemporal patterns of the <em>Picea</em> genus across North America for modern data and since the Last Glacial Maximum. Obtaining such data is straightforward:</p>
@@ -211,7 +214,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="example-3" class="level2">
 <h2 class="anchored" data-anchor-id="example-3">Example 3</h2>
-<p>In the last example, let’s imagine we want to recostruct the Community Weighted Mean (CWM) of plant heigh for Latin America between 6-12 ka yr BP.</p>
+<p>In the last example, let’s imagine we want to reconstruct the Community Weighted Mean (CWM) of plant height for Latin America between 6-12 ka yr BP.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Again start by creating a plan</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plan_la_traits <span class="ot">&lt;-</span></span>
@@ -255,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>data_la_traits <span class="ot">&lt;-</span></span>
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_data</span>(plan_la_traits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now lets plot the overview of the data</p>
+<p>Now let’s plot the overview of the data</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
