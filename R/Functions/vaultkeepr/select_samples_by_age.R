@@ -1,4 +1,7 @@
-select_samples_by_age <- function(con, age_lim = c(-Inf, Inf)) {
+select_samples_by_age <- function(
+    con,
+    age_lim = c(-Inf, Inf),
+    sel_dataset_type = c("vegetation_plot", "fossil_pollen_archive", "gridpoints")) {
   # test various things
   sel_con <- con$db_con
 
@@ -30,21 +33,15 @@ select_samples_by_age <- function(con, age_lim = c(-Inf, Inf)) {
         .default = TRUE,
         is.na(age) &
           (dataset_type %in% c(
-            "vegetation_plot",
-            "fossil_pollen_archive",
-            "gridpoints"
+            sel_dataset_type
           )) ~ FALSE,
         (age < age_lim_min) &
           (dataset_type %in% c(
-            "vegetation_plot",
-            "fossil_pollen_archive",
-            "gridpoints"
+            sel_dataset_type
           )) ~ FALSE,
         (age > age_lim_max) &
           (dataset_type %in% c(
-            "vegetation_plot",
-            "fossil_pollen_archive",
-            "gridpoints"
+            sel_dataset_type
           )) ~ FALSE
       )
     ) %>%
