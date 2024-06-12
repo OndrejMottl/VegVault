@@ -1,4 +1,6 @@
-get_taxa <- function(con) {
+get_taxa <- function(
+    con,
+    classify_to = c("original", "species", "genus", "family")) {
   # test various things
   sel_con <- con$db_con
 
@@ -7,10 +9,17 @@ get_taxa <- function(con) {
   # test for presence of abiotic and/or trait values and output a warning
   #  that the column is going to be renamed
 
+  data_taxa <-
+    classify_taxa(
+      data_source = dplyr::tbl(sel_con, "SampleTaxa"),
+      con = sel_con,
+      to = classify_to
+    )
+
   data_res <-
     sel_data %>%
     dplyr::left_join(
-      dplyr::tbl(sel_con, "SampleTaxa"),
+      data_taxa,
       by = "sample_id",
       suffix = c("", "_taxa")
     )
