@@ -17,7 +17,6 @@ remotes::install_github("OndrejMottl/vaultkeepr")
 and then all functions will be made available by attaching as:
 
 ``` r
-# install.packages("remotes")
 library(vaultkeepr)
 ```
 
@@ -32,42 +31,43 @@ straightforward:
 # First create a plan
 plan_na_plots_picea <-
   # Access the VegVault
-  open_vault(
+  vaultkeepr::open_vault(
     path = paste0(
       data_storage_path,
       "Data/VegVault/VegVault.sqlite"
     )
   ) %>%
   # Start by adding dataset information
-  get_datasets() %>%
+  vaultkeepr::get_datasets() %>%
   # Select both modern and paleo plot data
-  select_dataset_by_type(
-    sel_type = c(
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c(
       "vegetation_plot",
       "fossil_pollen_archive"
     )
   ) %>%
   # Limit data to North America
-  select_dataset_by_geo(
+  vaultkeepr::select_dataset_by_geo(
     lat_lim = c(22, 60),
     long_lim = c(-135, -60)
   ) %>%
   # Add samples
-  get_samples() %>%
+  vaultkeepr::get_samples() %>%
   # Limit the samples by age
-  select_samples_by_age(
+  vaultkeepr::select_samples_by_age(
     age_lim = c(0, 15e3)
   ) %>%
   # Add taxa
-  get_taxa() %>%
-  # Harmonise all data to a genus level
-  harmonise_taxa(to = "genus") %>%
+  vaultkeepr::get_taxa(
+    # Classify all data to a genus level
+    classify_to = "genus"
+  ) %>%
   # Extract only Picea data
-  select_taxa(sel_taxa = c("Picea"))
+  vaultkeepr::select_taxa_by_name(sel_taxa = c("Picea"))
 
 # Execute the plan
 data_na_plots_picea <-
-  extract_data(plan_na_plots_picea)
+  vaultkeepr::extract_data(plan_na_plots_picea)
 ```
 
 Now, we plot the presence of *Picea* in each 2500-year bin.
@@ -77,52 +77,48 @@ style="width:100.0%" data-fig-align="center" />
 
 ## Example 2
 
-In the second example, let’s imagine we want to do Joined - Species
-Distribution Modeling for all plant taxa in the Czech Republic. We will
-extract modern plot-based data and climate.
+In the second example, let’s imagine we want to do Species Distribution
+Modeling for all plant taxa in the Czech Republic. We will extract
+modern plot-based data and soil-types.
 
 ``` r
 # Again start by creating a plan
 plan_cz_modern <-
   # Acess the VegVault file
-  open_vault(
+  vaultkeepr::open_vault(
     path = paste0(
       data_storage_path,
       "Data/VegVault/VegVault.sqlite"
     )
   ) %>%
   # Add the dataset information
-  get_datasets() %>%
+  vaultkeepr::get_datasets() %>%
   # Select modern plot data and climate
-  select_dataset_by_type(
-    sel_type = c(
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c(
       "vegetation_plot",
       "gridpoints"
     )
   ) %>%
   # Limit data to Czech Republic
-  select_dataset_by_geo(
+  vaultkeepr::select_dataset_by_geo(
     lat_lim = c(48.5, 51.1),
     long_lim = c(12, 18.9)
   ) %>%
   # Add samples
-  get_samples() %>%
-  # Now it is a good idea to make sure to only keep modern data
-  select_samples_by_age(
-    age_lim = c(0, 0)
-  ) %>%
+  vaultkeepr::get_samples() %>%
   # Add abiotic data
-  get_abiotic() %>%
+  vaultkeepr::get_abiotic() %>%
   # Select only Mean Anual Temperature (bio1)
-  select_abiotic_by_var(
-    sel_var = c("bio1")
+  vaultkeepr::select_abiotic_var_by_name(
+    sel_var_name = "HWSD2"
   ) %>%
   # add taxa
-  get_taxa()
+  vaultkeepr::get_taxa()
 
 # Execute the plan
 data_cz_modern <-
-  extract_data(plan_cz_modern)
+  vaultkeepr::extract_data(plan_cz_modern)
 ```
 
 Now we can simply plot both the climatic data and the plot vegetation
@@ -141,44 +137,50 @@ BP.
 # Again start by creating a plan
 plan_la_traits <-
   # Acess the VegVault file
-  open_vault(
+  vaultkeepr::open_vault(
     path = paste0(
       data_storage_path,
       "Data/VegVault/VegVault.sqlite"
     )
   ) %>%
   # Add the dataset information
-  get_datasets() %>%
+  vaultkeepr::get_datasets() %>%
   # Select modern plot data and climate
-  select_dataset_by_type(
-    sel_type = c(
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c(
       "fossil_pollen_archive",
       "traits"
     )
   ) %>%
   # Limit data to Latin America
-  select_dataset_by_geo(
+  vaultkeepr::select_dataset_by_geo(
     lat_lim = c(-53, 28),
     long_lim = c(-110, -38)
   ) %>%
   # Add samples
-  get_samples() %>%
+  vaultkeepr::get_samples() %>%
   # Limit to 6-12 ka yr BP
-  select_samples_by_age(
+  vaultkeepr::select_samples_by_age(
     age_lim = c(6e3, 12e3)
   ) %>%
   # add taxa
-  get_taxa() %>%
+  vaultkeepr::get_taxa(
+    # Clasify all data to a genus level
+    classify_to = "genus"
+  ) %>%
   # add trait information
-  get_traits() %>%
+  vaultkeepr::get_traits(
+    # Clasify all data to a genus level
+    classify_to = "genus"
+  ) %>%
   # Only select the plant height
-  select_traits_by_domain(
+  vaultkeepr::select_traits_by_domain_name(
     sel_domain = "Plant heigh"
   )
 
 # Execute the plan
 data_la_traits <-
-  extract_data(plan_la_traits)
+  vaultkeepr::extract_data(plan_la_traits)
 ```
 
 Now let’s plot the overview of the data
