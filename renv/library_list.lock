@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.2.3",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -2727,6 +2727,26 @@
         "R"
       ],
       "Hash": "303c19bfd970bece872f93a824e323d9"
+    },
+    "vaultkeepr": {
+      "Package": "vaultkeepr",
+      "Version": "0.0.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "vaultkeepr",
+      "RemoteUsername": "OndrejMottl",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "1d38e5818cd0ec31674828a27aba8cfc29601138",
+      "Requirements": [
+        "DBI",
+        "RSQLite",
+        "assertthat",
+        "magrittr",
+        "rlang",
+        "tibble"
+      ],
+      "Hash": "6380cce55f95f5584a05085d5bbd06cf"
     },
     "vctrs": {
       "Package": "vctrs",
