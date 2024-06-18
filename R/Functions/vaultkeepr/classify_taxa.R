@@ -1,9 +1,5 @@
-harmonise_taxa <- function(con, to = c("original", "species", "genus", "family")) {
+classify_taxa <- function(data_source, con, to = c("original", "species", "genus", "family")) {
   # test various things
-  sel_con <- con$db_con
-
-  sel_data <- con$data
-
   to_long <- switch(to,
     original = "taxon_id",
     species = "taxon_species",
@@ -12,11 +8,11 @@ harmonise_taxa <- function(con, to = c("original", "species", "genus", "family")
   )
 
   if (to_long == "taxon_id") {
-    return(con)
+    return(data_source)
   }
 
   data_class_sub <-
-    dplyr::tbl(sel_con, "TaxonClassification") %>%
+    dplyr::tbl(con, "TaxonClassification") %>%
     dplyr::select(
       taxon_id,
       dplyr::all_of(to_long)
@@ -26,7 +22,7 @@ harmonise_taxa <- function(con, to = c("original", "species", "genus", "family")
     )
 
   data_res <-
-    sel_data %>%
+    data_source %>%
     dplyr::left_join(
       data_class_sub,
       by = "taxon_id"
@@ -38,14 +34,5 @@ harmonise_taxa <- function(con, to = c("original", "species", "genus", "family")
       taxon_id = taxon_id_new
     )
 
-  res <-
-    structure(
-      list(
-        data = data_res,
-        db_con = sel_con
-      ),
-      class = c("list", "vault_pipe")
-    )
-
-  return(res)
+  return(data_res)
 }

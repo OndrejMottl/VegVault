@@ -104,9 +104,10 @@ plan_na_plots_picea <-
     age_lim = c(0, 15e3)
   ) %>%
   # Add taxa
-  get_taxa() %>%
-  # Harmonise all data to a genus level
-  harmonise_taxa(to = "genus") %>%
+  get_taxa(
+    # Classify all data to a genus level
+    classify_to = "genus"
+  ) %>%
   # Extract only Picea data
   select_taxa(sel_taxa = c("Picea"))
 
@@ -121,13 +122,6 @@ Now, we plot the presence of *Picea* in each 2500-year bin.
 #| label: Example 1 - plot distribution
 
 time_step <- 2500
-
-data_dummy <-
-  tidyr::expand_grid(
-    data_na_plots_picea %>%
-      dplyr::distinct(coord_long, coord_lat),
-    age_bin = seq(0, 15e3, time_step)
-  )
 
 fig_na_plots_picea <-
   data_na_plots_picea %>%
@@ -158,12 +152,6 @@ fig_na_plots_picea <-
     col = NA
   ) +
   ggplot2::geom_point(
-    data = data_dummy,
-    shape = 20,
-    size = 1,
-    col = "grey50",
-  ) +
-  ggplot2::geom_point(
     col = "blue",
     size = 1
   ) +
@@ -185,7 +173,7 @@ fig_na_plots_picea
 
 ## Example 2
 
-In the second example, let's imagine we want to do Joined - Species Distribution Modeling for all plant taxa in the Czech Republic. We will extract modern plot-based data and climate.
+In the second example, let's imagine we want to do Species Distribution Modeling for all plant taxa in the Czech Republic. We will extract modern plot-based data and soil-types.
 
 ```{r}
 #| label: Example 2 - CZ JSDM
@@ -223,10 +211,12 @@ plan_cz_modern <-
   get_abiotic() %>%
   # Select only Mean Anual Temperature (bio1)
   select_abiotic_by_var(
-    sel_var = c("bio1")
+    sel_var = c("HWSD2")
   ) %>%
   # add taxa
-  get_taxa()
+  get_taxa(
+    classify_to = "original"
+  )
 
 # Execute the plan
 data_cz_modern <-
@@ -266,20 +256,25 @@ fig_cz_modern <-
     title = stringr::str_wrap("Example 2: Distribution of plots", fig_width_def), # [quarto config]
     x = "Longtitude",
     y = "Latitude",
-    col = "Mean Annual Temperature (°C)",
-    fill = "Mean Annual Temperature (°C)",
+    col = "WoSIS soil type (class)",
+    fill = "WoSIS soil type (class)",
     caption = "Each point represents one community dataset"
   ) +
-  ggplot2::scale_fill_viridis_c() +
-  ggplot2::scale_color_viridis_c() +
+  ggplot2::scale_fill_viridis_d() +
+  ggplot2::scale_color_viridis_d() +
+  ggplot2::guides(
+    fill = ggplot2::guide_legend(
+      nrow = 2
+    )
+  ) +
   ggplot2::theme(
     legend.position = "bottom"
   ) +
   ggplot2::geom_tile(
     data = data_climate,
     mapping = ggplot2::aes(
-      fill = value,
-      col = value
+      fill = as.factor(value),
+      col = as.factor(value)
     ),
     width = 0.05,
     height = 0.05,
@@ -335,9 +330,16 @@ plan_la_traits <-
     age_lim = c(6e3, 12e3)
   ) %>%
   # add taxa
-  get_taxa() %>%
+  get_taxa(
+    # Clasify all data to a genus level
+    classify_to = "genus"
+  ) %>%
+  harmonise_taxa(to = "genus") %>%
   # add trait information
-  get_traits() %>%
+  get_traits(
+    # Clasify all data to a genus level
+    classify_to = "genus"
+  ) %>%
   # Only select the plant height
   select_traits_by_domain(
     sel_domain = "Plant heigh"
@@ -352,6 +354,10 @@ Now let's plot the overview of the data
 
 ```{r}
 #| label: Example 3 - plot
+db_genus <-
+  dplyr::tbl(plan_la_traits$db_con, "TaxonClassification") %>%
+  dplyr::distinct(taxon_genus) %>%
+  dplyr::collect()
 
 data_la_datasets <-
   data_la_traits %>%
@@ -373,6 +379,25 @@ data_la_taxa <-
   dplyr::count() %>%
   dplyr::ungroup()
 
+dplyr::inner_join(
+  data_la_taxa,
+  db_genus,
+  by = dplyr::join_by(taxon_id == taxon_genus)
+)
+
+data_la_height <-
+  data_la_traits %>%
+  dplyr::filter(dataset_type == "traits") %>%
+  dplyr::distinct(dataset_id, taxon_id_trait) %>%
+  tidyr::drop_na(taxon_id_trait)
+
+dplyr::inner_join(
+  data_la_height,
+  db_genus,
+  by = dplyr::join_by(taxon_id_trait == taxon_genus)
+)
+
+
 data_la_height <-
   data_la_traits %>%
   dplyr::filter(dataset_type == "traits") %>%
@@ -383,6 +408,8 @@ data_la_height <-
     mean_value = mean(trait_value)
   ) %>%
   tidyr::drop_na(mean_value)
+
+
 
 fig_la_datasets <-
   data_la_datasets %>%
@@ -435,7 +462,7 @@ fig_la_taxa <-
     legend.position = "none"
   ) +
   ggplot2::labs(
-    y = "N taxa per sample"
+    y = "N genera per sample"
   ) +
   ggplot2::coord_cartesian(
     #  xlim = c(min(limits), max(limits))
@@ -462,7 +489,7 @@ fig_la_height <-
     legend.position = "none"
   ) +
   ggplot2::labs(
-    y = "Average Plant heigh per taxa"
+    y = "Average Plant heigh per genera"
   ) +
   ggplot2::scale_y_continuous(
     transform = "log1p",

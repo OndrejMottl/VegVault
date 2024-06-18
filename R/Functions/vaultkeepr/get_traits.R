@@ -1,8 +1,25 @@
-get_traits <- function(con) {
+get_traits <- function(
+    con,
+    classify_to = c("original", "species", "genus", "family")) {
   # test various things
   sel_con <- con$db_con
 
   sel_data <- con$data
+
+  data_taxa <-
+    sel_data %>%
+    dplyr::distinct(taxon_id)
+
+  data_traits <-
+    dplyr::tbl(sel_con, "TraitsValue") %>%
+    classify_taxa(
+      con = sel_con,
+      to = classify_to
+    ) %>%
+    dplyr::inner_join(
+      data_taxa,
+      by = "taxon_id"
+    )
 
   # test for presence of abiotic and/or trait values and output a warning
   #  that the column is going to be renamed
@@ -10,7 +27,7 @@ get_traits <- function(con) {
   data_res <-
     sel_data %>%
     dplyr::left_join(
-      dplyr::tbl(sel_con, "TraitsValue"),
+      data_traits,
       by = c("dataset_id", "sample_id"),
       suffix = c("", "_trait")
     )
