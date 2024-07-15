@@ -154,7 +154,14 @@ Table TraitsReference {
 Table AbioticData {
   sample_id INTEGER
   abiotic_variable_id INTEGER
-  value REAL
+  abiotic_value REAL
+}
+
+Table AbioticDataReference {
+  sample_id INTEGER
+  sample_ref_id INTEGER
+  distance_in_km INTEGER
+  distance_in_years INTEGER
 }
 
 Table AbioticVariable {
@@ -225,6 +232,8 @@ Ref: TraitsValue.sample_id > Samples.sample_id
 Ref: TraitsValue.taxon_id > Taxa.taxon_id 
 
 Ref: AbioticVariable.abiotic_variable_id < AbioticData.abiotic_variable_id
+Ref: AbioticDataReference.sample_id > Samples.sample_id
+Ref: AbioticDataReference.sample_ref_id > Samples.sample_id
 
 Ref: AbioticVariableReference.abiotic_variable_id > AbioticVariable.abiotic_variable_id
 Ref: AbioticVariableReference.reference_id > References.reference_id

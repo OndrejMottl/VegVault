@@ -141,10 +141,20 @@ CREATE TABLE "TraitsReference" (
 CREATE TABLE "AbioticData" (
   "sample_id" INTEGER,
   "abiotic_variable_id" INTEGER,
-  "value" REAL,
+  "abiotic_value" REAL,
   FOREIGN KEY ("sample_id") REFERENCES "Samples" ("sample_id"),
   FOREIGN KEY ("abiotic_variable_id") REFERENCES "AbioticVariable" ("abiotic_variable_id")
 );
+
+CREATE TABLE "AbioticDataReference" (
+  "sample_id" INTEGER,
+  "sample_ref_id" INTEGER,
+  "distance_in_km" INTEGER,
+  "distance_in_years" INTEGER,
+  FOREIGN KEY ("sample_id") REFERENCES "Samples" ("sample_id"),
+  FOREIGN KEY ("sample_ref_id") REFERENCES "Samples" ("sample_id")
+);
+
 CREATE TABLE "AbioticVariable" (
   "abiotic_variable_id" INTEGER PRIMARY KEY,
   "abiotic_variable_name" TEXT,
