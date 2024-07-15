@@ -48,7 +48,8 @@ add_sample_abiotic_value <- function(
       by = dplyr::join_by(abiotic_variable_name)
     ) %>%
     dplyr::select(
-      sample_id, abiotic_variable_id, value
+      sample_id, abiotic_variable_id, 
+      abiotic_value = value
     )
 
   data_sample_value_unique <-
