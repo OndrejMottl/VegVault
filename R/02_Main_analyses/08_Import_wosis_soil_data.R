@@ -26,6 +26,11 @@ source(
   )
 )
 
+# limit gridpoints
+sel_grid_size_degree <- 2
+sel_distance_km <- 50
+sel_distance_years <- 5e3
+
 
 #----------------------------------------------------------#
 # 1. Connect to db -----
@@ -61,6 +66,8 @@ data_wosis <-
 #----------------------------------------------------------#
 # 3. Add data -----
 #----------------------------------------------------------#
+
+# 3.1 Datasets -----
 
 data_wosis_dataset_raw <-
   data_wosis %>%
@@ -113,8 +120,8 @@ wosis_dataset_id_db <-
     dataset_source = data_wosis_data_source_id_db
   )
 
+# 3.2 Samples -----
 
-# samples -----
 data_wosis_samples_raw <-
   data_wosis_dataset_raw %>%
   dplyr::left_join(
@@ -137,29 +144,101 @@ data_wosis_samples_raw <-
     var_detail = "WoSIS-SoilGrids"
   )
 
+data_bd_vegetation <-
+  vaultkeepr::open_vault(
+    path = paste0(
+      data_storage_path,
+      "Data/VegVault/VegVault.sqlite"
+    )
+  ) %>%
+  vaultkeepr::get_datasets() %>%
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c("vegetation_plot", "fossil_pollen_archive", "traits")
+  ) %>%
+  vaultkeepr::select_dataset_by_geo(
+    sel_dataset_type = c("vegetation_plot", "fossil_pollen_archive", "traits"),
+    long_lim = c(-180, 180),
+    lat_lim = c(-90, 90)
+  ) %>%
+  vaultkeepr::get_samples() %>%
+  vaultkeepr::select_samples_by_age(
+    sel_dataset_type = c("vegetation_plot", "fossil_pollen_archive", "traits"),
+    # just very large number to get rid of NAs
+    age_lim = c(-1e10, 1e10)
+  ) %>%
+  vaultkeepr::extract_data() %>%
+  dplyr::distinct(dataset_id, sample_name, coord_long, coord_lat, age)
+
+
+data_wosis_samples_to_limit <-
+  data_wosis_samples_raw %>%
+  dplyr::distinct(dataset_id, sample_name, coord_long, coord_lat, age)
+
+data_sample_link <-
+  data_bd_vegetation %>%
+  dplyr::mutate(
+    batch = 1 + (dplyr::row_number() - 1) %/% 5000
+  ) %>%
+  dplyr::group_by(batch) %>%
+  tidyr::nest(data = -batch) %>%
+  dplyr::ungroup() %>%
+  purrr::chuck("data") %>%
+  rlang::set_names(paste0("batch_", 1:length(.))) %>%
+  purrr::imap(
+    .progress = "filtering gripoints samples",
+    .f = ~ {
+      message(.y)
+      get_gridpoints_link(
+        data_source = .x,
+        data_source_gridpoints = data_wosis_samples_to_limit,
+        sel_grid_size_degree = sel_grid_size_degree,
+        sel_distance_km = sel_distance_km,
+        sel_distance_years = sel_distance_years
+      ) %>%
+        return()
+    }
+  ) %>%
+  dplyr::bind_rows()
+
+vec_sample_name_to_keep <-
+  data_sample_link %>%
+  dplyr::distinct(sample_name_gridpoints) %>%
+  dplyr::arrange(sample_name_gridpoints) %>%
+  dplyr::pull(sample_name_gridpoints)
+
+data_wosis_samples_filter <-
+  data_wosis_samples_raw %>%
+  dplyr::filter(sample_name %in% vec_sample_name_to_keep)
+
 wosis_samples_id_db <-
   add_samples(
-    data_source = data_wosis_samples_raw,
+    data_source = data_wosis_samples_filter,
     con = con
   )
 
 # Dataset - Sample -----
 add_dataset_sample(
-  data_source = data_wosis_samples_raw,
+  data_source = data_wosis_samples_filter,
   con = con,
   dataset_id = wosis_dataset_id_db,
   sample_id = wosis_samples_id_db
 )
 
+# Abiotic sample reference
+add_abiotic_data_ref(
+  data_source = data_sample_link,
+  con = con
+)
+
 # Abiotic varibale
 abiotic_variabe_id <-
   add_abiotic_variable(
-    data_source = data_wosis_samples_raw,
+    data_source = data_wosis_samples_filter,
     con = con
   )
 
 add_sample_abiotic_value(
-  data_source = data_wosis_samples_raw,
+  data_source = data_wosis_samples_filter,
   con = con,
   sample_id = wosis_samples_id_db,
   abiotic_variable_id = abiotic_variabe_id
