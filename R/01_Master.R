@@ -72,10 +72,10 @@ source(
   )
 )
 
-# Import CHELSA-TRACE21K climate data
+# Make gridpoints
 source(
   here::here(
-    "R/02_Main_analyses/06_Import_chelsa_trace21k_climate_data.R"
+    "R/02_Main_analyses/06_Create_gridpoints.R"
   )
 )
 
@@ -86,16 +86,23 @@ source(
   )
 )
 
+# Import CHELSA-TRACE21K climate data
+source(
+  here::here(
+    "R/02_Main_analyses/08_Import_chelsa_trace21k_climate_data.R"
+  )
+)
+
 # Import WOSIS soil data
 source(
   here::here(
-    "R/02_Main_analyses/08_Import_wosis_soil_data.R"
+    "R/02_Main_analyses/09_Import_wosis_soil_data.R"
   )
 )
 
 # Classify all taxa in DB
 source(
   here::here(
-    "/R/02_Main_analyses/09_Classify_taxa.R"
+    "/R/02_Main_analyses/10_Classify_taxa.R"
   )
 )

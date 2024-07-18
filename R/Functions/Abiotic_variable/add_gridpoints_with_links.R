@@ -56,43 +56,9 @@ add_gridpoints_with_links <- function(
       .data$age
     )
 
-
-  # check if there are any previous data about links
-
-  data_db_abiotic_ref <-
-    dplyr::tbl(sel_con, "AbioticDataReference") %>%
-    dplyr::select("sample_id", "sample_ref_id") %>%
-    dplyr::left_join(
-      dplyr::tbl(sel_con, "Samples") %>%
-        dplyr::select("sample_id", "sample_name"),
-      by = dplyr::join_by("sample_id")
-    ) %>%
-    dplyr::left_join(
-      dplyr::tbl(sel_con, "Samples") %>%
-        dplyr::select("sample_id", "sample_name"),
-      by = dplyr::join_by("sample_ref_id" == "sample_id"),
-      suffix = c("", "_ref")
-    ) %>%
-    dplyr::distinct(.data$sample_name, .data$sample_name_ref) %>%
-    dplyr::collect()
-
-  vec_relevant_vegetation_sample_names <-
-    data_db_abiotic_ref %>%
-    dplyr::filter(
-      .data$sample_name_ref %in% unique(data_gridpoints_raw$sample_name)
-    ) %>%
-    dplyr::distinct(.data$sample_name) %>%
-    purrr::chuck("sample_name")
-
-  data_bd_vegetation_sub <-
-    data_bd_vegetation_raw %>%
-    dplyr::filter(
-      !.data$sample_name %in% vec_relevant_vegetation_sample_names
-    )
-
   # nest the and create dictionary of samples and link to gridpoints samples
   data_bd_vegetation_nest <-
-    data_bd_vegetation_sub %>%
+    data_bd_vegetation_raw %>%
     dplyr::distinct(
       .data$dataset_name, .data$sample_name,
       .data$coord_long, .data$coord_lat,
@@ -130,7 +96,7 @@ add_gridpoints_with_links <- function(
       .data$age
     ) %>%
     dplyr::rename(
-      sample = .data$sample_name
+      sample = "sample_name"
     ) %>%
     dplyr::rename_with(
       ~ paste0("grid_", .x)

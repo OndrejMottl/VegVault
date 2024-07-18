@@ -59,6 +59,7 @@ url_gh_abiotic <-
 #----------------------------------------------------------#
 
 add_chelsa_neo_data(
+  sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
     "CHELSA_bio_01_2024-01-03__811f09c0d86581eae1d3458e6d795cf2__.qs"
@@ -75,6 +76,7 @@ add_chelsa_neo_data(
 #----------------------------------------------------------#
 
 add_chelsa_neo_data(
+  sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
     "CHELSA_bio_04_2024-01-03__894c6d295414ecd53b9d9890d98e3f64__.qs"
@@ -91,6 +93,7 @@ add_chelsa_neo_data(
 #----------------------------------------------------------#
 
 add_chelsa_neo_data(
+  sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
     "CHELSA_bio_06_2024-01-03__fdf92f7e1ee51114f76c7282e3271fa9__.qs"
@@ -107,6 +110,7 @@ add_chelsa_neo_data(
 #----------------------------------------------------------#
 
 add_chelsa_neo_data(
+  sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
     "CHELSA_bio_12_2024-01-03__c0ea80d954d234afcf0a847bf353dcfe__.qs"
@@ -123,6 +127,7 @@ add_chelsa_neo_data(
 #----------------------------------------------------------#
 
 add_chelsa_neo_data(
+  sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
     "CHELSA_bio_15_2024-01-03__ebe80c5d46f45e0953a5f8efcdcf27f1__.qs"
@@ -139,6 +144,7 @@ add_chelsa_neo_data(
 #----------------------------------------------------------#
 
 add_chelsa_neo_data(
+  sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
     "CHELSA_bio_18_2024-01-03__038a79f5cec5e82d34ae4da98a687795__.qs"
@@ -155,6 +161,7 @@ add_chelsa_neo_data(
 #----------------------------------------------------------#
 
 add_chelsa_neo_data(
+  sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
     "CHELSA_bio_19_2024-01-03__9dae291cd952506b5dd4112c16762c97__.qs"
