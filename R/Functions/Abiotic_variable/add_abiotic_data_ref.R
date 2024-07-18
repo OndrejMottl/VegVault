@@ -10,11 +10,6 @@ add_abiotic_data_ref <- function(data_source, con) {
     msg = "data_source must have columns 'sample_name' and 'sample_name_gridpoints'"
   )
 
-  assertthat::assert_that(
-    assertthat::has_name(sample_id, "sample_id"),
-    msg = "sample_id must have column 'sample_id'"
-  )
-
   sample_id_db <-
     dplyr::tbl(con, "Samples") %>%
     dplyr::select(sample_id, sample_name) %>%
