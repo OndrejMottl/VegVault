@@ -1,4 +1,5 @@
 add_chelsa_trace_data <- function(
+    sel_con,
     sel_url,
     sel_hash,
     sel_var_name,
@@ -8,6 +9,8 @@ add_chelsa_trace_data <- function(
     sel_grid_size_degree = 2,
     sel_distance_km = 50,
     sel_distance_years = 5e3) {
+  `%>%` <- magrittr::`%>%`
+  .data <- rlang::.data
   current_env <- environment()
 
   # download and load ---
@@ -31,7 +34,7 @@ add_chelsa_trace_data <- function(
   )
 
   # Datasets -----
-  data_climate_dataset_raw <-
+  data_climate_raw <-
     data_climate %>%
     dplyr::mutate(
       dataset_type = "gridpoints",
@@ -40,76 +43,34 @@ add_chelsa_trace_data <- function(
       data_source_desc = "gridpoints",
       data_source_reference = "artificially created by O. Mottl",
       dataset_reference = "artificially created by O. Mottl",
-      coord_long = as.numeric(long),
-      coord_lat = as.numeric(lat),
-      age = (-as.numeric(time_id) * 100) + 2000
+      coord_long = as.numeric(.data$long),
+      coord_lat = as.numeric(.data$lat),
+      age = (-as.numeric(.data$time_id) * 100) + 1950
     ) %>%
-    dplyr::select(-time_id) %>%
+    dplyr::select(-"time_id") %>%
     # we do not want to use the 0 age
     #   as it would get confused with modern values
-    dplyr::filter(age != 0) %>%
+    dplyr::filter(.data$age > 0) %>%
     tidyr::nest(
       data_samples = c(
-        age,
-        value
+        .data$age,
+        .data$value
       )
     ) %>%
     dplyr::mutate(
       dataset_name = paste(
-        "geo", round(coord_long, digits = 2), round(coord_lat, digits = 2),
+        "geo",
+        round(.data$coord_long, digits = 2),
+        round(.data$coord_lat, digits = 2),
         sep = "_"
       )
-    )
-
-  # dataset type -----
-  data_climate_dataset_type_db <-
-    add_dataset_type(
-      data_source = data_climate_dataset_raw,
-      con = con
-    )
-
-  # dataset source type -----
-  data_climate_dataset_source_type_db <-
-    add_dataset_source_type(
-      data_source = data_climate_dataset_raw,
-      con = con
-    )
-
-  # dataset source -----
-  data_climate_data_source_id_db <-
-    add_data_source(
-      data_source = data_climate_dataset_raw,
-      con = con
-    )
-
-  # datasets -----
-  climate_dataset_id_db <-
-    add_datasets(
-      data_source = data_climate_dataset_raw,
-      con = con,
-      data_type = data_climate_dataset_type_db,
-      data_source_type = data_climate_dataset_source_type_db,
-      dataset_source = data_climate_data_source_id_db
-    )
-
-  # samples -----
-
-  data_climate_samples_raw <-
-    data_climate_dataset_raw %>%
-    dplyr::left_join(
-      climate_dataset_id_db,
-      by = dplyr::join_by(dataset_name)
     ) %>%
-    dplyr::select(
-      dataset_name, dataset_id, data_samples,
-    ) %>%
-    tidyr::unnest(data_samples) %>%
+    tidyr::unnest("data_samples") %>%
     dplyr::mutate(
       sample_name = paste0(
-        "geo_",
-        dataset_id,
+        .data$dataset_name,
         "_",
-        age
+        .data$age
       ),
       sample_size = NA_real_,
       description = "gridpoint",
@@ -120,113 +81,53 @@ add_chelsa_trace_data <- function(
       var_detail = sel_var_detail
     )
 
-  data_bd_vegetation <-
-    vaultkeepr::open_vault(
-      path = paste0(
-        data_storage_path,
-        "Data/VegVault/VegVault.sqlite"
-      )
-    ) %>%
-    vaultkeepr::get_datasets() %>%
-    vaultkeepr::select_dataset_by_type(
-      sel_dataset_type = c("vegetation_plot", "fossil_pollen_archive", "traits")
-    ) %>%
-    vaultkeepr::select_dataset_by_geo(
-      sel_dataset_type = c("vegetation_plot", "fossil_pollen_archive", "traits"),
-      long_lim = c(-180, 180),
-      lat_lim = c(-90, 90)
-    ) %>%
-    vaultkeepr::get_samples() %>%
-    vaultkeepr::select_samples_by_age(
-      sel_dataset_type = c("vegetation_plot", "fossil_pollen_archive", "traits"),
-      # just very large number to get rid of NAs
-      age_lim = c(-1e10, 1e10)
-    ) %>%
-    vaultkeepr::extract_data() %>%
-    dplyr::distinct(dataset_id, sample_name, coord_long, coord_lat, age)
-
-
-  data_climate_samples_to_limit <-
-    data_climate_dataset_raw %>%
-    dplyr::left_join(
-      climate_dataset_id_db,
-      by = dplyr::join_by(dataset_name)
-    ) %>%
-    dplyr::select(
-      dataset_id, coord_long, coord_lat
-    ) %>%
-    dplyr::left_join(
-      data_climate_samples_raw,
-      by = "dataset_id"
-    ) %>%
-    dplyr::distinct(dataset_id, sample_name, coord_long, coord_lat, age)
-
-  data_sample_link <-
-    data_bd_vegetation %>%
-    dplyr::mutate(
-      batch = 1 + (dplyr::row_number() - 1) %/% 5000
-    ) %>%
-    dplyr::group_by(batch) %>%
-    tidyr::nest(data = -batch) %>%
-    dplyr::ungroup() %>%
-    purrr::chuck("data") %>%
-    rlang::set_names(paste0("batch_", 1:length(.))) %>%
-    purrr::imap(
-      .progress = "filtering gripoints samples",
-      .f = ~ {
-        message(.y)
-        get_gridpoints_link(
-          data_source = .x,
-          data_source_gridpoints = data_climate_samples_to_limit,
-          sel_grid_size_degree = sel_grid_size_degree,
-          sel_distance_km = sel_distance_km,
-          sel_distance_years = sel_distance_years
-        ) %>%
-          return()
-      }
-    ) %>%
-    dplyr::bind_rows()
-
-  vec_sample_name_to_keep <-
-    data_sample_link %>%
-    dplyr::distinct(sample_name_gridpoints) %>%
-    dplyr::arrange(sample_name_gridpoints) %>%
-    dplyr::pull(sample_name_gridpoints)
-
-  data_climate_samples_filter <-
-    data_climate_samples_raw %>%
-    dplyr::filter(sample_name %in% vec_sample_name_to_keep)
-
-  climate_samples_id_db <-
-    add_samples(
-      data_source = data_climate_samples_filter,
-      con = con
+  # dataset type -----
+  data_climate_dataset_type_db <-
+    add_dataset_type(
+      data_source = data_climate_raw,
+      con = sel_con
     )
 
-  # Dataset - Sample -----
-  add_dataset_sample(
-    data_source = data_climate_samples_filter,
-    con = con,
-    dataset_id = climate_dataset_id_db,
-    sample_id = climate_samples_id_db
+  # dataset source type -----
+  data_climate_dataset_source_type_db <-
+    add_dataset_source_type(
+      data_source = data_climate_raw,
+      con = sel_con
+    )
+
+  # dataset source -----
+  data_climate_data_source_id_db <-
+    add_data_source(
+      data_source = data_climate_raw,
+      con = sel_con
+    )
+
+  add_gridpoints_with_links(
+    data_source = data_climate_raw,
+    sel_con = sel_con,
+    dataset_type_db = data_climate_dataset_type_db,
+    dataset_source_type_db = data_climate_dataset_source_type_db,
+    data_source_id_db = data_climate_data_source_id_db,
+    sel_grid_size_degree = sel_grid_size_degree,
+    sel_distance_km = sel_distance_km,
+    sel_distance_years = sel_distance_years
   )
 
-  # Abiotic sample reference
-  add_abiotic_data_ref(
-    data_source = data_sample_link,
-    con = con
-  )
+  climate_samples_id_db <-
+    dplyr::tbl(sel_con, "Samples") %>%
+    dplyr::select(.data$sample_id, .data$sample_name) %>%
+    dplyr::distinct(.data$sample_id, .data$sample_name)
 
   # Abiotic varibale
   abiotic_variabe_id <-
     add_abiotic_variable(
-      data_source = data_climate_samples_filter,
-      con = con
+      data_source = data_climate_raw,
+      con = sel_con
     )
 
   add_sample_abiotic_value(
-    data_source = data_climate_samples_filter,
-    con = con,
+    data_source = data_climate_raw,
+    con = sel_con,
     sample_id = climate_samples_id_db,
     abiotic_variable_id = abiotic_variabe_id
   )

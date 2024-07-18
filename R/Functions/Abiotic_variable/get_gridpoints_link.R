@@ -88,15 +88,14 @@ get_gridpoints_link <- function(
 
   data_source_gridpoints_sub <-
     data_source_gridpoints %>%
-    dplyr::filter(sample_name %in% vec_gridpoits_coarse_filtering)
+    dplyr::filter(grid_sample %in% vec_gridpoits_coarse_filtering)
 
   # Stage 2: Fine filtering
 
   data_vegetation_bounding_box <-
     data_source %>%
     dplyr::distinct(
-      .data$dataset_id,
-      .data$sample_name,
+      .data$geo_veg_sample,
       .keep_all = TRUE
     ) %>%
     dplyr::mutate(
@@ -121,18 +120,11 @@ get_gridpoints_link <- function(
         ),
         .f = ~ data_source_gridpoints_sub %>%
           vctrs::vec_slice(
-            data_source_gridpoints_sub$coord_long <= ..1 &
-              data_source_gridpoints_sub$coord_long >= ..2 &
-              data_source_gridpoints_sub$coord_lat <= ..3 &
-              data_source_gridpoints_sub$coord_lat >= ..4 & 
-              abs(data_source_gridpoints_sub$age - ..5) <= sel_distance_years
-          ) %>%
-          dplyr::rename(
-            dataset_id_gridpoints = dataset_id,
-            sample_name_gridpoints = sample_name,
-            coord_long_gridpoints = coord_long,
-            coord_lat_gridpoints = coord_lat,
-            age_gridpoints = age
+            data_source_gridpoints_sub$grid_coord_long <= ..1 &
+              data_source_gridpoints_sub$grid_coord_long >= ..2 &
+              data_source_gridpoints_sub$grid_coord_lat <= ..3 &
+              data_source_gridpoints_sub$grid_coord_lat >= ..4 &
+              abs(data_source_gridpoints_sub$grid_age - ..5) <= sel_distance_years
           )
       )
     )
@@ -140,12 +132,11 @@ get_gridpoints_link <- function(
   data_vegetation_grid_unnest <-
     data_vegetation_grid_data %>%
     dplyr::select(
-      dataset_id, sample_name,
+      geo_veg_sample,
       coord_long, coord_lat, age,
       data_gridpoints_sub
     ) %>%
     tidyr::unnest(data_gridpoints_sub)
-
 
   # Stage 3: Distance calculation
   data_vegetation_distance <-
@@ -156,8 +147,8 @@ get_gridpoints_link <- function(
         .l = list(
           .data$coord_long,
           .data$coord_lat,
-          .data$coord_long_gridpoints,
-          .data$coord_lat_gridpoints
+          .data$grid_coord_long,
+          .data$grid_coord_lat
         ),
         .f = ~ geosphere::distGeo(
           c(..1, ..2),
@@ -165,7 +156,7 @@ get_gridpoints_link <- function(
         )
       ),
       distance_in_km = distance_in_m / 1e3,
-      distance_in_years = abs(age - age_gridpoints)
+      distance_in_years = abs(age - grid_age)
     )
 
   # Stage 4: Filtering
@@ -176,10 +167,8 @@ get_gridpoints_link <- function(
       distance_in_years <= sel_distance_years
     ) %>%
     dplyr::select(
-      dataset_id,
-      sample_name,
-      dataset_id_gridpoints,
-      sample_name_gridpoints,
+      geo_veg_sample,
+      grid_sample,
       distance_in_km,
       distance_in_years
     )

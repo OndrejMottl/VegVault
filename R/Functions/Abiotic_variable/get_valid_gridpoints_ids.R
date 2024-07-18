@@ -45,18 +45,26 @@ get_valid_gridpoints_ids <- function(
     }
   )
 
-
   data_source_coord <-
     data_source %>%
     bin_coord_data(sel_grid_size_degree = sel_grid_size_degree)
 
-
   data_source_gridpoints_coord <-
     data_source_gridpoints %>%
+    dplyr::mutate(
+      coord_long = grid_coord_long,
+      coord_lat = grid_coord_lat
+    ) %>%
     bin_coord_data(
       sel_grid_size_degree = sel_grid_size_degree,
       long_offset = long_offset,
       lat_offset = lat_offset
+    ) %>%
+    dplyr::select(
+      -c(
+        coord_long,
+        coord_lat
+      )
     )
 
   vec_gridpoits_coarse_filtering <-
@@ -71,9 +79,9 @@ get_valid_gridpoints_ids <- function(
       suffix = c("_vegetation", "_gridpoints")
     ) %>%
     dplyr::distinct(
-      .data$sample_name_gridpoints
+      .data$grid_sample
     ) %>%
-    .[["sample_name_gridpoints"]]
+    .[["grid_sample"]]
 
   return(vec_gridpoits_coarse_filtering)
 }
