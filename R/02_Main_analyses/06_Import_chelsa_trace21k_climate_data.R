@@ -69,6 +69,7 @@ bio1_hash <-
   )
 
 add_chelsa_trace_data(
+  sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio1_hash,
   sel_var_name = "bio1",
@@ -91,6 +92,7 @@ bio4_hash <-
   )
 
 add_chelsa_trace_data(
+  sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio4_hash,
   sel_var_name = "bio4",
@@ -113,6 +115,7 @@ bio6_hash <-
   )
 
 add_chelsa_trace_data(
+  sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio6_hash,
   sel_var_name = "bio6",
@@ -135,6 +138,7 @@ bio12_hash <-
   )
 
 add_chelsa_trace_data(
+  sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio12_hash,
   sel_var_name = "bio12",
@@ -157,6 +161,7 @@ bio15_hash <-
   )
 
 add_chelsa_trace_data(
+  sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio15_hash,
   sel_var_name = "bio15",
@@ -179,6 +184,7 @@ bio18_hash <-
   )
 
 add_chelsa_trace_data(
+  sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio18_hash,
   sel_var_name = "bio18",
@@ -201,6 +207,7 @@ bio19_hash <-
   )
 
 add_chelsa_trace_data(
+  sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio19_hash,
   sel_var_name = "bio19",
