@@ -40,11 +40,23 @@ add_abiotic_data_ref <- function(data_source, con) {
       distance_in_years = as.integer(distance_in_years)
     )
 
+  vec_samples_present <-
+    dataset_sample %>%
+    dplyr::distinct(sample_id) %>%
+    purrr::chuck("sample_id")
+
+  vec_samples_ref_present <-
+    dataset_sample %>%
+    dplyr::distinct(sample_ref_id) %>%
+    purrr::chuck("sample_ref_id")
+
   dataset_sample_unique <-
     dataset_sample %>%
     dplyr::anti_join(
       dplyr::tbl(con, "AbioticDataReference") %>%
         dplyr::select(sample_id, sample_ref_id) %>%
+        dplyr::filter(sample_id %in% vec_samples_present) %>%
+        dplyr::filter(sample_ref_id %in% vec_samples_ref_present) %>%
         dplyr::collect(),
       by = dplyr::join_by(sample_id, sample_ref_id)
     )
