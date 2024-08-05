@@ -9,6 +9,7 @@ add_gridpoints_with_links <- function(
     sel_distance_years = 5e3) {
   `%>%` <- magrittr::`%>%`
   .data <- rlang::.data
+  current_env <- environment()
 
   data_gridpoints_raw <-
     data_source %>%
@@ -56,9 +57,50 @@ add_gridpoints_with_links <- function(
       .data$age
     )
 
+  gc(verbose = FALSE)
+
+  # check if there are any previous data about links
+
+  vec_gridpoints_sample_id <-
+    data_gridpoints_raw %>%
+    dplyr::distinct(.data$sample_name) %>%
+    dplyr::left_join(
+      dplyr::tbl(sel_con, "Samples") %>%
+        dplyr::select("sample_id", "sample_name") %>%
+        dplyr::collect(),
+      by = dplyr::join_by("sample_name")
+    ) %>%
+    dplyr::distinct(.data$sample_id) %>%
+    purrr::chuck("sample_id")
+
+  vec_relevant_vegetation_sample_names <-
+    dplyr::tbl(sel_con, "AbioticDataReference") %>%
+    dplyr::select("sample_id", "sample_ref_id") %>%
+    dplyr::filter(
+      .data$sample_ref_id %in% vec_gridpoints_sample_id
+    ) %>%
+    dplyr::distinct(.data$sample_id) %>%
+    dplyr::left_join(
+      dplyr::tbl(sel_con, "Samples") %>%
+        dplyr::select("sample_id", "sample_name"),
+      by = dplyr::join_by("sample_id")
+    ) %>%
+    dplyr::collect() %>%
+    purrr::chuck("sample_name")
+
+  rm(vec_gridpoints_sample_id, envir = current_env)
+
+  data_bd_vegetation_sub <-
+    data_bd_vegetation_raw %>%
+    dplyr::filter(
+      !.data$sample_name %in% vec_relevant_vegetation_sample_names
+    )
+
+  rm(data_bd_vegetation_raw, envir = current_env)
+
   # nest the and create dictionary of samples and link to gridpoints samples
   data_bd_vegetation_nest <-
-    data_bd_vegetation_raw %>%
+    data_bd_vegetation_sub %>%
     dplyr::distinct(
       .data$dataset_name, .data$sample_name,
       .data$coord_long, .data$coord_lat,
@@ -88,6 +130,8 @@ add_gridpoints_with_links <- function(
       "coord_long", "coord_lat", "age"
     )
 
+  rm(data_bd_vegetation_nest, envir = current_env)
+
   data_gridpoints_to_limit <-
     data_gridpoints_raw %>%
     dplyr::distinct(
@@ -102,9 +146,13 @@ add_gridpoints_with_links <- function(
       ~ paste0("grid_", .x)
     )
 
+  rm(data_gridpoints_raw, envir = current_env)
+
+  gc(verbose = FALSE)
+
   data_bd_vegetation_to_limit %>%
     dplyr::mutate(
-      batch = 1 + (dplyr::row_number() - 1) %/% 5000
+      batch = 1 + (dplyr::row_number() - 1) %/% 500
     ) %>%
     dplyr::group_by(.data$batch) %>%
     tidyr::nest(data = -"batch") %>%
@@ -197,6 +245,8 @@ add_gridpoints_with_links <- function(
           data_source = data_sample_link_to_import,
           con = sel_con
         )
+
+        gc(verbose = FALSE)
       }
     )
 }
