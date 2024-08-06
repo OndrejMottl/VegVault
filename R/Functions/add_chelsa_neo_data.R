@@ -75,7 +75,7 @@ add_chelsa_neo_data <- function(
   data_climate_sub <-
     data_climate_raw %>%
     dplyr::filter(
-      !.data$sample_name %in% data_samples_db$sample_name
+      .data$sample_name %in% data_samples_db$sample_name
     )
 
   # Abiotic varibale

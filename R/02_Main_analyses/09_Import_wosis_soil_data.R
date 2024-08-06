@@ -113,7 +113,7 @@ data_samples_db <-
 data_wosis_sub <-
   data_wosis_raw %>%
   dplyr::filter(
-    !.data$sample_name %in% data_samples_db$sample_name
+    .data$sample_name %in% data_samples_db$sample_name
   )
 
 # Abiotic varibale
