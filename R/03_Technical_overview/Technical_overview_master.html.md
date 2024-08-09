@@ -318,9 +318,9 @@ more info).
 
 | Variable name | Variable unit    | source of data  |
 |---------------|------------------|-----------------|
-| bio1          | °C               | CHELSA          |
-| bio4          | °C               | CHELSA          |
-| bio6          | °C               | CHELSA          |
+| bio1          | Â°C              | CHELSA          |
+| bio4          | Â°C              | CHELSA          |
+| bio6          | Â°C              | CHELSA          |
 | bio12         | kg m-2 year-1    | CHELSA          |
 | bio15         | Unitless         | CHELSA          |
 | bio18         | kg m-2 quarter-1 | CHELSA          |
@@ -396,8 +396,8 @@ style="width:100.0%" data-fig-align="center" />
     repo](https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.0.0)**
     - a Tag (v1.0.0) to process vegetation trait data
 12. **[VegVault-abiotic_data GitHub
-    repo](https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.0.0)**
-    - a Tag (v1.0.0) to process abiotic data
+    repo](https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0)**
+    - a Tag (v1.1.0) to process abiotic data
 13. **[VegVault GitHub repo](https://github.com/OndrejMottl/VegVault)**
     - a Tag (v1.0.0) to transfer the data into the SQLite database
 14. **VegVault** - SQLite database (v1.0.0)
@@ -493,7 +493,7 @@ style="width:100.0%" data-fig-align="center" />
 
 In the second example, let’s imagine we want to do Species Distribution
 Modeling for all plant taxa in the Czech Republic. We will extract
-modern plot-based data and soil-types.
+modern plot-based data and Mean Annual temprature.
 
 ``` r
 # Again start by creating a plan
@@ -521,11 +521,15 @@ plan_cz_modern <-
   ) %>%
   # Add samples
   vaultkeepr::get_samples() %>%
+  # select only modern data
+  vaultkeepr::select_samples_by_age(
+    age_lim = c(0, 0)
+  ) %>%
   # Add abiotic data
   vaultkeepr::get_abiotic() %>%
   # Select only Mean Anual Temperature (bio1)
   vaultkeepr::select_abiotic_var_by_name(
-    sel_var_name = "HWSD2"
+    sel_var_name = "bio1"
   ) %>%
   # add taxa
   vaultkeepr::get_taxa()
@@ -569,7 +573,11 @@ plan_la_traits <-
   # Limit data to Latin America
   vaultkeepr::select_dataset_by_geo(
     lat_lim = c(-53, 28),
-    long_lim = c(-110, -38)
+    long_lim = c(-110, -38),
+    sel_dataset_type = c(
+      "fossil_pollen_archive",
+      "traits"
+    )
   ) %>%
   # Add samples
   vaultkeepr::get_samples() %>%

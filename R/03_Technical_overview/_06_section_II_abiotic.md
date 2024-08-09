@@ -21,9 +21,9 @@ more info).
 
 | Variable name | Variable unit    | source of data  |
 |---------------|------------------|-----------------|
-| bio1          | °C               | CHELSA          |
-| bio4          | °C               | CHELSA          |
-| bio6          | °C               | CHELSA          |
+| bio1          | Â°C              | CHELSA          |
+| bio4          | Â°C              | CHELSA          |
+| bio6          | Â°C              | CHELSA          |
 | bio12         | kg m-2 year-1    | CHELSA          |
 | bio15         | Unitless         | CHELSA          |
 | bio18         | kg m-2 quarter-1 | CHELSA          |

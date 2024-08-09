@@ -172,7 +172,7 @@ fig_na_plots_picea
 
 ## Example 2
 
-In the second example, let's imagine we want to do Species Distribution Modeling for all plant taxa in the Czech Republic. We will extract modern plot-based data and soil-types.
+In the second example, let's imagine we want to do Species Distribution Modeling for all plant taxa in the Czech Republic. We will extract modern plot-based data and Mean Annual temprature.
 
 ```{r}
 #| label: Example 2 - CZ JSDM
@@ -202,11 +202,15 @@ plan_cz_modern <-
   ) %>%
   # Add samples
   vaultkeepr::get_samples() %>%
+  # select only modern data
+  vaultkeepr::select_samples_by_age(
+    age_lim = c(0, 0)
+  ) %>%
   # Add abiotic data
   vaultkeepr::get_abiotic() %>%
   # Select only Mean Anual Temperature (bio1)
   vaultkeepr::select_abiotic_var_by_name(
-    sel_var_name = "HWSD2"
+    sel_var_name = "bio1"
   ) %>%
   # add taxa
   vaultkeepr::get_taxa()
@@ -223,7 +227,7 @@ Now we can simply plot both the climatic data and the plot vegetation data:
 data_climate <-
   data_cz_modern %>%
   dplyr::filter(dataset_type == "gridpoints") %>%
-  dplyr::select(dataset_type, dataset_id, coord_long, coord_lat, sample_id, value) %>%
+  dplyr::select(dataset_type, dataset_id, coord_long, coord_lat, sample_id, abiotic_value) %>%
   tidyr::drop_na() %>%
   dplyr::distinct()
 
@@ -248,28 +252,23 @@ fig_cz_modern <-
     title = stringr::str_wrap("Example 2: Distribution of plots", fig_width_def), # [quarto config]
     x = "Longtitude",
     y = "Latitude",
-    col = "WoSIS soil type (class)",
-    fill = "WoSIS soil type (class)",
+    col = "Temperature (°C)",
+    fill = "Temperature (°C)",
     caption = "Each point represents one community dataset"
   ) +
-  ggplot2::scale_fill_viridis_d() +
-  ggplot2::scale_color_viridis_d() +
-  ggplot2::guides(
-    fill = ggplot2::guide_legend(
-      nrow = 2
-    )
-  ) +
+  ggplot2::scale_fill_viridis_c() +
+  ggplot2::scale_color_viridis_c() +
   ggplot2::theme(
     legend.position = "bottom"
   ) +
   ggplot2::geom_tile(
     data = data_climate,
     mapping = ggplot2::aes(
-      fill = as.factor(value),
-      col = as.factor(value)
+      fill = as.numeric(abiotic_value),
+      col = as.numeric(abiotic_value)
     ),
-    width = 0.05,
-    height = 0.05,
+    # width = 0.05,
+    # height = 0.05,
     alpha = 0.75,
     linewidth = 0.1
   ) +
@@ -313,7 +312,11 @@ plan_la_traits <-
   # Limit data to Latin America
   vaultkeepr::select_dataset_by_geo(
     lat_lim = c(-53, 28),
-    long_lim = c(-110, -38)
+    long_lim = c(-110, -38),
+    sel_dataset_type = c(
+      "fossil_pollen_archive",
+      "traits"
+    )
   ) %>%
   # Add samples
   vaultkeepr::get_samples() %>%
@@ -369,8 +372,8 @@ data_la_height <-
   data_la_traits %>%
   dplyr::filter(dataset_type == "traits") %>%
   dplyr::distinct(dataset_id, taxon_id_trait, .keep_all = TRUE) %>%
-  tidyr::drop_na(taxon_id_trait)  %>% 
-   dplyr::select(taxon_id_trait, trait_value) %>%
+  tidyr::drop_na(taxon_id_trait) %>%
+  dplyr::select(taxon_id_trait, trait_value) %>%
   dplyr::group_by(taxon_id_trait) %>%
   dplyr::summarise(
     mean_value = mean(trait_value)

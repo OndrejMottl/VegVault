@@ -79,7 +79,7 @@ style="width:100.0%" data-fig-align="center" />
 
 In the second example, let’s imagine we want to do Species Distribution
 Modeling for all plant taxa in the Czech Republic. We will extract
-modern plot-based data and soil-types.
+modern plot-based data and Mean Annual temprature.
 
 ``` r
 # Again start by creating a plan
@@ -107,11 +107,15 @@ plan_cz_modern <-
   ) %>%
   # Add samples
   vaultkeepr::get_samples() %>%
+  # select only modern data
+  vaultkeepr::select_samples_by_age(
+    age_lim = c(0, 0)
+  ) %>%
   # Add abiotic data
   vaultkeepr::get_abiotic() %>%
   # Select only Mean Anual Temperature (bio1)
   vaultkeepr::select_abiotic_var_by_name(
-    sel_var_name = "HWSD2"
+    sel_var_name = "bio1"
   ) %>%
   # add taxa
   vaultkeepr::get_taxa()
@@ -155,7 +159,11 @@ plan_la_traits <-
   # Limit data to Latin America
   vaultkeepr::select_dataset_by_geo(
     lat_lim = c(-53, 28),
-    long_lim = c(-110, -38)
+    long_lim = c(-110, -38),
+    sel_dataset_type = c(
+      "fossil_pollen_archive",
+      "traits"
+    )
   ) %>%
   # Add samples
   vaultkeepr::get_samples() %>%

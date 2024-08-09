@@ -140,7 +140,10 @@ data_bio1_example <-
   ) %>%
   dplyr::inner_join(
     dplyr::tbl(con, "Samples") %>%
-      dplyr::filter(age == 0 | age == 500 | age == 8000),
+      dplyr::filter(
+        age == 0 | (age > 500 & age < 550) |
+          (age > 7500 & age < 8500)
+      ),
     by = "sample_id"
   ) %>%
   dplyr::inner_join(
@@ -151,7 +154,7 @@ data_bio1_example <-
   dplyr::collect()
 
 data_bio1_example %>%
-  dplyr::select(coord_long, coord_lat, age, value) %>%
+  dplyr::select(coord_long, coord_lat, age, abiotic_value) %>%
   ggplot2::ggplot(
     mapping = ggplot2::aes(
       x = coord_long,
@@ -179,13 +182,13 @@ data_bio1_example %>%
     fill = NA,
     col = "red"
   ) +
-  ggplot2::geom_point(
+  ggplot2::geom_tile(
     mapping = ggplot2::aes(
-      fill = value,
-      col = value
+      fill = abiotic_value,
+      col = abiotic_value
     ),
     alpha = 0.75,
-    size = 0.1
+    linewidth = 0.1
   )
 
 ```
@@ -213,7 +216,7 @@ data_soil_example <-
   dplyr::collect()
 
 data_soil_example %>%
-  dplyr::select(coord_long, coord_lat, age, value) %>%
+  dplyr::select(coord_long, coord_lat, age, abiotic_value) %>%
   ggplot2::ggplot(
     mapping = ggplot2::aes(
       x = coord_long,
@@ -239,12 +242,12 @@ data_soil_example %>%
     fill = NA,
     col = "red"
   ) +
-  ggplot2::geom_point(
+  ggplot2::geom_tile(
     mapping = ggplot2::aes(
-      fill = as.factor(value),
-      col = as.factor(value)
+      fill = as.factor(abiotic_value),
+      col = as.factor(abiotic_value)
     ),
-    alpha = 1,
-    size = 0.2
+    alpha = 0.5,
+    linewidth = 0.2
   )
 ```

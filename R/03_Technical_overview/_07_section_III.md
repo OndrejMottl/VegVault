@@ -53,8 +53,8 @@ style="width:100.0%" data-fig-align="center" />
     repo](https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.0.0)**
     - a Tag (v1.0.0) to process vegetation trait data
 12. **[VegVault-abiotic_data GitHub
-    repo](https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.0.0)**
-    - a Tag (v1.0.0) to process abiotic data
+    repo](https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0)**
+    - a Tag (v1.1.0) to process abiotic data
 13. **[VegVault GitHub repo](https://github.com/OndrejMottl/VegVault)**
     - a Tag (v1.0.0) to transfer the data into the SQLite database
 14. **VegVault** - SQLite database (v1.0.0)

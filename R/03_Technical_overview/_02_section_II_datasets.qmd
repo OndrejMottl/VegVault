@@ -98,7 +98,7 @@ plot_waffle(
   n_datasetes_per_type,
   dataset_type,
   plot_title = "Datasets type",
-  one_point_is = 30e3
+  one_point_is = 1e3
 ) +
   ggplot2::scale_fill_manual(
     values = palette_dataset_type
@@ -200,7 +200,7 @@ plot_waffle(
   n_datasetes_per_source_type,
   dataset_source_type,
   plot_title = "Datasets source type",
-  one_point_is = 30e3
+  one_point_is = 1e3
 ) +
   ggplot2::scale_fill_manual(
     values = palette_dataset_source_type
