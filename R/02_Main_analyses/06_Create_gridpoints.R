@@ -49,36 +49,29 @@ con <-
 url_gh_abiotic <-
   paste0(
     "https://raw.githubusercontent.com/",
-    "OndrejMottl/VegVault-abiotic_data/",
-    "v1.0.0/",
-    "Outputs/Data/Palaoclimate/"
+    "OndrejMottl/VegVault-abiotic_data/"
   )
 
-bio1_hash <-
+paleo_bio1_hash <-
   c(
-    "bio01_batch_1_2024-01-02__05b0b43b6640a26c729b0403e711993f__.qs",
-    "bio01_batch_2_2024-01-02__f728c578e64054e96e1671829a1971f2__.qs",
-    "bio01_batch_3_2024-01-02__636dae96f45c34f2f63a579f7bba9ec6__.qs",
-    "bio01_batch_4_2024-01-02__c432f3ecedeae729f35914f02a6f65dc__.qs",
-    "bio01_batch_5_2024-01-02__3d4236481e4131ed665474d6dc7a9b41__.qs"
+    "bio01_batch_1_2024-08-06__f674adeb38401a05236e0b5e0ad7cc53__.qs",
+    "bio01_batch_2_2024-08-06__b32dfb2e39d295750dc67f1dc145c176__.qs",
+    "bio01_batch_3_2024-08-06__e6997e401e83f216ecf697e2ce3aefe0__.qs"
   )
 
 data_paleo_climate <-
-  bio1_hash %>%
+  paleo_bio1_hash %>%
   purrr::map(
     .f = ~ paste0(
       url_gh_abiotic,
+      "v1.1.0/",
+      "Outputs/Data/Palaoclimate/",
       .x
     ) %>%
       dowload_and_load()
   ) %>%
   dplyr::bind_rows() %>%
   dplyr::select(-"value")
-
-data_coord <-
-  data_paleo_climate %>%
-  dplyr::distinct(.data$long, .data$lat) %>%
-  tidyr::drop_na()
 
 vec_age <-
   data_paleo_climate %>%
@@ -90,6 +83,46 @@ vec_age <-
   dplyr::arrange(.data$age) %>%
   purrr::chuck("age") %>%
   c(0, .)
+
+data_paleo_coord <-
+  data_paleo_climate %>%
+  dplyr::select(-"time_id") %>%
+  round(digits = 2) %>%
+  dplyr::distinct(.data$long, .data$lat) %>%
+  tidyr::drop_na()
+
+data_neo_coords <-
+  paste0(
+    url_gh_abiotic,
+    "v1.1.0/",
+    "Outputs/Data/Neoclimate/",
+    "CHELSA_bio_01_2024-08-06__ff1659d322855ca35555ac7b96d58720__.qs"
+  ) %>%
+  dowload_and_load() %>%
+  dplyr::select(-c("value", "var_name")) %>%
+  round(digits = 2) %>%
+  dplyr::distinct(.data$long, .data$lat) %>%
+  tidyr::drop_na()
+
+data_soil_coords <-
+  paste0(
+    url_gh_abiotic,
+    "v1.1.0/",
+    "Outputs/Data/WoSIS/",
+    "wosis_data_2024-08-06__e8fb256f5b70deb9576ea69806c59eb1__.qs"
+  ) %>%
+  dowload_and_load() %>%
+  dplyr::select(-c("value", "var_name")) %>%
+  round(digits = 2) %>%
+  dplyr::distinct(.data$long, .data$lat) %>%
+  tidyr::drop_na()
+
+data_coord <-
+  data_paleo_coord %>%
+  dplyr::bind_rows(data_neo_coords) %>%
+  # dplyr::bind_rows(data_soil_coords) %>%
+  dplyr::distinct(.data$long, .data$lat) %>%
+  tidyr::drop_na()
 
 # Datasets -----
 data_raw <-
