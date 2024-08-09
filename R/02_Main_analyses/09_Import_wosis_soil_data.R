@@ -49,9 +49,9 @@ url_gh_wosis <-
   paste0(
     "https://raw.githubusercontent.com/",
     "OndrejMottl/VegVault-abiotic_data/",
-    "v1.0.0/",
+    "v1.1.0/",
     "Outputs/Data/WoSIS/",
-    "wosis_data_2024-01-03__3552eb2fc1af7f991c10e4fc6c2decb7__.qs"
+    "wosis_data_2024-08-06__e8fb256f5b70deb9576ea69806c59eb1__.qs"
   )
 
 data_wosis <-
@@ -99,14 +99,14 @@ data_wosis_raw <-
       "_",
       .data$age
     ),
-    abiotic_variable_name = .data$sel_var_name,
+    abiotic_variable_name = .data$var_name,
     var_unit = "Unitless",
     var_reference = "https://doi.org/10.5194/soil-7-217-2021",
     var_detail = "WoSIS-SoilGrids"
   )
 
 data_samples_db <-
-  dplyr::tbl(sel_con, "Samples") %>%
+  dplyr::tbl(con, "Samples") %>%
   dplyr::distinct(.data$sample_id, .data$sample_name) %>%
   dplyr::collect()
 
@@ -120,12 +120,12 @@ data_wosis_sub <-
 abiotic_variabe_id <-
   add_abiotic_variable(
     data_source = data_wosis_sub,
-    con = sel_con
+    con = con
   )
 
 add_sample_abiotic_value(
   data_source = data_wosis_sub,
-  con = sel_con,
+  con = con,
   sample_id = data_samples_db,
   abiotic_variable_id = abiotic_variabe_id
 )
