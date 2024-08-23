@@ -72,5 +72,34 @@ try(
 DBI::dbListTables(con)
 DBI::dbListObjects(con)
 
+# check the primary keys
+DBI::dbGetQuery(
+  con,
+  "
+  SELECT m.name AS table_name, p.name AS column_name
+  FROM sqlite_master m
+  JOIN pragma_table_info(m.name) p
+  WHERE p.pk > 0
+  ORDER BY m.name, p.pk;
+"
+)
+
+# check all indexes
+DBI::dbGetQuery(
+  con,
+  "
+  SELECT
+    name AS index_name,
+    tbl_name AS table_name,
+    sql
+  FROM
+    sqlite_master
+  WHERE
+    type = 'index'
+  ORDER BY
+    tbl_name, index_name;
+"
+)
+
 # disconnect
 DBI::dbDisconnect(con)
