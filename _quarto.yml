@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "VegVault"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: Technical_overview/Technical_overview_master.qmd
+        text: Technical Overview
+    search: true
+    repo-url: https://github.com/OndrejMottl/VegVault
+    repo-actions: [source, issue]
+    tools:
+      - icon: twitter
+        href: http://twitter.com/OndrejMottl
+      - icon: github
+        href: https://github.com/OndrejMottl/VegVault
+
+format:
+  html:
+    theme: 
+    - styles.scss
+
+
+
