@@ -1,0 +1,86 @@
+[
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html",
+    "href": "Technical_overview/Technical_overview_master.html",
+    "title": "VegVault - technical overview",
+    "section": "",
+    "text": "VegVault is a SQLite interdisciplinary database linking plot-based vegetation data with functional traits and climate. Specifically, it contains:\n\ncurrent vegetation plot data\npast vegetation plot data (fossil pollen records)\nfunctional trait data\ncurrent abiotic data (climate, soil)\npast abiotic data (climate)\n\nThe goal of the database is to compile interdisciplinary data …"
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#dataset",
+    "href": "Technical_overview/Technical_overview_master.html#dataset",
+    "title": "VegVault - technical overview",
+    "section": "Dataset",
+    "text": "Dataset\nDataset represents the highest levels in the hierarchy. It is the main keystone in the VegVault structure.\n\n\nDataset Type\ndataset_type_id defines the basic type of a dataset. This is the highest level of classification of the data\nCurrently, there VegVault consist of those types:\n\nvegetation_plot - current vegetation plot dataset\nfossil_pollen_archive - past vegetation plot dataset\ntraits - dataset containing functional traits\ngridpoints - artificially created dataset to hold abiotic data\n\n\n\n\n\n\n\nDataset Source-Type\ndataset_source_type_id defines the general provider of the dataset. This should help to classify, which data pipeline was used to import the dataset into the VegVault, This is also the first general point of reference of data, as all large databases have a citation statement.\nCurrently, the VegVault consist of those source-types:\n\nBIEN - Botanical Information and Ecology Network\nsPlotOpen - The open-access version of sPlot\nTRY - TRY Plant Trait Database\nFOSSILPOL - The workflow that aims to process and standardise global palaeoecological pollen data\ngridpoints - artificially created dataset to hold abiotic data\n\n\n\n\n\n\nDataset Source\nEach individual dataset from a specific Data Source-Type can have information on the source of the data (i.e. sub-database). This should help to promote better findability of the primary source of data and referencing.\n\nCurrently, there are 706 sources of datasets.\n\n\n\nSampling method\nSome datasets may differ in the way they have been sampled. This could be represented by different ways vegetation data have been sampled for Dataset Type of vegetation_plot, or depositional environment for Dataset Type of fossil_pollen_archive.\n\n\n\n\nReferences\nDataset Source-Type, Dataset Source, and Sampling Method can have their own references. Moreover, each dataset can have one or more references directly to that specific data.\n\nThis means that one dataset can have one/several references from each of those parts. Let’s take a look at an example, of what that could mean in practice.\nWe have selected dataset ID: 91256, which is a fossil pollen archive. Therefore, it has the reference of the Dataser Source-Type: https://doi.org/10.1111/geb.13693 and reference for the individual dataset: Grimm, E.C., 2008. Neotoma: an ecosystem database for the Pliocene, Pleistocene, and Holocene. Illinois State Museum Scientific Papers E Series, 1."
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#samples",
+    "href": "Technical_overview/Technical_overview_master.html#samples",
+    "title": "VegVault - technical overview",
+    "section": "Samples",
+    "text": "Samples\nSample represents the main unit of data in the VegVault database.\n\n\nDataset-Sample\nFirst Samples are linked to Datasets via the Dataset-Sample table.\n\n\n\n\n\nSample-size\nVegetation plots can have different sizes, which can have a huge impact on analyses. Therefore, the information about the plot is saved separately.\n\n\n\n\nSample age\nThe VegVault database deals with both current and paleo data. Therefore, each Sample has the indication of age, with modern samples being set to 0. To embrace the uncertainty from age-depth modeling paleo-record, the VegVault database has a structure to hold an uncertainty matrix containing information about all potential ages of each Sample from a paleo Dataset.\n\nWe can show this on the previously selected fossil pollen archive with dataset ID: 91256.\n\n\n\nSample reference\nIndividual Sample can have specific references on top of the reference to Dataset"
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#taxa",
+    "href": "Technical_overview/Technical_overview_master.html#taxa",
+    "title": "VegVault - technical overview",
+    "section": "Taxa",
+    "text": "Taxa\nThe VegVault database contains taxa names directly from main Data Source-types.\n\nIndividual taxa names are linked to the Samples by the SampleTaxa table.\n\n\n\nClassification\nIn order to obtain classification of all taxa present in the VegVault database, the {taxospace} R package has been utilized, automatically aligning the names to Taxonomy Backbone from Global Biodiversity Information Facility.\nClassification up to the family level is then saved for each taxon."
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#traits",
+    "href": "Technical_overview/Technical_overview_master.html#traits",
+    "title": "VegVault - technical overview",
+    "section": "Traits",
+    "text": "Traits\nFunctional traits of vegetation taxa follow the same structure of Dataset and Samples obtained directly from Dataset Source-types.\n\n\nTrait domain\nAs there are many varying names for the same “traits”, the VegVault database contains Trait Domain information to group traits together.\n\nThere are currently 6 trait domains following the Diaz et al. (2016)\n\n\n\nTrait domain\n\n\n\n\nStem specific density\n\n\nLeaf nitrogen content per unit mass\n\n\nDiaspore mass\n\n\nPlant heigh\n\n\nLeaf Area\n\n\nLeaf mass per area\n\n\n\n\n\n\nTrait Values\nTo store a trait value, information needs to be linked among Dataset, Sample, Taxa, and Trait.\n\n\n\n\nTrait reference\nFor full clarity, on top of Dataset and Sample, each Trait can have additional references."
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#abiotic-data",
+    "href": "Technical_overview/Technical_overview_master.html#abiotic-data",
+    "title": "VegVault - technical overview",
+    "section": "Abiotic data",
+    "text": "Abiotic data\nAbiotic data is aimed to provide information about all relevant abiotic information affecting vegetation distribution and its traits.\nAbiotic data is linked to the structure of the VegVault Database by the gridpoints, which are artificially created points to reasonably cover the resolution of both modern and past data for vegetation and abiotic data.\n\nThere are currently abiotic from CHELSA and CHELSA-TRACE21 and WoSIS. CHELSA and CHELSA-TRACE21 are built on the same structure of variables (visit the websites for more info).\n\n\n\nVariable name\nVariable unit\nsource of data\n\n\n\n\nbio1\nÂ°C\nCHELSA\n\n\nbio4\nÂ°C\nCHELSA\n\n\nbio6\nÂ°C\nCHELSA\n\n\nbio12\nkg m-2 year-1\nCHELSA\n\n\nbio15\nUnitless\nCHELSA\n\n\nbio18\nkg m-2 quarter-1\nCHELSA\n\n\nbio19\nkg m-2 quarter-1\nCHELSA\n\n\nHWSD2\nUnitless\nWoSIS-SoilGrids\n\n\n\nAbiotic data is simply linked to Samples.\n\n\nNote that the spatial resolution is higher for modern climate data than for the past. This is to reduce the size of the past climate data."
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#assembly-process",
+    "href": "Technical_overview/Technical_overview_master.html#assembly-process",
+    "title": "VegVault - technical overview",
+    "section": "Assembly process",
+    "text": "Assembly process\nHere is a general visualisation of the assembly process:\n\nFigure legend:\n\nNeotoma Paleoecology Database - open, community-curated data and services for paleoecological and paleoenvironmental data\n\nsource of fossil pollen data\n\nsPlotOpen - The open-access version of sPlot\n\nsource of current vegetation plot data\n\nBotanical Information and Ecology Network - global patterns of plot inventories and surveys\n\nsource of current vegetation plot and vegetation trait data\n\nTRY Plant Trait Database - open access plant trait data\n\nsource of vegetation trait data\n\nClimatologies at High resolution for the Earth’s Land Surface Area - Long-term, transient modern- and paleo-climate data\n\nsource of abiotic data\n\nWorld Soil Information Service - harmonised soil profile database\n\nsource of abiotic data\n\nFOSSILPOL - The workflow that aims to process and standardise global palaeoecological pollen data for macroecological studies\n\na method to obtain and process fossil pollen data\n\nRBIEN R package - Tools for accessing the BIEN database\n\na method to obtain current vegetation plot data\n\nVegVault-FOSSILPOL GitHub repo\n\na Tag (v1.0.0) to obtain and process fossil pollen data\n\nVegVault-Vegetation_data GitHub repo\n\na Tag (v1.0.0) to process current vegetation plot data\n\nVegVault-Trait_data GitHub repo\n\na Tag (v1.1.0) to process vegetation trait data\n\nVegVault-abiotic_data GitHub repo\n\na Tag (v1.1.0) to process abiotic data\n\nVegVault GitHub repo\n\na Tag (v1.0.0) to transfer the data into the SQLite database\n\nVegVault - SQLite database (v1.0.0)\n\n\nNote on GitHub Tags\n…Tags are ref’s that point to specific points in Git history. Tagging is generally used to capture a point in history…\nHere, the Tags have been used to ensure reproducibility of this version of VegVault. GitHub repo can change but the specific Tag used here (and also used in the code to source the data) ensure the transparency of the state of the database."
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#example-1",
+    "href": "Technical_overview/Technical_overview_master.html#example-1",
+    "title": "VegVault - technical overview",
+    "section": "Example 1",
+    "text": "Example 1\nIn the first example, we can imagine a scenario, where we are interested in spatiotemporal patterns of the Picea genus across North America for modern data and since the Last Glacial Maximum. Obtaining such data is straightforward:\n# First create a plan\nplan_na_plots_picea &lt;-\n  # Access the VegVault\n  vaultkeepr::open_vault(\n    path = paste0(\n      data_storage_path,\n      \"Data/VegVault/VegVault.sqlite\"\n    )\n  ) %&gt;%\n  # Start by adding dataset information\n  vaultkeepr::get_datasets() %&gt;%\n  # Select both modern and paleo plot data\n  vaultkeepr::select_dataset_by_type(\n    sel_dataset_type = c(\n      \"vegetation_plot\",\n      \"fossil_pollen_archive\"\n    )\n  ) %&gt;%\n  # Limit data to North America\n  vaultkeepr::select_dataset_by_geo(\n    lat_lim = c(22, 60),\n    long_lim = c(-135, -60)\n  ) %&gt;%\n  # Add samples\n  vaultkeepr::get_samples() %&gt;%\n  # Limit the samples by age\n  vaultkeepr::select_samples_by_age(\n    age_lim = c(0, 15e3)\n  ) %&gt;%\n  # Add taxa\n  vaultkeepr::get_taxa(\n    # Classify all data to a genus level\n    classify_to = \"genus\"\n  ) %&gt;%\n  # Extract only Picea data\n  vaultkeepr::select_taxa_by_name(sel_taxa = c(\"Picea\"))\n\n# Execute the plan\ndata_na_plots_picea &lt;-\n  vaultkeepr::extract_data(plan_na_plots_picea)\nNow, we plot the presence of Picea in each 2500-year bin."
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#example-2",
+    "href": "Technical_overview/Technical_overview_master.html#example-2",
+    "title": "VegVault - technical overview",
+    "section": "Example 2",
+    "text": "Example 2\nIn the second example, let’s imagine we want to do Species Distribution Modeling for all plant taxa in the Czech Republic. We will extract modern plot-based data and Mean Annual temprature.\n# Again start by creating a plan\nplan_cz_modern &lt;-\n  # Acess the VegVault file\n  vaultkeepr::open_vault(\n    path = paste0(\n      data_storage_path,\n      \"Data/VegVault/VegVault.sqlite\"\n    )\n  ) %&gt;%\n  # Add the dataset information\n  vaultkeepr::get_datasets() %&gt;%\n  # Select modern plot data and climate\n  vaultkeepr::select_dataset_by_type(\n    sel_dataset_type = c(\n      \"vegetation_plot\",\n      \"gridpoints\"\n    )\n  ) %&gt;%\n  # Limit data to Czech Republic\n  vaultkeepr::select_dataset_by_geo(\n    lat_lim = c(48.5, 51.1),\n    long_lim = c(12, 18.9)\n  ) %&gt;%\n  # Add samples\n  vaultkeepr::get_samples() %&gt;%\n  # select only modern data\n  vaultkeepr::select_samples_by_age(\n    age_lim = c(0, 0)\n  ) %&gt;%\n  # Add abiotic data\n  vaultkeepr::get_abiotic() %&gt;%\n  # Select only Mean Anual Temperature (bio1)\n  vaultkeepr::select_abiotic_var_by_name(\n    sel_var_name = \"bio1\"\n  ) %&gt;%\n  # add taxa\n  vaultkeepr::get_taxa()\n\n# Execute the plan\ndata_cz_modern &lt;-\n  vaultkeepr::extract_data(plan_cz_modern)\nNow we can simply plot both the climatic data and the plot vegetation data:"
+  },
+  {
+    "objectID": "Technical_overview/Technical_overview_master.html#example-3",
+    "href": "Technical_overview/Technical_overview_master.html#example-3",
+    "title": "VegVault - technical overview",
+    "section": "Example 3",
+    "text": "Example 3\nIn the last example, let’s imagine we want to reconstruct the Community Weighted Mean (CWM) of plant height for Latin America between 6-12 ka yr BP.\n# Again start by creating a plan\nplan_la_traits &lt;-\n  # Acess the VegVault file\n  vaultkeepr::open_vault(\n    path = paste0(\n      data_storage_path,\n      \"Data/VegVault/VegVault.sqlite\"\n    )\n  ) %&gt;%\n  # Add the dataset information\n  vaultkeepr::get_datasets() %&gt;%\n  # Select modern plot data and climate\n  vaultkeepr::select_dataset_by_type(\n    sel_dataset_type = c(\n      \"fossil_pollen_archive\",\n      \"traits\"\n    )\n  ) %&gt;%\n  # Limit data to Latin America\n  vaultkeepr::select_dataset_by_geo(\n    lat_lim = c(-53, 28),\n    long_lim = c(-110, -38),\n    sel_dataset_type = c(\n      \"fossil_pollen_archive\",\n      \"traits\"\n    )\n  ) %&gt;%\n  # Add samples\n  vaultkeepr::get_samples() %&gt;%\n  # Limit to 6-12 ka yr BP\n  vaultkeepr::select_samples_by_age(\n    age_lim = c(6e3, 12e3)\n  ) %&gt;%\n  # add taxa\n  vaultkeepr::get_taxa(\n    # Clasify all data to a genus level\n    classify_to = \"genus\"\n  ) %&gt;%\n  # add trait information\n  vaultkeepr::get_traits(\n    # Clasify all data to a genus level\n    classify_to = \"genus\"\n  ) %&gt;%\n  # Only select the plant height\n  vaultkeepr::select_traits_by_domain_name(\n    sel_domain = \"Plant heigh\"\n  )\n\n# Execute the plan\ndata_la_traits &lt;-\n  vaultkeepr::extract_data(plan_la_traits)\nNow let’s plot the overview of the data"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "VegVault",
+    "section": "",
+    "text": "This is official website dedicated to the VegVault project. VegVault is compiling extensive paleo- and neo-ecological vegetation data into a single, accessible database, accompanied by functional traits, and abiotic information, such as climate and soil. By bridging historical and contemporary data, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.\nCreating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.\nThe project is part of BIODYNAMICS project."
+  },
+  {
+    "objectID": "index.html#database-linking-global-paleo--and-neo-vegetation-data-functional-traits-and-climate",
+    "href": "index.html#database-linking-global-paleo--and-neo-vegetation-data-functional-traits-and-climate",
+    "title": "VegVault",
+    "section": "",
+    "text": "This is official website dedicated to the VegVault project. VegVault is compiling extensive paleo- and neo-ecological vegetation data into a single, accessible database, accompanied by functional traits, and abiotic information, such as climate and soil. By bridging historical and contemporary data, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.\nCreating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.\nThe project is part of BIODYNAMICS project."
+  }
+]
