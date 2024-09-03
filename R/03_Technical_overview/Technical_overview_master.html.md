@@ -393,8 +393,8 @@ style="width:100.0%" data-fig-align="center" />
     repo](https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.0.0)**
     - a Tag (v1.0.0) to process current vegetation plot data
 11. **[VegVault-Trait_data GitHub
-    repo](https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.0.0)**
-    - a Tag (v1.0.0) to process vegetation trait data
+    repo](https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.1.0)**
+    - a Tag (v1.1.0) to process vegetation trait data
 12. **[VegVault-abiotic_data GitHub
     repo](https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0)**
     - a Tag (v1.1.0) to process abiotic data
