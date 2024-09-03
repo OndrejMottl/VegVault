@@ -1,5 +1,5 @@
 ---
-title: "VegVault database"
+title: "VegVault - technical overview"
 date: last-modified
 author: Ondřej Mottl
 format:
@@ -23,7 +23,7 @@ editor:
 
 library(here)
 
-here::i_am("R/03_Technical_overview/Technical_overview_master.qmd")
+here::i_am("Technical_overview/Technical_overview_master.qmd")
 
 # Load configuration
 source(
@@ -34,7 +34,7 @@ source(
 
 source(
   here::here(
-    "R/03_Technical_overview/00_Config_quarto.R"
+    "Technical_overview/00_Config_quarto.R"
   )
 )
 

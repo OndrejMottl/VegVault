@@ -1,5 +1,5 @@
 ---
-title: "VegVault database"
+title: "VegVault - technical overview"
 date: last-modified
 author: Ondřej Mottl
 format:
