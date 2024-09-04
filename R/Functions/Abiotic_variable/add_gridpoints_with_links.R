@@ -24,7 +24,7 @@ add_gridpoints_with_links <- function(
   data_bd_vegetation_raw <-
     vaultkeepr::open_vault(
       path = paste0(
-        data_storage_path, # [config]
+        path_to_vegvault, # [config]
         "Data/VegVault/VegVault.sqlite"
       )
     ) %>%

@@ -41,10 +41,7 @@ sel_dataset_for_example <- 91256
 con <-
   DBI::dbConnect(
     RSQLite::SQLite(),
-    paste0(
-      data_storage_path,
-      "Data/VegVault/VegVault.sqlite"
-    )
+    path_to_vegvault
   )
 
 
@@ -60,23 +57,13 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   fig.align = "center",
-  fig.path = "figures/",
-  out.width = "100%"
+  fig.path = "Figures/",
+  out.width = "100%",
+  fig.bg = col_beige_light,
+  background = col_beige_light,
+  strip.white = FALSE
 )
 
-# theme setup
-ggplot2::theme_set(
-  ggplot2::theme_bw() +
-    ggplot2::theme(
-      text = ggplot2::element_text(size = text_size), # [config]
-      line = ggplot2::element_line(linewidth = line_size), # [config]
-      plot.title = ggplot2::element_text(size = 15),
-      axis.title = ggplot2::element_text(size = 15),
-      axis.text = ggplot2::element_text(size = 15),
-      strip.text = ggplot2::element_text(size = 15),
-      panel.grid = ggplot2::element_blank()
-    )
-)
 
 # N characters for wrapping text
 fig_width_def <- 60 # this is used to wrap text.
@@ -84,10 +71,10 @@ fig_width_def <- 60 # this is used to wrap text.
 # 3.1 palette setup -----
 palette_dataset_type <-
   c(
-    "#3DDC97",
-    "#AA6DA3",
-    "#156064",
-    "#5F634F"
+    col_green_dark,
+    col_blue_light,
+    col_brown_dark,
+    col_white
   ) %>%
   rlang::set_names(
     nm = c(
@@ -100,11 +87,11 @@ palette_dataset_type <-
 
 palette_dataset_source_type <-
   c(
-    "#3DDC97",
-    "#3DDC47",
-    "#AA6DA3",
-    "#156064",
-    "#5F634F"
+    col_green_dark,
+    col_green_light,
+    col_blue_light,
+    col_brown_dark,
+    col_white
   ) %>%
   rlang::set_names(
     nm = c(
@@ -117,14 +104,12 @@ palette_dataset_source_type <-
   )
 
 palette_trait_dommanins <-
-  c(
-    "#156064",
-    "#1C6C84",
-    "#47749F",
-    "#7C78AD",
-    "#AE7AAC",
-    "#D57F9C"
-  ) %>%
+  grDevices::colorRampPalette(
+    c(
+      col_brown_light,
+      col_brown_dark
+    )
+  )(6) %>%
   rlang::set_names(
     nm = c(
       "Diaspore mass",
@@ -135,45 +120,3 @@ palette_trait_dommanins <-
       "Stem specific density"
     )
   )
-
-# 3.2 helper functions -----
-
-#' @description
-#' A helper function to colour the facets
-color_facets <-
-  function(sel_plot,
-           sel_palette,
-           direction = c("vertical", "horizontal"),
-           return_raw = FALSE) {
-    direction <- match.arg(direction)
-    g <-
-      ggplot2::ggplot_gtable(
-        ggplot2::ggplot_build(sel_plot)
-      )
-    stripr <-
-      which(grepl("strip-t", g$layout$name))
-
-    for (i in seq_along(stripr)) {
-      object_val <-
-        sort(stripr,
-          decreasing = ifelse(direction == "vertical",
-            TRUE,
-            FALSE
-          )
-        )[i]
-
-      j <-
-        which(grepl("rect", g$grobs[[object_val]]$grobs[[1]]$childrenOrder))
-
-      g$grobs[[object_val]]$grobs[[1]]$children[[j]]$gp$fill <-
-        sel_palette[i]
-    }
-
-    if (
-      return_raw == TRUE
-    ) {
-      return(g)
-    } else {
-      grid::grid.draw(g)
-    }
-  }
