@@ -39,9 +39,6 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# pkgdown site
-docs/
-
 # translation temp files
 po/*~
 
@@ -58,3 +55,6 @@ Data/Processed/Classified_taxa/*
 
 # debug
 debug.R
+
+# quarto
+/.quarto/

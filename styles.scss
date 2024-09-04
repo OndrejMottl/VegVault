@@ -1,0 +1,140 @@
+/*-- scss:defaults --*/
+
+@font-face {
+  font-family: 'Renogate' !important;
+  src: local('Fonts/Renogare-Regular.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Minecraft' !important;
+  src: local('Fonts/Minecraft.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+
+// Vertical spacing between blocks of text
+$smallMargin: 5px;
+$blockMargin: 10px;
+$largeMargin: 20px;
+
+// Colors
+$white: #ffffffff;
+
+$brownDark: #8A554E;
+$bronwLight: #BC7052;
+
+$beigeDark: #AE8A7B;
+$beigeLight: #E6B482;
+
+$blueDark: #242531;
+$blueLight: #52758F;
+
+$greenDark: #5D7841;
+$greenLight: #9BC058;
+
+$body-color: $blueDark !default;
+$link-color: $greenDark !default;
+$selection-bg: $greenDark !default;
+$code-color: $blueDark !default;
+
+// Background
+$backgroundColor: $beigeLight !default;
+
+// Typography
+$mainFont: "Renogate", sans-serif !default;
+$mainFontSize: 1rem;
+$h1FontSize: 2.5rem;
+$h2FontSize: 2rem;
+$h3FontSize: 1.5rem;
+$body-line-height: 1.5;
+
+$headingFont-h1: "Minecraft" !default;
+$headingFont: "Renogate" !default;
+$headingLineHeight: 1.2;
+$headingLetterSpacing: normal;
+$headingTextShadow: none;
+$headingFontWeight: normal;
+
+// Layout
+$content-max-width: 900px;
+
+/*-- scss:rules --*/
+
+/* General text styling */
+body {
+  font-family: $mainFont;
+  font-size: $mainFontSize;
+  line-height: $body-line-height;
+  color: $body-color;
+  background-color: $backgroundColor;
+}
+
+a {
+  color: $link-color;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
+/* Headings */
+h1,
+.reveal h1 {
+  font-family: $headingFont-h1;
+  color: $white;
+  font-size: $h1FontSize;
+  line-height: $headingLineHeight;
+  letter-spacing: $headingLetterSpacing;
+  font-weight: $headingFontWeight;
+  margin-top: $largeMargin;
+  text-shadow: 3px 4px 5px $blueDark;
+}
+
+h2,
+.reveal h2 {
+  font-family: $headingFont;
+  color: $blueLight;
+  font-size: $h2FontSize;
+  line-height: $headingLineHeight;
+  letter-spacing: $headingLetterSpacing;
+  font-weight: $headingFontWeight;
+  margin-top: $blockMargin;
+}
+
+h3,
+.reveal h3 {
+  font-family: $headingFont;
+  color: $blueDark;
+  font-size: $h3FontSize;
+  line-height: $headingLineHeight;
+  letter-spacing: $headingLetterSpacing;
+  font-weight: $headingFontWeight;
+  margin-top: $smallMargin;
+}
+
+/* Code block */
+code {
+  background-color: darken($backgroundColor, 20%);
+  padding: $smallMargin;
+  border-radius: 5px;
+}
+
+/* List styling */
+ul {
+  padding-left: 0;
+  margin-left: $blockMargin;
+}
+
+
+/* Navbar */
+.nav-item {
+  border-left: 1px solid $blueDark;
+}

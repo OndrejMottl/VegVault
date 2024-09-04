@@ -34,10 +34,7 @@ source(
 con <-
   DBI::dbConnect(
     RSQLite::SQLite(),
-    paste0(
-      data_storage_path,
-      "Data/VegVault/VegVault.sqlite"
-    )
+    path_to_vegvault
   )
 
 DBI::dbListTables(con)
