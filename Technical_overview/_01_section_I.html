@@ -63,15 +63,19 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><strong>VegVault</strong> is a SQLite interdisciplinary database linking plot-based vegetation data with functional traits and climate. Specifically, it contains:</p>
+<p><strong>VegVault</strong> is a SQLite interdisciplinary database linking plot-based vegetation data with functional traits and climate.</p>
+<p>Vault integrates data from multiple well-established sources to provide a comprehensive view of vegetation dynamics. By organizing data into clearly defined types and providing comprehensive referencing, VegVault supports detailed and high-quality ecological research. This structured approach ensures that data are accessible, reliable, traceable, and facilitate a wide range of analyses and applications across disciplines. See the Data Acquisition section for more details about reproducibility.</p>
+<section id="data-structure" class="level2">
+<h2 class="anchored" data-anchor-id="data-structure">Data Structure</h2>
+<p>VegVault is organized into several section to systematically manage the varying datasets it integrates. The main structure is the <code>Dataset</code>, which serves as the cornerstone of the database structure. <code>Datasets</code> are further linked to <code>Samples</code>, representing individual data points within each dataset. Each <code>Dataset</code> can be linked to several <code>Samples</code> only if the samples differ in their age. Moreover, Each <code>Dataset</code> is classified into one of four types:</p>
 <ul>
-<li>current vegetation plot data</li>
-<li>past vegetation plot data (fossil pollen records)</li>
-<li>functional trait data</li>
-<li>current abiotic data (climate, soil)</li>
-<li>past abiotic data (climate)</li>
+<li>current vegetation plots,</li>
+<li>past vegetation (fossil pollen records)</li>
+<li>functional traits</li>
+<li>gridpoint (a dataset type created to hold abiotic data, see details below).</li>
 </ul>
-<p>The goal of the database is to compile interdisciplinary data …</p>
+<p>For current and past vegetation <code>Dataset</code>, the <code>Samples</code> holds information about their vegetation, and are linked to specific <code>Taxa</code>, which are the taxa names derived directly from the main data sources. <code>Trait</code> information is organised in separate <code>Datasets</code> (as they are associated with unique information about their spatio-temporal location, references, etc) but associated with these same <code>Taxa</code> codes as vegetation data. Moreover, each <code>Taxa</code> disregard of the source is associated with classification information (i.e.&nbsp;species, genus and family name). “<em>Gridpoints</em>” are artificially created <code>Datasets</code> with even spatio-temporal resolution to hold the abiotic information. While the vegetation data is the main focus of the database, the structure of using separete <code>Datasets</code> ensuree a comprehensive organization of the data (see Figure XXX). Note that this is just a simplified description of the database structure, see XXX for full database structure.</p>
+</section>
 
 </main>
 <!-- /main column -->

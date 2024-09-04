@@ -49,18 +49,8 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="abiotic-data" class="level2">
 <h2 class="anchored" data-anchor-id="abiotic-data">Abiotic data</h2>
-<p>Abiotic data is aimed to provide information about all relevant abiotic information affecting vegetation distribution and its traits.</p>
-<p>Abiotic data is linked to the structure of the <strong>VegVault</strong> Database by the <code>gridpoints</code>, which are artificially created points to <em>reasonably</em> cover the resolution of both modern and past data for vegetation and abiotic data.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figures/distribution%20of%20gridpoints-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>There are currently abiotic from <a href="https://chelsa-climate.org/">CHELSA</a> and <a href="https://chelsa-climate.org/chelsa-trace21k/">CHELSA-TRACE21</a> and <a href="https://www.isric.org/explore/wosis">WoSIS</a>. CHELSA and CHELSA-TRACE21 are built on the same structure of variables (visit the websites for more info).</p>
+<p>The abiotic data in the <strong>VegVault</strong> database provide essential information on environmental factors affecting vegetation distribution and traits. These data include variables such as climate and soil conditions, which are crucial for understanding the ecological contexts of vegetation dynamics.</p>
+<p>Currently, <strong>VegVault</strong> includes abiotic data from <a href="https://chelsa-climate.org/">CHELSA</a>, <a href="https://chelsa-climate.org/chelsa-trace21k/">CHELSA-TRACE21</a>, and <a href="https://www.isric.org/explore/wosis">WoSIS</a>. CHELSA and CHELSA-TRACE21 provide high-resolution climate data, while WoSIS offers detailed soil information.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
  
@@ -195,7 +185,6 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 
 </div>
 </div>
-<p>Abiotic data is simply linked to <code>Samples</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -205,25 +194,36 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 </div>
 </div>
 </div>
+<p>Because original data are stored as raster, which cannot be stored in SQLite database, we created artificial points called <code>gridpoints</code> in the middle of each raster cell to represent the data. To unify the varying resolution of rasters and to limit the amount of data, we resampled all data into ~ 25km resolution and 500-year slices. This mean that there we created uniform spatio-temporal matrix of <code>gridpoints</code> to hold the abiotic data. Gridpoints are stored in artificially created <code>Datasets</code> and <code>Samples</code>, with one <code>Dataset</code> holding more <code>Samples</code> only if the differ in age. Next, we have estimated the spatial and temporal distance between each <code>gridpoint</code> and other non-<code>gridpoint</code> <code>Samples</code> (<code>vegetation_plot</code>, <code>fossil_pollen_archive</code>, and <code>traits</code>). We store the link between <code>gridpoint</code> and non-<code>gridpoint</code> <code>Samples</code> as well as the spatial and temporal distance. As this result in very amount of data, we have discarded any <code>gridpoint</code> Sample, which is not close to 50 km and/or 5000 years to any other non-<code>gridpoint</code> <code>Samples</code> as not relevant for the vegetation dynamics.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/exampe%20of%20abitic%20data%20-%20bio1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+<p><img src="../Figures/%20fig_data_grid_coord%20.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Note that the spatial resolution is higher for modern climate data than for the past. This is to reduce the size of the past climate data.</p>
+<p>Such data structure allow that environmental context is readily available for each vegetation and trait <code>Sample</code>. while for each non-<code>gridpoint</code> <code>Sample</code>, user can select the closest spatio-temporally abiotic data or get average from all surrounding <code>gridpoints</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/exampe%20of%20abitic%20data%20-%20soil-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+<p><img src="DB_scheme_visualisation/AbioticDataReference.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
 </div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../Figures/%20fig_gridpoint_links_example%20.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By providing comprehensive and well-structured abiotic data, VegVault enhances the ability to study the interactions between vegetation and their environment, supporting advanced ecological research and modelling efforts.</p>
 </section>
 
 </main>

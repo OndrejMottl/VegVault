@@ -49,7 +49,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="taxa" class="level2">
 <h2 class="anchored" data-anchor-id="taxa">Taxa</h2>
-<p>The <strong>VegVault</strong> database contains taxa names directly from main <em>Data Source-types</em>.</p>
+<p>The <strong>VegVault</strong> database records taxa names derived directly from the primary data sources. Each individual <code>Taxon</code> is linked to corresponding <code>Samples</code> through the <code>SampleTaxa</code> table, ensuring accurate and systematic association between species and their ecological data.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -59,7 +59,6 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<p>Individual taxa names are linked to the <code>Samples</code> by the <code>SampleTaxa</code> table.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -73,15 +72,14 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/Number%20of%20taxa%20per%20data%20source%20type-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+<p><img src="../Figures/%20fig_n_taxa_per_source_type%20.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 <section id="classification" class="level3">
 <h3 class="anchored" data-anchor-id="classification">Classification</h3>
-<p>In order to obtain classification of all taxa present in the <strong>VegVault</strong> database, the {<a href="https://github.com/OndrejMottl/taxospace">taxospace</a>} R package has been utilized, automatically aligning the names to <a href="https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c">Taxonomy Backbone</a> from <a href="https://www.gbif.org/">Global Biodiversity Information Facility</a>.</p>
-<p>Classification up to the family level is then saved for each taxon.</p>
+<p>To classify the diverse taxa present in the <strong>VegVault</strong> database, the {<a href="https://github.com/OndrejMottl/taxospace">taxospace</a>} R package was used. This tool automatically aligns taxa names with the <a href="https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c">Taxonomy Backbone</a> from the <a href="https://www.gbif.org/">Global Biodiversity Information Facility</a>, providing a standardized classification framework. Specifically, we try to find the best match of the raw names of taxa using <a href="https://resolver.globalnames.org/">Global Names Resolver</a>. Classification information, detailed up to the family level, is stored for each taxon, ensuring consistency and facilitating comparative analyses across different datasets. Currently, the <strong>VegVault</strong> database holds over 110 thousand taxonomic names, of which we were unable to classify only 1312 (1.2%).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -95,7 +93,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/taxa%20classification%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+<p><img src="../Figures/%20fig_n_taxa_per_class%20.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>

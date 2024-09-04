@@ -22,7 +22,7 @@ website:
 format:
   html:
     theme: 
-    - styles.scss
+      - styles.scss
 
 
 

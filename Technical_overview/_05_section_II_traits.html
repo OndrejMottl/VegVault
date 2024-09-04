@@ -49,7 +49,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="traits" class="level2">
 <h2 class="anchored" data-anchor-id="traits">Traits</h2>
-<p>Functional traits of vegetation taxa follow the same structure of <code>Dataset</code> and <code>Samples</code> obtained directly from <em>Dataset Source-types</em>.</p>
+<p>Functional traits of vegetation taxa follow the same structure of <code>Dataset</code> and <code>Samples</code> obtained directly from <code>Dataset</code> <code>Source-Types</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -61,7 +61,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <section id="trait-domain" class="level3">
 <h3 class="anchored" data-anchor-id="trait-domain">Trait domain</h3>
-<p>As there are many varying names for the same “traits”, the <strong>VegVault</strong> database contains <em>Trait Domain</em> information to group traits together.</p>
+<p>As there are differences in trait names across sources of data and individual <code>Datasets</code>, the <strong>VegVault</strong> database contains <code>Trait Domain</code> information to group traits together.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -71,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<p>There are currently 6 trait domains following the <a href="https://www.nature.com/articles/nature16489">Diaz et al.&nbsp;(2016)</a></p>
+<p>There are currently 6 <code>Trait Domains</code> following the <a href="https://www.nature.com/articles/nature16489">Diaz et al.&nbsp;(2016)</a></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
  
@@ -104,27 +104,91 @@ ul.task-list li input[type="checkbox"] {
         
               <tr>
                 <th scope="col">Trait domain</th>
+                <th scope="col">Trait</th>
+                <th scope="col">Data source</th>
               </tr>
         </thead>
         
         <tbody>
                 <tr>
                   <td>Stem specific density              </td>
+                  <td>stem wood density                                                                                          </td>
+                  <td>BIEN</td>
+                </tr>
+                <tr>
+                  <td>Stem specific density              </td>
+                  <td>Stem specific density (SSD, stem dry mass per stem fresh volume) or wood density                           </td>
+                  <td>TRY </td>
                 </tr>
                 <tr>
                   <td>Leaf nitrogen content per unit mass</td>
+                  <td>leaf nitrogen content per leaf dry mass                                                                    </td>
+                  <td>BIEN</td>
+                </tr>
+                <tr>
+                  <td>Leaf nitrogen content per unit mass</td>
+                  <td>Leaf nitrogen (N) content per leaf dry mass                                                                </td>
+                  <td>TRY </td>
                 </tr>
                 <tr>
                   <td>Diaspore mass                      </td>
+                  <td>seed mass                                                                                                  </td>
+                  <td>BIEN</td>
+                </tr>
+                <tr>
+                  <td>Diaspore mass                      </td>
+                  <td>Seed dry mass                                                                                              </td>
+                  <td>TRY </td>
                 </tr>
                 <tr>
                   <td>Plant heigh                        </td>
+                  <td>whole plant height                                                                                         </td>
+                  <td>BIEN</td>
+                </tr>
+                <tr>
+                  <td>Plant heigh                        </td>
+                  <td>Plant height vegetative                                                                                    </td>
+                  <td>TRY </td>
                 </tr>
                 <tr>
                   <td>Leaf Area                          </td>
+                  <td>leaf area                                                                                                  </td>
+                  <td>BIEN</td>
+                </tr>
+                <tr>
+                  <td>Leaf Area                          </td>
+                  <td>Leaf area (in case of compound leaves undefined if leaf or leaflet, undefined if petiole is in- or exluded)</td>
+                  <td>TRY </td>
+                </tr>
+                <tr>
+                  <td>Leaf Area                          </td>
+                  <td>Leaf area (in case of compound leaves: leaf, petiole excluded)                                             </td>
+                  <td>TRY </td>
+                </tr>
+                <tr>
+                  <td>Leaf Area                          </td>
+                  <td>Leaf area (in case of compound leaves: leaf, petiole included)                                             </td>
+                  <td>TRY </td>
+                </tr>
+                <tr>
+                  <td>Leaf Area                          </td>
+                  <td>Leaf area (in case of compound leaves: leaf, undefined if petiole in- or excluded)                         </td>
+                  <td>TRY </td>
                 </tr>
                 <tr>
                   <td>Leaf mass per area                 </td>
+                  <td>leaf mass per area                                                                                         </td>
+                  <td>BIEN</td>
+                </tr>
+                <tr>
+                  <td>Leaf mass per area                 </td>
+                  <td>Leaf area per leaf dry mass (specific leaf area, SLA or 1/LMA): petiole included                           </td>
+                  <td>TRY </td>
+                </tr>
+                <tr>
+                  <td>Leaf mass per area                 </td>
+                  <td>Leaf area per leaf dry mass (specific leaf area, SLA or 1/LMA): undefined if petiole is in- or excluded)   </td>
+                  <td>TRY </td>
                 </tr>
         </tbody>
       </table>
@@ -173,6 +237,8 @@ ul.task-list li input[type="checkbox"] {
       }
 
 window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd33kj2z(0, 0, 'tinytable_css_0zri8tgl5kkvcg151faz') })
+window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd33kj2z(0, 1, 'tinytable_css_0zri8tgl5kkvcg151faz') })
+window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd33kj2z(0, 2, 'tinytable_css_0zri8tgl5kkvcg151faz') })
     </script>
 
   
@@ -184,7 +250,7 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/trait%20per%20domain%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+<p><img src="../Figures/%20fig_n_traits_per_domain%20.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -192,7 +258,7 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 </section>
 <section id="trait-values" class="level3">
 <h3 class="anchored" data-anchor-id="trait-values">Trait Values</h3>
-<p>To store a trait value, information needs to be linked among <code>Dataset</code>, <code>Sample</code>, <code>Taxa</code>, and <code>Trait</code>.</p>
+<p>Storing trait values in <strong>VegVault</strong> involves linking information across <code>Datasets</code>, <code>Samples</code>, <code>Taxa</code>, and <code>Traits</code>. This comprehensive linkage ensures that each trait value is accurately associated with its relevant ecological, environmental and taxonomic context.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -206,7 +272,7 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/trait%20value%20occurences%20plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+<p><img src="../Figures/%20fig_n_occurences_per_dommain%20.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -214,7 +280,7 @@ window.addEventListener('load', function () { styleCell_tinytable_rfl84f3xlp5edd
 </section>
 <section id="trait-reference" class="level3">
 <h3 class="anchored" data-anchor-id="trait-reference">Trait reference</h3>
-<p>For full clarity, on top of <code>Dataset</code> and <code>Sample</code>, each <code>Trait</code> can have additional references.</p>
+<p>To ensure clarity and reproducibility, each trait in the <strong>VegVault</strong> database can have additional <code>References</code> beyond the general <code>Dataset</code> and <code>Sample</code> references. These trait-specific <code>References</code> provide detailed provenance and citation information, supporting rigorous scientific research and enabling users to trace the origins and validation of each trait value.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">

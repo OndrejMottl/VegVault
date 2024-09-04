@@ -2,22 +2,18 @@
 
 ## Abiotic data
 
-Abiotic data is aimed to provide information about all relevant abiotic
-information affecting vegetation distribution and its traits.
+The abiotic data in the **VegVault** database provide essential
+information on environmental factors affecting vegetation distribution
+and traits. These data include variables such as climate and soil
+conditions, which are crucial for understanding the ecological contexts
+of vegetation dynamics.
 
-Abiotic data is linked to the structure of the **VegVault** Database by
-the `gridpoints`, which are artificially created points to *reasonably*
-cover the resolution of both modern and past data for vegetation and
-abiotic data.
-
-<img src="figures/distribution%20of%20gridpoints-1.png"
-style="width:100.0%" data-fig-align="center" />
-
-There are currently abiotic from [CHELSA](https://chelsa-climate.org/)
-and [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/) and
+Currently, **VegVault** includes abiotic data from
+[CHELSA](https://chelsa-climate.org/),
+[CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/), and
 [WoSIS](https://www.isric.org/explore/wosis). CHELSA and CHELSA-TRACE21
-are built on the same structure of variables (visit the websites for
-more info).
+provide high-resolution climate data, while WoSIS offers detailed soil
+information.
 
 | Variable name | Variable unit    | source of data  |
 |---------------|------------------|-----------------|
@@ -30,16 +26,41 @@ more info).
 | bio19         | kg m-2 quarter-1 | CHELSA          |
 | HWSD2         | Unitless         | WoSIS-SoilGrids |
 
-Abiotic data is simply linked to `Samples`.
-
 <img src="DB_scheme_visualisation/AbioticData.png" style="width:100.0%"
 data-fig-align="center" />
 
-<img src="figures/exampe%20of%20abitic%20data%20-%20bio1-1.png"
+Because original data are stored as raster, which cannot be stored in
+SQLite database, we created artificial points called `gridpoints` in the
+middle of each raster cell to represent the data. To unify the varying
+resolution of rasters and to limit the amount of data, we resampled all
+data into ~ 25km resolution and 500-year slices. This mean that there we
+created uniform spatio-temporal matrix of `gridpoints` to hold the
+abiotic data. Gridpoints are stored in artificially created `Datasets`
+and `Samples`, with one `Dataset` holding more `Samples` only if the
+differ in age. Next, we have estimated the spatial and temporal distance
+between each `gridpoint` and other non-`gridpoint` `Samples`
+(`vegetation_plot`, `fossil_pollen_archive`, and `traits`). We store the
+link between `gridpoint` and non-`gridpoint` `Samples` as well as the
+spatial and temporal distance. As this result in very amount of data, we
+have discarded any `gridpoint` Sample, which is not close to 50 km
+and/or 5000 years to any other non-`gridpoint` `Samples` as not relevant
+for the vegetation dynamics.
+
+<img src="../Figures/%20fig_data_grid_coord%20.png" style="width:100.0%"
+data-fig-align="center" />
+
+Such data structure allow that environmental context is readily
+available for each vegetation and trait `Sample`. while for each
+non-`gridpoint` `Sample`, user can select the closest spatio-temporally
+abiotic data or get average from all surrounding `gridpoints`.
+
+<img src="DB_scheme_visualisation/AbioticDataReference.png"
 style="width:100.0%" data-fig-align="center" />
 
-Note that the spatial resolution is higher for modern climate data than
-for the past. This is to reduce the size of the past climate data.
-
-<img src="figures/exampe%20of%20abitic%20data%20-%20soil-1.png"
+<img src="../Figures/%20fig_gridpoint_links_example%20.png"
 style="width:100.0%" data-fig-align="center" />
+
+By providing comprehensive and well-structured abiotic data, VegVault
+enhances the ability to study the interactions between vegetation and
+their environment, supporting advanced ecological research and modelling
+efforts.

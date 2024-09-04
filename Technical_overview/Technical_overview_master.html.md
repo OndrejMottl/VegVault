@@ -7,8 +7,6 @@ format:
     toc: true
     toc-depth: 3
     fig-width: 10
-    self_contained: true
-    embed-resources: true
     keep-md: true
 editor: 
   markdown: 
@@ -21,63 +19,92 @@ editor:
 
 
 **VegVault** is a SQLite interdisciplinary database linking plot-based
-vegetation data with functional traits and climate. Specifically, it
-contains:
+vegetation data with functional traits and climate.
 
-- current vegetation plot data
-- past vegetation plot data (fossil pollen records)
-- functional trait data
-- current abiotic data (climate, soil)
-- past abiotic data (climate)
+Vault integrates data from multiple well-established sources to provide
+a comprehensive view of vegetation dynamics. By organizing data into
+clearly defined types and providing comprehensive referencing, VegVault
+supports detailed and high-quality ecological research. This structured
+approach ensures that data are accessible, reliable, traceable, and
+facilitate a wide range of analyses and applications across disciplines.
+See the Data Acquisition section for more details about reproducibility.
 
-The goal of the database is to compile interdisciplinary data …
+## Data Structure
+
+VegVault is organized into several section to systematically manage the
+varying datasets it integrates. The main structure is the `Dataset`,
+which serves as the cornerstone of the database structure. `Datasets`
+are further linked to `Samples`, representing individual data points
+within each dataset. Each `Dataset` can be linked to several `Samples`
+only if the samples differ in their age. Moreover, Each `Dataset` is
+classified into one of four types:
+
+- current vegetation plots,
+- past vegetation (fossil pollen records)
+- functional traits
+- gridpoint (a dataset type created to hold abiotic data, see details
+  below).
+
+For current and past vegetation `Dataset`, the `Samples` holds
+information about their vegetation, and are linked to specific `Taxa`,
+which are the taxa names derived directly from the main data sources.
+`Trait` information is organised in separate `Datasets` (as they are
+associated with unique information about their spatio-temporal location,
+references, etc) but associated with these same `Taxa` codes as
+vegetation data. Moreover, each `Taxa` disregard of the source is
+associated with classification information (i.e. species, genus and
+family name). “*Gridpoints*” are artificially created `Datasets` with
+even spatio-temporal resolution to hold the abiotic information. While
+the vegetation data is the main focus of the database, the structure of
+using separete `Datasets` ensuree a comprehensive organization of the
+data (see Figure XXX). Note that this is just a simplified description
+of the database structure, see XXX for full database structure.
 
 # Section II: Overview of VegVault 1.0.0
 
 
-The database is structured in several logical levels, such as `Dataset`,
-`Sample`, `Taxa`, `Trait`, etc.
-
 ## Dataset
 
-`Dataset` represents the highest levels in the hierarchy. It is the main
-keystone in the VegVault structure.
+The `Dataset` represents the main structure in the VegVault, serving as
+the keystone for organizing and managing data. Currently, the VegVault
+database holds over 480,000 Datasets (of which approximately 100,000 are
+gridpoints, which are artificially created to hold abiotic data, see
+details below). Here we will explain some, but not all, of the features
+of the `Dataset`.
 
 <img src="DB_scheme_visualisation/Datasets.png" style="width:100.0%"
 data-fig-align="center" />
 
 ### Dataset Type
 
-`dataset_type_id` defines the basic type of a dataset. This is the
-highest level of classification of the data
+The `Dataset Type` defines the most basic classification of each
+`Dataset`, ensuring that the vast amount of data is categorized
+systematically. Currently, **VegVault** contains the following types of
+Datasets:
 
-Currently, there **VegVault** consist of those types:
-
-- **vegetation_plot** - current vegetation plot dataset
-- **fossil_pollen_archive** - past vegetation plot dataset
-- **traits** - dataset containing functional traits
-- **gridpoints** - artificially created dataset to hold abiotic data
+- `vegetation_plot`: This type includes current vegetation plot data,
+  capturing contemporary vegetation characteristics and distributions.
+- `fossil_pollen_archive`: This type encompasses past vegetation plot
+  data derived from fossil pollen records, providing insights into
+  historical vegetation patterns.
+- `traits`: This `Dataset` contains functional trait data, detailing
+  specific characteristics of plant species that influence their
+  ecological roles.
+- `gridpoints`: This type holds artificially created Datasets to manage
+  abiotic data, such as climate and soil information
 
 <img src="DB_scheme_visualisation/DatasetTypeID.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="figures/Dataset%20type%20-%20plots-1.png" style="width:100.0%"
-data-fig-align="center" />
-
-<img src="figures/Dataset%20type%20-%20plots-2.png" style="width:100.0%"
-data-fig-align="center" />
-
-<img src="figures/Dataset%20type%20-%20plots-3.png" style="width:100.0%"
-data-fig-align="center" />
+<img src="../Figures/%20fig_n_datasetes_per_type%20.png"
+style="width:100.0%" data-fig-align="center" />
 
 ### Dataset Source-Type
 
-`dataset_source_type_id` defines the general provider of the dataset.
-This should help to classify, which data pipeline was used to import the
-dataset into the **VegVault**, This is also the first general point of
-reference of data, as all large databases have a citation statement.
-
-Currently, the **VegVault** consist of those source-types:
+Each `Dataset` is derived from a specific `Source-Type` provides
+detailed information on the source, which was used to retrieve the
+original data, enhancing the findability and referencing of primary data
+sources. The current `Source-Types` in **VegVault** include
 
 - **BIEN** - [Botanical Information and Ecology
   Network](https://bien.nceas.ucsb.edu/bien/)
@@ -87,51 +114,67 @@ Currently, the **VegVault** consist of those source-types:
   Database](https://www.try-db.org/TryWeb/Home.php)
 - **FOSSILPOL** - [The workflow that aims to process and standardise
   global palaeoecological pollen
-  data](https://hope-uib-bio.github.io/FOSSILPOL-website/)
-- **gridpoints** - artificially created dataset to hold abiotic data
+  data](https://hope-uib-bio.github.io/FOSSILPOL-website/). Note that we
+  specifically state FOSSILPOL and not Neotoma, as FOSSILPOL not only
+  provides the data but also alters it (e.g, new age-depth models).
+- **gridpoints** - artificially created `Datasets` to hold abiotic data
 
 <img src="DB_scheme_visualisation/DatasetSourceTypeID.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="figures/dataset%20source%20type%20-%20plots-1.png"
+<img src="../Figures/%20fig_n_datasetes_per_source_type%20.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="figures/dataset%20source%20type%20-%20plots-2.png"
+<img src="../Figures/%20p_n_datasetes_per_type_per_source_type%20.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Dataset Source
 
-Each individual dataset from a specific *Data Source-Type* can have
-information on the source of the data (i.e. sub-database). This should
-help to promote better findability of the primary source of data and
-referencing.
+Each individual `Dataset` from a specific `Dataset` `Source-Type` can
+have information on the source of the data (i.e. sub-database). This
+should help to promote better findability of the primary source of data
+and referencing.
 
 <img src="DB_scheme_visualisation/DatasetSourcesID.png"
 style="width:100.0%" data-fig-align="center" />
 
 Currently, there are 706 sources of datasets.
 
-<img src="figures/Dataset%20ID%20-%20plots-1.png" style="width:100.0%"
-data-fig-align="center" />
+<img src="../Figures/%20fig_n_datasetes_per_source%20.png"
+style="width:100.0%" data-fig-align="center" />
 
 ### Sampling method
 
-Some datasets may differ in the way they have been sampled. This could
-be represented by different ways vegetation data have been sampled for
-*Dataset Type* of `vegetation_plot`, or depositional environment for
-*Dataset Type* of `fossil_pollen_archive`.
+Sampling methods vary significantly across the different types of
+`Datasets` integrated into **VegVault**, reflecting the diverse nature
+of the data collected. For current vegetation plots, sampling involves
+standardized plot inventories and surveys that capture detailed
+vegetation characteristics across various regions. In contrast, fossil
+pollen data are collected from sediment cores, representing past
+vegetation and depositional environments. These sampling methods are
+crucial for understanding the context and limitations of each Dataset
+Type. Therefore, information on sampling methods is only present for
+both `vegetation_plot` and `fossil_pollen_archive` `Datasets`, providing
+metadata that ensures accurate and contextually relevant analyses
 
 <img src="DB_scheme_visualisation/SamplingMethodID.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="figures/Dataset%20Sampling%20method%20-%20plots-1.png"
+<img src="../Figures/%20fig_n_sampling_methods_per_dataset_type%20.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### References
 
-*Dataset Source-Type*, *Dataset Source*, and *Sampling Method* can have
-their own references. Moreover, each dataset can have one or more
-references directly to that specific data.
+To support robust and transparent scientific research, each `Dataset` in
+**VegVault** can have multiple references at different levels. The
+`Dataset` `Source-Type`, `Dataset Source`, and `Sampling Method` can all
+have their own references, providing detailed provenance and citation
+information. This multi-level referencing system enhances the
+traceability and validation of the data. **VegVault** currently includes
+706 sources of `Datasets`, each documented to ensure reliability and
+ease of use. Each dataset can also have one or more direct references to
+specific data, further ensuring that users can accurately cite and
+verify the sources of their data.
 
 <img src="DB_scheme_visualisation/DatasetReference.png"
 style="width:100.0%" data-fig-align="center" />
@@ -151,44 +194,54 @@ Papers E Series, 1.*
 
 ## Samples
 
-`Sample` represents the main unit of data in the **VegVault** database.
+`Samples` represent the main unit of data in the **VegVault** database,
+serving as the fundamental building blocks for all analyses. There are
+currently over 13 millions of `Samples` in the **VegVault** database (of
+which ~ 1.6 millions are `gridpoints`, artificially created to hold
+abiotic data, see below).
 
 <img src="DB_scheme_visualisation/Samples.png" style="width:100.0%"
 data-fig-align="center" />
 
 ### Dataset-Sample
 
-First `Samples` are linked to `Datasets` via the `Dataset-Sample` table.
+Each sample is linked to a specific `Dataset` via the `Dataset-Sample`
+table, which ensures that every sample is correctly associated with its
+corresponding `Dataset Type`, whether it is current `vegetation_plots`,
+`fossil_pollen_archive`, `traits`, or `gridpoint`.
 
 <img src="DB_scheme_visualisation/DatasetSample.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="figures/Number%20of%20samples%20plot-1.png"
-style="width:100.0%" data-fig-align="center" />
-
-<img src="figures/Number%20of%20samples%20plot-2.png"
+<img src="../Figures/%20fig_n_samples_per_dataset_type%20.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Sample-size
 
-Vegetation plots can have different sizes, which can have a huge impact
-on analyses. Therefore, the information about the plot is saved
-separately.
+The size of vegetation plots can vary, impacting the analyses and
+interpretations of the data. To account for this variability,
+information about the plot size is recorded separately for each
+`Sample`. This detail is crucial for ecological studies where plot size
+can influence species diversity and abundance metrics.
 
 <img src="DB_scheme_visualisation/SampleSizeID.png" style="width:100.0%"
 data-fig-align="center" />
 
-<img src="figures/plot-size%20plot-1.png" style="width:100.0%"
-data-fig-align="center" />
+<img src="../Figures/%20fig_samples_plot_size%20.png"
+style="width:100.0%" data-fig-align="center" />
 
 ### Sample age
 
-The **VegVault** database deals with both current and paleo data.
-Therefore, each `Sample` has the indication of *age*, with modern
-samples being set to 0. To embrace the uncertainty from age-depth
-modeling paleo-record, the **VegVault** database has a structure to hold
-an uncertainty matrix containing information about all *potential ages*
-of each `Sample` from a paleo `Dataset`.
+**VegVault** encompasses both current and paleo data, necessitating
+accurate age information for each sample. Modern samples are assigned an
+age of 0, while paleo samples uses calibrated years before present (cal
+yr BP). The “present” is here specified as 1950 AD. In addition, each
+`Sample` from `fossil_pollen_archive` `Dataset` is also associated with
+an uncertainty matrix. This matrix provides a range of potential ages
+derived from age-depth modelling, reflecting the inherent uncertainty in
+dating paleoecological records. For instance, we include detailed age
+uncertainty information for a fossil pollen archive with an example
+`Dataset`.
 
 <img src="DB_scheme_visualisation/SampleUncertainty.png"
 style="width:100.0%" data-fig-align="center" />
@@ -196,13 +249,17 @@ style="width:100.0%" data-fig-align="center" />
 We can show this on the previously selected fossil pollen archive with
 dataset ID: 91256.
 
-<img src="figures/Sample%20poential%20age%20-%20plot-1.png"
-style="width:100.0%" data-fig-align="center" />
+<img src="../Figures/%20fig_sample_age%20.png" style="width:100.0%"
+data-fig-align="center" />
 
 ### Sample reference
 
-Individual `Sample` can have specific references on top of the reference
-to `Dataset`
+Each `Sample` in **VegVault** can have specific references in addition
+to the `Dataset`-level references. These individual `Sample` references
+provide detailed provenance and citation information, ensuring that
+users can trace the origin and validation of each data point. This level
+of referencing enhances the transparency and reliability of the data,
+especially when the database continues to be updated in the future.
 
 <img src="DB_scheme_visualisation/SampleReference.png"
 style="width:100.0%" data-fig-align="center" />
@@ -211,36 +268,41 @@ style="width:100.0%" data-fig-align="center" />
 
 ## Taxa
 
-The **VegVault** database contains taxa names directly from main *Data
-Source-types*.
+The **VegVault** database records taxa names derived directly from the
+primary data sources. Each individual `Taxon` is linked to corresponding
+`Samples` through the `SampleTaxa` table, ensuring accurate and
+systematic association between species and their ecological data.
 
 <img src="DB_scheme_visualisation/Taxa.png" style="width:100.0%"
 data-fig-align="center" />
 
-Individual taxa names are linked to the `Samples` by the `SampleTaxa`
-table.
-
 <img src="DB_scheme_visualisation/SampleTaxa.png" style="width:100.0%"
 data-fig-align="center" />
 
-<img src="figures/Number%20of%20taxa%20per%20data%20source%20type-1.png"
+<img src="../Figures/%20fig_n_taxa_per_source_type%20.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Classification
 
-In order to obtain classification of all taxa present in the
-**VegVault** database, the
-{[taxospace](https://github.com/OndrejMottl/taxospace)} R package has
-been utilized, automatically aligning the names to [Taxonomy
+To classify the diverse taxa present in the **VegVault** database, the
+{[taxospace](https://github.com/OndrejMottl/taxospace)} R package was
+used. This tool automatically aligns taxa names with the [Taxonomy
 Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c)
-from [Global Biodiversity Information Facility](https://www.gbif.org/).
-
-Classification up to the family level is then saved for each taxon.
+from the [Global Biodiversity Information
+Facility](https://www.gbif.org/), providing a standardized
+classification framework. Specifically, we try to find the best match of
+the raw names of taxa using [Global Names
+Resolver](https://resolver.globalnames.org/). Classification
+information, detailed up to the family level, is stored for each taxon,
+ensuring consistency and facilitating comparative analyses across
+different datasets. Currently, the **VegVault** database holds over 110
+thousand taxonomic names, of which we were unable to classify only 1312
+(1.2%).
 
 <img src="DB_scheme_visualisation/TaxonClassification.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="figures/taxa%20classification%20plot-1.png"
+<img src="../Figures/%20fig_n_taxa_per_class%20.png"
 style="width:100.0%" data-fig-align="center" />
 
 
@@ -248,49 +310,66 @@ style="width:100.0%" data-fig-align="center" />
 ## Traits
 
 Functional traits of vegetation taxa follow the same structure of
-`Dataset` and `Samples` obtained directly from *Dataset Source-types*.
+`Dataset` and `Samples` obtained directly from `Dataset` `Source-Types`.
 
 <img src="DB_scheme_visualisation/Traits.png" style="width:100.0%"
 data-fig-align="center" />
 
 ### Trait domain
 
-As there are many varying names for the same “traits”, the **VegVault**
-database contains *Trait Domain* information to group traits together.
+As there are differences in trait names across sources of data and
+individual `Datasets`, the **VegVault** database contains `Trait Domain`
+information to group traits together.
 
 <img src="DB_scheme_visualisation/TraitsDomain.png" style="width:100.0%"
 data-fig-align="center" />
 
-There are currently 6 trait domains following the [Diaz et
+There are currently 6 `Trait Domains` following the [Diaz et
 al. (2016)](https://www.nature.com/articles/nature16489)
 
-| Trait domain                        |
-|-------------------------------------|
-| Stem specific density               |
-| Leaf nitrogen content per unit mass |
-| Diaspore mass                       |
-| Plant heigh                         |
-| Leaf Area                           |
-| Leaf mass per area                  |
+| Trait domain                        | Trait                                                                                                       | Data source |
+|-------------------------------------|-------------------------------------------------------------------------------------------------------------|-------------|
+| Stem specific density               | stem wood density                                                                                           | BIEN        |
+| Stem specific density               | Stem specific density (SSD, stem dry mass per stem fresh volume) or wood density                            | TRY         |
+| Leaf nitrogen content per unit mass | leaf nitrogen content per leaf dry mass                                                                     | BIEN        |
+| Leaf nitrogen content per unit mass | Leaf nitrogen (N) content per leaf dry mass                                                                 | TRY         |
+| Diaspore mass                       | seed mass                                                                                                   | BIEN        |
+| Diaspore mass                       | Seed dry mass                                                                                               | TRY         |
+| Plant heigh                         | whole plant height                                                                                          | BIEN        |
+| Plant heigh                         | Plant height vegetative                                                                                     | TRY         |
+| Leaf Area                           | leaf area                                                                                                   | BIEN        |
+| Leaf Area                           | Leaf area (in case of compound leaves undefined if leaf or leaflet, undefined if petiole is in- or exluded) | TRY         |
+| Leaf Area                           | Leaf area (in case of compound leaves: leaf, petiole excluded)                                              | TRY         |
+| Leaf Area                           | Leaf area (in case of compound leaves: leaf, petiole included)                                              | TRY         |
+| Leaf Area                           | Leaf area (in case of compound leaves: leaf, undefined if petiole in- or excluded)                          | TRY         |
+| Leaf mass per area                  | leaf mass per area                                                                                          | BIEN        |
+| Leaf mass per area                  | Leaf area per leaf dry mass (specific leaf area, SLA or 1/LMA): petiole included                            | TRY         |
+| Leaf mass per area                  | Leaf area per leaf dry mass (specific leaf area, SLA or 1/LMA): undefined if petiole is in- or excluded)    | TRY         |
 
-<img src="figures/trait%20per%20domain%20plot-1.png"
+<img src="../Figures/%20fig_n_traits_per_domain%20.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Trait Values
 
-To store a trait value, information needs to be linked among `Dataset`,
-`Sample`, `Taxa`, and `Trait`.
+Storing trait values in **VegVault** involves linking information across
+`Datasets`, `Samples`, `Taxa`, and `Traits`. This comprehensive linkage
+ensures that each trait value is accurately associated with its relevant
+ecological, environmental and taxonomic context.
 
 <img src="DB_scheme_visualisation/TraitsValue.png" style="width:100.0%"
 data-fig-align="center" />
 
-<img src="figures/trait%20value%20occurences%20plot-1.png"
+<img src="../Figures/%20fig_n_occurences_per_dommain%20.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Trait reference
 
-For full clarity, on top of `Dataset` and `Sample`, each `Trait` can
-have additional references.
+To ensure clarity and reproducibility, each trait in the **VegVault**
+database can have additional `References` beyond the general `Dataset`
+and `Sample` references. These trait-specific `References` provide
+detailed provenance and citation information, supporting rigorous
+scientific research and enabling users to trace the origins and
+validation of each trait value.
 
 <img src="DB_scheme_visualisation/TraitsReference.png"
 style="width:100.0%" data-fig-align="center" />
@@ -299,22 +378,18 @@ style="width:100.0%" data-fig-align="center" />
 
 ## Abiotic data
 
-Abiotic data is aimed to provide information about all relevant abiotic
-information affecting vegetation distribution and its traits.
+The abiotic data in the **VegVault** database provide essential
+information on environmental factors affecting vegetation distribution
+and traits. These data include variables such as climate and soil
+conditions, which are crucial for understanding the ecological contexts
+of vegetation dynamics.
 
-Abiotic data is linked to the structure of the **VegVault** Database by
-the `gridpoints`, which are artificially created points to *reasonably*
-cover the resolution of both modern and past data for vegetation and
-abiotic data.
-
-<img src="figures/distribution%20of%20gridpoints-1.png"
-style="width:100.0%" data-fig-align="center" />
-
-There are currently abiotic from [CHELSA](https://chelsa-climate.org/)
-and [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/) and
+Currently, **VegVault** includes abiotic data from
+[CHELSA](https://chelsa-climate.org/),
+[CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/), and
 [WoSIS](https://www.isric.org/explore/wosis). CHELSA and CHELSA-TRACE21
-are built on the same structure of variables (visit the websites for
-more info).
+provide high-resolution climate data, while WoSIS offers detailed soil
+information.
 
 | Variable name | Variable unit    | source of data  |
 |---------------|------------------|-----------------|
@@ -327,19 +402,44 @@ more info).
 | bio19         | kg m-2 quarter-1 | CHELSA          |
 | HWSD2         | Unitless         | WoSIS-SoilGrids |
 
-Abiotic data is simply linked to `Samples`.
-
 <img src="DB_scheme_visualisation/AbioticData.png" style="width:100.0%"
 data-fig-align="center" />
 
-<img src="figures/exampe%20of%20abitic%20data%20-%20bio1-1.png"
+Because original data are stored as raster, which cannot be stored in
+SQLite database, we created artificial points called `gridpoints` in the
+middle of each raster cell to represent the data. To unify the varying
+resolution of rasters and to limit the amount of data, we resampled all
+data into ~ 25km resolution and 500-year slices. This mean that there we
+created uniform spatio-temporal matrix of `gridpoints` to hold the
+abiotic data. Gridpoints are stored in artificially created `Datasets`
+and `Samples`, with one `Dataset` holding more `Samples` only if the
+differ in age. Next, we have estimated the spatial and temporal distance
+between each `gridpoint` and other non-`gridpoint` `Samples`
+(`vegetation_plot`, `fossil_pollen_archive`, and `traits`). We store the
+link between `gridpoint` and non-`gridpoint` `Samples` as well as the
+spatial and temporal distance. As this result in very amount of data, we
+have discarded any `gridpoint` Sample, which is not close to 50 km
+and/or 5000 years to any other non-`gridpoint` `Samples` as not relevant
+for the vegetation dynamics.
+
+<img src="../Figures/%20fig_data_grid_coord%20.png" style="width:100.0%"
+data-fig-align="center" />
+
+Such data structure allow that environmental context is readily
+available for each vegetation and trait `Sample`. while for each
+non-`gridpoint` `Sample`, user can select the closest spatio-temporally
+abiotic data or get average from all surrounding `gridpoints`.
+
+<img src="DB_scheme_visualisation/AbioticDataReference.png"
 style="width:100.0%" data-fig-align="center" />
 
-Note that the spatial resolution is higher for modern climate data than
-for the past. This is to reduce the size of the past climate data.
-
-<img src="figures/exampe%20of%20abitic%20data%20-%20soil-1.png"
+<img src="../Figures/%20fig_gridpoint_links_example%20.png"
 style="width:100.0%" data-fig-align="center" />
+
+By providing comprehensive and well-structured abiotic data, VegVault
+enhances the ability to study the interactions between vegetation and
+their environment, supporting advanced ecological research and modelling
+efforts.
 
 # Section III: Assembly details of VegVault 1.0.0
 
@@ -434,7 +534,7 @@ and then all functions will be made available by attaching as:
 library(vaultkeepr)
 ```
 
-## Example 1
+## Example 1: Spatiotemporal patterns of the Picea genus across North America since the LGM
 
 In the first example, we can imagine a scenario, where we are interested
 in spatiotemporal patterns of the *Picea* genus across North America for
@@ -442,15 +542,9 @@ modern data and since the Last Glacial Maximum. Obtaining such data is
 straightforward:
 
 ``` r
-# First create a plan
-plan_na_plots_picea <-
+data_na_plots_picea <-
   # Access the VegVault
-  vaultkeepr::open_vault(
-    path = paste0(
-      data_storage_path,
-      "Data/VegVault/VegVault.sqlite"
-    )
-  ) %>%
+  vaultkeepr::open_vault(path = "<path_to_VegVault>") %>%
   # Start by adding dataset information
   vaultkeepr::get_datasets() %>%
   # Select both modern and paleo plot data
@@ -471,40 +565,28 @@ plan_na_plots_picea <-
   vaultkeepr::select_samples_by_age(
     age_lim = c(0, 15e3)
   ) %>%
-  # Add taxa
-  vaultkeepr::get_taxa(
-    # Classify all data to a genus level
-    classify_to = "genus"
-  ) %>%
+  # Add taxa & classify all data to a genus level
+  vaultkeepr::get_taxa( classify_to = "genus") %>%
   # Extract only Picea data
-  vaultkeepr::select_taxa_by_name(sel_taxa = c("Picea"))
-
-# Execute the plan
-data_na_plots_picea <-
-  vaultkeepr::extract_data(plan_na_plots_picea)
+  vaultkeepr::select_taxa_by_name(sel_taxa = "Picea") %>%
+  vaultkeepr::extract_data()
 ```
 
 Now, we plot the presence of *Picea* in each 2500-year bin.
 
-<img src="figures/Example%201%20-%20plot%20distribution-1.png"
-style="width:100.0%" data-fig-align="center" />
+<img src="../Figures/fig_na_plots_picea.png" style="width:100.0%"
+data-fig-align="center" />
 
-## Example 2
+## Example 2: Joined Species Distribution model for all vegetation within Czechia
 
 In the second example, let’s imagine we want to do Species Distribution
 Modeling for all plant taxa in the Czech Republic. We will extract
 modern plot-based data and Mean Annual temprature.
 
 ``` r
-# Again start by creating a plan
-plan_cz_modern <-
+data_cz_modern <-
   # Acess the VegVault file
-  vaultkeepr::open_vault(
-    path = paste0(
-      data_storage_path,
-      "Data/VegVault/VegVault.sqlite"
-    )
-  ) %>%
+  vaultkeepr::open_vault(path = "<path_to_VegVault>") %>%
   # Add the dataset information
   vaultkeepr::get_datasets() %>%
   # Select modern plot data and climate
@@ -526,41 +608,30 @@ plan_cz_modern <-
     age_lim = c(0, 0)
   ) %>%
   # Add abiotic data
-  vaultkeepr::get_abiotic() %>%
+  vaultkeepr::get_abiotic_data() %>%
   # Select only Mean Anual Temperature (bio1)
-  vaultkeepr::select_abiotic_var_by_name(
-    sel_var_name = "bio1"
-  ) %>%
+  vaultkeepr::select_abiotic_var_by_name(sel_var_name = "bio1") %>%
   # add taxa
-  vaultkeepr::get_taxa()
-
-# Execute the plan
-data_cz_modern <-
-  vaultkeepr::extract_data(plan_cz_modern)
+  vaultkeepr::get_taxa() %>%
+  vaultkeepr::extract_data()
 ```
 
 Now we can simply plot both the climatic data and the plot vegetation
 data:
 
-<img src="figures/Example%202%20-%20plot-1.png" style="width:100.0%"
+<img src="../Figures/fig_cz_jsdm.png" style="width:100.0%"
 data-fig-align="center" />
 
-## Example 3
+## Example 3: Patterns of plant height (CWM) for South and Central Latin America between 6-12 ka
 
 In the last example, let’s imagine we want to reconstruct the Community
 Weighted Mean (CWM) of plant height for Latin America between 6-12 ka yr
 BP.
 
 ``` r
-# Again start by creating a plan
-plan_la_traits <-
+data_la_traits <-
   # Acess the VegVault file
-  vaultkeepr::open_vault(
-    path = paste0(
-      data_storage_path,
-      "Data/VegVault/VegVault.sqlite"
-    )
-  ) %>%
+  vaultkeepr::open_vault(path = "<path_to_VegVault>") %>%
   # Add the dataset information
   vaultkeepr::get_datasets() %>%
   # Select modern plot data and climate
@@ -570,7 +641,7 @@ plan_la_traits <-
       "traits"
     )
   ) %>%
-  # Limit data to Latin America
+  # Limit data to South and Central America
   vaultkeepr::select_dataset_by_geo(
     lat_lim = c(-53, 28),
     long_lim = c(-110, -38),
@@ -585,32 +656,20 @@ plan_la_traits <-
   vaultkeepr::select_samples_by_age(
     age_lim = c(6e3, 12e3)
   ) %>%
-  # add taxa
-  vaultkeepr::get_taxa(
-    # Clasify all data to a genus level
-    classify_to = "genus"
-  ) %>%
-  # add trait information
-  vaultkeepr::get_traits(
-    # Clasify all data to a genus level
-    classify_to = "genus"
-  ) %>%
+  # add taxa & clasify all data to a genus level
+  vaultkeepr::get_taxa(classify_to = "genus") %>%
+  # add trait information & clasify all data to a genus level
+  vaultkeepr::get_traits(classify_to = "genus") %>%
   # Only select the plant height
-  vaultkeepr::select_traits_by_domain_name(
-    sel_domain = "Plant heigh"
-  )
-
-# Execute the plan
-data_la_traits <-
-  vaultkeepr::extract_data(plan_la_traits)
+  vaultkeepr::select_traits_by_domain_name(sel_domain = "Plant heigh") %>%
+  vaultkeepr::extract_data()
 ```
 
 Now let’s plot the overview of the data
 
-<img src="figures/Example%203%20-%20plot-1.png" style="width:100.0%"
+<img src="../Figures/fig_la_merge.png" style="width:100.0%"
 data-fig-align="center" />
 
-# Section V: Outlook and future directions
 
 
-
+<!--- {{< include _09_section_V.md >}} --->
