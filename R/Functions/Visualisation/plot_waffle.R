@@ -24,7 +24,6 @@ plot_waffle <- function(
   p0 <-
     data_work %>%
     ggplot2::ggplot() +
-    ggplot2::theme_bw() +
     ggplot2::guides(
       fill = ggplot2::guide_legend(ncol = 1)
     ) +
@@ -34,10 +33,9 @@ plot_waffle <- function(
       axis.text = ggplot2::element_blank(),
       legend.position = "right",
       plot.caption.position = "panel",
-      strip.background = ggplot2::element_blank(),
-      strip.text = ggplot2::element_text(
-        size = text_size,
-        hjust = 0.01
+      panel.background = ggplot2::element_rect(
+        fill = col_brown_light, # [config]
+        colour = col_brown_light # [config]
       ),
       panel.grid.minor = ggplot2::element_blank(),
       panel.grid.major = ggplot2::element_blank()
@@ -67,7 +65,7 @@ plot_waffle <- function(
         fill = {{ var_name }},
         values = N_work
       ),
-      col = NA,
+      col = col_blue_dark, # [config]
       n_rows = n_rows,
       make_proportional = FALSE,
       ...
