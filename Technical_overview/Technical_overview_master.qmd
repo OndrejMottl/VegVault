@@ -7,8 +7,6 @@ format:
     toc: true
     toc-depth: 3
     fig-width: 10
-    self_contained: true
-    embed-resources: true
     keep-md: true
 editor: 
   markdown: 
@@ -67,4 +65,4 @@ invisible(
 
 {{< include _08_section_IV.md >}}
 
-{{< include _09_section_V.md >}}
+<!--- {{< include _09_section_V.md >}} --->

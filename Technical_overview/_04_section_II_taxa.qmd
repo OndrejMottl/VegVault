@@ -17,7 +17,7 @@ editor:
 
 library(here)
 
-here::i_am("R/03_Technical_overview/_04_section_II_taxa.qmd")
+here::i_am("Technical_overview/_04_section_II_taxa.qmd")
 
 # Load configuration
 source(
@@ -28,7 +28,7 @@ source(
 
 source(
   here::here(
-    "R/03_Technical_overview/00_Config_quarto.R"
+    "Technical_overview/00_Config_quarto.R"
   )
 )
 
@@ -47,24 +47,22 @@ invisible(
 
 ## Taxa
 
-The **VegVault** database contains taxa names directly from main *Data Source-types*. 
+The **VegVault** database records taxa names derived directly from the primary data sources. Each individual `Taxon` is linked to corresponding `Samples` through the `SampleTaxa` table, ensuring accurate and systematic association between species and their ecological data.  
 
 ```{r}
 #| label: Taxa scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/Taxa.png"
+    "Technical_overview/DB_scheme_visualisation/Taxa.png"
   )
 )
-```
-
-Individual taxa names are linked to the `Samples` by the `SampleTaxa` table. 
+``` 
 
 ```{r}
 #| label: SampleTaxa scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/SampleTaxa.png"
+    "Technical_overview/DB_scheme_visualisation/SampleTaxa.png"
   )
 )
 ```
@@ -102,7 +100,8 @@ n_taxa_per_source_type <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-n_taxa_per_source_type %>%
+fig_n_taxa_per_source_type <-
+  n_taxa_per_source_type %>%
   dplyr::arrange(-N) %>%
   dplyr::mutate(
     dataset_source_type = factor(
@@ -119,7 +118,10 @@ n_taxa_per_source_type %>%
   ggplot2::scale_y_continuous(
     transform = scales::transform_log10(),
     breaks = scales::trans_breaks("log10", function(x) 10^x),
-    labels = scales::trans_format("log10", scales::math_format(10^.x))
+    labels = scales::trans_format("log10", scales::math_format(10^.x)),
+  ) +
+  ggplot2::coord_cartesian(
+    ylim = c(10e3, 10e5)
   ) +
   ggplot2::labs(
     title = "Taxa per source type",
@@ -138,16 +140,16 @@ n_taxa_per_source_type %>%
       xend = dataset_source_type,
       yend = 0
     ),
-    color = "grey",
+    color = col_blue_dark,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_point(
     mapping = ggplot2::aes(
       fill = dataset_source_type
     ),
-    size = 3,
+    size = point_size,
     shape = 21,
-    col = "black",
+    col = col_blue_dark,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_label(
@@ -155,22 +157,22 @@ n_taxa_per_source_type %>%
       label = scales::number(N)
     ),
     vjust = -0.5,
-    size = 3,
+    size = point_size * 2,
     position = ggplot2::position_dodge(0.5)
   )
+
+save_figure_to_render(fig_n_taxa_per_source_type)
 ```
 
 ### Classification
 
-In order to obtain classification of all taxa present in the **VegVault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package has been utilized, automatically aligning the names to [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from [Global Biodiversity Information Facility](https://www.gbif.org/).
-
-Classification up to the family level is then saved for each taxon.
+To classify the diverse taxa present in the **VegVault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package was used. This tool automatically aligns taxa names with the [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from the [Global Biodiversity Information Facility](https://www.gbif.org/), providing a standardized classification framework. Specifically, we try to find the best match of the raw names of taxa using [Global Names Resolver](https://resolver.globalnames.org/). Classification information, detailed up to the family level, is stored for each taxon, ensuring consistency and facilitating comparative analyses across different datasets. Currently, the **VegVault** database holds over 110 thousand taxonomic names, of which we were unable to classify only 1312 (1.2%).
 
 ```{r}
 #| label: TaxonClassification scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/TaxonClassification.png"
+    "Technical_overview/DB_scheme_visualisation/TaxonClassification.png"
   )
 )
 ```
@@ -216,7 +218,8 @@ n_taxa_per_class <-
     "not classified", n_taxa_not_classificed
   )
 
-n_taxa_per_class %>%
+fig_n_taxa_per_class <-
+  n_taxa_per_class %>%
   dplyr::mutate(
     class = factor(
       class,
@@ -246,22 +249,25 @@ n_taxa_per_class %>%
       "#D8DBE0"
     )
   ) +
+  ggplot2::coord_cartesian(
+    ylim = c(0, 120e3)
+  ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
       x = class,
       xend = class,
       yend = 0
     ),
-    color = "grey",
+    color = col_blue_dark,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_point(
     mapping = ggplot2::aes(
       fill = class
     ),
-    size = 3,
+    size = point_size,
     shape = 21,
-    col = "black",
+    col = col_blue_dark,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_label(
@@ -269,7 +275,9 @@ n_taxa_per_class %>%
       label = scales::number(N)
     ),
     vjust = -0.5,
-    size = 3,
+    size = point_size * 2,
     position = ggplot2::position_dodge(0.5)
   )
+
+save_figure_to_render(fig_n_taxa_per_class)
 ```

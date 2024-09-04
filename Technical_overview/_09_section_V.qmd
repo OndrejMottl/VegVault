@@ -18,7 +18,7 @@ editor:
 
 library(here)
 
-here::i_am("R/03_Technical_overview/_09_section_V.qmd")
+here::i_am("Technical_overview/_09_section_V.qmd")
 
 # Load configuration
 source(
@@ -29,7 +29,7 @@ source(
 
 source(
   here::here(
-    "R/03_Technical_overview/00_Config_quarto.R"
+    "Technical_overview/00_Config_quarto.R"
   )
 )
 

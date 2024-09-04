@@ -18,7 +18,7 @@ editor:
 
 library(here)
 
-here::i_am("R/03_Technical_overview/_02_section_II_datasets.qmd")
+here::i_am("Technical_overview/_02_section_II_datasets.qmd")
 
 # Load configuration
 source(
@@ -29,7 +29,7 @@ source(
 
 source(
   here::here(
-    "R/03_Technical_overview/00_Config_quarto.R"
+    "Technical_overview/00_Config_quarto.R"
   )
 )
 
@@ -46,37 +46,33 @@ invisible(
 )
 ```
 
-The database is structured in several logical levels, such as `Dataset`, `Sample`, `Taxa`, `Trait`, etc. 
-
 ## Dataset
 
-`Dataset` represents the highest levels in the hierarchy. It is the main keystone in the VegVault structure. 
+The `Dataset` represents the main structure in the VegVault, serving as the keystone for organizing and managing data. Currently, the VegVault database holds over 480,000 Datasets (of which approximately 100,000 are gridpoints, which are artificially created to hold abiotic data, see details below). Here we will explain some, but not all, of the features of the `Dataset`. 
 
 ```{r}
 #| label: Dataset scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/Datasets.png"
+    "Technical_overview/DB_scheme_visualisation/Datasets.png"
   )
 )
 ```
 
 ### Dataset Type
 
-`dataset_type_id` defines the basic type of a dataset. This is the highest level of classification of the data
+The `Dataset Type` defines the most basic classification of each `Dataset`, ensuring that the vast amount of data is categorized systematically. Currently, **VegVault** contains the following types of Datasets: 
 
-Currently, there **VegVault** consist of those types:
-
-* **vegetation_plot** -  current vegetation plot dataset
-* **fossil_pollen_archive** - past vegetation plot dataset
-* **traits** - dataset containing functional traits
-* **gridpoints** - artificially created dataset to hold abiotic data 
+- `vegetation_plot`: This type includes current vegetation plot data, capturing contemporary vegetation characteristics and distributions. 
+- `fossil_pollen_archive`: This type encompasses past vegetation plot data derived from fossil pollen records, providing insights into historical vegetation patterns. 
+- `traits`: This `Dataset` contains functional trait data, detailing specific characteristics of plant species that influence their ecological roles. 
+- `gridpoints`: This type holds artificially created Datasets to manage abiotic data, such as climate and soil information 
 
 ```{r}
 #| label: Dataset Type scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/DatasetTypeID.png"
+    "Technical_overview/DB_scheme_visualisation/DatasetTypeID.png"
   )
 )
 ```
@@ -94,28 +90,21 @@ n_datasetes_per_type <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-plot_waffle(
-  n_datasetes_per_type,
-  dataset_type,
-  plot_title = "Datasets type",
-  one_point_is = 1e3
-) +
+fig_n_datasetes_per_type <-
+  plot_waffle(
+    n_datasetes_per_type,
+    dataset_type,
+    plot_title = "Datasets type",
+    one_point_is = 1e3
+  ) +
   ggplot2::scale_fill_manual(
     values = palette_dataset_type
   )
 
-plot_waffle(
+save_figure_to_render(fig_n_datasetes_per_type)
+
+fig_n_datasetes_per_type <-
   n_datasetes_per_type %>%
-    dplyr::filter(dataset_type != "gridpoints"),
-  dataset_type,
-  plot_title = "Datasets type - no gridpoints",
-  one_point_is = 1e3
-) +
-  ggplot2::scale_fill_manual(
-    values = palette_dataset_type
-  )
-
-n_datasetes_per_type %>%
   ggplot2::ggplot(
     ggplot2::aes(
       y = N,
@@ -125,7 +114,8 @@ n_datasetes_per_type %>%
   ggplot2::scale_y_continuous(
     trans = "log10",
     breaks = scales::trans_breaks("log10", function(x) 10^x),
-    labels = scales::trans_format("log10", scales::math_format(10^.x))
+    labels = scales::trans_format("log10", scales::math_format(10^.x)),
+    limits = c(1, 10e6)
   ) +
   ggplot2::labs(
     title = "Datasets type",
@@ -143,42 +133,42 @@ n_datasetes_per_type %>%
       xend = dataset_type,
       yend = 0
     ),
-    color = "grey"
+    color = col_blue_dark
   ) +
   ggplot2::geom_point(
     mapping = ggplot2::aes(
       fill = dataset_type
     ),
-    size = 3,
+    size = point_size,
     shape = 21,
-    col = "black",
+    col = col_blue_dark,
   ) +
   ggplot2::geom_label(
     ggplot2::aes(
       label = scales::number(N)
     ),
     vjust = -0.5,
-    size = 3
+    size = point_size * 2
   )
+
+save_figure_to_render(fig_n_datasetes_per_type)
 ```
 
 ### Dataset Source-Type
 
-`dataset_source_type_id` defines the general provider of the dataset. This should help to classify, which data pipeline was used to import the dataset into the **VegVault**, This is also the first general point of reference of data, as all large databases have a citation statement.
+Each `Dataset` is derived from a specific `Source-Type` provides detailed information on the source, which was used to retrieve the original data, enhancing the findability and referencing of primary data sources. The current `Source-Types` in **VegVault** include
 
-Currently, the **VegVault** consist of those source-types:
-
-* **BIEN** - [Botanical Information and Ecology Network](https://bien.nceas.ucsb.edu/bien/)
-* **sPlotOpen** - [The open-access version of sPlot](https://idiv-biodiversity.de/en/splot/splotopen.html)
-* **TRY** - [TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php)
-* **FOSSILPOL** - [The workflow that aims to process and standardise global palaeoecological pollen data](https://hope-uib-bio.github.io/FOSSILPOL-website/) 
-* **gridpoints** - artificially created dataset to hold abiotic data 
+- **BIEN** - [Botanical Information and Ecology Network](https://bien.nceas.ucsb.edu/bien/)
+- **sPlotOpen** - [The open-access version of sPlot](https://idiv-biodiversity.de/en/splot/splotopen.html)
+- **TRY** - [TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php)
+- **FOSSILPOL** - [The workflow that aims to process and standardise global palaeoecological pollen data](https://hope-uib-bio.github.io/FOSSILPOL-website/). Note that we specifically state FOSSILPOL and not Neotoma, as FOSSILPOL not only provides the data but also alters it (e.g, new age-depth models).
+- **gridpoints** - artificially created `Datasets` to hold abiotic data 
 
 ```{r}
 #| label: Dataset Source Type scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/DatasetSourceTypeID.png"
+    "Technical_overview/DB_scheme_visualisation/DatasetSourceTypeID.png"
   )
 )
 ```
@@ -196,28 +186,18 @@ n_datasetes_per_source_type <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-plot_waffle(
-  n_datasetes_per_source_type,
-  dataset_source_type,
-  plot_title = "Datasets source type",
-  one_point_is = 1e3
-) +
+fig_n_datasetes_per_source_type <-
+  plot_waffle(
+    n_datasetes_per_source_type,
+    dataset_source_type,
+    plot_title = "Datasets source type",
+    one_point_is = 1e3
+  ) +
   ggplot2::scale_fill_manual(
     values = palette_dataset_source_type
   )
 
-plot_waffle(
-  n_datasetes_per_source_type %>%
-    dplyr::filter(
-      dataset_source_type != "gridpoints"
-    ),
-  dataset_source_type,
-  plot_title = "Datasets source type - no gridpoints",
-  one_point_is = 1e3
-) +
-  ggplot2::scale_fill_manual(
-    values = palette_dataset_source_type
-  )
+save_figure_to_render(fig_n_datasetes_per_source_type)
 
 n_datasetes_per_type_per_source_type <-
   dplyr::inner_join(
@@ -261,7 +241,8 @@ p_n_datasetes_per_type_per_source_type <-
   ggplot2::scale_y_continuous(
     transform = scales::transform_log10(),
     breaks = scales::trans_breaks("log10", function(x) 10^x),
-    labels = scales::trans_format("log10", scales::math_format(10^.x))
+    labels = scales::trans_format("log10", scales::math_format(10^.x)),
+    limits = c(1, 10e6)
   ) +
   ggplot2::labs(
     title = "Datasets type per source type",
@@ -282,16 +263,16 @@ p_n_datasetes_per_type_per_source_type <-
       xend = dataset_source_type, # reorder(dataset_source_type, -N),
       yend = 0
     ),
-    color = "grey",
+    color = col_blue_dark,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_point(
     mapping = ggplot2::aes(
       fill = dataset_source_type
     ),
-    size = 3,
+    size = point_size,
     shape = 21,
-    col = "black",
+    col = col_blue_dark,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_label(
@@ -299,32 +280,33 @@ p_n_datasetes_per_type_per_source_type <-
       label = scales::number(N)
     ),
     vjust = -0.5,
-    size = 3,
+    size = point_size * 2,
     position = ggplot2::position_dodge(0.5)
   )
 
-color_facets(
-  sel_plot = p_n_datasetes_per_type_per_source_type,
-  # need to manually sort the colors due to previous reorder
-  sel_palette = c(
-    palette_dataset_type["gridpoints"],
-    palette_dataset_type["traits"],
-    palette_dataset_type["vegetation_plot"],
-    palette_dataset_type["fossil_pollen_archive"]
-  ),
-  direction = "horizontal"
-)
+save_figure_to_render(p_n_datasetes_per_type_per_source_type)
+# color_facets(
+#  sel_plot = p_n_datasetes_per_type_per_source_type,
+#  # need to manually sort the colors due to previous reorder
+#  sel_palette = c(
+#    palette_dataset_type["gridpoints"],
+#    palette_dataset_type["traits"],
+#    palette_dataset_type["vegetation_plot"],
+#    palette_dataset_type["fossil_pollen_archive"]
+#  ),
+#  direction = "horizontal"
+# )
 ```
 
 ### Dataset Source
 
-Each individual dataset from a specific *Data Source-Type* can have information on the source of the data (i.e. sub-database). This should help to promote better findability of the primary source of data and referencing.
+Each individual `Dataset` from a specific `Dataset` `Source-Type` can have information on the source of the data (i.e. sub-database). This should help to promote better findability of the primary source of data and referencing.
 
 ```{r}
 #| label: Dataset Source ID scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/DatasetSourcesID.png"
+    "Technical_overview/DB_scheme_visualisation/DatasetSourcesID.png"
   )
 )
 ```
@@ -371,7 +353,8 @@ Currently, there are `r n_total_sources` sources of datasets.
 
 ```{r}
 #| label: Dataset ID - plots
-n_datasetes_per_source %>%
+fig_n_datasetes_per_source <-
+  n_datasetes_per_source %>%
   ggplot2::ggplot(
     ggplot2::aes(
       x = dataset_type,
@@ -384,8 +367,8 @@ n_datasetes_per_source %>%
   ) +
   ggplot2::geom_boxplot(
     width = 0.2,
-    fill = "white",
-    col = "gray50",
+    fill = col_white,
+    col = col_blue_dark,
     outlier.shape = NA
   ) +
   ggplot2::geom_point(
@@ -398,7 +381,7 @@ n_datasetes_per_source %>%
       fill = dataset_type
     ),
     shape = 22,
-    size = 3
+    size = point_size
   ) +
   ggplot2::scale_y_continuous(
     transform = scales::transform_log10(),
@@ -416,17 +399,18 @@ n_datasetes_per_source %>%
   ggplot2::theme(
     legend.position = "none"
   )
+save_figure_to_render(fig_n_datasetes_per_source)
 ```
 
 ### Sampling method
 
-Some datasets may differ in the way they have been sampled. This could be represented by different ways vegetation data have been sampled for *Dataset Type* of `vegetation_plot`, or depositional environment for *Dataset Type* of `fossil_pollen_archive`.
+Sampling methods vary significantly across the different types of `Datasets` integrated into **VegVault**, reflecting the diverse nature of the data collected. For current vegetation plots, sampling involves standardized plot inventories and surveys that capture detailed vegetation characteristics across various regions. In contrast, fossil pollen data are collected from sediment cores, representing past vegetation and depositional environments. These sampling methods are crucial for understanding the context and limitations of each Dataset Type. Therefore, information on sampling methods is only present for both `vegetation_plot` and `fossil_pollen_archive` `Datasets`, providing metadata that ensures accurate and contextually relevant analyses
 
 ```{r}
 #| label: Dataset Sampling method scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/SamplingMethodID.png"
+    "Technical_overview/DB_scheme_visualisation/SamplingMethodID.png"
   )
 )
 ```
@@ -449,26 +433,29 @@ n_sampling_methods_per_dataset_type <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-plot_waffle(
-  n_sampling_methods_per_dataset_type,
-  dataset_type,
-  plot_title = "Number of Sampling method per Datasets type",
-  one_point_is = 1
-) +
+fig_n_sampling_methods_per_dataset_type <-
+  plot_waffle(
+    n_sampling_methods_per_dataset_type,
+    dataset_type,
+    plot_title = "Number of Sampling method per Datasets type",
+    one_point_is = 1
+  ) +
   ggplot2::scale_fill_manual(
     values = palette_dataset_type
   )
+
+save_figure_to_render(fig_n_sampling_methods_per_dataset_type)
 ```
 
 ### References
 
-*Dataset Source-Type*, *Dataset Source*, and *Sampling Method* can have their own references. Moreover, each dataset can have one or more references directly to that specific data.
+To support robust and transparent scientific research, each `Dataset` in **VegVault** can have multiple references at different levels. The `Dataset` `Source-Type`, `Dataset Source`, and `Sampling Method` can all have their own references, providing detailed provenance and citation information. This multi-level referencing system enhances the traceability and validation of the data. **VegVault** currently includes 706 sources of `Datasets`, each documented to ensure reliability and ease of use. Each dataset can also have one or more direct references to specific data, further ensuring that users can accurately cite and verify the sources of their data. 
 
 ```{r}
 #| label: Dataset reference method scheme structure
 knitr::include_graphics(
   here::here(
-    "R/03_Technical_overview/DB_scheme_visualisation/DatasetReference.png"
+    "Technical_overview/DB_scheme_visualisation/DatasetReference.png"
   )
 )
 ```

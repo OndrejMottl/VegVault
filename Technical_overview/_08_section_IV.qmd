@@ -18,7 +18,7 @@ editor:
 
 library(here)
 
-here::i_am("R/03_Technical_overview/_08_section_IV.qmd")
+here::i_am("Technical_overview/_08_section_IV.qmd")
 
 # Load configuration
 source(
@@ -29,7 +29,7 @@ source(
 
 source(
   here::here(
-    "R/03_Technical_overview/00_Config_quarto.R"
+    "Technical_overview/00_Config_quarto.R"
   )
 )
 
@@ -66,22 +66,17 @@ and then all functions will be made available by attaching as:
 library(vaultkeepr)
 ```
 
-## Example 1
+## Example 1: Spatiotemporal patterns of the Picea genus across North America since the LGM
 
 In the first example, we can imagine a scenario, where we are interested in spatiotemporal patterns of the *Picea* genus across North America for modern data and since the Last Glacial Maximum. Obtaining such data is straightforward:
 
 ```{r}
 #| label: Example 1 - North America Picea
 #| echo: true
-# First create a plan
-plan_na_plots_picea <-
+#| eval: false
+data_na_plots_picea <-
   # Access the VegVault
-  vaultkeepr::open_vault(
-    path = paste0(
-      data_storage_path,
-      "Data/VegVault/VegVault.sqlite"
-    )
-  ) %>%
+  vaultkeepr::open_vault(path = "<path_to_VegVault>") %>%
   # Start by adding dataset information
   vaultkeepr::get_datasets() %>%
   # Select both modern and paleo plot data
@@ -102,27 +97,53 @@ plan_na_plots_picea <-
   vaultkeepr::select_samples_by_age(
     age_lim = c(0, 15e3)
   ) %>%
-  # Add taxa
-  vaultkeepr::get_taxa(
-    # Classify all data to a genus level
-    classify_to = "genus"
-  ) %>%
+  # Add taxa & classify all data to a genus level
+  vaultkeepr::get_taxa( classify_to = "genus") %>%
   # Extract only Picea data
-  vaultkeepr::select_taxa_by_name(sel_taxa = c("Picea"))
-
-# Execute the plan
-data_na_plots_picea <-
-  vaultkeepr::extract_data(plan_na_plots_picea)
+  vaultkeepr::select_taxa_by_name(sel_taxa = "Picea") %>%
+  vaultkeepr::extract_data()
 ```
 
 Now, we plot the presence of *Picea* in each 2500-year bin. 
 
 ```{r}
-#| label: Example 1 - plot distribution
+#| label: Example 1 - North America Picea - real
+#| eval: true
+#| echo: false
+data_na_plots_picea <-
+  # Access the VegVault
+  vaultkeepr::open_vault(
+    path = path_to_vegvault # [config]
+  ) %>%
+  # Start by adding dataset information
+  vaultkeepr::get_datasets() %>%
+  # Select both modern and paleo plot data
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c(
+      "vegetation_plot",
+      "fossil_pollen_archive"
+    )
+  ) %>%
+  # Limit data to North America
+  vaultkeepr::select_dataset_by_geo(
+    lat_lim = c(22, 60),
+    long_lim = c(-135, -60)
+  ) %>%
+  # Add samples
+  vaultkeepr::get_samples() %>%
+  # Limit the samples by age
+  vaultkeepr::select_samples_by_age(
+    age_lim = c(0, 12e3)
+  ) %>%
+  # Add taxa & classify all data to a genus level
+  vaultkeepr::get_taxa(classify_to = "genus") %>%
+  # Extract only Picea data
+  vaultkeepr::select_taxa_by_name(sel_taxa = "Picea") %>%
+  vaultkeepr::extract_data()
 
 time_step <- 2500
 
-fig_na_plots_picea <-
+data_to_plot <-
   data_na_plots_picea %>%
   dplyr::filter(value > 0) %>%
   dplyr::distinct(
@@ -133,58 +154,130 @@ fig_na_plots_picea <-
   ) %>%
   dplyr::mutate(
     age_bin_class = dplyr::case_when(
-      .default = paste("paleo:", age_bin),
+      .default = paste("paleo:", age_bin, "cal yr BP"),
       dataset_type == "vegetation_plot" ~ "modern",
     ),
     age_bin_class = factor(age_bin_class,
-      levels = c("modern", paste("paleo:", seq(0, 15e3, time_step)))
+      levels = c(
+        "modern",
+        paste(
+          "paleo:",
+          seq(0, 10e3, time_step),
+          "cal yr BP"
+        )
+      )
     )
-  ) %>%
+  )
+
+fig_na_plots_picea <-
+  data_to_plot %>%
   ggplot2::ggplot(
     mapping = ggplot2::aes(
       x = coord_long,
       y = coord_lat,
     )
   ) +
-  ggplot2::borders(
-    fill = "grey80",
-    col = NA
-  ) +
-  ggplot2::geom_point(
-    col = "blue",
-    size = 1
-  ) +
-  ggplot2::facet_wrap(
-    ~age_bin_class
-  ) +
-  ggplot2::theme_minimal() +
   ggplot2::coord_quickmap(
     xlim = c(-135, -60),
     ylim = c(22, 60)
   ) +
+  ggplot2::scale_fill_gradient2(
+    low = col_brown_light, # [config]
+    mid = col_beige_dark, # [config]
+    high = "white",
+    midpoint = 5.8,
+    guide = "none"
+  ) +
   ggplot2::labs(
+    subtitle =  "Each point is a presence of the Picea genus at a given time",
     x = "Latitude",
     y = "Longitude"
+  ) +
+  ggplot2::borders(
+    fill = col_brown_light, # [config]
+    col = NA
+  ) +
+  ggplot2::borders(
+    fill = NA,
+    col = col_blue_dark, # [config]
+    size = line_size # [config]
+  ) +
+  ggplot2::geom_point(
+    size = point_size, # [config]
+    col = col_blue_light # [config]
+  ) +
+  ggplot2::geom_point(
+    size = 0.1,
+    col = col_green_light # [config]
+  ) +
+  ggplot2::facet_wrap(
+    ~age_bin_class
   )
 
-fig_na_plots_picea
+ggplot2::ggsave(
+  here::here("Figures/fig_na_plots_picea.png"),
+  plot = fig_na_plots_picea,
+  width = 10,
+  height = 7,
+  bg = col_beige_light # [config]
+)
+
+knitr::include_graphics(here::here("Figures/fig_na_plots_picea.png"))
+
 ```
 
-## Example 2
+## Example 2: Joined Species Distribution model for all vegetation within Czechia
 
 In the second example, let's imagine we want to do Species Distribution Modeling for all plant taxa in the Czech Republic. We will extract modern plot-based data and Mean Annual temprature.
 
 ```{r}
 #| label: Example 2 - CZ JSDM
 #| echo: true
-# Again start by creating a plan
-plan_cz_modern <-
+#| eval: false
+data_cz_modern <-
+  # Acess the VegVault file
+  vaultkeepr::open_vault(path = "<path_to_VegVault>") %>%
+  # Add the dataset information
+  vaultkeepr::get_datasets() %>%
+  # Select modern plot data and climate
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c(
+      "vegetation_plot",
+      "gridpoints"
+    )
+  ) %>%
+  # Limit data to Czech Republic
+  vaultkeepr::select_dataset_by_geo(
+    lat_lim = c(48.5, 51.1),
+    long_lim = c(12, 18.9)
+  ) %>%
+  # Add samples
+  vaultkeepr::get_samples() %>%
+  # select only modern data
+  vaultkeepr::select_samples_by_age(
+    age_lim = c(0, 0)
+  ) %>%
+  # Add abiotic data
+  vaultkeepr::get_abiotic_data() %>%
+  # Select only Mean Anual Temperature (bio1)
+  vaultkeepr::select_abiotic_var_by_name(sel_var_name = "bio1") %>%
+  # add taxa
+  vaultkeepr::get_taxa() %>%
+  vaultkeepr::extract_data()
+```
+
+
+Now we can simply plot both the climatic data and the plot vegetation data:
+
+```{r}
+#| label: Example 2 - CZ JSDM - real
+#| eval: true
+#| echo: false
+# 1. Load data -----
+data_cz_jsdm <-
   # Acess the VegVault file
   vaultkeepr::open_vault(
-    path = paste0(
-      data_storage_path,
-      "Data/VegVault/VegVault.sqlite"
-    )
+    path = path_to_vegvault # [config]
   ) %>%
   # Add the dataset information
   vaultkeepr::get_datasets() %>%
@@ -207,37 +300,45 @@ plan_cz_modern <-
     age_lim = c(0, 0)
   ) %>%
   # Add abiotic data
-  vaultkeepr::get_abiotic() %>%
+  vaultkeepr::get_abiotic_data() %>%
   # Select only Mean Anual Temperature (bio1)
-  vaultkeepr::select_abiotic_var_by_name(
-    sel_var_name = "bio1"
-  ) %>%
+  vaultkeepr::select_abiotic_var_by_name(sel_var_name = "bio1") %>%
   # add taxa
-  vaultkeepr::get_taxa()
+  vaultkeepr::get_taxa() %>%
+  vaultkeepr::extract_data()
 
-# Execute the plan
-data_cz_modern <-
-  vaultkeepr::extract_data(plan_cz_modern)
-```
-
-Now we can simply plot both the climatic data and the plot vegetation data:
-
-```{r}
-#| label: Example 2 - plot
-data_climate <-
-  data_cz_modern %>%
+# 2. build figure -----
+data_cz_climate <-
+  data_cz_jsdm %>%
   dplyr::filter(dataset_type == "gridpoints") %>%
-  dplyr::select(dataset_type, dataset_id, coord_long, coord_lat, sample_id, abiotic_value) %>%
+  dplyr::select(
+    sample_id_link, abiotic_value
+  ) %>%
   tidyr::drop_na() %>%
   dplyr::distinct()
 
-data_plots <-
-  data_cz_modern %>%
+data_cz_plots <-
+  data_cz_jsdm %>%
   dplyr::filter(dataset_type == "vegetation_plot") %>%
-  dplyr::select(dataset_type, dataset_id, coord_long, coord_lat, sample_id) %>%
-  dplyr::distinct()
+  dplyr::select(
+    dataset_id, coord_long, coord_lat, sample_id, taxon_id
+  ) %>%
+  dplyr::distinct() %>%
+  dplyr::group_by(dataset_id, coord_long, coord_lat, sample_id) %>%
+  dplyr::summarise(
+    .groups = "drop",
+    n_taxa = dplyr::n()
+  ) %>%
+  dplyr::filter(n_taxa > 1)
 
-fig_cz_modern <-
+data_cz_plots_with_climate <-
+  data_cz_plots %>%
+  dplyr::left_join(
+    data_cz_climate,
+    by = c("sample_id" = "sample_id_link")
+  )
+
+fig_cz_jsdm <-
   ggplot2::ggplot(
     mapping = ggplot2::aes(
       x = coord_long,
@@ -249,57 +350,90 @@ fig_cz_modern <-
     ylim = c(48.5, 51.1)
   ) +
   ggplot2::labs(
-    title = stringr::str_wrap("Example 2: Distribution of plots", fig_width_def), # [quarto config]
     x = "Longtitude",
     y = "Latitude",
-    col = "Temperature (°C)",
-    fill = "Temperature (°C)",
-    caption = "Each point represents one community dataset"
+    colour = "Temperature (°C)",
+    size = "Species richness",
+    subtitle = "Each point represents one vegetation plot"
   ) +
-  ggplot2::scale_fill_viridis_c() +
-  ggplot2::scale_color_viridis_c() +
+  ggplot2::scale_fill_gradient2(
+    low = col_brown_light, # [config]
+    mid = col_beige_dark, # [config]
+    high = "white",
+    midpoint = 5.8,
+    guide = "none"
+  ) +
+  ggplot2::scale_colour_steps(
+    low = col_blue_dark, # [config]
+    high = col_blue_light # [config]
+  ) +
+  ggplot2::scale_size_continuous(
+    breaks = scales::pretty_breaks(n = 5),
+    range = c(
+      0.2,
+      point_size * 2 # [config]
+    )
+  ) +
   ggplot2::theme(
-    legend.position = "bottom"
+    legend.position = "right"
   ) +
-  ggplot2::geom_tile(
-    data = data_climate,
-    mapping = ggplot2::aes(
-      fill = as.numeric(abiotic_value),
-      col = as.numeric(abiotic_value)
-    ),
-    # width = 0.05,
-    # height = 0.05,
-    alpha = 0.75,
-    linewidth = 0.1
+  ggplot2::borders(
+    fill = col_brown_light, # [config]
+    col = NA
+  ) +
+  ggplot2::geom_vline(
+    xintercept = seq(12, 18, 2),
+    linewidth = line_size,
+    colour = col_white
+  ) +
+  ggplot2::geom_hline(
+    yintercept = seq(48.5, 51, 0.5),
+    linewidth = line_size,
+    colour = col_white
   ) +
   ggplot2::borders(
     fill = NA,
-    col = "red"
+    col = col_blue_dark, # [config]
+    size = line_size # [config]
   ) +
   ggplot2::geom_point(
-    data = data_plots,
-    col = "black"
+    data = data_cz_plots_with_climate,
+    mapping = ggplot2::aes(
+      x = coord_long,
+      y = coord_lat,
+      col = abiotic_value,
+      size = n_taxa
+    )
+  ) +
+  ggplot2::geom_point(
+    data = data_cz_plots_with_climate,
+    col = col_green_light, # [config]
+    size = 0.1
   )
 
-fig_cz_modern
+
+ggplot2::ggsave(
+  here::here("Figures/fig_cz_jsdm.png"),
+  plot = fig_cz_jsdm,
+  width = 10,
+  height = 7,
+  bg = col_beige_light # [config]
+)
+
+knitr::include_graphics(here::here("Figures/fig_cz_jsdm.png"))
 ```
 
-## Example 3
+## Example 3: Patterns of plant height (CWM) for South and Central Latin America between 6-12 ka
 
 In the last example, let's imagine we want to reconstruct the Community Weighted Mean (CWM) of plant height for Latin America between 6-12 ka yr BP.
 
 ```{r}
 #| label: Example 3 - LA CWM
 #| echo: true
-# Again start by creating a plan
-plan_la_traits <-
+#| eval: false
+data_la_traits <-
   # Acess the VegVault file
-  vaultkeepr::open_vault(
-    path = paste0(
-      data_storage_path,
-      "Data/VegVault/VegVault.sqlite"
-    )
-  ) %>%
+  vaultkeepr::open_vault(path = "<path_to_VegVault>") %>%
   # Add the dataset information
   vaultkeepr::get_datasets() %>%
   # Select modern plot data and climate
@@ -309,7 +443,7 @@ plan_la_traits <-
       "traits"
     )
   ) %>%
-  # Limit data to Latin America
+  # Limit data to South and Central America
   vaultkeepr::select_dataset_by_geo(
     lat_lim = c(-53, 28),
     long_lim = c(-110, -38),
@@ -324,30 +458,61 @@ plan_la_traits <-
   vaultkeepr::select_samples_by_age(
     age_lim = c(6e3, 12e3)
   ) %>%
-  # add taxa
-  vaultkeepr::get_taxa(
-    # Clasify all data to a genus level
-    classify_to = "genus"
-  ) %>%
-  # add trait information
-  vaultkeepr::get_traits(
-    # Clasify all data to a genus level
-    classify_to = "genus"
-  ) %>%
+  # add taxa & clasify all data to a genus level
+  vaultkeepr::get_taxa(classify_to = "genus") %>%
+  # add trait information & clasify all data to a genus level
+  vaultkeepr::get_traits(classify_to = "genus") %>%
   # Only select the plant height
-  vaultkeepr::select_traits_by_domain_name(
-    sel_domain = "Plant heigh"
-  )
-
-# Execute the plan
-data_la_traits <-
-  vaultkeepr::extract_data(plan_la_traits)
+  vaultkeepr::select_traits_by_domain_name(sel_domain = "Plant heigh") %>%
+  vaultkeepr::extract_data()
 ```
 
 Now let's plot the overview of the data
 
 ```{r}
-#| label: Example 3 - plot
+#| label: Example 3 - LA CWM - real
+#| eval: true
+#| echo: false
+# 1. Load data -----
+data_la_traits <-
+  # Acess the VegVault file
+  vaultkeepr::open_vault(
+    path = path_to_vegvault # [config]
+  ) %>%
+  # Add the dataset information
+  vaultkeepr::get_datasets() %>%
+  # Select modern plot data and climate
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c(
+      "fossil_pollen_archive",
+      "traits"
+    )
+  ) %>%
+  # Limit data to South and Central America
+  vaultkeepr::select_dataset_by_geo(
+    lat_lim = c(-53, 28),
+    long_lim = c(-110, -38),
+    sel_dataset_type = c(
+      "fossil_pollen_archive",
+      "traits"
+    )
+  ) %>%
+  # Add samples
+  vaultkeepr::get_samples() %>%
+  # Limit to 6-12 ka yr BP
+  vaultkeepr::select_samples_by_age(
+    age_lim = c(6e3, 12e3)
+  ) %>%
+  # add taxa & clasify all data to a genus level
+  vaultkeepr::get_taxa(classify_to = "genus") %>%
+  # add trait information & clasify all data to a genus level
+  vaultkeepr::get_traits(classify_to = "genus") %>%
+  # Only select the plant height
+  vaultkeepr::select_traits_by_domain_name(sel_domain = "Plant heigh") %>%
+  vaultkeepr::extract_data()
+
+# 2. Build figure -----
+
 data_la_datasets <-
   data_la_traits %>%
   dplyr::filter(dataset_type == "fossil_pollen_archive") %>%
@@ -367,6 +532,7 @@ data_la_taxa <-
   dplyr::group_by(dataset_id, sample_id) %>%
   dplyr::count() %>%
   dplyr::ungroup()
+
 
 data_la_height <-
   data_la_traits %>%
@@ -390,12 +556,30 @@ fig_la_datasets <-
       xend = age_max
     )
   ) +
-  ggplot2::geom_segment() +
+  ggplot2::geom_segment(
+    linewidth = 2,
+    col = col_blue_dark
+  ) +
+  ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      x = age_min
+    ),
+    col = col_green_light,
+    size = point_size
+  ) +
+  ggplot2::geom_point(
+    mapping = ggplot2::aes(
+      x = age_max
+    ),
+    col = col_green_dark,
+    size = point_size
+  ) +
   ggplot2::theme(
     axis.text.y = ggplot2::element_blank(),
     axis.ticks.y = ggplot2::element_blank(),
     legend.title = ggplot2::element_blank(),
-    legend.position = "none"
+    legend.position = "none",
+    panel.grid.major.y = ggplot2::element_blank()
   ) +
   ggplot2::scale_x_continuous(
     transform = "reverse",
@@ -418,23 +602,31 @@ fig_la_taxa <-
       y = n
     )
   ) +
-  ggplot2::geom_violin() +
+  ggplot2::geom_violin(
+    fill = col_blue_light,
+    col = col_blue_dark
+  ) +
   ggplot2::geom_boxplot(
     width = 0.2,
-    outlier.shape = NA
+    outlier.shape = NA,
+    fill = col_white,
+    col = col_blue_dark
   ) +
   ggplot2::theme(
     axis.title.x = ggplot2::element_blank(),
     axis.text.x = ggplot2::element_blank(),
     axis.ticks.x = ggplot2::element_blank(),
+    panel.grid.major.x = ggplot2::element_blank(),
     legend.title = ggplot2::element_blank(),
     legend.position = "none"
   ) +
   ggplot2::labs(
     y = "N genera per sample"
   ) +
-  ggplot2::coord_cartesian(
-    #  xlim = c(min(limits), max(limits))
+  ggplot2::scale_y_continuous(
+    labels = scales::label_number(),
+    breaks = c(1, 5, 10, 20, 30, 50, 70),
+    limits = c(0, 60)
   )
 
 fig_la_height <-
@@ -445,15 +637,21 @@ fig_la_height <-
       y = mean_value
     )
   ) +
-  ggplot2::geom_violin() +
+  ggplot2::geom_violin(
+    fill = col_green_light,
+    col = col_green_dark
+  ) +
   ggplot2::geom_boxplot(
     width = 0.2,
-    outlier.shape = NA
+    outlier.shape = NA,
+    fill = col_white,
+    col = col_green_dark
   ) +
   ggplot2::theme(
     axis.title.x = ggplot2::element_blank(),
     axis.text.x = ggplot2::element_blank(),
     axis.ticks.x = ggplot2::element_blank(),
+    panel.grid.major.x = ggplot2::element_blank(),
     legend.title = ggplot2::element_blank(),
     legend.position = "none"
   ) +
@@ -461,16 +659,31 @@ fig_la_height <-
     y = "Average Plant heigh per genera"
   ) +
   ggplot2::scale_y_continuous(
-    transform = "log1p",
-    breaks = c(0, 10, 100, 1e3, 1e4, 1e5),
-    labels = scales::label_number()
-    #  xlim = c(min(limits), max(limits))
+    transform = scales::transform_pseudo_log(),
+    labels = scales::label_number(),
+    breaks = c(0, 1, 5, 10, 20, 30, 50, 70),
+    limits = c(0, 80)
   )
 
-cowplot::plot_grid(
-  fig_la_datasets,
-  fig_la_taxa,
-  fig_la_height,
-  nrow = 1
+fig_la_merge <-
+  cowplot::plot_grid(
+    fig_la_datasets,
+    fig_la_taxa,
+    fig_la_height,
+    nrow = 1,
+    align = "h",
+    axis = "bt",
+    rel_widths = c(2, 1, 1)
+  )
+
+ggplot2::ggsave(
+  here::here("Figures/fig_la_merge.png"),
+  plot = fig_la_merge,
+  width = 10,
+  height = 7,
+  bg = col_beige_light # [config]
 )
+
+knitr::include_graphics(here::here("Figures/fig_la_merge.png"))
+
 ```
