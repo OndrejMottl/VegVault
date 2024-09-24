@@ -1,0 +1,11 @@
+---
+date: last-modified
+sidebar: true
+---
+
+# Materials
+
+## Posters
+
+- [VegVault poster - CSPE confrerence Sep 2024 - LQ](Figures/poster2024/mottl_poster_compression_9.png)
+- [VegVault poster - CSPE confrerence Sep 2024 - HQ](Figures/poster2024/mottl_poster.jpeg)

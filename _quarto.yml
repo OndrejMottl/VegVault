@@ -10,6 +10,8 @@ website:
         text: Home
       - href: Technical_overview/Technical_overview_master.qmd
         text: Technical Overview
+      - href: materials.qmd
+        text: Materials
     search: true
     repo-url: https://github.com/OndrejMottl/VegVault
     repo-actions: [source, issue]
