@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ondřej Mottl">
-<meta name="dcterms.date" content="2024-09-04">
+<meta name="dcterms.date" content="2024-10-15">
 
 <title>VegVault - VegVault - technical overview</title>
 <style>
@@ -224,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 4, 2024</p>
+      <p class="date">October 15, 2024</p>
     </div>
   </div>
   
@@ -635,7 +635,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_lim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">15e3</span>)</span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add taxa &amp; classify all data to a genus level</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  vaultkeepr<span class="sc">::</span><span class="fu">get_taxa</span>( <span class="at">classify_to =</span> <span class="st">"genus"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  vaultkeepr<span class="sc">::</span><span class="fu">get_taxa</span>(<span class="at">classify_to =</span> <span class="st">"genus"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract only Picea data</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  vaultkeepr<span class="sc">::</span><span class="fu">select_taxa_by_name</span>(<span class="at">sel_taxa =</span> <span class="st">"Picea"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  vaultkeepr<span class="sc">::</span><span class="fu">extract_data</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

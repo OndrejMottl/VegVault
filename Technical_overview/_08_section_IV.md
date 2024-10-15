@@ -52,7 +52,7 @@ data_na_plots_picea <-
     age_lim = c(0, 15e3)
   ) %>%
   # Add taxa & classify all data to a genus level
-  vaultkeepr::get_taxa( classify_to = "genus") %>%
+  vaultkeepr::get_taxa(classify_to = "genus") %>%
   # Extract only Picea data
   vaultkeepr::select_taxa_by_name(sel_taxa = "Picea") %>%
   vaultkeepr::extract_data()

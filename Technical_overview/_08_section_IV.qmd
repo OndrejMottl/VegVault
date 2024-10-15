@@ -98,7 +98,7 @@ data_na_plots_picea <-
     age_lim = c(0, 15e3)
   ) %>%
   # Add taxa & classify all data to a genus level
-  vaultkeepr::get_taxa( classify_to = "genus") %>%
+  vaultkeepr::get_taxa(classify_to = "genus") %>%
   # Extract only Picea data
   vaultkeepr::select_taxa_by_name(sel_taxa = "Picea") %>%
   vaultkeepr::extract_data()
@@ -145,9 +145,39 @@ time_step <- 2500
 
 data_to_plot <-
   data_na_plots_picea %>%
-  dplyr::filter(value > 0) %>%
+  dplyr::filter(
+    dataset_type %in% c("vegetation_plot", "fossil_pollen_archive")
+  ) %>%
+  dplyr::filter(
+    purrr::map_lgl(
+      .x = data_samples,
+      .f = ~ tibble::is_tibble(.x)
+    )
+  ) %>%
+  dplyr::filter(
+    purrr::map_lgl(
+      .x = data_community,
+      .f = ~ tibble::is_tibble(.x)
+    )
+  ) %>%
+  dplyr::mutate(
+    sample_merge = purrr::map2(
+      .x = data_samples,
+      .y = data_community,
+      .f = ~ dplyr::left_join(
+        .x,
+        .y,
+        by = "sample_name"
+      )
+    )
+  ) %>%
+  dplyr::select(
+    dataset_name, dataset_type, coord_long, coord_lat, sample_merge
+  ) %>%
+  tidyr::unnest(sample_merge) %>%
+  dplyr::filter(Picea > 0) %>%
   dplyr::distinct(
-    dataset_type, dataset_id, coord_long, coord_lat, sample_id, age
+    dataset_name, dataset_type, coord_long, coord_lat, age
   ) %>%
   dplyr::mutate(
     age_bin = floor(age / time_step) * time_step
@@ -310,32 +340,48 @@ data_cz_jsdm <-
 # 2. build figure -----
 data_cz_climate <-
   data_cz_jsdm %>%
-  dplyr::filter(dataset_type == "gridpoints") %>%
-  dplyr::select(
-    sample_id_link, abiotic_value
+  dplyr::filter(
+    purrr::map_lgl(
+      .x = data_abiotic,
+      .f = ~ tibble::is_tibble(.x)
+    )
   ) %>%
+  dplyr::select(
+    dataset_name, data_abiotic
+  ) %>%
+  tidyr::unnest(data_abiotic) %>%
   tidyr::drop_na() %>%
-  dplyr::distinct()
+  dplyr::distinct(dataset_name, abiotic_value, abiotic_variable_unit, abiotic_value)
 
 data_cz_plots <-
   data_cz_jsdm %>%
   dplyr::filter(dataset_type == "vegetation_plot") %>%
-  dplyr::select(
-    dataset_id, coord_long, coord_lat, sample_id, taxon_id
+  dplyr::filter(
+    purrr::map_lgl(
+      .x = data_community,
+      .f = ~ tibble::is_tibble(.x)
+    )
   ) %>%
-  dplyr::distinct() %>%
-  dplyr::group_by(dataset_id, coord_long, coord_lat, sample_id) %>%
-  dplyr::summarise(
-    .groups = "drop",
-    n_taxa = dplyr::n()
+  dplyr::select(
+    dataset_name, coord_long, coord_lat, data_community
+  ) %>%
+  dplyr::mutate(
+    n_taxa = purrr::map_int(
+      .progress = "estimating richness",
+      .x = data_community,
+      .f = ~ .x %>%
+        tibble::column_to_rownames("sample_name") %>%
+        ncol()
+    )
   ) %>%
   dplyr::filter(n_taxa > 1)
+
 
 data_cz_plots_with_climate <-
   data_cz_plots %>%
   dplyr::left_join(
     data_cz_climate,
-    by = c("sample_id" = "sample_id_link")
+    by = "dataset_name"
   )
 
 fig_cz_jsdm <-
@@ -516,8 +562,15 @@ data_la_traits <-
 data_la_datasets <-
   data_la_traits %>%
   dplyr::filter(dataset_type == "fossil_pollen_archive") %>%
-  dplyr::distinct(dataset_id, sample_id, age) %>%
-  dplyr::group_by(dataset_id) %>%
+  dplyr::filter(
+    purrr::map_lgl(
+      .x = data_samples,
+      .f = ~ tibble::is_tibble(.x)
+    )
+  ) %>%
+  tidyr::unnest(data_samples) %>%
+  dplyr::distinct(dataset_name, sample_name, age) %>%
+  dplyr::group_by(dataset_name) %>%
   dplyr::summarise(
     .groups = "drop",
     age_min = min(age),
@@ -528,17 +581,58 @@ data_la_datasets <-
 data_la_taxa <-
   data_la_traits %>%
   dplyr::filter(dataset_type == "fossil_pollen_archive") %>%
-  dplyr::distinct(dataset_id, sample_id, taxon_id) %>%
-  dplyr::group_by(dataset_id, sample_id) %>%
-  dplyr::count() %>%
-  dplyr::ungroup()
-
+  dplyr::filter(
+    dataset_type %in% c("vegetation_plot", "fossil_pollen_archive")
+  ) %>%
+  dplyr::filter(
+    purrr::map_lgl(
+      .x = data_community,
+      .f = ~ tibble::is_tibble(.x)
+    )
+  ) %>%
+  dplyr::select(
+    dataset_name, coord_long, coord_lat, data_community
+  ) %>%
+  dplyr::mutate(
+    n_taxa_data = purrr::map(
+      .progress = "estimating richness",
+      .x = data_community,
+      .f = ~ .x %>%
+        tibble::column_to_rownames("sample_name") %>%
+        dplyr::mutate(
+          dplyr::across(
+            dplyr::everything(),
+            ~ as.integer(.x)
+          )
+        ) %>%
+        vegan::estimateR() %>%
+        t() %>%
+        as.data.frame() %>%
+        tibble::rownames_to_column("sample_name") %>%
+        janitor::clean_names() %>%
+        dplyr::select(sample_name, n_taxa = s_obs)
+    )
+  ) %>%
+  tidyr::unnest(n_taxa_data) %>%
+  dplyr::filter(n_taxa > 1)
 
 data_la_height <-
   data_la_traits %>%
   dplyr::filter(dataset_type == "traits") %>%
-  dplyr::distinct(dataset_id, taxon_id_trait, .keep_all = TRUE) %>%
-  tidyr::drop_na(taxon_id_trait) %>%
+  dplyr::filter(
+    purrr::map_lgl(
+      .x = data_traits,
+      .f = ~ tibble::is_tibble(.x)
+    )
+  ) %>%
+  dplyr::select(data_traits)  %>% 
+  tidyr::unnest(data_traits) %>%
+  tidyr::pivot_longer(
+    cols = -c(sample_name, trait_domain_name, trait_name),
+    names_to = "taxon_id_trait",
+    values_to = "trait_value"
+  ) %>%
+  tidyr::drop_na(trait_value) %>%
   dplyr::select(taxon_id_trait, trait_value) %>%
   dplyr::group_by(taxon_id_trait) %>%
   dplyr::summarise(
@@ -550,8 +644,8 @@ fig_la_datasets <-
   data_la_datasets %>%
   ggplot2::ggplot(
     mapping = ggplot2::aes(
-      y = reorder(dataset_id, -age_mean),
-      yend = reorder(dataset_id, -age_mean),
+      y = reorder(dataset_name, -age_mean),
+      yend = reorder(dataset_name, -age_mean),
       x = age_min,
       xend = age_max
     )
@@ -599,7 +693,7 @@ fig_la_taxa <-
   ggplot2::ggplot(
     mapping = ggplot2::aes(
       x = 1,
-      y = n
+      y = n_taxa
     )
   ) +
   ggplot2::geom_violin(
