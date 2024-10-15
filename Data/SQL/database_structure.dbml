@@ -12,6 +12,23 @@ Project VegVault {
     - past abiotic data (climate)
   '''
 }
+
+// Versioning
+Table version_control {
+  version_id INTEGER [PRIMARY KEY]               
+  version TEXT
+  update_timestamp DATETIME 
+  changelog TEXT
+}
+
+// Authors
+Table Authors {
+  author_id INTEGER [PRIMARY KEY]
+  author_fullname TEXT
+  author_email TEXT
+  author_orcid TEXT
+}
+
 // Datasets
 Table Datasets {
   dataset_id INTEGER [PRIMARY KEY]

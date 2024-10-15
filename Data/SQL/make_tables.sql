@@ -1,3 +1,21 @@
+CREATE TABLE "version_control"
+(
+  "id" INTEGER PRIMARY KEY,
+  "version" TEXT,
+  "update_timestamp" DATETIME DEFAULT CURRENT_TIMESTAMP,
+  "changelog" TEXT
+);
+CREATE UNIQUE INDEX idx_version_control_id ON version_control(id);
+
+CREATE TABLE "Authors"
+(
+  "author_id" INTEGER PRIMARY KEY,
+  "author_fullname" TEXT,
+  "author_email" TEXT,
+  "author_orcid" TEXT
+);
+CREATE UNIQUE INDEX idx_authors_author_id ON Authors(author_id);
+
 CREATE TABLE "Datasets"
 (
   "dataset_id" INTEGER PRIMARY KEY,

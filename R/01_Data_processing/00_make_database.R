@@ -98,5 +98,57 @@ DBI::dbGetQuery(
 "
 )
 
+# add Author information
+if (
+  isTRUE(
+    tbl(con, "Authors") %>%
+      dplyr::collect() %>%
+      nrow() == 0
+  )
+) {
+  DBI::dbExecute(
+    con,
+    "
+    INSERT INTO Authors (author_fullname, author_email, author_orcid)
+    VALUES ('Ondřej Mottl', 'ondrej.mottl@gmail.com', '0000-0002-9796-5081');
+    "
+  )
+}
+
+# update the database version
+db_version_control <-
+  dplyr::tbl(
+    con, "version_control"
+  ) %>%
+  dplyr::collect()
+
+update_db_version <- FALSE
+
+if (
+  nrow(db_version_control) == 0
+) {
+  update_db_version <- TRUE
+} else {
+  if (
+    db_version_control$version[1] != db_version
+  ) {
+    update_db_version <- TRUE
+  }
+}
+
+if (
+  isTRUE(update_db_version)
+) {
+  DBI::dbExecute(
+    con,
+    paste0(
+      "INSERT INTO version_control (version, changelog)",
+      "VALUES ('",
+      db_version, # [config]
+      "', 'beging the versioning of the database');"
+    )
+  )
+}
+
 # disconnect
 DBI::dbDisconnect(con)
