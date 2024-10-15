@@ -428,17 +428,17 @@
     },
     "bit": {
       "Package": "bit",
-      "Version": "4.0.5",
+      "Version": "4.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "d242abec29412ce988848d0294b208fd"
+      "Hash": "5dc7b2677d65d0e874fc4aaf0e879987"
     },
     "bit64": {
       "Package": "bit64",
-      "Version": "4.0.5",
+      "Version": "4.5.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -448,7 +448,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "9fe98599ca456d6552421db0d6772d8f"
+      "Hash": "e84984bf5f12a18628d9a02322128dfd"
     },
     "blob": {
       "Package": "blob",
@@ -2767,14 +2767,14 @@
     },
     "vaultkeepr": {
       "Package": "vaultkeepr",
-      "Version": "0.0.2",
+      "Version": "0.0.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "vaultkeepr",
       "RemoteUsername": "OndrejMottl",
       "RemoteRef": "HEAD",
-      "RemoteSha": "a4592ce641fd03ca1c9de214492c60f462f483de",
+      "RemoteSha": "1ddc01b562a4ce9680cd9ce27aec26d979d3c630",
       "Requirements": [
         "DBI",
         "RSQLite",
@@ -2785,7 +2785,7 @@
         "rlang",
         "tibble"
       ],
-      "Hash": "ac3f11cfcd4f89e201a599c87e540c87"
+      "Hash": "629c8ac147f4f2d3b0258feab2a87d36"
     },
     "vctrs": {
       "Package": "vctrs",
