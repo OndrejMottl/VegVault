@@ -20,6 +20,7 @@ current_env <- environment()
 # set seed
 set.seed(1234)
 
+db_version <- "0.0.2"
 
 #----------------------------------------------------------#
 # 1. Load packages -----
