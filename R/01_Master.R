@@ -103,7 +103,7 @@ source(
 # Classify all taxa in DB
 source(
   here::here(
-    "/R/02_Main_analyses/10_Classify_taxa.R"
+    "R/02_Main_analyses/10_Classify_taxa.R"
   )
 )
 
@@ -111,6 +111,6 @@ source(
 # Classify all taxa in DB
 source(
   here::here(
-    "/R/02_Main_analyses/11_Check_database.R"
+    "R/02_Main_analyses/11_Check_database.R"
   )
 )
