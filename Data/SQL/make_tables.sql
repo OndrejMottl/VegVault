@@ -291,7 +291,8 @@ CREATE INDEX idx_abioticvariablereference_reference_id ON AbioticVariableReferen
 CREATE TABLE "References"
 (
   "reference_id" INTEGER PRIMARY KEY,
-  "reference_detail" TEXT
+  "reference_detail" TEXT,
+  "mandatory" BOOLEAN
 );
 CREATE UNIQUE INDEX idx_references_reference_id ON "References"(reference_id);
 
