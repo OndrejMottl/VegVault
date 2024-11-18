@@ -197,6 +197,7 @@ Table AbioticVariableReference {
 Table References {
   reference_id INTEGER [PRIMARY KEY]
   reference_detail TEXT
+  mandatory BOOLEAN
 }
 
 // All references

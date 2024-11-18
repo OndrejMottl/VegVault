@@ -98,8 +98,23 @@ data_wosis_raw <-
     ),
     abiotic_variable_name = .data$var_name,
     var_unit = "Unitless",
-    var_reference = "https://doi.org/10.5194/soil-7-217-2021",
-    var_detail = "WoSIS-SoilGrids"
+    var_reference = list(
+      c(
+        paste(
+          "Batjes NH, Calisto L and de Sousa LM, 2024.",
+          "Providing quality-assessed and standardised soil data to support",
+          "global mapping and modelling (WoSIS snapshot 2023).",
+          "Earth Syst. Sci. Data https://doi.org/10.5194/essd-16-4735-2024"
+        ),
+        paste(
+          "Batjes NH, Calisto L and de Sousa LM, 2024.",
+          "WoSIS-latest: Standardised world soil profile data. ISRIC Soil Data",
+          "Hub resource identifier: https://tinyurl.com/39xhaa9d.",
+          "Date downloaded: 06/08/2024."
+        )
+      )
+    ),
+    var_detail = "SoilGrids-soil_class"
   )
 
 data_samples_db <-

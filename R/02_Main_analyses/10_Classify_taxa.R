@@ -281,7 +281,7 @@ data_classified_up_to_family %>%
   dplyr::distinct(taxon_name) %>%
   tidyr::drop_na() %>%
   dplyr::mutate(
-    taxon_reference = "added manually by Ondrej Mottl",
+    taxon_reference = "taxospace"
   ) %>%
   add_taxa(con = con)
 
@@ -410,7 +410,7 @@ data_classified_up_to_family %>%
   dplyr::distinct(taxon_name) %>%
   tidyr::drop_na() %>%
   dplyr::mutate(
-    taxon_reference = "added manually by Ondrej Mottl",
+    taxon_reference = "taxospace",
   ) %>%
   add_taxa(con = con)
 

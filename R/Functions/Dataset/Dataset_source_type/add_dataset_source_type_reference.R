@@ -2,19 +2,19 @@ add_dataset_source_type_reference <- function(
     data_source,
     data_source_type_id,
     con) {
-  dataset_source_type_referecne_db <-
+  dataset_source_type_reference_db <-
     add_dataset_source_type_reference_id(
       data_source = data_source,
       con = con
     )
 
-  dataset_source_type_referecne_lookup <-
+  dataset_source_type_reference_lookup <-
     data_source %>%
     dplyr::select(dataset_source_type, data_source_type_reference) %>%
     tidyr::unnest(data_source_type_reference) %>%
     dplyr::distinct(dataset_source_type, data_source_type_reference) %>%
     dplyr::left_join(
-      dataset_source_type_referecne_db,
+      dataset_source_type_reference_db,
       by = dplyr::join_by(data_source_type_reference == reference_detail)
     ) %>%
     dplyr::left_join(
@@ -26,8 +26,8 @@ add_dataset_source_type_reference <- function(
       reference_id
     )
 
-  dataset_source_type_referecne_lookup_unique <-
-    dataset_source_type_referecne_lookup %>%
+  dataset_source_type_reference_lookup_unique <-
+    dataset_source_type_reference_lookup %>%
     dplyr::anti_join(
       dplyr::tbl(con, "DatasetSourceTypeReference") %>%
         dplyr::collect(),
@@ -39,7 +39,7 @@ add_dataset_source_type_reference <- function(
 
   add_to_db(
     conn = con,
-    data = dataset_source_type_referecne_lookup_unique,
+    data = dataset_source_type_reference_lookup_unique,
     table_name = "DatasetSourceTypeReference",
     overwrite_test = TRUE
   )

@@ -71,7 +71,24 @@ bien_dataset_raw <-
   dplyr::mutate(
     dataset_type = "vegetation_plot",
     dataset_source_type = "BIEN",
-    data_source_type_reference = list("https://doi.org/10.7287/peerj.preprints.2615v2"),
+    data_source_type_reference = list(
+      c(
+        paste(
+          "Enquist, B J, B Sandel, B Boyle, J-C Svenning, B J McGill,",
+          "J C Donoghue, C E Hinchliff, et al. ‘Botanical Big Data Shows That",
+          "Plant Diversity in the New World Is Driven by Climatic-Linked",
+          "Differences in Evolutionary Rates and Biotic Exclusion’, n.d."
+        ),
+        paste(
+          "S, Maitner Brian, Boyle Brad, Casler Nathan, Condit Rick,",
+          "Donoghue John, Duran Sandra M, Guaderrama Daniel, et al.",
+          "‘The Bien r Package: A Tool to Access the Botanical Information and",
+          "Ecology Network (BIEN) Database’. Methods in Ecology and",
+          "Evolution 9, no. 2 (n.d.): 373–79.",
+          "https://doi.org/10.1111/2041-210X.12861."
+        )
+      )
+    ),
     data_source_desc = datasource,
     data_source_reference = NA_character_,
     dataset_name = paste0(
@@ -80,7 +97,13 @@ bien_dataset_raw <-
     ),
     coord_long = longitude,
     coord_lat = latitude,
-    sampling_reference = methodology_reference,
+    sampling_reference = purrr::map(
+      .x = methodology_reference,
+      .f = ~ c(
+        "BIEN",
+        .x
+      )
+    ),
     sampling_method_details = methodology_description,
     dataset_reference = NA_character_
   )
@@ -187,7 +210,7 @@ data_bien_taxa_raw <-
   ) %>%
   tidyr::drop_na() %>%
   dplyr::mutate(
-    taxon_reference = NA_character_
+    taxon_reference = "BIEN",
   )
 
 # 6.1 taxa id -----

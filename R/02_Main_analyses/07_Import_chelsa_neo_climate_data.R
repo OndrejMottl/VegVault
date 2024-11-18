@@ -27,6 +27,26 @@ source(
 )
 
 
+sel_var_references <-
+  list(
+    c(
+      paste(
+        "Karger, Dirk Nikolaus, Olaf Conrad, Jürgen Böhner, Tobias Kawohl,",
+        "Holger Kreft, Rodrigo Wilber Soria-Auza, Niklaus E. Zimmermann,",
+        "H. Peter Linder, and Michael Kessler.",
+        "Climatologies at high resolution for the earth’s land surface areas.",
+        "Scientific data 4, no. 1 (2017): 1-20.",
+        "https://doi.org/10.1038/sdata.2017.122"
+      ),
+      paste(
+        "Karger D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H.,",
+        "Soria-Auza, R.W., Zimmermann, N.E, Linder, H.P., Kessler, M. (2018):",
+        "Data from: Climatologies at high resolution for the earth’s land",
+        "surface areas. EnviDat. https://doi.org/10.16904/envidat.228.v2.1"
+      )
+    )
+  )
+
 #----------------------------------------------------------#
 # 1. Connect to db -----
 #----------------------------------------------------------#
@@ -62,9 +82,9 @@ add_chelsa_neo_data(
     "CHELSA_bio_01_2024-08-06__ff1659d322855ca35555ac7b96d58720__.qs"
   ),
   sel_var_name = "bio1",
-  sel_var_unit = "°C",
-  sel_var_reference = "https://doi.org/10.1038/sdata.2017.122",
-  sel_var_detail = "CHELSA"
+  sel_var_unit = "C (degree Celsius)",
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "mean annual air temperature"
 )
 
 
@@ -79,9 +99,9 @@ add_chelsa_neo_data(
     "CHELSA_bio_04_2024-08-06__1604d03e5861ab5c68ec199aa62149b7__.qs"
   ),
   sel_var_name = "bio4",
-  sel_var_unit = "°C",
-  sel_var_reference = "https://doi.org/10.1038/sdata.2017.122",
-  sel_var_detail = "CHELSA"
+  sel_var_unit = "C (degree Celsius)",
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "temperature seasonality"
 )
 
 
@@ -96,9 +116,9 @@ add_chelsa_neo_data(
     "CHELSA_bio_06_2024-08-06__8655ad5eb3ceb3994277951094153411__.qs"
   ),
   sel_var_name = "bio6",
-  sel_var_unit = "°C",
-  sel_var_reference = "https://doi.org/10.1038/sdata.2017.122",
-  sel_var_detail = "CHELSA"
+  sel_var_unit = "C (degree Celsius)",
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "mean daily minimum air temperature of the coldest month"
 )
 
 
@@ -114,8 +134,8 @@ add_chelsa_neo_data(
   ),
   sel_var_name = "bio12",
   sel_var_unit = "kg m-2 year-1",
-  sel_var_reference = "https://doi.org/10.1038/sdata.2017.122",
-  sel_var_detail = "CHELSA"
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "annual precipitation amount"
 )
 
 
@@ -131,8 +151,8 @@ add_chelsa_neo_data(
   ),
   sel_var_name = "bio15",
   sel_var_unit = "Unitless",
-  sel_var_reference = "https://doi.org/10.1038/sdata.2017.122",
-  sel_var_detail = "CHELSA"
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "precipitation seasonality"
 )
 
 
@@ -148,8 +168,8 @@ add_chelsa_neo_data(
   ),
   sel_var_name = "bio18",
   sel_var_unit = "kg m-2 quarter-1",
-  sel_var_reference = "https://doi.org/10.1038/sdata.2017.122",
-  sel_var_detail = "CHELSA"
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "mean monthly precipitation amount of the warmest quarter"
 )
 
 
@@ -165,6 +185,6 @@ add_chelsa_neo_data(
   ),
   sel_var_name = "bio19",
   sel_var_unit = "kg m-2 quarter-1",
-  sel_var_reference = "https://doi.org/10.1038/sdata.2017.122",
-  sel_var_detail = "CHELSA"
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "mean monthly precipitation amount of the coldest quarter"
 )

@@ -36,7 +36,7 @@ add_chelsa_trace_data <- function(
     dplyr::mutate(
       coord_long = as.numeric(.data$long),
       coord_lat = as.numeric(.data$lat),
-      age = (-as.numeric(.data$time_id) * 100) + 1950
+      age = (-as.numeric(.data$time_id) * 100) + 2000
     ) %>%
     dplyr::select(-"time_id") %>%
     # we do not want to use the 0 age

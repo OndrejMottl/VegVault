@@ -72,7 +72,12 @@ splot_dataset_raw <-
   dplyr::mutate(
     dataset_type = "vegetation_plot",
     dataset_source_type = "sPlotOpen",
-    data_source_type_reference = "https://doi.org/10.1111/geb.13346",
+    data_source_type_reference = paste(
+      "Sabatini FM, Lenoir J, Hattab T, et al. sPlotOpen – An environmentally",
+      "balanced, open-access, global dataset of vegetation plots.",
+      "Global Ecol Biogeogr. 2021; 30: 1740–1764.",
+      "https://doi.org/10.1111/geb.13346"
+    ),
     data_source_desc = givd_id,
     data_source_reference = NA_character_,
     dataset_name = paste0(
@@ -177,7 +182,7 @@ data_splot_taxa_raw <-
     taxon_name != ""
   ) %>%
   dplyr::mutate(
-    taxon_reference = NA_character_
+    taxon_reference = "sPlotOpen"
   )
 
 # - 6.1 taxa id -----

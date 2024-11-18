@@ -23,10 +23,7 @@ add_gridpoints_with_links <- function(
 
   data_bd_vegetation_raw <-
     vaultkeepr::open_vault(
-      path = paste0(
-        path_to_vegvault, # [config]
-        "Data/VegVault/VegVault.sqlite"
-      )
+      path = path_to_vegvault # [config]
     ) %>%
     vaultkeepr::get_datasets() %>%
     vaultkeepr::select_dataset_by_type(
@@ -50,6 +47,7 @@ add_gridpoints_with_links <- function(
       age_lim = c(-1e10, 1e10)
     ) %>%
     vaultkeepr::extract_data() %>%
+    tidyr::unnest("data_samples") %>%
     dplyr::distinct(
       .data$dataset_name,
       .data$sample_name,

@@ -1,4 +1,4 @@
-add_data_source_referecne <- function(data_source, data_source_id, con) {
+add_data_source_reference <- function(data_source, data_source_id, con, mandatory = FALSE) {
   assertthat::assert_that(
     assertthat::has_name(
       data_source, c(
@@ -10,9 +10,10 @@ add_data_source_referecne <- function(data_source, data_source_id, con) {
   )
 
   data_source_reference_db <-
-    add_data_source_referecne_id(
+    add_data_source_reference_id(
       data_source = data_source,
-      con = con
+      con = con,
+      mandatory = mandatory
     )
 
   data_source_reference_lookup <-

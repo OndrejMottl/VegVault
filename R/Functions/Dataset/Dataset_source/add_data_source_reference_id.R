@@ -1,4 +1,4 @@
-add_data_source_referecne_id <- function(data_source, con) {
+add_data_source_reference_id <- function(data_source, con, mandatory = FALSE) {
   assertthat::assert_that(
     assertthat::has_name(data_source, "data_source_reference"),
     msg = "data_source must have a column named data_source_reference"
@@ -13,11 +13,14 @@ add_data_source_referecne_id <- function(data_source, con) {
   data_source_reference <-
     data_source %>%
     dplyr::distinct(data_source_reference) %>%
-    tidyr::drop_na()  %>% 
+    tidyr::drop_na() %>%
     dplyr::filter(
       !data_source_reference %in% reference_detail_db
     ) %>%
-    dplyr::rename(reference_detail = data_source_reference)
+    dplyr::rename(reference_detail = data_source_reference) %>%
+    dplyr::mutate(
+      mandatory = ifelse(isTRUE(mandatory), 1L, 0L)
+    )
 
   add_to_db(
     conn = con,
