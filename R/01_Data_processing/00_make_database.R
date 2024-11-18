@@ -130,7 +130,7 @@ if (
   update_db_version <- TRUE
 } else {
   if (
-    db_version_control$version[1] != db_version
+    db_version_control$version[1] != db_version # [config]
   ) {
     update_db_version <- TRUE
   }
@@ -145,10 +145,20 @@ if (
       "INSERT INTO version_control (version, changelog)",
       "VALUES ('",
       db_version, # [config]
-      "', 'beging the versioning of the database');"
+      "', 'Reworked the `References` and flagged `mandatory`');"
     )
   )
 }
+
+# general reference of the database
+add_to_db(
+  conn = con,
+  data = tibble::tibble(
+    reference_detail = "VegVault: an interdisciplinary database linking paleo-, and neo-vegetation data with functional traits and abiotic drivers",
+    mandatory = TRUE,
+  ),
+  table_name = "References"
+)
 
 # disconnect
 DBI::dbDisconnect(con)
