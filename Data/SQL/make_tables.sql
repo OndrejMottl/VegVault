@@ -292,7 +292,7 @@ CREATE TABLE "References"
 (
   "reference_id" INTEGER PRIMARY KEY,
   "reference_detail" TEXT,
-  "mandatory" BOOLEAN
+  "mandatory" BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE UNIQUE INDEX idx_references_reference_id ON "References"(reference_id);
 
