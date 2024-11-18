@@ -19,7 +19,8 @@ add_dataset_source_type_reference_id <- function(data_source, con) {
     dplyr::filter(
       !data_source_type_reference %in% dataset_reference_detail_db
     ) %>%
-    dplyr::rename(reference_detail = data_source_type_reference)
+    dplyr::rename(reference_detail = data_source_type_reference) %>%
+    dplyr::mutate(mandatory = 1L)
 
   add_to_db(
     conn = con,

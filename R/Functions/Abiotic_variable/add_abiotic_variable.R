@@ -1,6 +1,7 @@
 add_abiotic_variable <- function(
     data_source,
-    con) {
+    con,
+    mandatory = TRUE) {
   assertthat::assert_that(
     assertthat::has_name(
       data_source,
@@ -23,7 +24,8 @@ add_abiotic_variable <- function(
   data_reference_id_db <-
     add_abiotic_referecne_id(
       data_source = data_source,
-      con = con
+      con = con,
+      mandatory = mandatory
     )
 
   add_abiotic_referecne(

@@ -1,32 +1,36 @@
 add_abiotic_referecne <- function(data_source, abiotic_reference_id, con) {
+  .data <- rlang::.data
+  `%>%` <- magrittr::`%>%`
+
   data_abiotic_variable_id <-
     dplyr::tbl(con, "AbioticVariable") %>%
     dplyr::distinct(
-      abiotic_variable_id,
-      abiotic_variable_name
+      .data$abiotic_variable_id,
+      .data$abiotic_variable_name
     ) %>%
     dplyr::collect()
 
   data_abiotic_reference_lookup <-
     data_source %>%
-    dplyr::distinct(abiotic_variable_name, var_reference) %>%
+    dplyr::distinct(.data$abiotic_variable_name, .data$var_reference) %>%
+    tidyr::unnest(.data$var_reference) %>%
     tidyr::drop_na() %>%
     dplyr::left_join(
       data_abiotic_variable_id,
-      by = dplyr::join_by(abiotic_variable_name)
+      by = dplyr::join_by("abiotic_variable_name")
     ) %>%
     dplyr::left_join(
       abiotic_reference_id,
-      by = dplyr::join_by(var_reference == reference_detail)
+      by = dplyr::join_by("var_reference" == "reference_detail")
     ) %>%
-    dplyr::select(abiotic_variable_id, reference_id)
+    dplyr::select("abiotic_variable_id", "reference_id")
 
   data_abiotic_reference_unique <-
     data_abiotic_reference_lookup %>%
     dplyr::anti_join(
       dplyr::tbl(con, "AbioticVariableReference") %>%
         dplyr::collect(),
-      by = dplyr::join_by(abiotic_variable_id, reference_id)
+      by = dplyr::join_by("abiotic_variable_id", "reference_id")
     )
 
   add_to_db(
