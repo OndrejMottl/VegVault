@@ -90,7 +90,14 @@ fossilpol_dataset_raw <-
   dplyr::mutate(
     dataset_type = "fossil_pollen_archive",
     dataset_source_type = "FOSSILPOL",
-    data_source_type_reference = "https://doi.org/10.1111/geb.13693",
+    data_source_type_reference = paste(
+      "Flantua, S. G. A., Mottl, O., Felde, V. A., Bhatta, K. P.,",
+      "Birks, H. H., Grytnes, J.-A., Seddon, A. W. R., &",
+      "Birks, H. J. B. (2023). A guide to the processing and standardization",
+      "of global palaeoecological data for large-scale syntheses using fossil",
+      "pollen. Global Ecology and Biogeography, 32, 1377–1394.",
+      "https://doi.org/10.1111/geb.13693"
+    ),
     data_source_desc = source_of_data,
     data_source_reference = paste(
       "Grimm, E.C., 2008. Neotoma: an ecosystem database for the Pliocene,",
@@ -105,7 +112,7 @@ fossilpol_dataset_raw <-
     coord_long = long,
     coord_lat = lat,
     sampling_method_details = depositionalenvironment,
-    sampling_reference = NA_character_
+    sampling_reference = "Neotoma"
   ) %>%
   dplyr::select(-dataset_id)
 
@@ -127,7 +134,8 @@ data_fossilpol_dataset_source_type_db <-
 data_fossilpol_data_source_id_db <-
   add_data_source(
     data_source = fossilpol_dataset_raw,
-    con = con
+    con = con,
+    mandatory = TRUE
   )
 
 # - 3.5 datasets sampling ------
@@ -276,9 +284,9 @@ data_fossilpol_taxa_raw <-
   dplyr::filter(
     taxon_name != "sample_id"
   ) %>%
-  tidyr::drop_na()  %>% 
+  tidyr::drop_na() %>%
   dplyr::mutate(
-    taxon_reference = NA_character_
+    taxon_reference = "Neotoma"
   )
 
 data_fossilpol_taxa_id <-

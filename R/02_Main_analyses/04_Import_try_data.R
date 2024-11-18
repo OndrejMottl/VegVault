@@ -71,7 +71,11 @@ try_dataset_raw <-
   dplyr::mutate(
     dataset_type = "traits",
     dataset_source_type = "TRY",
-    data_source_type_reference = "https://doi.org/10.1111/gcb.14904",
+    data_source_type_reference = paste(
+      "Kattge J, Bönisch G, Díaz S, et al. TRY plant trait database",
+      "– enhanced coverage and open access. Glob Change Biol. 2020;",
+      "26: 119–188. https://doi.org/10.1111/gcb.14904"
+    ),
     data_source_desc = dataset,
     coord_long = as.numeric(longitude),
     coord_lat = as.numeric(latitude),
@@ -185,7 +189,7 @@ try_taxa_raw <-
   try_samples_raw %>%
   dplyr::rename(taxon_name = acc_species_name) %>%
   dplyr::mutate(
-    taxon_reference = NA_character_
+    taxon_reference = "TRY"
   )
 
 try_taxa_id <-
@@ -203,7 +207,7 @@ try_traits_raw <-
   try_samples_raw %>%
   dplyr::rename(trait_domain_name = trait_domain) %>%
   dplyr::mutate(
-    trait_reference = NA_character_
+    trait_reference = "TRY"
   )
 
 # 7.1 Traits -----

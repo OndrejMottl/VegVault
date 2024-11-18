@@ -80,7 +80,24 @@ bien_traits_dataset_raw <-
   dplyr::mutate(
     dataset_type = "traits",
     dataset_source_type = "BIEN",
-    data_source_type_reference = "https://doi.org/10.7287/peerj.preprints.2615v2",
+    data_source_type_reference = list(
+      c(
+        paste(
+          "Enquist, B J, B Sandel, B Boyle, J-C Svenning, B J McGill,",
+          "J C Donoghue, C E Hinchliff, et al. ‘Botanical Big Data Shows That",
+          "Plant Diversity in the New World Is Driven by Climatic-Linked",
+          "Differences in Evolutionary Rates and Biotic Exclusion’, n.d."
+        ),
+        paste(
+          "S, Maitner Brian, Boyle Brad, Casler Nathan, Condit Rick,",
+          "Donoghue John, Duran Sandra M, Guaderrama Daniel, et al.",
+          "‘The Bien r Package: A Tool to Access the Botanical Information and",
+          "Ecology Network (BIEN) Database’. Methods in Ecology and",
+          "Evolution 9, no. 2 (n.d.): 373–79.",
+          "https://doi.org/10.1111/2041-210X.12861."
+        )
+      )
+    ),
     data_source_desc = project_pi,
     coord_long = as.numeric(longitude),
     coord_lat = as.numeric(latitude),
@@ -195,9 +212,9 @@ add_dataset_sample(
 
 bien_traits_taxa_raw <-
   bien_traits_samples_raw %>%
-  dplyr::rename(taxon_name = scrubbed_species_binomial)  %>% 
+  dplyr::rename(taxon_name = scrubbed_species_binomial) %>%
   dplyr::mutate(
-    taxon_reference = NA_character_ 
+    taxon_reference = "BIEN"
   )
 
 bien_traits_taxa_id <-
@@ -236,7 +253,7 @@ bien_traits_traits_raw <-
     trait_full_name = trait_name
   ) %>%
   dplyr::mutate(
-    trait_reference = NA_character_
+    trait_reference = "BIEN"
   )
 
 # 7.1 Traits -----

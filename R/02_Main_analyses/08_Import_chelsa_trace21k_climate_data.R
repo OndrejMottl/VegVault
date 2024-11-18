@@ -25,7 +25,25 @@ source(
     "R/00_Config_file.R"
   )
 )
-
+sel_var_references <-
+  list(
+    c(
+      paste(
+        "Karger, D. N., M. P. Nobis, S. Normand, C. H. Graham,",
+        "and N. E. Zimmermann. 'CHELSA-TraCE21k: downscaled transient",
+        "temperature and precipitation data since the last glacial maximum.",
+        "EnviDat. 2020. https://www.doi.org/10.16904/envidat.211"
+      ),
+      paste(
+        "Karger, Dirk Nikolaus, Michael P. Nobis, Signe Normand,",
+        "Catherine H. Graham, and Niklaus E. Zimmermann.",
+        "'CHELSA-TraCE21k–high-resolution (1 km) downscaled transient",
+        "temperature and precipitation data since the Last Glacial Maximum.",
+        "Climate of the Past 19, no. 2 (2023): 439-456.",
+        "https://doi.org/10.5194/cp-19-439-2023"
+      )
+    )
+  )
 
 #----------------------------------------------------------#
 # 1. Connect to db -----
@@ -36,8 +54,6 @@ con <-
     RSQLite::SQLite(),
     path_to_vegvault
   )
-
-DBI::dbListTables(con)
 
 
 #----------------------------------------------------------#
@@ -69,9 +85,9 @@ add_chelsa_trace_data(
   sel_url = url_gh_abiotic,
   sel_hash = bio1_hash,
   sel_var_name = "bio1",
-  sel_var_unit = "°C",
-  sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA"
+  sel_var_unit = "C (degree Celsius)",
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "mean annual air temperature"
 )
 
 #----------------------------------------------------------#
@@ -90,9 +106,9 @@ add_chelsa_trace_data(
   sel_url = url_gh_abiotic,
   sel_hash = bio4_hash,
   sel_var_name = "bio4",
-  sel_var_unit = "°C",
-  sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA"
+  sel_var_unit = "C (degree Celsius)",
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "temperature seasonality"
 )
 
 #----------------------------------------------------------#
@@ -111,9 +127,9 @@ add_chelsa_trace_data(
   sel_url = url_gh_abiotic,
   sel_hash = bio6_hash,
   sel_var_name = "bio6",
-  sel_var_unit = "°C",
-  sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA"
+  sel_var_unit = "C (degree Celsius)",
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "mean daily minimum air temperature of the coldest month"
 )
 
 #----------------------------------------------------------#
@@ -133,8 +149,8 @@ add_chelsa_trace_data(
   sel_hash = bio12_hash,
   sel_var_name = "bio12",
   sel_var_unit = "kg m-2 year-1",
-  sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA"
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "annual precipitation amount"
 )
 
 #----------------------------------------------------------#
@@ -154,8 +170,8 @@ add_chelsa_trace_data(
   sel_hash = bio15_hash,
   sel_var_name = "bio15",
   sel_var_unit = "Unitless",
-  sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA"
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "precipitation seasonality"
 )
 
 #----------------------------------------------------------#
@@ -175,8 +191,8 @@ add_chelsa_trace_data(
   sel_hash = bio18_hash,
   sel_var_name = "bio18",
   sel_var_unit = "kg m-2 quarter-1",
-  sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA"
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "mean monthly precipitation amount of the warmest quarter"
 )
 
 #----------------------------------------------------------#
@@ -196,6 +212,6 @@ add_chelsa_trace_data(
   sel_hash = bio19_hash,
   sel_var_name = "bio19",
   sel_var_unit = "kg m-2 quarter-1",
-  sel_var_reference = "https://doi.org/10.5194/cp-2021-30",
-  sel_var_detail = "CHELSA"
+  sel_var_reference = sel_var_references,
+  sel_var_detail = "mean monthly precipitation amount of the coldest quarter"
 )
