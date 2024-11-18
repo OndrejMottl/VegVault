@@ -75,11 +75,10 @@ vec_age <-
   dplyr::distinct(.data$time_id) %>%
   tidyr::drop_na("time_id") %>%
   dplyr::mutate(
-    age = (-as.numeric(.data$time_id) * 100) + 1950
+    age = (-as.numeric(.data$time_id) * 100) + 2000
   ) %>%
   dplyr::arrange(.data$age) %>%
-  purrr::chuck("age") %>%
-  c(0, .)
+  purrr::chuck("age")
 
 data_paleo_coord <-
   data_paleo_climate %>%
@@ -130,10 +129,10 @@ data_raw <-
   dplyr::mutate(
     dataset_type = "gridpoints",
     dataset_source_type = "gridpoints",
-    data_source_type_reference = "artificially created by O. Mottl",
+    data_source_type_reference = "gridpoints - artificially created by O. Mottl",
     data_source_desc = "gridpoints",
-    data_source_reference = "artificially created by O. Mottl",
-    dataset_reference = "artificially created by O. Mottl",
+    data_source_reference = "gridpoints - artificially created by O. Mottl",
+    dataset_reference = "gridpoints - artificially created by O. Mottl",
     coord_long = as.numeric(.data$long),
     coord_lat = as.numeric(.data$lat),
     age = as.numeric(.data$vec_age)
@@ -161,7 +160,7 @@ data_raw <-
     ),
     sample_size = NA_real_,
     description = "gridpoint",
-    sample_reference = "artificially created by O. Mottl"
+    sample_reference = "gridpoints - artificially created by O. Mottl"
   )
 
 # dataset type -----
