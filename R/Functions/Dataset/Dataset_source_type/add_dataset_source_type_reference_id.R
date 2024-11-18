@@ -28,7 +28,7 @@ add_dataset_source_type_reference_id <- function(data_source, con) {
     table_name = "References"
   )
 
-  dataset_source_type_referecne_db <-
+  dataset_source_type_reference_db <-
     dplyr::tbl(con, "References") %>%
     dplyr::collect() %>%
     dplyr::inner_join(
@@ -39,5 +39,5 @@ add_dataset_source_type_reference_id <- function(data_source, con) {
       by = dplyr::join_by(reference_detail == data_source_type_reference)
     )
 
-  return(dataset_source_type_referecne_db)
+  return(dataset_source_type_reference_db)
 }

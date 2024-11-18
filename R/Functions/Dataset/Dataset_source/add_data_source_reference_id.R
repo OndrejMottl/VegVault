@@ -1,4 +1,4 @@
-add_data_source_referecne_id <- function(data_source, con, mandatory = FALSE) {
+add_data_source_reference_id <- function(data_source, con, mandatory = FALSE) {
   assertthat::assert_that(
     assertthat::has_name(data_source, "data_source_reference"),
     msg = "data_source must have a column named data_source_reference"

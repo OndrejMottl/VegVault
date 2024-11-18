@@ -1,4 +1,4 @@
-add_abiotic_referecne <- function(data_source, abiotic_reference_id, con) {
+add_abiotic_reference <- function(data_source, abiotic_reference_id, con) {
   .data <- rlang::.data
   `%>%` <- magrittr::`%>%`
 
