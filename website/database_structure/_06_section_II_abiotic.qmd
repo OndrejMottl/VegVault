@@ -1,0 +1,268 @@
+---
+format:
+  html:
+    fig-width: 10
+  gfm:
+    fig-width: 10
+editor: 
+  markdown: 
+    wrap: sentence
+---
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("Technical_overview/_06_section_II_abiotic.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Visualisation/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
+
+## Abiotic data
+
+The abiotic data in the **VegVault** database provide essential information on environmental factors affecting vegetation distribution and traits. These data include variables such as climate and soil conditions, which are crucial for understanding the ecological contexts of vegetation dynamics. 
+
+Currently, **VegVault** includes abiotic data from [CHELSA](https://chelsa-climate.org/), [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/), and [WoSIS](https://www.isric.org/explore/wosis). CHELSA and CHELSA-TRACE21 provide high-resolution climate data, while WoSIS offers detailed soil information.
+
+```{r}
+#| label: show abitotic variables
+dplyr::tbl(con, "AbioticVariable") %>%
+  dplyr::select(abiotic_variable_name, abiotic_variable_unit, measure_details) %>%
+  dplyr::collect() %>%
+  rlang::set_names(
+    nm = c(
+      "Variable name",
+      "Variable unit",
+      "source of data"
+    )
+  ) %>%
+  tinytable::tt()
+```
+
+```{r}
+#| label: AbioticData scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/AbioticData.png"
+  )
+)
+```
+
+Because original data are stored as raster, which cannot be stored in SQLite database, we created artificial points called `gridpoints` in the middle of each raster cell to represent the data. To unify the varying resolution of rasters and to limit the amount of data, we resampled all data into ~ 25km resolution and 500-year slices. This mean that there we created uniform spatio-temporal matrix of `gridpoints` to hold the abiotic data. Gridpoints are stored in artificially created `Datasets` and `Samples`, with one `Dataset` holding more `Samples` only if the differ in age. Next, we have estimated the spatial and temporal distance between each `gridpoint` and other non-`gridpoint` `Samples` (`vegetation_plot`, `fossil_pollen_archive`, and `traits`). We store the link between `gridpoint` and non-`gridpoint` `Samples` as well as the spatial and temporal distance. As this result in very amount of data, we have discarded any `gridpoint` Sample, which is not close to 50 km and/or 5000 years to any other non-`gridpoint` `Samples` as not relevant for the vegetation dynamics.  
+
+```{r}
+#| label: distribution of gridpoints
+x_lim <- c(12, 18.9)
+y_lim <- c(48.5, 51.1)
+
+x_lim_min <- min(x_lim)
+x_lim_max <- max(x_lim)
+y_lim_min <- min(y_lim)
+y_lim_max <- max(y_lim)
+
+data_grid_coord <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::filter(dataset_type == "gridpoints") %>%
+  dplyr::filter(
+    coord_long >= !!rlang::enquo(x_lim_min) &
+      coord_long <= !!rlang::enquo(x_lim_max)
+  ) %>%
+  dplyr::filter(
+    coord_lat >= !!rlang::enquo(y_lim_min) &
+      coord_lat <= !!rlang::enquo(y_lim_max)
+  )
+
+fig_data_grid_coord <-
+  data_grid_coord %>%
+  dplyr::collect() %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      x = coord_long,
+      y = coord_lat
+    )
+  ) +
+  ggplot2::coord_quickmap(
+    xlim = x_lim,
+    ylim = y_lim
+  ) +
+  ggplot2::labs(
+    title = "Example of gridpoints resolution",
+    x = "Longtitude",
+    y = "Latitude"
+  ) +
+  ggplot2::borders(
+    fill = NA,
+    col = "red"
+  ) +
+  ggplot2::geom_point(
+    shape = 15,
+    size = point_size / 2,
+    alpha = 0.75,
+    col = col_blue_dark
+  )
+
+save_figure_to_render(fig_data_grid_coord)
+```
+
+Such data structure allow that environmental context is readily available for each vegetation and trait `Sample`. while for each non-`gridpoint` `Sample`, user can select the closest spatio-temporally abiotic data or get average from all surrounding `gridpoints`. 
+
+```{r}
+#| label: AbioticDataReference scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/AbioticDataReference.png"
+  )
+)
+```
+
+
+
+```{r}
+#| label: exampe of abitic data - bio1
+
+# Acess the VegVault file
+data_example_all <-
+  vaultkeepr::open_vault(
+    path = path_to_vegvault # [config]
+  ) %>%
+  # Add the dataset information
+  vaultkeepr::get_datasets() %>%
+  # Select modern plot data and climate
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c(
+      "vegetation_plot",
+      "gridpoints"
+    )
+  ) %>%
+  # Limit data to Czech Republic
+  vaultkeepr::select_dataset_by_geo(
+    lat_lim = c(48.5, 51.1),
+    long_lim = c(12, 18.9)
+  ) %>%
+  # Add samples
+  vaultkeepr::get_samples() %>%
+  # select only modern data
+  vaultkeepr::select_samples_by_age(
+    age_lim = c(0, 0)
+  ) %>%
+  # Add abiotic data
+  vaultkeepr::get_abiotic_data() %>%
+  # Select only Mean Anual Temperature (bio1)
+  vaultkeepr::select_abiotic_var_by_name(sel_var_name = "bio1") %>%
+  vaultkeepr::extract_data()
+
+data_gridpoints_abiotic <-
+  data_example_all %>%
+  dplyr::filter(dataset_type == "gridpoints") %>%
+  dplyr::select(sample_id, coord_long, coord_lat, sample_id_link) %>%
+  dplyr::rename_with(
+    .fn = ~ paste0(.x, "_grid")
+  )
+
+data_vegetation <-
+  data_example_all %>%
+  dplyr::filter(dataset_type == "vegetation_plot") %>%
+  dplyr::select(sample_id, coord_long, coord_lat) %>%
+  dplyr::rename_with(
+    .fn = ~ paste0(.x, "_veg")
+  )
+
+
+data_links <-
+  data_gridpoints_abiotic %>%
+  dplyr::left_join(
+    data_vegetation,
+    by = c("sample_id_link_grid" = "sample_id_veg")
+  )
+
+
+fig_gridpoint_links_example <-
+  ggplot2::ggplot() +
+  ggplot2::coord_quickmap(
+    xlim = x_lim,
+    ylim = y_lim
+  ) +
+  ggplot2::labs(
+    title = stringr::str_wrap("Example of vegetation plot distance to gridpoints", fig_width_def),
+    x = "Longtitude",
+    y = "Latitude"
+    # caption = paste(
+    #  "Each square represents the gridpoint.", "\n",
+    #  "Each circle represents the vegetation plot.", "\n",
+    #  "Each line represents the distance between vegetation plot and the closest gridpoint."
+    # )
+  ) +
+  ggplot2::borders(
+    fill = NA,
+    col = "red"
+  ) +
+  ggplot2::geom_segment(
+    data = data_links,
+    mapping = ggplot2::aes(
+      x = coord_long_grid,
+      y = coord_lat_grid,
+      xend = coord_long_veg,
+      yend = coord_lat_veg
+    ),
+    col = col_blue_dark,
+    linewidth = line_size
+  ) +
+  ggplot2::geom_point(
+    data = data_gridpoints_abiotic,
+    mapping = ggplot2::aes(
+      x = coord_long_grid,
+      y = coord_lat_grid
+    ),
+    shape = 15,
+    alpha = 0.75,
+    size = point_size / 2,
+    col = col_blue_dark
+  ) +
+  ggplot2::geom_point(
+    data = data_vegetation,
+    mapping = ggplot2::aes(
+      x = coord_long_veg,
+      y = coord_lat_veg
+    ),
+    shape = 20,
+    alpha = 0.75,
+    size = point_size * 0.75,
+    col = col_green_dark
+  )
+
+save_figure_to_render(fig_gridpoint_links_example)
+
+```
+
+By providing comprehensive and well-structured abiotic data, VegVault enhances the ability to study the interactions between vegetation and their environment, supporting advanced ecological research and modelling efforts. 

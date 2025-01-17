@@ -1,0 +1,283 @@
+---
+format:
+  html:
+    fig-width: 10
+  gfm:
+    fig-width: 10
+editor: 
+  markdown: 
+    wrap: sentence
+---
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("Technical_overview/_05_section_II_traits.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Visualisation/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
+
+## Traits
+
+Functional traits of vegetation taxa follow the same structure of `Dataset` and `Samples` obtained directly from `Dataset` `Source-Types`. 
+
+```{r}
+#| label: Traits scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/Traits.png"
+  )
+)
+```
+
+### Trait domain
+
+As there are differences in trait names across sources of data and individual `Datasets`, the **VegVault** database contains `Trait Domain` information to group traits together. 
+
+```{r}
+#| label: TraitsDomain scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/TraitsDomain.png"
+  )
+)
+```
+
+There are currently 6 `Trait Domains` following the [Diaz et al. (2016)](https://www.nature.com/articles/nature16489)
+
+```{r}
+#| label: show trait domains
+dplyr::tbl(con, "TraitsDomain") %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Traits"),
+    by = "trait_domain_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "TraitsValue"),
+    by = "trait_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets") %>%
+      dplyr::filter(dataset_type_id == 3),
+    by = "dataset_id"
+  ) %>%
+  dplyr::distinct(
+    trait_domain_id, trait_domain_name,
+    trait_name,
+    data_source_type_id, dataset_id
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSourceTypeID"),
+    by = "data_source_type_id"
+  ) %>%
+  dplyr::distinct(
+    trait_domain_id, trait_domain_name,
+    trait_name,
+    dataset_source_type
+  ) %>%
+  dplyr::collect() %>%
+  dplyr::arrange(trait_domain_id, dataset_source_type) %>%
+  dplyr::select(-trait_domain_id) %>%
+  rlang::set_names(
+    nm = c(
+      "Trait domain",
+      "Trait",
+      "Data source"
+    )
+  ) %>%
+  tinytable::tt()
+```
+
+```{r}
+#| label: trait per domain plot
+
+n_traits_per_domain <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "TraitsDomain"),
+    dplyr::tbl(con, "Traits"),
+    by = "trait_domain_id"
+  ) %>%
+  dplyr::distinct(trait_domain_name, trait_name) %>%
+  dplyr::group_by(trait_domain_name) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+fig_n_traits_per_domain <-
+  n_traits_per_domain %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = N,
+      x = trait_domain_name
+    )
+  ) +
+  ggplot2::labs(
+    title = "Trait domains",
+    x = "",
+    y = "Number of traits"
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  ) +
+  ggplot2::coord_cartesian(
+    ylim = c(0, 7)
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = trait_domain_name,
+      xend = trait_domain_name,
+      yend = 0
+    ),
+    color = col_blue_dark,
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_point(
+    fill = col_white,
+    size = point_size,
+    shape = 21,
+    col = col_blue_dark,
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_label(
+    mapping = ggplot2::aes(
+      label = scales::number(N)
+    ),
+    vjust = -0.5,
+    size = point_size * 2,
+    position = ggplot2::position_dodge(0.5)
+  )
+
+save_figure_to_render(fig_n_traits_per_domain)
+
+```
+
+### Trait Values
+
+Storing trait values in **VegVault** involves linking information across `Datasets`, `Samples`, `Taxa`, and `Traits`. This comprehensive linkage ensures that each trait value is accurately associated with its relevant ecological, environmental and taxonomic context.   
+
+```{r}
+#| label: TraitsValue scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/TraitsValue.png"
+  )
+)
+```
+
+```{r}
+#| label: trait value occurences plot
+
+n_occurences_per_dommain <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "TraitsDomain"),
+    dplyr::tbl(con, "Traits"),
+    by = "trait_domain_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "TraitsValue"),
+    by = "trait_id"
+  ) %>%
+  dplyr::group_by(trait_domain_name) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+fig_n_occurences_per_dommain <-
+  n_occurences_per_dommain %>%
+  dplyr::arrange(-N) %>%
+  dplyr::mutate(
+    trait_domain_name = factor(
+      trait_domain_name,
+      levels = unique(trait_domain_name)
+    )
+  ) %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      y = N,
+      x = trait_domain_name
+    )
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = scales::transform_log10(),
+    breaks = scales::trans_breaks("log10", function(x) 10^x),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))
+  ) +
+  ggplot2::coord_cartesian(
+    ylim = c(10e3, 10e9)
+  ) +
+  ggplot2::labs(
+    title = "Occurences of trait values",
+    x = "",
+    y = "Number of occurrences (values)"
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = trait_domain_name,
+      xend = trait_domain_name,
+      yend = 0
+    ),
+    color = col_blue_dark,
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_point(
+    fill = col_white,
+    size = point_size,
+    shape = 21,
+    col = col_blue_dark,
+    position = ggplot2::position_dodge(0.5)
+  ) +
+  ggplot2::geom_label(
+    mapping = ggplot2::aes(
+      label = scales::number(N)
+    ),
+    vjust = -0.5,
+    size = point_size * 2,
+    position = ggplot2::position_dodge(0.5)
+  )
+
+save_figure_to_render(fig_n_occurences_per_dommain)
+```
+
+### Trait reference
+
+To ensure clarity and reproducibility, each trait in the **VegVault** database can have additional `References` beyond the general `Dataset` and `Sample` references. These trait-specific `References` provide detailed provenance and citation information, supporting rigorous scientific research and enabling users to trace the origins and validation of each trait value.
+
+```{r}
+#| label: TraitsReference scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/TraitsReference.png"
+  )
+)
+```

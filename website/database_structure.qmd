@@ -1,0 +1,26 @@
+---
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    fig-width: 10
+    keep-md: true
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("website/database_structure.qmd")
+```
+
+{{< include database_structure/_01_section_I.md >}}

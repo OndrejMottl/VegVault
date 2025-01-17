@@ -1,0 +1,283 @@
+---
+format:
+  html:
+    fig-width: 10
+  gfm:
+    fig-width: 10
+editor: 
+  markdown: 
+    wrap: sentence
+---
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("Technical_overview/_03_section_II_samples.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Visualisation/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
+
+## Samples
+
+`Samples` represent the main unit of data in the **VegVault** database, serving as the fundamental building blocks for all analyses. There are currently over 13 millions of `Samples` in the **VegVault** database (of which ~ 1.6 millions are `gridpoints`, artificially created to hold abiotic data, see below). 
+
+```{r}
+#| label: Samples scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/Samples.png"
+  )
+)
+```
+
+### Dataset-Sample
+
+Each sample is linked to a specific `Dataset` via the `Dataset-Sample` table, which ensures that every sample is correctly associated with its corresponding `Dataset Type`, whether it is current `vegetation_plots`, `fossil_pollen_archive`, `traits`, or `gridpoint`. 
+
+```{r}
+#| label: DatasetSample scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/DatasetSample.png"
+  )
+)
+```
+
+```{r}
+#| label: Number of samples plot
+n_samples_per_dataset_type <-
+  dplyr::inner_join(
+    dplyr::tbl(con, "Datasets"),
+    dplyr::tbl(con, "DatasetTypeID"),
+    by = "dataset_type_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(dataset_type, sample_id) %>%
+  dplyr::group_by(dataset_type) %>%
+  dplyr::count(name = "N") %>%
+  dplyr::collect() %>%
+  dplyr::ungroup()
+
+fig_n_samples_per_dataset_type <-
+  plot_waffle(
+    n_samples_per_dataset_type,
+    dataset_type,
+    plot_title = "Number of samples per Dataset type",
+    one_point_is = 25e3
+  ) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type
+  )
+
+save_figure_to_render(fig_n_samples_per_dataset_type)
+```
+
+### Sample-size
+
+The size of vegetation plots can vary, impacting the analyses and interpretations of the data. To account for this variability, information about the plot size is recorded separately for each `Sample`. This detail is crucial for ecological studies where plot size can influence species diversity and abundance metrics. 
+
+```{r}
+#| label: SampleSizeID scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/SampleSizeID.png"
+  )
+)
+```
+
+```{r}
+#| label: plot-size plot
+plot_size_types <-
+  dplyr::tbl(con, "SampleSizeID") %>%
+  dplyr::distinct(description) %>%
+  dplyr::collect()
+
+if (
+  nrow(plot_size_types) == 1
+) {
+  data_samples_plot_size <-
+    dplyr::inner_join(
+      dplyr::tbl(con, "Datasets"),
+      dplyr::tbl(con, "DatasetTypeID"),
+      by = "dataset_type_id"
+    ) %>%
+    dplyr::filter(
+      dataset_type == "vegetation_plot"
+    ) %>%
+    dplyr::inner_join(
+      dplyr::tbl(con, "DatasetSample"),
+      by = "dataset_id"
+    ) %>%
+    dplyr::inner_join(
+      dplyr::tbl(con, "Samples"),
+      by = "sample_id"
+    ) %>%
+    dplyr::left_join(
+      dplyr::tbl(con, "SampleSizeID"),
+      by = "sample_size_id"
+    ) %>%
+    dplyr::select(sample_size) %>%
+    dplyr::collect()
+
+  fig_samples_plot_size <-
+    data_samples_plot_size %>%
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = sample_size,
+      )
+    ) +
+    ggplot2::scale_x_continuous(
+      trans = "log10"
+    ) +
+    ggplot2::scale_y_continuous(
+      trans = "log10",
+      breaks = scales::trans_breaks("log10", function(x) 10^x),
+      labels = scales::trans_format("log10", scales::math_format(10^.x))
+    ) +
+    ggplot2::labs(
+      title = "Vegetation plot size",
+      x = paste0("plot size (", plot_size_types$description, ")"),
+      y = "Number of Samples"
+    ) +
+    ggplot2::geom_histogram(
+      fill = col_blue_light,
+      col = NA,
+      bins = 15
+    )
+
+  save_figure_to_render(fig_samples_plot_size)
+}
+```
+
+### Sample age
+
+**VegVault** encompasses both current and paleo data, necessitating accurate age information for each sample. Modern samples are assigned an age of 0, while paleo samples uses calibrated years before present (cal yr BP). The "present" is here specified as 1950 AD. In addition, each `Sample` from `fossil_pollen_archive` `Dataset` is also associated with an uncertainty matrix. This matrix provides a range of potential ages derived from age-depth modelling, reflecting the inherent uncertainty in dating paleoecological records. For instance, we include detailed age uncertainty information for a fossil pollen archive with an example `Dataset`. 
+
+```{r}
+#| label: SampleUncertainty scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/SampleUncertainty.png"
+  )
+)
+```
+
+We can show this on the previously selected fossil pollen archive with dataset ID: `r as.character(sel_dataset_for_example)`.
+
+```{r}
+#| label: Sample poential age - plot
+dataset_age_example <-
+  dplyr::tbl(con, "Datasets") %>%
+  dplyr::filter(dataset_id == sel_dataset_for_example) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(sample_id, age) %>%
+  dplyr::collect()
+
+dataset_age_example_iterations <-
+  dplyr::tbl(con, "Datasets") %>%
+  dplyr::filter(dataset_id == sel_dataset_for_example) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "DatasetSample"),
+    by = "dataset_id"
+  ) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "Samples"),
+    by = "sample_id"
+  ) %>%
+  dplyr::distinct(sample_id) %>%
+  dplyr::inner_join(
+    dplyr::tbl(con, "SampleUncertainty"),
+    by = "sample_id"
+  ) %>%
+  dplyr::select(
+    sample_id,
+    age_it = age
+  ) %>%
+  dplyr::collect()
+
+fig_sample_age <-
+  dplyr::left_join(
+    dataset_age_example_iterations,
+    dataset_age_example,
+    by = "sample_id"
+  ) %>%
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(
+      y = age,
+      group = as.factor(age),
+      x = age_it
+    )
+  ) +
+  ggplot2::coord_fixed() +
+  ggplot2::labs(
+    title = paste0(
+      "Dataset ID:",
+      as.character(sel_dataset_for_example)
+    ),
+    y = "Sample age (cal yr BP)",
+    x = "Potential age of Samples (cal yr BP)"
+  ) +
+  ggplot2::geom_boxplot(
+    col = col_blue_dark,
+    fill = col_blue_light,
+    outlier.shape = NA
+  )
+
+save_figure_to_render(fig_sample_age)
+
+```
+
+### Sample reference
+
+Each `Sample` in **VegVault** can have specific references in addition to the `Dataset`-level references. These individual `Sample` references provide detailed provenance and citation information, ensuring that users can trace the origin and validation of each data point. This level of referencing enhances the transparency and reliability of the data, especially when the database continues to be updated in the future. 
+
+```{r}
+#| label: SampleReference scheme structure
+knitr::include_graphics(
+  here::here(
+    "Technical_overview/DB_scheme_visualisation/SampleReference.png"
+  )
+)
+```
