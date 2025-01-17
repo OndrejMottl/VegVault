@@ -6,16 +6,32 @@ website:
   title: "VegVault"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - href: Technical_overview/Technical_overview_master.qmd
-        text: Technical Overview
-      - href: materials.qmd
-        text: Materials
+      - text: About
+        href: index.qmd
+      - text: People
+        href: website/people.qmd
+      - text: Database
+        menu:
+          - text: VegVault Content
+            href: website/database_content.qmd
+          - text: VegVault Access
+            href: website/database_access.qmd
+          - text: VegVault Structure
+            href: website/database_structure.qmd
+          - text: Examples of usage
+            href: website/database_examples.qmd
+      - text: Contribute!
+        href: website/contribute.qmd
+      - text: Outputs and Materials 
+        href: website/materials.qmd
+      - text: Get in touch!
+        href: website/contact.qmd
     search: true
     repo-url: https://github.com/OndrejMottl/VegVault
     repo-actions: [source, issue]
     tools:
+      - icon: bluesky
+        href: https://bsky.app/profile/ondrejmottl.bsky.social
       - icon: twitter
         href: http://twitter.com/OndrejMottl
       - icon: github
