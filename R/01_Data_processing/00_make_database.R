@@ -127,10 +127,17 @@ update_db_version <- FALSE
 if (
   nrow(db_version_control) == 0
 ) {
-  update_db_version <- TRUE
+  add_to_db(
+    conn = con,
+    data = data_version_control,
+    table_name = "version_control"
+  )
 } else {
   if (
-    db_version_control$version[1] != db_version # [config]
+    db_version_control %>%
+      dplyr::slice_tail(n = 1) %>%
+      purrr::chuck("version") !=
+      db_version # [config]
   ) {
     update_db_version <- TRUE
   }
@@ -145,7 +152,7 @@ if (
       "INSERT INTO version_control (version, changelog)",
       "VALUES ('",
       db_version, # [config]
-      "', 'Reworked the `References` and flagged `mandatory`');"
+      "', '');"
     )
   )
 }

@@ -20,7 +20,6 @@ current_env <- environment()
 # set seed
 set.seed(1234)
 
-db_version <- "0.0.3"
 
 #----------------------------------------------------------#
 # 1. Load packages -----
@@ -142,6 +141,26 @@ if (
 # 5. Define variables -----
 #----------------------------------------------------------#
 
+data_version_control <-
+  tibble::tribble(
+    ~version, ~update_date, ~changelog,
+    "0.0.2", "2024-10-17",
+    "Beging the versioning of the database",
+    "0.0.3", "2024-11-18",
+    "Reworked the `References` and flagged `mandatory`",
+    "0.0.4", "2024-12-19",
+    "Update the version control and correct the Dataset References"
+  ) %>%
+  dplyr::mutate(
+    # check the date format
+    update_date = lubridate::ymd(update_date) %>%
+      as.character()
+  )
+
+db_version <-
+  data_version_control %>%
+  dplyr::slice_tail(n = 1) %>%
+  purrr::chuck("version")
 
 #----------------------------------------------------------#
 # 6. Graphical options -----
