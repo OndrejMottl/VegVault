@@ -182,7 +182,7 @@
     },
     "RSQLite": {
       "Package": "RSQLite",
-      "Version": "2.3.7",
+      "Version": "2.3.8",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -197,7 +197,7 @@
         "plogr",
         "rlang"
       ],
-      "Hash": "46b45a4dd7bb0e0f4e3fc22245817240"
+      "Hash": "7ab2505b85e2ed1b07873b56e8beddd1"
     },
     "RUtilpol": {
       "Package": "RUtilpol",
@@ -2767,14 +2767,14 @@
     },
     "vaultkeepr": {
       "Package": "vaultkeepr",
-      "Version": "0.0.4",
+      "Version": "0.0.5",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "vaultkeepr",
       "RemoteUsername": "OndrejMottl",
       "RemoteRef": "HEAD",
-      "RemoteSha": "1ddc01b562a4ce9680cd9ce27aec26d979d3c630",
+      "RemoteSha": "99f4effe8a294ec742a206bab4e0fce4695ad511",
       "Requirements": [
         "DBI",
         "RSQLite",
@@ -2785,7 +2785,7 @@
         "rlang",
         "tibble"
       ],
-      "Hash": "629c8ac147f4f2d3b0258feab2a87d36"
+      "Hash": "b7248f214e10f745d6f1d2205f92bc35"
     },
     "vctrs": {
       "Package": "vctrs",

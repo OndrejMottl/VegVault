@@ -22,38 +22,27 @@ add_gridpoints_with_links <- function(
     )
 
   data_bd_vegetation_raw <-
-    vaultkeepr::open_vault(
-      path = path_to_vegvault # [config]
+    dplyr::tbl(sel_con, "Datasets") %>%
+    dplyr::filter(
+      .data$dataset_type_id != 4
     ) %>%
-    vaultkeepr::get_datasets() %>%
-    vaultkeepr::select_dataset_by_type(
-      sel_dataset_type = c(
-        "vegetation_plot", "fossil_pollen_archive", "traits"
-      )
+    dplyr::inner_join(
+      dplyr::tbl(sel_con, "DatasetSample"),
+      by = dplyr::join_by("dataset_id")
     ) %>%
-    vaultkeepr::select_dataset_by_geo(
-      sel_dataset_type = c(
-        "vegetation_plot", "fossil_pollen_archive", "traits"
-      ),
-      long_lim = c(-180, 180),
-      lat_lim = c(-90, 90)
+    dplyr::left_join(
+      dplyr::tbl(sel_con, "Samples") %>%
+        dplyr::select("sample_id", "sample_name", "age"),
+      by = dplyr::join_by("sample_id")
     ) %>%
-    vaultkeepr::get_samples() %>%
-    vaultkeepr::select_samples_by_age(
-      sel_dataset_type = c(
-        "vegetation_plot", "fossil_pollen_archive", "traits"
-      ),
-      # just very large number to get rid of NAs
-      age_lim = c(-1e10, 1e10)
+    dplyr::select(
+      "dataset_name",
+      "sample_name",
+      "coord_long", "coord_lat",
+      "age"
     ) %>%
-    vaultkeepr::extract_data() %>%
-    tidyr::unnest("data_samples") %>%
-    dplyr::distinct(
-      .data$dataset_name,
-      .data$sample_name,
-      .data$coord_long, .data$coord_lat,
-      .data$age
-    )
+    dplyr::distinct() %>%
+    dplyr::collect()
 
   gc(verbose = FALSE)
 
@@ -177,7 +166,7 @@ add_gridpoints_with_links <- function(
             data_bd_vegetation_nest_ref,
             by = "geo_veg_sample",
             relationship = "many-to-many"
-          ) %>%
+           ) %>%
           dplyr::select(
             "sample_name",
             sample_name_gridpoints = "grid_sample",
