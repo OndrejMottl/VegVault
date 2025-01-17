@@ -1,21 +1,18 @@
 /*-- scss:defaults --*/
 
 @font-face {
-  font-family: 'Renogate' !important;
-  src: local('Fonts/Renogare-Regular.otf');
+  font-family: "Renogate" !important;
+  src: local("Fonts/Renogare-Regular.otf");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Minecraft' !important;
-  src: local('Fonts/Minecraft.ttf') format('truetype');
+  font-family: "Minecraft" !important;
+  src: local("Fonts/Minecraft.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
-
-
-
 
 // Vertical spacing between blocks of text
 $smallMargin: 5px;
@@ -25,17 +22,17 @@ $largeMargin: 20px;
 // Colors
 $white: #ffffffff;
 
-$brownDark: #8A554E;
-$bronwLight: #BC7052;
+$brownDark: #8a554e;
+$bronwLight: #bc7052;
 
-$beigeDark: #AE8A7B;
-$beigeLight: #E6B482;
+$beigeDark: #ae8a7b;
+$beigeLight: #e6b482;
 
 $blueDark: #242531;
-$blueLight: #52758F;
+$blueLight: #52758f;
 
-$greenDark: #5D7841;
-$greenLight: #9BC058;
+$greenDark: #5d7841;
+$greenLight: #9bc058;
 
 $body-color: $blueDark !default;
 $link-color: $greenDark !default;
@@ -84,6 +81,18 @@ a {
   }
 }
 
+.btn {
+  background-color: $blueDark;
+  color: $white;
+  border-color: $white;
+  font-variant-caps: all-petite-caps;
+  border-radius: 10px;
+  &:hover {
+    background-color: $white;
+    color: $blueLight;
+    border-color: $blueLight;
+  }
+}
 
 /* Headings */
 h1,
@@ -132,7 +141,6 @@ ul {
   padding-left: 0;
   margin-left: $blockMargin;
 }
-
 
 /* Navbar */
 .nav-item {

@@ -13,3 +13,5 @@ This is official website dedicated to the VegVault project. VegVault is compilin
 Creating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.
 
 The project is part of [BIODYNAMICS](https://bit.ly/BIODYNAMICS) project.
+
+[Access Database](/website/database_access.qmd){.btn} [Database paper](/website/materials.qmd){.btn}
