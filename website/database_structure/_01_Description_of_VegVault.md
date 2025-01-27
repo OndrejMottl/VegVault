@@ -1,18 +1,21 @@
+
+
 # Section I: Description of VegVault
 
+**VegVault** is a SQLite interdisciplinary database linking global
+paleo-, and neo-vegetation data with functional traits and abiotic
+drivers .
 
-**VegVault** is a SQLite interdisciplinary database linking plot-based
-vegetation data with functional traits and climate.
+**VegVault** integrates data from multiple well-established sources to
+provide a comprehensive view of vegetation dynamics. By organizing data
+into clearly defined types and providing comprehensive referencing,
+**VegVault** supports detailed and high-quality ecological research.
+This structured approach ensures that data are accessible, reliable,
+traceable, and facilitate a wide range of analyses and applications
+across disciplines.
 
-Vault integrates data from multiple well-established sources to provide
-a comprehensive view of vegetation dynamics. By organizing data into
-clearly defined types and providing comprehensive referencing, VegVault
-supports detailed and high-quality ecological research. This structured
-approach ensures that data are accessible, reliable, traceable, and
-facilitate a wide range of analyses and applications across disciplines.
-
-VegVault is organized into several sections to systematically manage the
-varying datasets it integrates. The main structure is the `Dataset`,
+**VegVault** is organized into several sections to systematically manage
+the varying datasets it integrates. The main structure is the `Dataset`,
 which serves as the cornerstone of the database structure. `Datasets`
 are composed of `Samples`, representing individual data points within
 each dataset. Each `Dataset` will only contain several `Samples` if

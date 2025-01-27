@@ -7,13 +7,16 @@ primary data sources. Each individual `Taxon` is linked to corresponding
 `Samples` through the `SampleTaxa` table, ensuring accurate and
 systematic association between species and their ecological data.
 
-<img src="DB_scheme_visualisation/Taxa.png" style="width:100.0%"
-data-fig-align="center" />
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
+style="width:100.0%" data-fig-align="center" />
 
-<img src="DB_scheme_visualisation/SampleTaxa.png" style="width:100.0%"
-data-fig-align="center" />
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.png"
+style="width:100.0%" data-fig-align="center" />
 
-<img src="../Figures/%20fig_n_taxa_per_source_type%20.png"
+<img
+src="../../Outputs/Figures/website/DB_structure/fig_n_taxa_per_source_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Classification
@@ -33,8 +36,10 @@ different datasets. Currently, the **VegVault** database holds over 110
 thousand taxonomic names, of which we were unable to classify only 1312
 (1.2%).
 
-<img src="DB_scheme_visualisation/TaxonClassification.png"
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="../Figures/%20fig_n_taxa_per_class%20.png"
+<img
+src="../../Outputs/Figures/website/DB_structure/fig_n_taxa_per_class.png"
 style="width:100.0%" data-fig-align="center" />

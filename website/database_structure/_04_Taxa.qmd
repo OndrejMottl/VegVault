@@ -17,7 +17,7 @@ editor:
 
 library(here)
 
-here::i_am("Technical_overview/_04_section_II_taxa.qmd")
+here::i_am("website/database_structure/_04_Taxa.qmd")
 
 # Load configuration
 source(
@@ -53,7 +53,7 @@ The **VegVault** database records taxa names derived directly from the primary d
 #| label: Taxa scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/Taxa.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
   )
 )
 ``` 
@@ -62,7 +62,7 @@ knitr::include_graphics(
 #| label: SampleTaxa scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/SampleTaxa.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.png"
   )
 )
 ```
@@ -124,7 +124,7 @@ fig_n_taxa_per_source_type <-
     ylim = c(10e3, 10e5)
   ) +
   ggplot2::labs(
-    title = "Taxa per source type",
+    title = "Taxa per Source Type",
     x = "",
     y = "Number of taxa"
   ) +
@@ -172,7 +172,7 @@ To classify the diverse taxa present in the **VegVault** database, the {[taxospa
 #| label: TaxonClassification scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/TaxonClassification.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.png"
   )
 )
 ```
@@ -235,7 +235,7 @@ fig_n_taxa_per_class <-
   ggplot2::labs(
     title = "Taxa classification",
     x = "",
-    y = "Number of taxa"
+    y = "Number of Taxa"
   ) +
   ggplot2::guides(
     fill = "none"

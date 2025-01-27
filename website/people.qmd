@@ -1,5 +1,7 @@
 ---
-date: last-modified
+date: 2025/01/24
+date-format: long
+date-modified: last-modified
 sidebar: true
 ---
 
@@ -9,11 +11,11 @@ sidebar: true
 
 ### Ondřej Mottl <img src="https://ondrejmottl.github.io/profile_mottl_zoom.jpg" align="right" width="120"/>
 
--   Assistant Professor for Plant Ecology
--   🏦Department of Botany, Faculty of Science, Charles University, Prague, Czech Republic
--   📬email: ondrej.mottl(at)gmail.com
--   [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9796--5081-brightgreen.svg)](https://orcid.org/0000-0002-9796-5081)
--   [🔗personal webiste](https://ondrejmottl.github.io/)
+* Assistant Professor for Plant Ecology
+* 🏦Department of Botany, Faculty of Science, Charles University, Prague, Czech Republic
+* 📬email: ondrej.mottl(at)gmail.com
+* [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9796--5081-brightgreen.svg)](https://orcid.org/0000-0002-9796-5081)
+* [![personal website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://ondrejmottl.github.io/)
 
 ## Core collaborators
 
@@ -23,7 +25,7 @@ sidebar: true
 * 🏦University of Bergen, Norway 
 * 📬email: suzette.flantua(at)uib.no
 * [![orcid](https://img.shields.io/badge/orcid-0000--0001--6526--3037-brightgreen.svg)](https://orcid.org/0000-0001-6526-3037)
-* [🔗personal webiste](https://mountainsinmotion.w.uib.no/)
+* [![personal website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://mountainsinmotion.w.uib.no/)
 
 ### Franka Gaiser <img src="https://www.spowi5.uni-bayreuth.de/pool/bilder/team/Gaiser_hp_2022.jpg" align="right" width="120" />
 
@@ -31,7 +33,7 @@ sidebar: true
 * 🏦University of Bayreuth, Bayreuth, Germany
 * 📬email: franka.gaiser(at)uni-bayreuth.de
 * [![ORCID](https://img.shields.io/badge/orcid-0000--0003--2600--6603-brightgreen.svg)](https://orcid.org/0009-0003-2600-6603)
-* [🔗personal webiste](https://www.spowi5.uni-bayreuth.de/en/team/Gaiser/index.php)
+* [![personal website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://www.spowi5.uni-bayreuth.de/en/team/Gaiser/index.php)
 
 ### Irena Šímová <img src="https://www.cts.cuni.cz/img/people/%C5%A0%C3%ADmov%C3%A1.jpg" align="right" width="120" />
 
@@ -39,4 +41,4 @@ sidebar: true
 * 🏦Charles University, Czech Republic
 * 📬email: simova(at)cts.cuni.cz
 * [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9474--569X-brightgreen.svg)](https://orcid.org/0000-0002-9474-569X)
-* [🔗personal webiste](https://www.cts.cuni.cz/en/simova.html)
+* [![personal website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://www.cts.cuni.cz/en/simova.html)

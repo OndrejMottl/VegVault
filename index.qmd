@@ -4,7 +4,7 @@ author: Ondřej Mottl
 sidebar: false
 ---
 
-# VegVault<img src="Figures/VegVault_logo.png" align="right" width="250"/>
+# VegVault<img src="Outputs/Figures/website/VegVault_logo.png" align="right" width="250"/>
 
 ## Database linking global paleo-, and neo-vegetation data, functional traits, and climate
 

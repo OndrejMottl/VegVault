@@ -17,7 +17,7 @@ editor:
 
 library(here)
 
-here::i_am("Technical_overview/_05_section_II_traits.qmd")
+here::i_am("website/database_structure/_05_Traits.qmd")
 
 # Load configuration
 source(
@@ -53,7 +53,7 @@ Functional traits of vegetation taxa follow the same structure of `Dataset` and 
 #| label: Traits scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/Traits.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/Traits.png"
   )
 )
 ```
@@ -66,7 +66,7 @@ As there are differences in trait names across sources of data and individual `D
 #| label: TraitsDomain scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/TraitsDomain.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitsDomain.png"
   )
 )
 ```
@@ -110,7 +110,7 @@ dplyr::tbl(con, "TraitsDomain") %>%
     nm = c(
       "Trait domain",
       "Trait",
-      "Data source"
+      "Data Source"
     )
   ) %>%
   tinytable::tt()
@@ -187,7 +187,7 @@ Storing trait values in **VegVault** involves linking information across `Datase
 #| label: TraitsValue scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/TraitsValue.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitsValue.png"
   )
 )
 ```
@@ -234,7 +234,7 @@ fig_n_occurences_per_dommain <-
     ylim = c(10e3, 10e9)
   ) +
   ggplot2::labs(
-    title = "Occurences of trait values",
+    title = "Occurences of Trait values",
     x = "",
     y = "Number of occurrences (values)"
   ) +
@@ -277,7 +277,7 @@ To ensure clarity and reproducibility, each trait in the **VegVault** database c
 #| label: TraitsReference scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/TraitsReference.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitsReference.png"
   )
 )
 ```

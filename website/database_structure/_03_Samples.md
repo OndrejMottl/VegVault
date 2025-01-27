@@ -8,8 +8,9 @@ currently over 13 millions of `Samples` in the **VegVault** database (of
 which ~ 1.6 millions are `gridpoints`, artificially created to hold
 abiotic data, see below).
 
-<img src="DB_scheme_visualisation/Samples.png" style="width:100.0%"
-data-fig-align="center" />
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
+style="width:100.0%" data-fig-align="center" />
 
 ### Dataset-Sample
 
@@ -18,10 +19,12 @@ table, which ensures that every sample is correctly associated with its
 corresponding `Dataset Type`, whether it is current `vegetation_plots`,
 `fossil_pollen_archive`, `traits`, or `gridpoint`.
 
-<img src="DB_scheme_visualisation/DatasetSample.png"
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="../Figures/%20fig_n_samples_per_dataset_type%20.png"
+<img
+src="../../Outputs/Figures/website/DB_structure/fig_n_samples_per_dataset_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Sample-size
@@ -32,10 +35,12 @@ information about the plot size is recorded separately for each
 `Sample`. This detail is crucial for ecological studies where plot size
 can influence species diversity and abundance metrics.
 
-<img src="DB_scheme_visualisation/SampleSizeID.png" style="width:100.0%"
-data-fig-align="center" />
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
+style="width:100.0%" data-fig-align="center" />
 
-<img src="../Figures/%20fig_samples_plot_size%20.png"
+<img
+src="../../Outputs/Figures/website/DB_structure/fig_samples_plot_size.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Sample age
@@ -51,14 +56,15 @@ dating paleoecological records. For instance, we include detailed age
 uncertainty information for a fossil pollen archive with an example
 `Dataset`.
 
-<img src="DB_scheme_visualisation/SampleUncertainty.png"
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
 style="width:100.0%" data-fig-align="center" />
 
 We can show this on the previously selected fossil pollen archive with
 dataset ID: 91256.
 
-<img src="../Figures/%20fig_sample_age%20.png" style="width:100.0%"
-data-fig-align="center" />
+<img src="../../Outputs/Figures/website/DB_structure/fig_sample_age.png"
+style="width:100.0%" data-fig-align="center" />
 
 ### Sample reference
 
@@ -69,5 +75,6 @@ users can trace the origin and validation of each data point. This level
 of referencing enhances the transparency and reliability of the data,
 especially when the database continues to be updated in the future.
 
-<img src="DB_scheme_visualisation/SampleReference.png"
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
 style="width:100.0%" data-fig-align="center" />

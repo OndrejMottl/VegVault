@@ -1,14 +1,5 @@
----
-title: "Section II: Internal Database Structure"
-format:
-  html:
-    fig-width: 10
-  gfm:
-    fig-width: 10
-editor: 
-  markdown: 
-    wrap: sentence
----
+# Section II: Internal Database Structure
+
 ```{r}
 #| label: source config
 #| include: FALSE
@@ -18,7 +9,7 @@ editor:
 
 library(here)
 
-here::i_am("website/database_structure/_02_section_II_datasets.qmd")
+here::i_am("website/database_structure/_02_Datasets.qmd")
 
 # Load configuration
 source(
@@ -29,7 +20,7 @@ source(
 
 source(
   here::here(
-    "R/01_Config_quarto.R"
+    "R/03_Visualisation/00_Config_quarto.R"
   )
 )
 
@@ -44,17 +35,19 @@ invisible(
     source
   )
 )
+
+sel_dataset_for_example <- 91256
 ```
 
 ## `Dataset`
 
-The `Dataset` represents the main structure in the **VegVault**, serving as the keystone for organizing and managing data. Currently, **VegVault** database holds over 480,000 Datasets (of which approximately 100,000 are `gridpoints`, which are artificially created to hold abiotic data, see details below). Here we will explain some, but not all, of the features of the `Dataset`. 
+The `Dataset` represents the main structure in the **VegVault**, serving as the keystone for organizing and managing data. Here we will explain some, but not all, of the features of the `Dataset`. 
 
 ```{r}
 #| label: Dataset scheme structure
 knitr::include_graphics(
   here::here(
-    "website/database_structure/Figures/DB_scheme_visualisation/Datasets.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
   )
 )
 ```
@@ -71,7 +64,7 @@ The `Dataset Type` defines the most basic classification of each `Dataset`, ensu
 #| label: Dataset Type scheme structure
 knitr::include_graphics(
   here::here(
-    "website/database_structure/Figures/DB_scheme_visualisation/DatasetTypeID.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.png"
   )
 )
 ```
@@ -93,61 +86,11 @@ fig_n_datasetes_per_type <-
   plot_waffle(
     n_datasetes_per_type,
     dataset_type,
-    plot_title = "Datasets type",
+    plot_title = "Dataset Type",
     one_point_is = 1e3
   ) +
   ggplot2::scale_fill_manual(
     values = palette_dataset_type
-  )
-
-save_figure_to_render(fig_n_datasetes_per_type)
-
-fig_n_datasetes_per_type <-
-  n_datasetes_per_type %>%
-  ggplot2::ggplot(
-    ggplot2::aes(
-      y = N,
-      x = reorder(dataset_type, -N)
-    )
-  ) +
-  ggplot2::scale_y_continuous(
-    trans = "log10",
-    breaks = scales::trans_breaks("log10", function(x) 10^x),
-    labels = scales::trans_format("log10", scales::math_format(10^.x)),
-    limits = c(1, 10e6)
-  ) +
-  ggplot2::labs(
-    title = "Datasets type",
-    x = "",
-    y = "Number of datasets"
-  ) +
-  ggplot2::scale_fill_manual(
-    values = palette_dataset_type
-  ) +
-  ggplot2::theme(
-    legend.position = "none"
-  ) +
-  ggplot2::geom_segment(
-    ggplot2::aes(
-      xend = dataset_type,
-      yend = 0
-    ),
-    color = col_blue_dark
-  ) +
-  ggplot2::geom_point(
-    mapping = ggplot2::aes(
-      fill = dataset_type
-    ),
-    size = point_size,
-    shape = 21,
-    col = col_blue_dark,
-  ) +
-  ggplot2::geom_label(
-    ggplot2::aes(
-      label = scales::number(N)
-    ),
-    vjust = -0.5,
-    size = point_size * 2
   )
 
 save_figure_to_render(fig_n_datasetes_per_type)
@@ -167,37 +110,13 @@ VegVault maintains the detailed information on the source used to retrieve the o
 #| label: Dataset Source Type scheme structure
 knitr::include_graphics(
   here::here(
-    "website/database_structure/Figures/DB_scheme_visualisation/DatasetSourceTypeID.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.png"
   )
 )
 ```
 
 ```{r}
 #| label: dataset source type - plots
-n_datasetes_per_source_type <-
-  dplyr::inner_join(
-    dplyr::tbl(con, "Datasets"),
-    dplyr::tbl(con, "DatasetSourceTypeID"),
-    by = "data_source_type_id"
-  ) %>%
-  dplyr::group_by(dataset_source_type) %>%
-  dplyr::count(name = "N") %>%
-  dplyr::collect() %>%
-  dplyr::ungroup()
-
-fig_n_datasetes_per_source_type <-
-  plot_waffle(
-    n_datasetes_per_source_type,
-    dataset_source_type,
-    plot_title = "Datasets source type",
-    one_point_is = 1e3
-  ) +
-  ggplot2::scale_fill_manual(
-    values = palette_dataset_source_type
-  )
-
-save_figure_to_render(fig_n_datasetes_per_source_type)
-
 n_datasetes_per_type_per_source_type <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
@@ -213,7 +132,7 @@ n_datasetes_per_type_per_source_type <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
-p_n_datasetes_per_type_per_source_type <-
+fig_n_datasetes_per_source_type <-
   n_datasetes_per_type_per_source_type %>%
   dplyr::group_by(dataset_type) %>%
   dplyr::mutate(
@@ -244,9 +163,9 @@ p_n_datasetes_per_type_per_source_type <-
     limits = c(1, 10e6)
   ) +
   ggplot2::labs(
-    title = "Datasets type per source type",
+    title = "Dataset Type per Source-Type",
     x = "",
-    y = "Number of datasets"
+    y = "Number of Datasets"
   ) +
   ggplot2::theme(
     legend.position = "none",
@@ -283,18 +202,7 @@ p_n_datasetes_per_type_per_source_type <-
     position = ggplot2::position_dodge(0.5)
   )
 
-save_figure_to_render(p_n_datasetes_per_type_per_source_type)
-# color_facets(
-#  sel_plot = p_n_datasetes_per_type_per_source_type,
-#  # need to manually sort the colors due to previous reorder
-#  sel_palette = c(
-#    palette_dataset_type["gridpoints"],
-#    palette_dataset_type["traits"],
-#    palette_dataset_type["vegetation_plot"],
-#    palette_dataset_type["fossil_pollen_archive"]
-#  ),
-#  direction = "horizontal"
-# )
+save_figure_to_render(fig_n_datasetes_per_source_type)
 ```
 
 ### `Dataset Source`
@@ -305,7 +213,7 @@ Each individual `Dataset` from a specific `Dataset` `Source-Type` can have infor
 #| label: Dataset Source ID scheme structure
 knitr::include_graphics(
   here::here(
-    "website/database_structure/Figures/DB_scheme_visualisation/DatasetSourcesID.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.png"
   )
 )
 ```
@@ -388,8 +296,8 @@ fig_n_datasetes_per_source <-
     labels = scales::trans_format("log10", scales::math_format(10^.x))
   ) +
   ggplot2::labs(
-    title = "Number of datasets per Dataset-Type",
-    y = "Number of datasets",
+    title = "Number of Datasets per Dataset Type",
+    y = "Number of Datasets",
     x = ""
   ) +
   ggplot2::scale_fill_manual(
@@ -398,10 +306,11 @@ fig_n_datasetes_per_source <-
   ggplot2::theme(
     legend.position = "none"
   )
+
 save_figure_to_render(fig_n_datasetes_per_source)
 ```
 
-### Sampling method
+### Sampling Method
 
 Sampling methods vary significantly across the different types of `Datasets` integrated into **VegVault**, reflecting the diverse nature of the data collected. For current vegetation plots, sampling involves standardized plot inventories and surveys that capture detailed vegetation characteristics across various regions. In contrast, fossil pollen data are collected from sediment cores, representing past vegetation and depositional environments. These sampling methods are crucial for understanding the context and limitations of each Dataset Type. Therefore, information on sampling methods is only present for both `vegetation_plot` and `fossil_pollen_archive` `Datasets`, providing metadata that ensures accurate and contextually relevant analyses
 
@@ -409,7 +318,7 @@ Sampling methods vary significantly across the different types of `Datasets` int
 #| label: Dataset Sampling method scheme structure
 knitr::include_graphics(
   here::here(
-    "website/database_structure/Figures/DB_scheme_visualisation/SamplingMethodID.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.png"
   )
 )
 ```
@@ -436,7 +345,7 @@ fig_n_sampling_methods_per_dataset_type <-
   plot_waffle(
     n_sampling_methods_per_dataset_type,
     dataset_type,
-    plot_title = "Number of Sampling method per Datasets type",
+    plot_title = "Number of Sampling Method per Datasets Type",
     one_point_is = 1
   ) +
   ggplot2::scale_fill_manual(
@@ -454,7 +363,7 @@ To support robust and transparent scientific research, each `Dataset` in **VegVa
 #| label: Dataset reference method scheme structure
 knitr::include_graphics(
   here::here(
-    "website/database_structure/Figures/DB_scheme_visualisation/DatasetReference.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.png"
   )
 )
 ```
@@ -477,7 +386,7 @@ dataset_ref_example <-
   dplyr::rename(
     source_type_ref = reference_detail
   ) %>%
-  dplyr::select(-reference_id) %>%
+  dplyr::select(-c(reference_id, mandatory)) %>%
   dplyr::left_join(
     dplyr::tbl(con, "SamplingMethodReference"),
     by = "sampling_method_id"
@@ -489,7 +398,7 @@ dataset_ref_example <-
   dplyr::rename(
     sampling_method_ref = reference_detail
   ) %>%
-  dplyr::select(-reference_id) %>%
+  dplyr::select(-c(reference_id, mandatory)) %>%
   dplyr::left_join(
     dplyr::tbl(con, "DatasetSourcesReference"),
     by = "data_source_id"
@@ -501,9 +410,15 @@ dataset_ref_example <-
   dplyr::rename(
     source_ref = reference_detail
   ) %>%
-  dplyr::select(-reference_id) %>%
+  dplyr::select(-c(reference_id, mandatory)) %>%
   dplyr::collect()
 
 ```
 
-We have selected dataset ID: `r as.character(sel_dataset_for_example)`, which is a fossil pollen archive. Therefore, it has the reference of the *Dataser Source-Type*: *`r dataset_ref_example$source_type_ref`* and reference for the individual dataset: *`r dataset_ref_example$source_ref`*
+We have selected dataset ID: `r as.character(sel_dataset_for_example)`, which is a fossil pollen archive. Therefore, it has the reference of the *Dataser Source-Type*: 
+ 
+ - *`r dataset_ref_example$source_type_ref`* 
+
+and reference for the individual dataset: 
+
+- *`r dataset_ref_example$source_ref`*

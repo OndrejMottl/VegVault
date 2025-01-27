@@ -17,7 +17,7 @@ editor:
 
 library(here)
 
-here::i_am("Technical_overview/_06_section_II_abiotic.qmd")
+here::i_am("website/database_structure/_06_Abiotic.qmd")
 
 # Load configuration
 source(
@@ -60,7 +60,7 @@ dplyr::tbl(con, "AbioticVariable") %>%
     nm = c(
       "Variable name",
       "Variable unit",
-      "source of data"
+      "Source of data"
     )
   ) %>%
   tinytable::tt()
@@ -70,7 +70,7 @@ dplyr::tbl(con, "AbioticVariable") %>%
 #| label: AbioticData scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/AbioticData.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
   )
 )
 ```
@@ -141,7 +141,7 @@ Such data structure allow that environmental context is readily available for ea
 #| label: AbioticDataReference scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/AbioticDataReference.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
   )
 )
 ```
@@ -180,7 +180,10 @@ data_example_all <-
   vaultkeepr::get_abiotic_data() %>%
   # Select only Mean Anual Temperature (bio1)
   vaultkeepr::select_abiotic_var_by_name(sel_var_name = "bio1") %>%
-  vaultkeepr::extract_data()
+  vaultkeepr::extract_data(
+    return_raw_data = TRUE,
+    verbose = FALSE
+  )
 
 data_gridpoints_abiotic <-
   data_example_all %>%
@@ -198,14 +201,12 @@ data_vegetation <-
     .fn = ~ paste0(.x, "_veg")
   )
 
-
 data_links <-
   data_gridpoints_abiotic %>%
   dplyr::left_join(
     data_vegetation,
     by = c("sample_id_link_grid" = "sample_id_veg")
   )
-
 
 fig_gridpoint_links_example <-
   ggplot2::ggplot() +

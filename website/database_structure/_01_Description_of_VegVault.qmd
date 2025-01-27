@@ -1,12 +1,4 @@
----
-title: "Section I: Description of VegVault"
-format:
-  gfm:
-    fig-width: 10
-editor: 
-  markdown: 
-    wrap: sentence
----
+# Section I: Description of VegVault
 
 **VegVault** is a SQLite interdisciplinary database linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers .
 

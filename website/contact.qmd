@@ -1,5 +1,7 @@
 ---
-date: last-modified
+date: 2025/01/24
+date-format: long
+date-modified: last-modified
 sidebar: true
 ---
 

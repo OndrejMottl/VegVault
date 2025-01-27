@@ -20,12 +20,12 @@ website:
             href: website/database_structure.qmd
           - text: Examples of usage
             href: website/database_examples.qmd
-      - text: Contribute!
-        href: website/contribute.qmd
       - text: Outputs and Materials 
         href: website/materials.qmd
       - text: Get in touch!
         href: website/contact.qmd
+      - text: Contribute!
+        href: website/contribute.qmd
     search: true
     repo-url: https://github.com/OndrejMottl/VegVault
     repo-actions: [source, issue]

@@ -1,13 +1,3 @@
----
-format:
-  html:
-    fig-width: 10
-  gfm:
-    fig-width: 10
-editor: 
-  markdown: 
-    wrap: sentence
----
 ```{r}
 #| label: source config
 #| include: FALSE
@@ -17,7 +7,7 @@ editor:
 
 library(here)
 
-here::i_am("Technical_overview/_03_section_II_samples.qmd")
+here::i_am("website/database_structure/_03_Samples.qmd")
 
 # Load configuration
 source(
@@ -43,6 +33,8 @@ invisible(
     source
   )
 )
+
+sel_dataset_for_example <- 91256
 ```
 
 ## Samples
@@ -53,7 +45,7 @@ invisible(
 #| label: Samples scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/Samples.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
   )
 )
 ```
@@ -66,7 +58,7 @@ Each sample is linked to a specific `Dataset` via the `Dataset-Sample` table, wh
 #| label: DatasetSample scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/DatasetSample.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
   )
 )
 ```
@@ -97,7 +89,7 @@ fig_n_samples_per_dataset_type <-
   plot_waffle(
     n_samples_per_dataset_type,
     dataset_type,
-    plot_title = "Number of samples per Dataset type",
+    plot_title = "Number of Samples per Dataset Type",
     one_point_is = 25e3
   ) +
   ggplot2::scale_fill_manual(
@@ -115,7 +107,7 @@ The size of vegetation plots can vary, impacting the analyses and interpretation
 #| label: SampleSizeID scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/SampleSizeID.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
   )
 )
 ```
@@ -192,7 +184,7 @@ if (
 #| label: SampleUncertainty scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/SampleUncertainty.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
   )
 )
 ```
@@ -201,6 +193,7 @@ We can show this on the previously selected fossil pollen archive with dataset I
 
 ```{r}
 #| label: Sample poential age - plot
+
 dataset_age_example <-
   dplyr::tbl(con, "Datasets") %>%
   dplyr::filter(dataset_id == sel_dataset_for_example) %>%
@@ -277,7 +270,7 @@ Each `Sample` in **VegVault** can have specific references in addition to the `D
 #| label: SampleReference scheme structure
 knitr::include_graphics(
   here::here(
-    "Technical_overview/DB_scheme_visualisation/SampleReference.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
   )
 )
 ```

@@ -1,11 +1,30 @@
 ---
-date: last-modified
+date: 2025/01/24
+date-format: long
+date-modified: last-modified
 sidebar: true
 ---
 
 # Materials
 
+## VegVault database
+
+- [Access Database v1.0.0 ](){.btn} 
+
+## Manuscript
+
+- [Database paper](){.btn}
+
+## {vaultkeepr} R-package
+
+ - [{vaultkeepr} R-package](https://bit.ly/vaultkeepr)
+
+## VegVault logo
+
+ - [VegVault logo](https://github.com/OndrejMottl/VegVault/tree/main/Outputs/Figures/website/VegVault_logo.png)
+
 ## Posters
 
-- [VegVault poster - CSPE confrerence Sep 2024 - LQ](Figures/poster2024/mottl_poster_compression_9.png)
-- [VegVault poster - CSPE confrerence Sep 2024 - HQ](Figures/poster2024/mottl_poster.jpeg)
+### VegVault poster - CSPE confrerence Sep 2024
+- [Low Quality](Figures/poster2024/mottl_poster_compression_9.png)
+- [High Quality](Figures/poster2024/mottl_poster.jpeg)

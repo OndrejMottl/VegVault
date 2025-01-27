@@ -1,26 +1,19 @@
 ---
-date: last-modified
+date: 2025/01/24
+date-format: long
+date-modified: last-modified
 format:
   html:
     toc: true
     toc-depth: 3
     fig-width: 10
-    keep-md: true
-editor: 
-  markdown: 
-    wrap: sentence
+    format: html
+
 ---
 
-```{r}
-#| label: source config
-#| include: FALSE
-#| results: 'hide'
-#| warning: FALSE
-#| message: FALSE
-
-library(here)
-
-here::i_am("website/database_structure.qmd")
-```
-
-{{< include database_structure/_01_section_I.md >}}
+{{< include database_structure/_01_Description_of_VegVault.md >}}
+{{< include database_structure/_02_Datasets.md >}}
+{{< include database_structure/_03_Samples.md >}}
+{{< include database_structure/_04_Taxa.md >}}
+{{< include database_structure/_05_Traits.md >}}
+{{< include database_structure/_06_Abiotic.md >}}

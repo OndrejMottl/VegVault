@@ -15,19 +15,66 @@ Currently, **VegVault** includes abiotic data from
 provide high-resolution climate data, while WoSIS offers detailed soil
 information.
 
-| Variable name | Variable unit    | source of data  |
-|---------------|------------------|-----------------|
-| bio1          | Â°C              | CHELSA          |
-| bio4          | Â°C              | CHELSA          |
-| bio6          | Â°C              | CHELSA          |
-| bio12         | kg m-2 year-1    | CHELSA          |
-| bio15         | Unitless         | CHELSA          |
-| bio18         | kg m-2 quarter-1 | CHELSA          |
-| bio19         | kg m-2 quarter-1 | CHELSA          |
-| HWSD2         | Unitless         | WoSIS-SoilGrids |
+<table style="width:99%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 21%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable name</th>
+<th>Variable unit</th>
+<th>Source of data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>bio1</td>
+<td>C (degree Celsius)</td>
+<td>mean annual air temperature</td>
+</tr>
+<tr class="even">
+<td>bio4</td>
+<td>C (degree Celsius)</td>
+<td>temperature seasonality</td>
+</tr>
+<tr class="odd">
+<td>bio6</td>
+<td>C (degree Celsius)</td>
+<td>mean daily minimum air temperature of the coldest month</td>
+</tr>
+<tr class="even">
+<td>bio12</td>
+<td>kg m-2 year-1</td>
+<td>annual precipitation amount</td>
+</tr>
+<tr class="odd">
+<td>bio15</td>
+<td>Unitless</td>
+<td>precipitation seasonality</td>
+</tr>
+<tr class="even">
+<td>bio18</td>
+<td>kg m-2 quarter-1</td>
+<td>mean monthly precipitation amount of the warmest quarter</td>
+</tr>
+<tr class="odd">
+<td>bio19</td>
+<td>kg m-2 quarter-1</td>
+<td>mean monthly precipitation amount of the coldest quarter</td>
+</tr>
+<tr class="even">
+<td>HWSD2</td>
+<td>Unitless</td>
+<td>SoilGrids-soil_class</td>
+</tr>
+</tbody>
+</table>
 
-<img src="DB_scheme_visualisation/AbioticData.png" style="width:100.0%"
-data-fig-align="center" />
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
+style="width:100.0%" data-fig-align="center" />
 
 Because original data are stored as raster, which cannot be stored in
 SQLite database, we created artificial points called `gridpoints` in the
@@ -46,18 +93,21 @@ have discarded any `gridpoint` Sample, which is not close to 50 km
 and/or 5000 years to any other non-`gridpoint` `Samples` as not relevant
 for the vegetation dynamics.
 
-<img src="../Figures/%20fig_data_grid_coord%20.png" style="width:100.0%"
-data-fig-align="center" />
+<img
+src="../../Outputs/Figures/website/DB_structure/fig_data_grid_coord.png"
+style="width:100.0%" data-fig-align="center" />
 
 Such data structure allow that environmental context is readily
 available for each vegetation and trait `Sample`. while for each
 non-`gridpoint` `Sample`, user can select the closest spatio-temporally
 abiotic data or get average from all surrounding `gridpoints`.
 
-<img src="DB_scheme_visualisation/AbioticDataReference.png"
+<img
+src="../../Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
 style="width:100.0%" data-fig-align="center" />
 
-<img src="../Figures/%20fig_gridpoint_links_example%20.png"
+<img
+src="../../Outputs/Figures/website/DB_structure/fig_gridpoint_links_example.png"
 style="width:100.0%" data-fig-align="center" />
 
 By providing comprehensive and well-structured abiotic data, VegVault

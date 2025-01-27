@@ -1,0 +1,7 @@
+project:
+  output-dir: webiste/database_structure
+
+format:
+  gfm:
+    fig-width: 10
+
