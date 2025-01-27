@@ -10,8 +10,8 @@ save_figure_to_render <- function(
 
   ggplot2::ggsave(
     here::here(
-      paste(
-        "Figures/",
+      "Outputs/Figures/website/DB_structure",
+      paste0(
         file_name,
         ".png"
       )
@@ -25,8 +25,8 @@ save_figure_to_render <- function(
 
   knitr::include_graphics(
     here::here(
-      paste(
-        "Figures/",
+      "Outputs/Figures/website/DB_structure",
+      paste0(
         file_name,
         ".png"
       )

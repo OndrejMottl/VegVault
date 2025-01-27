@@ -149,7 +149,9 @@ data_version_control <-
     "0.0.3", "2024-11-18",
     "Reworked the `References` and flagged `mandatory`",
     "0.0.4", "2024-12-19",
-    "Update the version control and correct the Dataset References"
+    "Update the version control and correct the Dataset References",
+    "1.0.0", "2025-01-20",
+    "First release of the database"
   ) %>%
   dplyr::mutate(
     # check the date format
@@ -161,79 +163,3 @@ db_version <-
   data_version_control %>%
   dplyr::slice_tail(n = 1) %>%
   purrr::chuck("version")
-
-#----------------------------------------------------------#
-# 6. Graphical options -----
-#----------------------------------------------------------#
-
-# define general
-text_size <- 32
-line_size <- 0.1
-point_size <- 3
-
-# define font
-sysfonts::font_add(
-  family = "Renogare",
-  regular = here::here("Fonts/Renogare-Regular.otf")
-)
-showtext::showtext_auto()
-
-# define output sizes
-image_width <- 2450
-image_height <- 1200
-image_units <- "px"
-
-# define common color
-col_brown_light <- "#BC7052"
-col_brown_dark <- "#8A554E"
-
-col_green_light <- "#9BC058"
-col_green_dark <- "#5D7841"
-
-col_blue_light <- "#52758F"
-col_blue_dark <- "#242531"
-
-col_beige_light <- "#E6B482"
-col_beige_dark <- "#AE8a7B"
-
-col_white <- "white"
-
-
-# set ggplot output
-ggplot2::theme_set(
-  ggplot2::theme_minimal() +
-    ggplot2::theme(
-      text = ggplot2::element_text(
-        size = text_size,
-        colour = col_blue_dark,
-        family = "Renogare"
-      ),
-      line = ggplot2::element_line(
-        linewidth = line_size,
-        colour = col_blue_dark
-      ),
-      axis.text = ggplot2::element_text(
-        colour = col_blue_dark,
-        size = text_size,
-        family = "Renogare"
-      ),
-      axis.title = ggplot2::element_text(
-        colour = col_blue_dark,
-        size = text_size,
-        family = "Renogare"
-      ),
-      panel.grid.major = ggplot2::element_line(
-        colour = col_white,
-        linewidth = line_size
-      ),
-      panel.grid.minor = ggplot2::element_blank(),
-      plot.background = ggplot2::element_rect(
-        fill = col_beige_light,
-        colour = col_beige_light
-      ),
-      panel.background = ggplot2::element_rect(
-        fill = col_brown_light,
-        colour = col_brown_light
-      ),
-    )
-)

@@ -1,0 +1,59 @@
+---
+date: 2025/01/24
+date-format: long
+date-modified: last-modified
+sidebar: true
+---
+
+## Guidelines for data reuse and update
+
+Due to the version system of **VegVault**, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest **VegVault** version with corresponding DOI. 
+
+[Access Database v1.0.0 ](){.btn} 
+
+As the primary data sources are held under various licences, the **VegVault** has an `CC BY-NC-ND` 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e. BIEN data is under `CC BY-NC-ND`). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of **VegVault**, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function `vaulkeeper::get_references()` within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.
+
+[Access and cite the Database paper](/website/materials.qmd){.btn}
+
+## Limitations and considerations for future research
+
+Potential limitation lies in the completeness, accuracy, and reliability of the primary data sources. For example, it has been suggested that improper data practices erode the quality of global ecological databases such as TRY38, which have been used in **VegVault**. We do not attempt to solve these problems as **VegVault**'s main purpose is the re-usability of the data. Note that for some cases we are not permitted to make modifications based on the original data (e.g. BIEN data has `CC BY-NC-ND` licence).
+
+## {vaultkeeper}: R-package for accessing the **VegVault** database    
+
+:::: {.columns}
+::: {.column width="75%"}
+In order to make usage of the **VegVault** database as easy as possible, we have developed an R-package called [{vaultkeepr}](https://bit.ly/vaultkeepr), providing a suite of functions to effectively interact with the database directly from the [R programming language](https://en.wikipedia.org/wiki/R_(programming_language)). Functions include opening the database, extracting datasets, filtering samples, and accessing specific taxa and traits. This package is a well-tested interface (>95% code coverage).
+:::
+
+::: {.column width="25%"}
+```{r}
+#| label: vaultkeepr-logo
+#| echo: false
+knitr::include_graphics(
+  "https://ondrejmottl.github.io/vaultkeepr/reference/figures/vaultkeeper_logo.png"
+)
+```
+:::
+
+::::
+
+The {vaultkeepr} can be installed from [GitHub](https://github.com/) with:
+
+```{r}
+#| label: install
+#| eval: false
+#| echo: true
+# install.packages("remotes")
+remotes::install_github("OndrejMottl/vaultkeepr")
+```
+
+and then all functions will be made available by attaching as: 
+
+```{r}
+#| label: example
+#| echo: true
+library(vaultkeepr)
+```
+
+See [Exampe of usage](/website/database_examples.qmd) for more details.

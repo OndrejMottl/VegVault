@@ -1,0 +1,85 @@
+---
+title: "Examples of VegVault usage"
+format:
+  html:
+    fig-width: 10
+date: 2025/01/24
+date-format: long
+date-modified: last-modified
+sidebar: true
+---
+
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("website/_database_examples.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Visualisation/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+```
+
+:::: {.columns}
+::: {.column width="75%"}
+In order to make usage of the **VegVault** database as easy as possible, we have developed an R-package called [{vaultkeepr}](https://bit.ly/vaultkeepr), providing a suite of functions to effectively interact with the database directly from the [R programming language](https://en.wikipedia.org/wiki/R_(programming_language)). Functions include opening the database, extracting datasets, filtering samples, and accessing specific taxa and traits. This package is a well-tested interface (>95% code coverage).
+:::
+
+::: {.column width="25%"}
+```{r}
+#| label: vaultkeepr-logo
+knitr::include_graphics(
+  "https://ondrejmottl.github.io/vaultkeepr/reference/figures/vaultkeeper_logo.png"
+)
+```
+:::
+
+::::
+
+The {vaultkeepr} can be installed from [GitHub](https://github.com/) with:
+
+```{r}
+#| label: install
+#| eval: false
+#| echo: true
+# install.packages("remotes")
+remotes::install_github("OndrejMottl/vaultkeepr")
+```
+
+and then all functions will be made available by attaching as: 
+
+```{r}
+#| label: example
+#| echo: true
+library(vaultkeepr)
+```
+
+Here we present 3 examples of potential projects and how to obtain data for such projects from **VegVault** using {vaultkeepr} R-package. Note that we are specifically not trying to do any analysis, only presenting a way to obtain data, which can be used for such projects.
+
+{{< include _database_examples.md >}}

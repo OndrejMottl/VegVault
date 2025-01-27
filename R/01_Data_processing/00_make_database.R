@@ -122,6 +122,11 @@ db_version_control <-
   ) %>%
   dplyr::collect()
 
+db_version <-
+  data_version_control %>%
+  dplyr::slice_tail(n = 1) %>%
+  purrr::pluck("version")
+
 update_db_version <- FALSE
 
 if (
@@ -149,10 +154,15 @@ if (
   DBI::dbExecute(
     con,
     paste0(
-      "INSERT INTO version_control (version, changelog)",
+      "INSERT INTO version_control (version, update_date, changelog) ",
       "VALUES ('",
-      db_version, # [config]
-      "', '');"
+      db_version, "', '",
+      data_version_control %>%
+        dplyr::slice_tail(n = 1) %>%
+        purrr::pluck("update_date"), "', '",
+      data_version_control %>%
+        dplyr::slice_tail(n = 1) %>%
+        purrr::pluck("changelog"), "');"
     )
   )
 }
@@ -161,7 +171,10 @@ if (
 add_to_db(
   conn = con,
   data = tibble::tibble(
-    reference_detail = "VegVault: an interdisciplinary database linking paleo-, and neo-vegetation data with functional traits and abiotic drivers",
+    reference_detail = paste(
+      "VegVault: an interdisciplinary database linking paleo-,",
+      "and neo-vegetation data with functional traits and abiotic drivers"
+    ),
     mandatory = TRUE,
   ),
   table_name = "References"
