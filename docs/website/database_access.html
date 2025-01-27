@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Ondřej Mottl">
 <meta name="dcterms.date" content="2025-01-24">
 
 <title>VegVault</title>
@@ -22,25 +21,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -79,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">VegVault</span>
     </a>
   </div>
@@ -90,11 +123,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./website/people.html"> 
+    <a class="nav-link" href="../website/people.html"> 
 <span class="menu-text">People</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -103,33 +136,33 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-database">    
         <li>
-    <a class="dropdown-item" href="./website/database_content.html">
+    <a class="dropdown-item" href="../website/database_content.html">
  <span class="dropdown-text">VegVault Content</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./website/database_access.html">
+    <a class="dropdown-item" href="../website/database_access.html">
  <span class="dropdown-text">VegVault Access</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./website/database_structure.html">
+    <a class="dropdown-item" href="../website/database_structure.html">
  <span class="dropdown-text">VegVault Structure</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./website/database_examples.html">
+    <a class="dropdown-item" href="../website/database_examples.html">
  <span class="dropdown-text">Examples of usage</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="./website/materials.html"> 
+    <a class="nav-link" href="../website/materials.html"> 
 <span class="menu-text">Outputs and Materials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./website/contact.html"> 
+    <a class="nav-link" href="../website/contact.html"> 
 <span class="menu-text">Get in touch!</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./website/contribute.html"> 
+    <a class="nav-link" href="../website/contribute.html"> 
 <span class="menu-text">Contribute!</span></a>
   </li>  
 </ul>
@@ -158,12 +191,6 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Ondřej Mottl </p>
-          </div>
-  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
@@ -172,6 +199,12 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">January 26, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -180,17 +213,46 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="vegvault" class="level1">
-<h1>VegVault<img src="Outputs/Figures/website/VegVault_logo.png" align="right" width="250"></h1>
-<section id="database-linking-global-paleo--and-neo-vegetation-data-functional-traits-and-climate" class="level2">
-<h2 class="anchored" data-anchor-id="database-linking-global-paleo--and-neo-vegetation-data-functional-traits-and-climate">Database linking global paleo-, and neo-vegetation data, functional traits, and climate</h2>
-<p>This is official website dedicated to the VegVault project. VegVault is compiling extensive paleo- and neo-ecological vegetation data into a single, accessible database, accompanied by functional traits, and abiotic information, such as climate and soil. By bridging historical and contemporary data, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.</p>
-<p>Creating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.</p>
-<p>The project is part of <a href="https://bit.ly/BIODYNAMICS">BIODYNAMICS</a> project.</p>
-<p><a href="./website/database_access.html" class="btn">Access Database</a> <a href="./website/materials.html" class="btn">Database paper</a></p>
-
-
+<section id="guidelines-for-data-reuse-and-update" class="level2">
+<h2 class="anchored" data-anchor-id="guidelines-for-data-reuse-and-update">Guidelines for data reuse and update</h2>
+<p>Due to the version system of <strong>VegVault</strong>, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest <strong>VegVault</strong> version with corresponding DOI.</p>
+<p><a href="" class="btn">Access Database v1.0.0</a></p>
+<p>As the primary data sources are held under various licences, the <strong>VegVault</strong> has an <code>CC BY-NC-ND</code> 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e.&nbsp;BIEN data is under <code>CC BY-NC-ND</code>). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of <strong>VegVault</strong>, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function <code>vaulkeeper::get_references()</code> within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.</p>
+<p><a href="../website/materials.html" class="btn">Access and cite the Database paper</a></p>
 </section>
+<section id="limitations-and-considerations-for-future-research" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-and-considerations-for-future-research">Limitations and considerations for future research</h2>
+<p>Potential limitation lies in the completeness, accuracy, and reliability of the primary data sources. For example, it has been suggested that improper data practices erode the quality of global ecological databases such as TRY38, which have been used in <strong>VegVault</strong>. We do not attempt to solve these problems as <strong>VegVault</strong>’s main purpose is the re-usability of the data. Note that for some cases we are not permitted to make modifications based on the original data (e.g.&nbsp;BIEN data has <code>CC BY-NC-ND</code> licence).</p>
+</section>
+<section id="vaultkeeper-r-package-for-accessing-the-vegvault-database" class="level2">
+<h2 class="anchored" data-anchor-id="vaultkeeper-r-package-for-accessing-the-vegvault-database">{vaultkeeper}: R-package for accessing the <strong>VegVault</strong> database</h2>
+<div class="columns">
+<div class="column" style="width:75%;">
+<p>In order to make usage of the <strong>VegVault</strong> database as easy as possible, we have developed an R-package called <a href="https://bit.ly/vaultkeepr">{vaultkeepr}</a>, providing a suite of functions to effectively interact with the database directly from the <a href="https://en.wikipedia.org/wiki/R_(programming_language)">R programming language</a>. Functions include opening the database, extracting datasets, filtering samples, and accessing specific taxa and traits. This package is a well-tested interface (&gt;95% code coverage).</p>
+</div><div class="column" style="width:25%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://ondrejmottl.github.io/vaultkeepr/reference/figures/vaultkeeper_logo.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The {vaultkeepr} can be installed from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("remotes")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"OndrejMottl/vaultkeepr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and then all functions will be made available by attaching as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vaultkeepr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>See <a href="../website/database_examples.html">Exampe of usage</a> for more details.</p>
+
+
 </section>
 
 </main> <!-- /main -->
