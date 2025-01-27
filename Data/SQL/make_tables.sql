@@ -2,7 +2,7 @@ CREATE TABLE "version_control"
 (
   "id" INTEGER PRIMARY KEY,
   "version" TEXT,
-  "update_timestamp" DATETIME DEFAULT CURRENT_TIMESTAMP,
+  "update_date" TEXT DEFAULT CURRENT_DATE,
   "changelog" TEXT
 );
 CREATE UNIQUE INDEX idx_version_control_id ON version_control(id);
