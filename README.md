@@ -2,13 +2,16 @@
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
 
-# VegVault database <img src="Figures/VegVault_logo.png" align="right" width="200"/>
+# VegVault database <img src="Outputs/Figures/website/VegVault_logo.png" align="right" width="200"/>
 
 <!-- badges: start -->
+
+[![Version](https://img.shields.io/github/v/release/OndrejMottl/VegVault?label=Version&logo=github.png)](https://github.com/OndrejMottl/VegVault/releases)
 <!-- badges: end -->
 
-This is part of the [BIODYNAMICS
+The goal of this repo is to create an SQLite database with all data from
+[BIODYNAMICS
 project](https://ondrejmottl.github.io/projects/BIODYNAMICS/).
 
-The goal of this repo is to create SQL-like datasase with all data from
-[BIODYNAMICS](https://ondrejmottl.github.io/projects/BIODYNAMICS/).
+Please visit [VegVault website](https://bit.ly/VegVault) for more
+details.
