@@ -44,7 +44,13 @@ render_md <- function(
   )
 
   if (
-    isTRUE(copy)
+    isTRUE(copy) &&
+      file.exists(
+        here::here(
+          output_dir,
+          paste0(file_name, ".md")
+        )
+      )
   ) {
     fs::file_copy(
       path = here::here(
