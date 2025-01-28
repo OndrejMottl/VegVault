@@ -9,7 +9,7 @@ as the keystone for organizing and managing data. Here we will explain
 some, but not all, of the features of the `Dataset`.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### `Dataset Type`
@@ -32,11 +32,11 @@ systematically. Currently, **VegVault** contains the following types of
     manage abiotic data, here climate and soil information
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_n_datasetes_per_type.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### `Dataset` `Source-Type`
@@ -65,11 +65,11 @@ and referencing of primary data sources. The current `Source-Types` in
     data
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source_type.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### `Dataset Source`
@@ -80,13 +80,13 @@ should help to promote better findability of the primary source of data
 and referencing.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.png"
 style="width:100.0%" data-fig-align="center" />
 
 Currently, there are 691 sources of datasets.
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Sampling Method
@@ -104,11 +104,11 @@ both `vegetation_plot` and `fossil_pollen_archive` `Datasets`, providing
 metadata that ensures accurate and contextually relevant analyses
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_n_sampling_methods_per_dataset_type.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_sampling_methods_per_dataset_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### References
@@ -125,7 +125,7 @@ specific data, further ensuring that users can accurately cite and
 verify the sources of their data.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.png"
 style="width:100.0%" data-fig-align="center" />
 
 This means that one dataset can have one/several references from each of

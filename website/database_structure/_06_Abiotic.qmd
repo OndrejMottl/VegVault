@@ -68,7 +68,7 @@ dplyr::tbl(con, "AbioticVariable") %>%
 
 ```{r}
 #| label: AbioticData scheme structure
-knitr::include_graphics(
+include_graphics_absolute_path(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
   )
@@ -139,7 +139,7 @@ Such data structure allow that environmental context is readily available for ea
 
 ```{r}
 #| label: AbioticDataReference scheme structure
-knitr::include_graphics(
+include_graphics_absolute_path(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
   )

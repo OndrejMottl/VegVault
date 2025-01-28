@@ -8,15 +8,15 @@ primary data sources. Each individual `Taxon` is linked to corresponding
 systematic association between species and their ecological data.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_n_taxa_per_source_type.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_taxa_per_source_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Classification
@@ -37,9 +37,9 @@ thousand taxonomic names, of which we were unable to classify only 1312
 (1.2%).
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_n_taxa_per_class.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_taxa_per_class.png"
 style="width:100.0%" data-fig-align="center" />

@@ -22,49 +22,49 @@ information.
 <col style="width: 60%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Variable name</th>
 <th>Variable unit</th>
 <th>Source of data</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>bio1</td>
 <td>C (degree Celsius)</td>
 <td>mean annual air temperature</td>
 </tr>
-<tr class="even">
+<tr>
 <td>bio4</td>
 <td>C (degree Celsius)</td>
 <td>temperature seasonality</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>bio6</td>
 <td>C (degree Celsius)</td>
 <td>mean daily minimum air temperature of the coldest month</td>
 </tr>
-<tr class="even">
+<tr>
 <td>bio12</td>
 <td>kg m-2 year-1</td>
 <td>annual precipitation amount</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>bio15</td>
 <td>Unitless</td>
 <td>precipitation seasonality</td>
 </tr>
-<tr class="even">
+<tr>
 <td>bio18</td>
 <td>kg m-2 quarter-1</td>
 <td>mean monthly precipitation amount of the warmest quarter</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>bio19</td>
 <td>kg m-2 quarter-1</td>
 <td>mean monthly precipitation amount of the coldest quarter</td>
 </tr>
-<tr class="even">
+<tr>
 <td>HWSD2</td>
 <td>Unitless</td>
 <td>SoilGrids-soil_class</td>
@@ -73,7 +73,7 @@ information.
 </table>
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
 style="width:100.0%" data-fig-align="center" />
 
 Because original data are stored as raster, which cannot be stored in
@@ -94,7 +94,7 @@ and/or 5000 years to any other non-`gridpoint` `Samples` as not relevant
 for the vegetation dynamics.
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_data_grid_coord.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_data_grid_coord.png"
 style="width:100.0%" data-fig-align="center" />
 
 Such data structure allow that environmental context is readily
@@ -103,11 +103,11 @@ non-`gridpoint` `Sample`, user can select the closest spatio-temporally
 abiotic data or get average from all surrounding `gridpoints`.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_gridpoint_links_example.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_gridpoint_links_example.png"
 style="width:100.0%" data-fig-align="center" />
 
 By providing comprehensive and well-structured abiotic data, VegVault

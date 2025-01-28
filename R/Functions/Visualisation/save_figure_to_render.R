@@ -23,7 +23,7 @@ save_figure_to_render <- function(
     bg = col_beige_light # [config]
   )
 
-  knitr::include_graphics(
+  include_graphics_absolute_path(
     here::here(
       "Outputs/Figures/website/DB_structure",
       paste0(

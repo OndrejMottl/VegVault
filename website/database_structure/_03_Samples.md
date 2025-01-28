@@ -9,7 +9,7 @@ which ~ 1.6 millions are `gridpoints`, artificially created to hold
 abiotic data, see below).
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Dataset-Sample
@@ -20,11 +20,11 @@ corresponding `Dataset Type`, whether it is current `vegetation_plots`,
 `fossil_pollen_archive`, `traits`, or `gridpoint`.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_n_samples_per_dataset_type.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_samples_per_dataset_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Sample-size
@@ -36,11 +36,11 @@ information about the plot size is recorded separately for each
 can influence species diversity and abundance metrics.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="../../Outputs/Figures/website/DB_structure/fig_samples_plot_size.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_samples_plot_size.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Sample age
@@ -57,13 +57,14 @@ uncertainty information for a fossil pollen archive with an example
 `Dataset`.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
 style="width:100.0%" data-fig-align="center" />
 
 We can show this on the previously selected fossil pollen archive with
 dataset ID: 91256.
 
-<img src="../../Outputs/Figures/website/DB_structure/fig_sample_age.png"
+<img
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_sample_age.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Sample reference
@@ -76,5 +77,5 @@ of referencing enhances the transparency and reliability of the data,
 especially when the database continues to be updated in the future.
 
 <img
-src="../../Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
+src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
 style="width:100.0%" data-fig-align="center" />

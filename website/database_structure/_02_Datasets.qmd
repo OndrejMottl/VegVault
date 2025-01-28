@@ -45,7 +45,7 @@ The `Dataset` represents the main structure in the **VegVault**, serving as the 
 
 ```{r}
 #| label: Dataset scheme structure
-knitr::include_graphics(
+include_graphics_absolute_path(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
   )
@@ -62,7 +62,7 @@ The `Dataset Type` defines the most basic classification of each `Dataset`, ensu
 
 ```{r}
 #| label: Dataset Type scheme structure
-knitr::include_graphics(
+include_graphics_absolute_path(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.png"
   )
@@ -108,7 +108,7 @@ VegVault maintains the detailed information on the source used to retrieve the o
 
 ```{r}
 #| label: Dataset Source Type scheme structure
-knitr::include_graphics(
+include_graphics_absolute_path(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.png"
   )
@@ -211,7 +211,7 @@ Each individual `Dataset` from a specific `Dataset` `Source-Type` can have infor
 
 ```{r}
 #| label: Dataset Source ID scheme structure
-knitr::include_graphics(
+include_graphics_absolute_path(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.png"
   )
@@ -316,7 +316,7 @@ Sampling methods vary significantly across the different types of `Datasets` int
 
 ```{r}
 #| label: Dataset Sampling method scheme structure
-knitr::include_graphics(
+include_graphics_absolute_path(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.png"
   )
@@ -361,7 +361,7 @@ To support robust and transparent scientific research, each `Dataset` in **VegVa
 
 ```{r}
 #| label: Dataset reference method scheme structure
-knitr::include_graphics(
+include_graphics_absolute_path(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.png"
   )
