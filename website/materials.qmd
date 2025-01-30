@@ -9,7 +9,7 @@ sidebar: true
 
 ## VegVault database
 
-- [Access Database v1.0.0 ](){.btn} 
+- [Access Database v1.0.0 ](https://doi.org/10.48700/datst.m7ky4-4de51){.btn} 
 
 ## Manuscript
 
