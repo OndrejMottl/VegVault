@@ -38,7 +38,7 @@ x_lim_max <- max(x_lim)
 y_lim_min <- min(y_lim)
 y_lim_max <- max(y_lim)
 
-ext_europe <- c(-15, 45, 35, 72)
+ext_europe <- c(-10, 32, 35, 60)
 
 #----------------------------------------------------------#
 # 1. Get data -----
@@ -67,7 +67,8 @@ data_grid_coord <-
   dplyr::filter(
     coord_lat >= !!rlang::enquo(y_lim_min) &
       coord_lat <= !!rlang::enquo(y_lim_max)
-  )
+  ) %>%
+  dplyr::collect()
 
 # Acess the VegVault file
 data_example_bio1 <-
@@ -132,7 +133,7 @@ data_links <-
 # 2. Plot -----
 #----------------------------------------------------------#
 
-fif_template <-
+fig_template <-
   tibble::tibble() %>%
   ggplot2::ggplot() +
   ggplot2::borders(
@@ -150,18 +151,17 @@ fif_template <-
   )
 
 fig_europe <-
-  fif_template +
+  fig_template +
   ggplot2::scale_y_continuous(breaks = seq(35, 70, by = 10)) +
-  ggplot2::scale_x_continuous(breaks = seq(-10, 45, by = 10)) +
-
+  ggplot2::scale_x_continuous(breaks = seq(-10, 45, by = 20)) +
   ggplot2::coord_sf(
     xlim = ext_europe[1:2],
     ylim = ext_europe[3:4]
   )
 
 fif_template_cz <-
-  fif_template +
-  ggplot2::scale_y_continuous(breaks = seq(48, 51, by = 1)) +
+  fig_template +
+  ggplot2::scale_y_continuous(breaks = seq(49, 51, by = 1)) +
   ggplot2::scale_x_continuous(breaks = seq(12, 19, by = 2)) +
   ggplot2::coord_sf(
     xlim = x_lim,
@@ -171,8 +171,7 @@ fif_template_cz <-
 fig_data_grid_coord_cz <-
   fif_template_cz +
   ggplot2::geom_point(
-    data = data_grid_coord %>%
-      dplyr::collect(),
+    data = data_grid_coord,
     mapping = ggplot2::aes(
       x = coord_long,
       y = coord_lat
@@ -193,7 +192,7 @@ fig_gridpoint_links_cz <-
       xend = coord_long_veg,
       yend = coord_lat_veg
     ),
-    col = col_blue_dark,
+    col = col_brown_neutral, # [config]
     linewidth = line_size
   ) +
   ggplot2::geom_point(
@@ -204,7 +203,7 @@ fig_gridpoint_links_cz <-
     ),
     shape = 15,
     alpha = 1,
-    size = point_size / 6,
+    size = point_size / 2,
     col = col_brown_neutral
   ) +
   ggplot2::geom_point(
@@ -219,19 +218,19 @@ fig_gridpoint_links_cz <-
     col = col_green_dark # [config]
   )
 
-
 fig_gridpoints_example <-
   cowplot::plot_grid(
-    fig_europe,
     cowplot::plot_grid(
+      fig_europe,
       fig_data_grid_coord_cz,
-      fig_gridpoint_links_cz,
       ncol = 1,
-      nrow = 2
+      nrow = 2,
+      rel_heights = c(1.4, 1)
     ),
+    fig_gridpoint_links_cz,
     ncol = 2,
     nrow = 1,
-    rel_widths = c(1, 1)
+    rel_widths = c(1, 2.4)
   )
 
 save_mns_figure(
