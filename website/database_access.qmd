@@ -13,7 +13,7 @@ Due to the version system of **VegVault**, the database is expected to be update
 
 As the primary data sources are held under various licences, the **VegVault** has an `CC BY-NC-ND` 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e. BIEN data is under `CC BY-NC-ND`). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of **VegVault**, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function `vaulkeeper::get_references()` within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.
 
-[Access and cite the Database paper](/website/materials.qmd){.btn}
+[Access and cite the Database preprint](/website/materials.qmd){.btn}
 
 ## Limitations and considerations for future research
 

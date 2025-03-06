@@ -5,15 +5,17 @@ date-modified: last-modified
 sidebar: true
 ---
 
-# Materials
+# Materials & Outputs
 
 ## VegVault database
 
 - [Access Database v1.0.0 ](https://doi.org/10.48700/datst.m7ky4-4de51){.btn} 
+  - Please check [Guidelines for data reuse and update](/website/database_access.qmd#guidelines-for-data-reuse-and-update) 
 
-## Manuscript
+## Publications
 
-- [Database paper](){.btn}
+### Pre-print
+  - "*VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers*": [![static-badge](https://img.shields.io/badge/DOI-10.1101/2025.01.31.635213-blue)](https://doi.org/10.1101/2025.01.31.635213).
 
 ## {vaultkeepr} R-package
 
@@ -25,6 +27,12 @@ sidebar: true
 
 ## Posters
 
-### VegVault poster - CSPE confrerence Sep 2024
-- [Low Quality](Figures/poster2024/mottl_poster_compression_9.png)
-- [High Quality](Figures/poster2024/mottl_poster.jpeg)
+### VegVault poster - CSPE conference September 2024
+- [Low Quality](/Outputs/Figures/poster2024/mottl_poster_compression_9.png)
+- [High Quality](/Outputs/Figures/poster2024/mottl_poster.jpeg)
+
+## Presentations
+
+### VegVault Flash Presentation - Geobotany meeting, Sudějov 23 March 2025
+ - [slides](https://ondrejmottl.github.io/VegVault-FlashPresentation-20250323/)
+ - [code for slides](https://github.com/OndrejMottl/VegVault-FlashPresentation-20250323)

@@ -109,14 +109,14 @@
     "href": "index.html",
     "title": "VegVault",
     "section": "",
-    "text": "This is official website dedicated to the VegVault project. VegVault is compiling extensive paleo- and neo-ecological vegetation data into a single, accessible database, accompanied by functional traits, and abiotic information, such as climate and soil. By bridging historical and contemporary data, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.\nCreating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.\nThe project is part of BIODYNAMICS project.\nAccess Database Database paper"
+    "text": "This is official website dedicated to the VegVault project. VegVault is compiling extensive paleo- and neo-ecological vegetation data into a single, accessible database, accompanied by functional traits, and abiotic information, such as climate and soil. By bridging historical and contemporary data, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.\nCreating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.\nThe project is part of BIODYNAMICS project.\nAccess Database Database pre-print"
   },
   {
     "objectID": "index.html#database-linking-global-paleo--and-neo-vegetation-data-functional-traits-and-climate",
     "href": "index.html#database-linking-global-paleo--and-neo-vegetation-data-functional-traits-and-climate",
     "title": "VegVault",
     "section": "",
-    "text": "This is official website dedicated to the VegVault project. VegVault is compiling extensive paleo- and neo-ecological vegetation data into a single, accessible database, accompanied by functional traits, and abiotic information, such as climate and soil. By bridging historical and contemporary data, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.\nCreating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.\nThe project is part of BIODYNAMICS project.\nAccess Database Database paper"
+    "text": "This is official website dedicated to the VegVault project. VegVault is compiling extensive paleo- and neo-ecological vegetation data into a single, accessible database, accompanied by functional traits, and abiotic information, such as climate and soil. By bridging historical and contemporary data, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.\nCreating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.\nThe project is part of BIODYNAMICS project.\nAccess Database Database pre-print"
   },
   {
     "objectID": "website/contact.html",
@@ -151,14 +151,14 @@
     "href": "website/database_access.html",
     "title": "VegVault",
     "section": "",
-    "text": "Due to the version system of VegVault, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest VegVault version with corresponding DOI.\nAccess Database v1.0.0\nAs the primary data sources are held under various licences, the VegVault has an CC BY-NC-ND 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e. BIEN data is under CC BY-NC-ND). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of VegVault, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function vaulkeeper::get_references() within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.\nAccess and cite the Database paper"
+    "text": "Due to the version system of VegVault, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest VegVault version with corresponding DOI.\nAccess Database v1.0.0\nAs the primary data sources are held under various licences, the VegVault has an CC BY-NC-ND 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e. BIEN data is under CC BY-NC-ND). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of VegVault, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function vaulkeeper::get_references() within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.\nAccess and cite the Database preprint"
   },
   {
     "objectID": "website/database_access.html#guidelines-for-data-reuse-and-update",
     "href": "website/database_access.html#guidelines-for-data-reuse-and-update",
     "title": "VegVault",
     "section": "",
-    "text": "Due to the version system of VegVault, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest VegVault version with corresponding DOI.\nAccess Database v1.0.0\nAs the primary data sources are held under various licences, the VegVault has an CC BY-NC-ND 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e. BIEN data is under CC BY-NC-ND). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of VegVault, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function vaulkeeper::get_references() within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.\nAccess and cite the Database paper"
+    "text": "Due to the version system of VegVault, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest VegVault version with corresponding DOI.\nAccess Database v1.0.0\nAs the primary data sources are held under various licences, the VegVault has an CC BY-NC-ND 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e. BIEN data is under CC BY-NC-ND). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of VegVault, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function vaulkeeper::get_references() within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.\nAccess and cite the Database preprint"
   },
   {
     "objectID": "website/database_access.html#limitations-and-considerations-for-future-research",
@@ -205,43 +205,50 @@
   {
     "objectID": "website/materials.html",
     "href": "website/materials.html",
-    "title": "Materials",
+    "title": "Materials & Outputs",
     "section": "",
-    "text": "Access Database v1.0.0\n\n\n\n\n\nDatabase paper\n\n\n\n\n\n{vaultkeepr} R-package\n\n\n\n\n\nVegVault logo\n\n\n\n\n\n\n\nLow Quality\nHigh Quality"
+    "text": "Access Database v1.0.0\n\nPlease check Guidelines for data reuse and update\n\n\n\n\n\n\n\n\n“VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers”: .\n\n\n\n\n\n\n{vaultkeepr} R-package\n\n\n\n\n\nVegVault logo\n\n\n\n\n\n\n\nLow Quality\nHigh Quality\n\n\n\n\n\n\n\n\nslides\ncode for slides"
   },
   {
     "objectID": "website/materials.html#vegvault-database",
     "href": "website/materials.html#vegvault-database",
-    "title": "Materials",
+    "title": "Materials & Outputs",
     "section": "",
-    "text": "Access Database v1.0.0"
+    "text": "Access Database v1.0.0\n\nPlease check Guidelines for data reuse and update"
   },
   {
-    "objectID": "website/materials.html#manuscript",
-    "href": "website/materials.html#manuscript",
-    "title": "Materials",
+    "objectID": "website/materials.html#publications",
+    "href": "website/materials.html#publications",
+    "title": "Materials & Outputs",
     "section": "",
-    "text": "Database paper"
+    "text": "“VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers”: ."
   },
   {
     "objectID": "website/materials.html#vaultkeepr-r-package",
     "href": "website/materials.html#vaultkeepr-r-package",
-    "title": "Materials",
+    "title": "Materials & Outputs",
     "section": "",
     "text": "{vaultkeepr} R-package"
   },
   {
     "objectID": "website/materials.html#vegvault-logo",
     "href": "website/materials.html#vegvault-logo",
-    "title": "Materials",
+    "title": "Materials & Outputs",
     "section": "",
     "text": "VegVault logo"
   },
   {
     "objectID": "website/materials.html#posters",
     "href": "website/materials.html#posters",
-    "title": "Materials",
+    "title": "Materials & Outputs",
     "section": "",
     "text": "Low Quality\nHigh Quality"
+  },
+  {
+    "objectID": "website/materials.html#presentations",
+    "href": "website/materials.html#presentations",
+    "title": "Materials & Outputs",
+    "section": "",
+    "text": "slides\ncode for slides"
   }
 ]
