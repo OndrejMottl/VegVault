@@ -1,5 +1,5 @@
 ---
-date: last-modified
+date-modified: last-modified
 author: Ondřej Mottl
 sidebar: false
 ---
@@ -14,4 +14,4 @@ Creating such an integrated database, in which gathering and processing of the d
 
 The project is part of [BIODYNAMICS](https://bit.ly/BIODYNAMICS) project.
 
-[Access Database](/website/database_access.qmd){.btn} [Database paper](/website/materials.qmd){.btn}
+[Access Database](/website/database_access.qmd){.btn} [Database pre-print](/website/materials.qmd){.btn}
