@@ -4,6 +4,16 @@ project:
 
 website:
   title: "VegVault"
+  page-footer:
+    right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
+  site-url: https://ondrejmottl.github.io/VegVault
+  repo-url: https://github.com/OndrejMottl/VegVault
+  issue-url: https://github.com/OndrejMottl/VegVault/issues
+  repo-actions: [source, issue]
+  
+  image: Outputs\Figures\website\VegVault_image.png
+  favicon: Outputs\Figures\website\VegVault_logo.png
+  back-to-top-navigation: true
   navbar:
     left:
       - text: About
@@ -27,13 +37,9 @@ website:
       - text: Contribute!
         href: website/contribute.qmd
     search: true
-    repo-url: https://github.com/OndrejMottl/VegVault
-    repo-actions: [source, issue]
     tools:
       - icon: bluesky
         href: https://bsky.app/profile/ondrejmottl.bsky.social
-      - icon: twitter
-        href: http://twitter.com/OndrejMottl
       - icon: github
         href: https://github.com/OndrejMottl/VegVault
 
