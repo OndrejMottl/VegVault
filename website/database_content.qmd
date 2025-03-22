@@ -68,9 +68,10 @@ Here is a general visualisation of the assembly process:
 #| label: VV assembly scheme
 knitr::include_graphics(
   here::here(
-    "Outputs/Figures/DB_assembly_visualisation/assembly_viz_03.png"
+    "Outputs/Figures/DB_assembly_visualisation/assembly_viz_04.png"
   )
 )
+
 ```
 
 **Figure legend**:

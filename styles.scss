@@ -87,6 +87,7 @@ a {
   border-color: $white;
   font-variant-caps: all-petite-caps;
   border-radius: 10px;
+
   &:hover {
     background-color: $white;
     color: $blueLight;
@@ -145,4 +146,21 @@ ul {
 /* Navbar */
 .nav-item {
   border-left: 1px solid $blueDark;
+}
+
+.nav-footer {
+  background: $blueLight;
+  color: $white;
+  padding: $blockMargin;
+  text-align: center;
+
+  a {
+    color: $white;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+
 }
