@@ -80,6 +80,29 @@ and then all functions will be made available by attaching as:
 library(vaultkeepr)
 ```
 
-Here we present 3 examples of potential projects and how to obtain data for such projects from **VegVault** using {vaultkeepr} R-package. Note that we are specifically not trying to do any analysis, only presenting a way to obtain data, which can be used for such projects.
+Here is a schematic workflow of accessing and extracting data from the VegVault database using the {vaultkeepr} R package:
+
+```{r}
+#| label: figure-extracting-data
+knitr::include_graphics(
+  here::here(
+    "Outputs/Figures/Scheme_extraction/Scheme_03.png"
+  )
+)
+```
+
+Schematic workflow of accessing and extracting data from VegVault database using {vaultkeepr} R package. 
+
+  1. [Download VegVault database](/website/database_access.qmd)  
+  2. Download {vaultkeepr} R package from GitHub (see above)
+  3. In the R programming environment39, the user has to select, which type(s) of datasets they would like to extracted. A minimum of one Dataset Type (see Data Records section for more details) must be specified when using the `vaultkeepr::select_dataset_by_type()` function
+  4. When the user is interested in data from a specific region, they can specific the geographical coordinates of a rectangular extent using the `vaultkeepr::select_dataset_by_geo()` function to only get Samples from the individual Datasets that were recorded within the region of interest. Additionally, the user can specify the temporal focus by filtering data within a specific period using the `vaultkeepr::select_samples_by_age()`
+  5. The user may also specify any further attributes to be added to the data compilation. Specifically: `get_taxa()`
+     - When extracting contemporary or past vegetation (fossil pollen) records, the user most likely wishes to add information about the abundance of individual Taxa in each Sample. To do so, the user can use the `vaultkeepr::get_taxa()` function. In addition, the user can standardise the taxonomy, so that the extracted Taxa can be compared. The parameter `classify_to` within the `vaultkeepr::get_taxa()` function allows the user to specify a taxonomic level (species, genus or family) on which the data should be comparable (see Methods about Taxa classification). Furthermore, the user can select specific Taxa based on taxonomy by using the `vaultkeepr::select_taxa_by_name()` function. `get_traits()`
+     - When wishing to link the Trait data with the vegetation records, the user can use `vaultkeepr::get_traits()` function to extract all Trait Samples of the earlier specified spatio-temporal extent. Moreover, similarly to the `vaultkeepr::get_taxa()` function, the user can specify the taxonomic level to which the data should be standardised by using the `classify_to` parameter. Please note that the user has to decide in their further analysis how they want to aggregate the measured traits per taxonomic group, e.g. by taking the mean. Further, the user can select a specific Trait Domain (of the six available; see Methods about details) by using the `vaultkeepr::select_traits_by_domain_name()` function. `get_abiotic_data()`
+     - When wishing to link vegetation or trait records with abiotic data, the abiotic data can be obtained by the `vaultkeepr::get_abiotic_data()` function. The user can specify in which mode the abiotic data should be linked, which can be either "nearest" (i.e. geographically closest records), "mean" or "median" (summarising all abiotic records within a set geographical and/or temporal distance). This can be further tweaked by its parameters `limit_by_distance_km` and `limit_by_age_years`. Furthermore, specific abiotic variables can be chosen by the `vaultkeepr::select_abiotic_var_by_name()` function
+  6. When defined all specifications for data extraction, the user can execute the extraction using `vaultkeepr::extract_data()`. This will result in a "ready-for-analyses" data compilation. Moreover, the user can use the `vaultkeepr::get_references()` function to obtain all references required (and/or suggested) for such compilation (see Internal Database Structure section for more details about hierarchical structure of references). Finally, see the Usage Notes section for examples of data processing and extracting using {vaultkeepr} R package.
+
+Finally, we present 3 examples of potential projects and how to obtain data for such projects from **VegVault** using {vaultkeepr} R-package. Note that we are specifically not trying to do any analysis, only presenting a way to obtain data, which can be used for such projects.
 
 {{< include _database_examples.md >}}
