@@ -14,4 +14,4 @@ Creating such an integrated database, in which gathering and processing of the d
 
 The project is part of [BIODYNAMICS](https://bit.ly/BIODYNAMICS) project.
 
-[Access Database](/website/database_access.qmd){.btn} [Database pre-print](/website/materials.qmd){.btn}
+[Access Database](/website/database_access.qmd){.btn} [Database pre-print](https://doi.org/10.1101/2025.01.31.635213){.btn}

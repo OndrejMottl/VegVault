@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 27, 2025</p>
+      <p class="date-modified">April 12, 2025</p>
     </div>
   </div>
     
@@ -238,7 +238,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vaultkeepr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here we present 3 examples of potential projects and how to obtain data for such projects from <strong>VegVault</strong> using {vaultkeepr} R-package. Note that we are specifically not trying to do any analysis, only presenting a way to obtain data, which can be used for such projects.</p>
+<p>Here is a schematic workflow of accessing and extracting data from the VegVault database using the {vaultkeepr} R package:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../Outputs/Figures/Scheme_extraction/Scheme_03.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Schematic workflow of accessing and extracting data from VegVault database using {vaultkeepr} R package.</p>
+<ol type="1">
+<li><a href="../website/database_access.html">Download VegVault database</a><br>
+</li>
+<li>Download {vaultkeepr} R package from GitHub (see above)</li>
+<li>In the R programming environment39, the user has to select, which type(s) of datasets they would like to extracted. A minimum of one Dataset Type (see Data Records section for more details) must be specified when using the <code>vaultkeepr::select_dataset_by_type()</code> function</li>
+<li>When the user is interested in data from a specific region, they can specific the geographical coordinates of a rectangular extent using the <code>vaultkeepr::select_dataset_by_geo()</code> function to only get Samples from the individual Datasets that were recorded within the region of interest. Additionally, the user can specify the temporal focus by filtering data within a specific period using the <code>vaultkeepr::select_samples_by_age()</code></li>
+<li>The user may also specify any further attributes to be added to the data compilation. Specifically: <code>get_taxa()</code>
+<ul>
+<li>When extracting contemporary or past vegetation (fossil pollen) records, the user most likely wishes to add information about the abundance of individual Taxa in each Sample. To do so, the user can use the <code>vaultkeepr::get_taxa()</code> function. In addition, the user can standardise the taxonomy, so that the extracted Taxa can be compared. The parameter <code>classify_to</code> within the <code>vaultkeepr::get_taxa()</code> function allows the user to specify a taxonomic level (species, genus or family) on which the data should be comparable (see Methods about Taxa classification). Furthermore, the user can select specific Taxa based on taxonomy by using the <code>vaultkeepr::select_taxa_by_name()</code> function. <code>get_traits()</code></li>
+<li>When wishing to link the Trait data with the vegetation records, the user can use <code>vaultkeepr::get_traits()</code> function to extract all Trait Samples of the earlier specified spatio-temporal extent. Moreover, similarly to the <code>vaultkeepr::get_taxa()</code> function, the user can specify the taxonomic level to which the data should be standardised by using the <code>classify_to</code> parameter. Please note that the user has to decide in their further analysis how they want to aggregate the measured traits per taxonomic group, e.g.&nbsp;by taking the mean. Further, the user can select a specific Trait Domain (of the six available; see Methods about details) by using the <code>vaultkeepr::select_traits_by_domain_name()</code> function. <code>get_abiotic_data()</code></li>
+<li>When wishing to link vegetation or trait records with abiotic data, the abiotic data can be obtained by the <code>vaultkeepr::get_abiotic_data()</code> function. The user can specify in which mode the abiotic data should be linked, which can be either “nearest” (i.e.&nbsp;geographically closest records), “mean” or “median” (summarising all abiotic records within a set geographical and/or temporal distance). This can be further tweaked by its parameters <code>limit_by_distance_km</code> and <code>limit_by_age_years</code>. Furthermore, specific abiotic variables can be chosen by the <code>vaultkeepr::select_abiotic_var_by_name()</code> function</li>
+</ul></li>
+<li>When defined all specifications for data extraction, the user can execute the extraction using <code>vaultkeepr::extract_data()</code>. This will result in a “ready-for-analyses” data compilation. Moreover, the user can use the <code>vaultkeepr::get_references()</code> function to obtain all references required (and/or suggested) for such compilation (see Internal Database Structure section for more details about hierarchical structure of references). Finally, see the Usage Notes section for examples of data processing and extracting using {vaultkeepr} R package.</li>
+</ol>
+<p>Finally, we present 3 examples of potential projects and how to obtain data for such projects from <strong>VegVault</strong> using {vaultkeepr} R-package. Note that we are specifically not trying to do any analysis, only presenting a way to obtain data, which can be used for such projects.</p>
 <section id="example-1-spatiotemporal-patterns-of-the-picea-genus-across-north-america-since-the-lgm" class="level2">
 <h2 class="anchored" data-anchor-id="example-1-spatiotemporal-patterns-of-the-picea-genus-across-north-america-since-the-lgm">Example 1: Spatiotemporal patterns of the <em>Picea</em> genus across North America since the LGM</h2>
 <p>The first example demonstrates how to retrieve data for the genus <em>Picea</em> across North America by selecting both modern and fossil pollen plot datasets, filtering samples by geographic boundaries and temporal range (0 to 15,000 yr BP), and harmonizing taxa to the genus level. The resulting dataset allows users to study spatiotemporal patterns of <em>Picea</em> distribution over millennia. This can be accomplished by running the following code:</p>
