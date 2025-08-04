@@ -1,14 +1,100 @@
-# Section I: Description of VegVault
+---
+format:
+  html:
+    fig-width: 10
+  gfm:
+    fig-width: 10
+editor: 
+  markdown: 
+    wrap: sentence
+---
 
-**VegVault** is a SQLite interdisciplinary database linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers .
+# Internal Dataset Structure
 
-**VegVault** integrates data from multiple well-established sources to provide a comprehensive view of vegetation dynamics. By organizing data into clearly defined types and providing comprehensive referencing, **VegVault** supports detailed and high-quality ecological research. This structured approach ensures that data are accessible, reliable, traceable, and facilitate a wide range of analyses and applications across disciplines.  
+Currently, the **VegVault** consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal structure of VegVault may not be of relevance to a user, as the {vaultkeepr} R package processes all the data to output only the most relevant information in a "ready-to-analyse" format (see Usage Notes section). We will describe all tables and how they link with each other in the following sections.
 
-**VegVault** is organized into several sections to systematically manage the varying datasets it integrates. The main structure is the `Dataset`, which serves as the cornerstone of the database structure. `Datasets` are composed of `Samples`, representing individual data points within each dataset. Each `Dataset` will only contain several `Samples` if these differ in age. There are four types of `Datasets`:
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
 
-1. contemporary vegetation plots
-2. past vegetation (fossil pollen records)
-3. functional traits
-4. gridpoint (a dataset type created to hold abiotic data, see details in Section III).  
+library(here)
 
-For the contemporary (1) and past (2) vegetation `Datasets`, the `Samples` hold information about `Taxa` as derived directly from the primary data sources. Trait information is organised in separate `Datasets` (as they are associated with unique information about their spatio-temporal location, references, etc) but linked to the same `Taxa` codes as those taxa in the vegetation `Datasets` (if present). Moreover, each `Taxa`, disregarding of the source, is associated with classification information (i.e. species, genus and family name; see Section III). 
+here::i_am("website/database_structure/_01_Description_of_VegVault.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Visualisation/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+
+```
+
+There are currently several tables, which are not directly linked to the data. First is the `Authors` table, which describes the authors and maintainers of VegVault, including the contact information. The next table is `version_control` table, which stores the information about database versions with a description of individual changes at a specific point in time. Finally, there are `sqlite_stat1` and `sqlite_stat4` tables, which hold descriptive information about database indexes, used for improving the performance of data extractions.
+
+```{r}
+#| label: Authors variables scheme structure
+#| tbl-cap: "Column names and types for table Authors."
+data_comments_authors <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "author_id", "ID of an Author (unique)",
+    "author_fullname", "Full name of an Author",
+    "author_email", "Contact email of an Author",
+    "author_orcid", "ORCID ID of an Author"
+  )
+
+get_db_table_data_types(
+  con,
+  "Authors"
+) %>%
+  dplyr::full_join(
+    data_comments_authors,
+    by = "column_name"
+  ) %>%
+  tinytable::tt()
+```
+
+```{r}
+#| label: Version Control variables scheme structure
+#| tbl-cap: "Column names and types for table version_control."
+data_comments_version_control <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "id", "ID a database version (unique)",
+    "version", "Version number",
+    "update_date", "Date of the creation of that version",
+    "changelog", "Text description of main changes in the database"
+  )
+
+get_db_table_data_types(
+  con,
+  "version_control"
+) %>%
+  dplyr::full_join(
+    data_comments_version_control,
+    by = "column_name"
+  ) %>%
+  tinytable::tt()
+```
