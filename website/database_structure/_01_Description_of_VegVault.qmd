@@ -1,15 +1,4 @@
----
-format:
-  html:
-    fig-width: 10
-  gfm:
-    fig-width: 10
-editor: 
-  markdown: 
-    wrap: sentence
----
-
-# Internal Dataset Structure
+# Internal Database Structure
 
 Currently, the **VegVault** consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal structure of VegVault may not be of relevance to a user, as the {vaultkeepr} R package processes all the data to output only the most relevant information in a "ready-to-analyse" format (see Usage Notes section). We will describe all tables and how they link with each other in the following sections.
 
@@ -73,7 +62,7 @@ get_db_table_data_types(
     data_comments_authors,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -96,5 +85,5 @@ get_db_table_data_types(
     data_comments_version_control,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```

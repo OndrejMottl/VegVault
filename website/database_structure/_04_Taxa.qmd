@@ -1,13 +1,5 @@
----
-format:
-  html:
-    fig-width: 10
-  gfm:
-    fig-width: 10
-editor: 
-  markdown: 
-    wrap: sentence
----
+## Taxa
+
 ```{r}
 #| label: source config
 #| include: FALSE
@@ -45,9 +37,30 @@ invisible(
 )
 ```
 
-## Taxa
+### Taxa Structure Overview (`Taxa`)
 
-The **VegVault** database records taxa names derived directly from the primary data sources. Each individual `Taxon` is linked to corresponding `Samples` through the `SampleTaxa` table, ensuring accurate and systematic association between species and their ecological data.  
+The **VegVault** database records the original taxonomic names derived directly from the primary data sources, and currently, it holds over 100 thousand taxonomic names. 
+
+```{r}
+#| label: Taxa variables scheme structure
+#| tbl-cap: "Column names and types for table Taxa."
+data_comments_taxa <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "taxon_id", "ID of a Taxon (unique)",
+    "taxon_name", "Name of a Taxon from primary source."
+  )
+
+get_db_table_data_types(
+  con,
+  "Taxa"
+) %>%
+  dplyr::full_join(
+    data_comments_taxa,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
 
 ```{r}
 #| label: Taxa scheme structure
@@ -56,7 +69,32 @@ include_graphics_absolute_path(
     "Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
   )
 )
-``` 
+```
+
+### Sample-Taxa (`SampleTaxa`)
+
+Each individual `Taxon` is linked to corresponding `Samples` through the `SampleTaxa` table, ensuring accurate and systematic association between species and their ecological data. Note that the abundance information varies across the primary data sources. Therefore, users have to be careful while processing data from various sources. 
+
+```{r}
+#| label: SampleTaxa variables scheme structure
+#| tbl-cap: "Column names and types for table SampleTaxa."
+data_comments_sample_taxa <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "sample_id", "ID of a Sample",
+    "taxon_id", "ID of a Taxon",
+    "value", "Abundance representation of a Taxon (the units may differ among primary sources, i.e. Dataset Source-Types)"
+  )
+get_db_table_data_types(
+  con,
+  "SampleTaxa"
+  ) %>%
+  dplyr::full_join(
+    data_comments_sample_taxa,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
 
 ```{r}
 #| label: SampleTaxa scheme structure
@@ -164,9 +202,33 @@ fig_n_taxa_per_source_type <-
 save_figure_to_render(fig_n_taxa_per_source_type)
 ```
 
-### Classification
+### Taxon Classification (`TaxonClassification`)
 
-To classify the diverse taxa present in the **VegVault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package was used. This tool automatically aligns taxa names with the [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from the [Global Biodiversity Information Facility](https://www.gbif.org/), providing a standardized classification framework. Specifically, we try to find the best match of the raw names of taxa using [Global Names Resolver](https://resolver.globalnames.org/). Classification information, detailed up to the family level, is stored for each taxon, ensuring consistency and facilitating comparative analyses across different datasets. Currently, the **VegVault** database holds over 110 thousand taxonomic names, of which we were unable to classify only 1312 (1.2%).
+Each taxonomic name undergoes an automated classification (see [Database Content](/website/database_content.qmd)) and results are stored in the `TaxonClassification` table. To classify the diverse taxa present in the **VegVault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package was used. This tool automatically aligns taxa names with the [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from the [Global Biodiversity Information Facility](https://www.gbif.org/), providing a standardized classification framework. Specifically, we try to find the best match of the raw names of taxa using [Global Names Resolver](https://resolver.globalnames.org/). 
+
+```{r}
+#| label: TaxonClassification variables scheme structure
+#| tbl-cap: "Column names and types for table TaxonClassification."
+data_comments_taxon_classification <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "taxon_id", "ID of a Taxon",
+    "taxon_species", "ID of a Taxon, which was assign as species level",
+    "taxon_genus", "ID of a Taxon, which was assign as genus level",
+    "taxon_family", "ID of a Taxon, which was assign as family level"
+  )
+
+get_db_table_data_types(
+  con,
+  "TaxonClassification"
+) %>%
+  dplyr::full_join(
+    data_comments_taxon_classification,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
 
 ```{r}
 #| label: TaxonClassification scheme structure
@@ -176,6 +238,8 @@ include_graphics_absolute_path(
   )
 )
 ```
+
+Taxonomic classification for some `Taxa` might be only available down to the genus or family level, while most of the data is classified to species level. Classification information, detailed up to the family level, is stored for each taxon, ensuring consistency and facilitating comparative analyses across different datasets. Currently, the **VegVault** database holds over 110 thousand taxonomic names, of which we were unable to classify only 1312 (1.2%).
 
 ```{r}
 #| label: taxa classification plot
@@ -280,4 +344,29 @@ fig_n_taxa_per_class <-
   )
 
 save_figure_to_render(fig_n_taxa_per_class)
+```
+
+### Taxon Reference (`TaxonReference`)
+
+Each taxon might get a reference. Currently, this is used to track the origin of the `Taxon` name (i.e. which primary source was used first with this `Taxon`). Note that `Taxa`, generated from taxonomic classification are associated with "taxospace" reference.
+
+```{r}
+#| label: TaxonReference variables scheme structure
+#| tbl-cap: "Column names and types for table TaxonReference."
+data_comments_taxon_reference <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "taxon_id", "ID of a Taxon",
+    "reference_id", "ID of a Reference"
+  )
+
+get_db_table_data_types(
+  con,
+  "TaxonReference"
+) %>%
+  dplyr::full_join(
+    data_comments_taxon_reference,
+    by = "column_name"
+  ) %>%
+  plot_table()
 ```

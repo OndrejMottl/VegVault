@@ -1,3 +1,9 @@
+## Samples
+
+`Samples` represent the main unit of data in **VegVault**, serving as the fundamental building blocks for all analyses. There are currently over 13 million `Samples` in **VegVault** v1.0.0 (of which ~ 1.6 million are gridpoints of abiotic data, see [Database content](/website/database_content.qmd)). 
+
+**VegVault** encompasses both contemporary and paleo data, necessitating accurate age information for each `Sample`. Contemporary `Samples` are assigned an age of `0`, while `Samples` from fossil pollen records are in calibrated years before the present (cal yr BP). The "present" is here specified as 1950 AD. 
+
 ```{r}
 #| label: source config
 #| include: FALSE
@@ -37,9 +43,34 @@ invisible(
 sel_dataset_for_example <- 91256
 ```
 
-## Samples
+### Sample Structure Overview (`Samples`)
 
-`Samples` represent the main unit of data in the **VegVault** database, serving as the fundamental building blocks for all analyses. There are currently over 13 millions of `Samples` in the **VegVault** database (of which ~ 1.6 millions are `gridpoints`, artificially created to hold abiotic data, see below). 
+The table contains one `Sample` per row, with each `Sample` containing: a unique Sample ID (`sample_id`), Sample name (`sample_name`), temporal information about Sample (`age`), sample site (size of the plot if available; `sample_size_id`), and additional information about sample (`sample_details`; this is currently not being used in v1.0.0.). As **VegVault** encompasses both contemporary and paleo-data, accurate age information is required for each Sample. 
+
+```{r}
+#| label: Samples variables scheme structure
+#| tbl-cap: "Column names and types for table Samples."
+data_comments_samples <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "sample_id", "ID of a Sample (unique)",
+    "sample_name", "Name of a Sample",
+    "sample_details", "Specific description of a Sample. Currently not being used.",
+    "age", "Age of sample. Mainly used for fossil_pollen_archives, where note the age of a Sample in calibrated years before present. Note that all contemporary Samples, have age of 0.",
+    "sample_size_id", "ID of a Sample Size"
+  )
+
+get_db_table_data_types(
+  con,
+  "Samples"
+) %>%
+  dplyr::full_join(
+    data_comments_samples,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
 
 ```{r}
 #| label: Samples scheme structure
@@ -50,9 +81,29 @@ include_graphics_absolute_path(
 )
 ```
 
-### Dataset-Sample
+### Dataset-Sample (`DatasetSample`)
 
-Each sample is linked to a specific `Dataset` via the `Dataset-Sample` table, which ensures that every sample is correctly associated with its corresponding `Dataset Type`, whether it is current `vegetation_plots`, `fossil_pollen_archive`, `traits`, or `gridpoint`. 
+Each Sample is linked to a specific `Dataset` via the `DatasetSample` table, which ensures that every Sample is correctly associated with its corresponding `Dataset Type` (whether it is `vegetation_plot`, `fossil_pollen_archive`, `traits`, or `gridpoint`) and other `Dataset` properties (e.g., geographic location). One `Dataset` contains several `Samples` only in a case where they differ in time (`age`). 
+
+```{r}
+#| label: DatasetSample variables scheme structure
+#| tbl-cap: "Column names and types for table DatasetSample."
+data_comments_dataset_sample <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "dataset_id", "ID of a Dataset",
+    "sample_id", "ID of a Sample"
+  )
+get_db_table_data_types(
+  con,
+  "DatasetSample"
+) %>%
+  dplyr::full_join(
+    data_comments_dataset_sample,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
 
 ```{r}
 #| label: DatasetSample scheme structure
@@ -95,13 +146,33 @@ fig_n_samples_per_dataset_type <-
   ggplot2::scale_fill_manual(
     values = palette_dataset_type
   )
-
-save_figure_to_render(fig_n_samples_per_dataset_type)
 ```
 
-### Sample-size
+### Sample Size (`SampleSizeID`)
 
-The size of vegetation plots can vary, impacting the analyses and interpretations of the data. To account for this variability, information about the plot size is recorded separately for each `Sample`. This detail is crucial for ecological studies where plot size can influence species diversity and abundance metrics. 
+The size of vegetation plots can vary substantially. This detail is crucial for ecological studies where plot size can influence species diversity and abundance metrics, thus impacting follow-up analyses and interpretations. To account for this variability, information about the plot size is recorded separately for each contemporary Sample. 
+
+```{r}
+#| label: SampleSizeID variables scheme structure
+#| tbl-cap: "Column names and types for table SampleSizeID."
+data_comments_sample_size <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "sample_size_id", "ID of a size category (unique)",
+    "sample_size", "Numeric expression of size",
+    "description", "Mostly description of units in which the values are stored"
+  )
+
+get_db_table_data_types(
+  con,
+  "SampleSizeID"
+) %>%
+  dplyr::full_join(
+    data_comments_sample_size,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
 
 ```{r}
 #| label: SampleSizeID scheme structure
@@ -176,9 +247,33 @@ if (
 }
 ```
 
-### Sample age
+### Sample age uncertainty (`SampleUncertainty`)
 
-**VegVault** encompasses both current and paleo data, necessitating accurate age information for each sample. Modern samples are assigned an age of 0, while paleo samples uses calibrated years before present (cal yr BP). The "present" is here specified as 1950 AD. In addition, each `Sample` from `fossil_pollen_archive` `Dataset` is also associated with an uncertainty matrix. This matrix provides a range of potential ages derived from age-depth modelling, reflecting the inherent uncertainty in dating paleoecological records. For instance, we include detailed age uncertainty information for a fossil pollen archive with an example `Dataset`. 
+Each Sample from the `fossil_pollen_archive` `Dataset` is also associated with an uncertainty matrix generated during the re-estimation of ages using FOSSILPOL workflow. This matrix provides a range of potential ages derived from age-depth modelling, reflecting the inherent uncertainty in dating paleoecological records. 
+
+
+```{r}
+#| label: SampleUncertainty variables scheme structure
+#| tbl-cap: "Column names and types for table SampleUncertainty."
+data_comments_sample_uncertainty <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "sample_id", "ID of a Sample",
+    "iteration", "ID of a iteration from age depth model. Currently, the is 1000 iteration per each Sample.",
+    "age", "Potential age of a Sample"
+  )
+
+get_db_table_data_types(
+  con,
+  "SampleUncertainty"
+) %>%
+  dplyr::full_join(
+    data_comments_sample_uncertainty,
+    by = "column_name"
+  ) %>%
+  plot_table()
+
+```
 
 ```{r}
 #| label: SampleUncertainty scheme structure
@@ -192,7 +287,7 @@ include_graphics_absolute_path(
 We can show this on the previously selected fossil pollen archive with dataset ID: `r as.character(sel_dataset_for_example)`.
 
 ```{r}
-#| label: Sample poential age - plot
+#| label: Sample potential age - plot
 
 dataset_age_example <-
   dplyr::tbl(con, "Datasets") %>%
@@ -259,12 +354,31 @@ fig_sample_age <-
   )
 
 save_figure_to_render(fig_sample_age)
-
 ```
 
-### Sample reference
+### Sample Reference
 
-Each `Sample` in **VegVault** can have specific references in addition to the `Dataset`-level references. These individual `Sample` references provide detailed provenance and citation information, ensuring that users can trace the origin and validation of each data point. This level of referencing enhances the transparency and reliability of the data, especially when the database continues to be updated in the future. 
+Each `Sample` in **VegVault** can have specific `References` in addition to those at the `Dataset`-level. These individual `Sample References` provide detailed provenance and citation information, ensuring that users can trace the origin and validation of each data point. Note that a single `Sample` can have several References. This level of referencing enhances the transparency and reliability of the data, especially when the dataset continues to be updated in the future. 
+
+```{r}
+#| label: SampleReference variables scheme structure
+#| tbl-cap: "Column names and types for table SampleReference."
+data_comments_sample_reference <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "sample_id", "ID of a Sample",
+    "reference_id", "ID of a Reference"
+  )
+get_db_table_data_types(
+  con,
+  "SampleReference"
+) %>%
+  dplyr::full_join(
+    data_comments_sample_reference,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
 
 ```{r}
 #| label: SampleReference scheme structure

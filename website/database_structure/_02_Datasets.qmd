@@ -1,14 +1,3 @@
----
-format:
-  html:
-    fig-width: 10
-  gfm:
-    fig-width: 10
-editor: 
-  markdown: 
-    wrap: sentence
----
-
 ## Datasets
 
 ```{r}
@@ -78,7 +67,7 @@ get_db_table_data_types(
     data_comments_datasets,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -117,7 +106,7 @@ get_db_table_data_types(
     data_comments_dataset_type,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -163,7 +152,7 @@ save_figure_to_render(fig_n_datasetes_per_type)
 - **BIEN** - [Botanical Information and Ecology Network](https://bien.nceas.ucsb.edu/bien/)
 - **sPlotOpen** - [The open-access version of sPlot](https://idiv-biodiversity.de/en/splot/splotopen.html)
 - **TRY** - [TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php)
-- **FOSSILPOL** - [The workflow that aims to process and standardise global palaeoecological pollen data](https://hope-uib-bio.github.io/FOSSILPOL-website/). Note that we specifically state FOSSILPOL and not Neotoma, as FOSSILPOL not only provides the data acquisition but also alters it (e.g., creating new age-depth models). It also addresses major challenges in paleoecological data integration, such as age uncertainty, by incorporating probabilistic age-depth models and their associated uncertainty matrices. This enables the propagation of temporal uncertainty in subsequent analyses, a critical advancement for robust macroecological studies, previously flagged as a major issue with paleo-data.
+- **Neotoma-FOSSILPOL** - [The workflow that aims to process and standardise global palaeoecological pollen data](https://hope-uib-bio.github.io/FOSSILPOL-website/). Note that we specifically state Neotoma-FOSSILPOL and not just Neotoma, as FOSSILPOL not only provides the data acquisition but also alters it (e.g., creating new age-depth models). It also addresses major challenges in paleoecological data integration, such as age uncertainty, by incorporating probabilistic age-depth models and their associated uncertainty matrices. This enables the propagation of temporal uncertainty in subsequent analyses, a critical advancement for robust macroecological studies, previously flagged as a major issue with paleo-data.
 - **gridpoints** - artificially created `Datasets` to hold abiotic data 
 
 ```{r}
@@ -185,7 +174,7 @@ get_db_table_data_types(
     data_comments_dataset_source_type,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -206,7 +195,7 @@ get_db_table_data_types(
     data_comments_dataset_sources_type_reference,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -330,7 +319,7 @@ get_db_table_data_types(
     data_comments_dataset_sources,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -351,7 +340,7 @@ get_db_table_data_types(
     data_comments_dataset_sources_reference,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -457,7 +446,7 @@ save_figure_to_render(fig_n_datasetes_per_source)
 
 #### Sampling Methods (`SamplingMethodID`)
 
-Sampling methods vary significantly across the different types of `Datasets` integrated into **VegVault**, reflecting the diverse nature of the data collected. Such information is crucial for understanding the context and limitations of each Dataset Type. For contemporary vegetation plots, sampling involves standardised plot inventories and surveys that capture detailed vegetation characteristics across various regions. Fossil pollen data are collected from sediment records from numerous different depositional environments representing past vegetation and climate dynamics. Therefore, information on sampling methods is only available for both `vegetation_plot` and `fossil_pollen_archive` `Datasets`, providing metadata that ensures accurate and contextually relevant analyses.
+Sampling methods vary significantly across the different types of `Datasets` integrated into **VegVault**, reflecting the diverse nature of the data collected. Such information is crucial for understanding the context and limitations of each `Dataset Type`. For contemporary vegetation plots, sampling involves standardised plot inventories and surveys that capture detailed vegetation characteristics across various regions. Fossil pollen data are collected from sediment records from numerous different depositional environments representing past vegetation and climate dynamics. Therefore, information on sampling methods is only available for both `vegetation_plot` and `fossil_pollen_archive` `Datasets`, providing metadata that ensures accurate and contextually relevant analyses.
 
 ```{r}
 #| label: Dataset Sampling method variables scheme structure
@@ -477,7 +466,7 @@ get_db_table_data_types(
     data_comments_sampling_method,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -498,7 +487,7 @@ get_db_table_data_types(
     data_comments_sampling_method_reference,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -564,7 +553,7 @@ get_db_table_data_types(
     data_comments_dataset_references,
     by = "column_name"
   ) %>%
-  tinytable::tt()
+  plot_table()
 ```
 
 ```{r}
@@ -594,7 +583,11 @@ dataset_ref_example <-
   dplyr::rename(
     source_type_ref = reference_detail
   ) %>%
-  dplyr::select(-c(reference_id, mandatory)) %>%
+  dplyr::select(
+    !dplyr::any_of(
+      c("reference_id", "mandatory")
+    )
+  ) %>%
   dplyr::left_join(
     dplyr::tbl(con, "SamplingMethodReference"),
     by = "sampling_method_id"
@@ -606,7 +599,11 @@ dataset_ref_example <-
   dplyr::rename(
     sampling_method_ref = reference_detail
   ) %>%
-  dplyr::select(-c(reference_id, mandatory)) %>%
+  dplyr::select(
+    !dplyr::any_of(
+      c("reference_id", "mandatory")
+    )
+  ) %>%
   dplyr::left_join(
     dplyr::tbl(con, "DatasetSourcesReference"),
     by = "data_source_id"
@@ -618,7 +615,11 @@ dataset_ref_example <-
   dplyr::rename(
     source_ref = reference_detail
   ) %>%
-  dplyr::select(-c(reference_id, mandatory)) %>%
+  dplyr::select(
+    !dplyr::any_of(
+      c("reference_id", "mandatory")
+    )
+  ) %>%
   dplyr::collect()
 ```
 
