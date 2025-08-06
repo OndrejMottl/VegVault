@@ -9,8 +9,11 @@ sidebar: true
 
 ## VegVault database
 
-- [Access Database v1.0.0 ](https://doi.org/10.48700/datst.m7ky4-4de51){.btn} 
+- [Database v1.0.0 ](https://doi.org/10.48700/datst.t21cz-2nq07){.btn} 
   - Please check [Guidelines for data reuse and update](/website/database_access.qmd#guidelines-for-data-reuse-and-update) 
+- [Database v1.0.0 as flat-files](https://doi.org/10.48700/datst.thktf-5rr35){.btn} 
+  - Note this is not prefered way of using the data, see details [Database Access](/website/database_access.qmd)
+
 
 ## Publications
 
@@ -33,6 +36,11 @@ sidebar: true
 
 ## Presentations
 
+### VegVault - IAVS, Colorado, USA, 2 August 2025
+ - [slides](https://ondrejmottl.github.io/VegVault-Presentation-20250802/)
+ - [code for slides](https://github.com/OndrejMottl/VegVault-Presentation-20250802)
+
 ### VegVault Flash Presentation - Geobotany meeting, Sudějov 23 March 2025
  - [slides](https://ondrejmottl.github.io/VegVault-FlashPresentation-20250323/)
  - [code for slides](https://github.com/OndrejMottl/VegVault-FlashPresentation-20250323)
+
