@@ -7,23 +7,32 @@ sidebar: true
 
 ## Guidelines for data reuse and update
 
-Due to the version system of **VegVault**, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest **VegVault** version with corresponding DOI. 
+Due to the version system of **VegVault**, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest **VegVault** version with the corresponding DOI.
 
-[Access Database v1.0.0 ](https://doi.org/10.48700/datst.m7ky4-4de51){.btn} 
+[Access Database v1.0.0](https://doi.org/10.48700/datst.t21cz-2nq071){.btn} 
 
-As the primary data sources are held under various licences, the **VegVault** has an `CC BY-NC-ND` 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e. BIEN data is under `CC BY-NC-ND`). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of **VegVault**, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function `vaulkeeper::get_references()` within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.
+As the primary data sources are held under various licences, **VegVault** has a `CC BY` 4.0 Licence (https://creativecommons.org/licenses/by/4.0/), allowing the copy and redistribute the material as long as correct attribution is given. We recommend users to carefully review the restrictions associated with data usage. In addition, when citing the usage of **VegVault**, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function `vaulkeeper::get_references()` within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.
 
 [Access and cite the Database preprint](/website/materials.qmd){.btn}
 
 ## Limitations and considerations for future research
 
-Potential limitation lies in the completeness, accuracy, and reliability of the primary data sources. For example, it has been suggested that improper data practices erode the quality of global ecological databases such as TRY38, which have been used in **VegVault**. We do not attempt to solve these problems as **VegVault**'s main purpose is the re-usability of the data. Note that for some cases we are not permitted to make modifications based on the original data (e.g. BIEN data has `CC BY-NC-ND` licence).
+Potential limitation lies in the completeness, accuracy, and reliability of the primary data sources. For example, it has been suggested that improper data practices erode the quality of global ecological databases such as [TRY](https://www.try-db.org/), which have been used in **VegVault**. We do not attempt to solve these problems as **VegVault**'s main purpose is the re-usability of the data.
+
+
+::: {.callout-warning}
+Next, as **VegVault** database contains more than 100GB of data, we advise the users to make sure their machine has enough space on their drives. Therefore, it might be difficult to download on certain machines (e.g., a laptop).
+:::
+
+Finally, to increase the accessibility of the data, we have also deposited the flat version of the database (i.e. individual tables saved as CSV files). However, note that many of those files have size larger than 1GB and some machines do not have enough memory (RAM) to fully load them.
+
+[Access VegVault v1.0.0 as flat-files](https://doi.org/10.48700/datst.thktf-5rr35){.btn} 
 
 ## {vaultkeeper}: R-package for accessing the **VegVault** database    
 
 :::: {.columns}
 ::: {.column width="75%"}
-In order to make usage of the **VegVault** database as easy as possible, we have developed an R-package called [{vaultkeepr}](https://bit.ly/vaultkeepr), providing a suite of functions to effectively interact with the database directly from the [R programming language](https://en.wikipedia.org/wiki/R_(programming_language)). Functions include opening the database, extracting datasets, filtering samples, and accessing specific taxa and traits. This package is a well-tested interface (>95% code coverage).
+In order to make usage of **VegVault** as easy as possible (not everyone is familiar with SQLite databases), we have developed an R-package called [{vaultkeepr}](https://bit.ly/vaultkeepr), providing a suite of functions to effectively interact with the database directly from the R programming environment. Functions include accessing the database, extracting datasets, filtering samples, and accessing specific taxa and traits. Therefore, we suggest all users to use the SQLite database accompanied by {vaultkeepr} R package to retrieve only project-specific data without the need to load data into memory. This package is a well-tested interface (>95% code coverage).
 :::
 
 ::: {.column width="25%"}
@@ -56,4 +65,4 @@ and then all functions will be made available by attaching as:
 library(vaultkeepr)
 ```
 
-See [Exampe of usage](/website/database_examples.qmd) for more details.
+See [Example of usage](/website/database_examples.qmd) for more details.
