@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.4.1",
+    "Version": "4.4.2",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -12,6 +12,13 @@
     "Version": "3.16"
   },
   "Packages": {
+    "BH": {
+      "Package": "BH",
+      "Version": "1.87.0-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "468d9a03ba57f22ebde50060fd13ba9f"
+    },
     "BiocManager": {
       "Package": "BiocManager",
       "Version": "1.30.22",
@@ -809,7 +816,7 @@
     },
     "data.table": {
       "Package": "data.table",
-      "Version": "1.15.0",
+      "Version": "1.17.8",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -849,7 +856,7 @@
     },
     "digest": {
       "Package": "digest",
-      "Version": "0.6.34",
+      "Version": "0.6.37",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1038,6 +1045,17 @@
         "methods"
       ],
       "Hash": "15e9634c0fcd294799e9b2e929ed1b86"
+    },
+    "geodata": {
+      "Package": "geodata",
+      "Version": "0.6-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "terra"
+      ],
+      "Hash": "4d43570de08ab49ba86bb2ccb6fe117d"
     },
     "geosphere": {
       "Package": "geosphere",
@@ -1458,7 +1476,7 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.8.8",
+      "Version": "2.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1967,16 +1985,17 @@
     },
     "qs": {
       "Package": "qs",
-      "Version": "0.25.7",
+      "Version": "0.27.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
+        "BH",
         "R",
         "RApiSerialize",
         "Rcpp",
         "stringfish"
       ],
-      "Hash": "f5adb766329cc757980d943ce472e831"
+      "Hash": "c9b643f00e514841ba0ded6dc33f788b"
     },
     "quadprog": {
       "Package": "quadprog",
@@ -2005,6 +2024,26 @@
         "survival"
       ],
       "Hash": "1bbc97f7d637ab3917c514a69047b2c1"
+    },
+    "quarto": {
+      "Package": "quarto",
+      "Version": "1.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cli",
+        "jsonlite",
+        "later",
+        "processx",
+        "rlang",
+        "rmarkdown",
+        "rstudioapi",
+        "tools",
+        "utils",
+        "yaml"
+      ],
+      "Hash": "af456d7a181750812bd8b2bfedb3ea4e"
     },
     "rappdirs": {
       "Package": "rappdirs",
@@ -2386,7 +2425,7 @@
     },
     "sp": {
       "Package": "sp",
-      "Version": "2.1-2",
+      "Version": "2.2-0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2415,7 +2454,7 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.8.3",
+      "Version": "1.8.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2767,14 +2806,14 @@
     },
     "vaultkeepr": {
       "Package": "vaultkeepr",
-      "Version": "0.0.5",
+      "Version": "0.0.6",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "vaultkeepr",
       "RemoteUsername": "OndrejMottl",
       "RemoteRef": "HEAD",
-      "RemoteSha": "99f4effe8a294ec742a206bab4e0fce4695ad511",
+      "RemoteSha": "5438bc21bfa04a7182a901e6bdfa7495722f08b1",
       "Requirements": [
         "DBI",
         "RSQLite",
@@ -2785,7 +2824,7 @@
         "rlang",
         "tibble"
       ],
-      "Hash": "b7248f214e10f745d6f1d2205f92bc35"
+      "Hash": "1550024b5e30d8a2583c6824bc2427d8"
     },
     "vctrs": {
       "Package": "vctrs",
@@ -2935,7 +2974,7 @@
     },
     "wk": {
       "Package": "wk",
-      "Version": "0.9.1",
+      "Version": "0.9.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
