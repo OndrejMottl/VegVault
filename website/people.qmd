@@ -5,40 +5,74 @@ date-modified: last-modified
 sidebar: true
 ---
 
-# Team
+# VegVault Team
 
-## Main developers
+Meet the team behind VegVault - researchers dedicated to advancing vegetation ecology through integrated data science.
 
-### Ondřej Mottl <img src="https://ondrejmottl.github.io/profile_mottl_zoom.jpg" align="right" width="120"/>
+## Main Developer
 
-* Assistant Professor for Plant Ecology
-* 🏦Department of Botany, Faculty of Science, Charles University, Prague, Czech Republic
-* 📬email: ondrej.mottl(at)gmail.com
+### Ondřej Mottl <img src="/Outputs/Figures/website/VS1_1572_zoom.jpg" align="right" width="120"/>
+
+**Assistant Professor for Plant Ecology**
+
+* 🏦 Department of Botany, Faculty of Science, Charles University, Prague, Czech Republic
+* 📬 Email: ondrej.mottl(at)gmail.com
 * [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9796--5081-brightgreen.svg)](https://orcid.org/0000-0002-9796-5081)
-* [![personal website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://ondrejmottl.github.io/)
+* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://ondrejmottl.github.io/)
 
-## Core collaborators
+## Core Collaborators
 
 ### Suzette Flantua <img src="https://www.uib.no/sites/w3.uib.no/files/styles/user_thumbnail/public/pictures/picture-388168-1536217906.jpg?itok=yqGLK7Kg" align="right" width="120" />
 
-* Research group leader
-* 🏦University of Bergen, Norway 
-* 📬email: suzette.flantua(at)uib.no
-* [![orcid](https://img.shields.io/badge/orcid-0000--0001--6526--3037-brightgreen.svg)](https://orcid.org/0000-0001-6526-3037)
-* [![personal website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://mountainsinmotion.w.uib.no/)
+**Research Group Leader**
+
+* 🏦 University of Bergen, Norway 
+* 📬 Email: suzette.flantua(at)uib.no
+* [![ORCID](https://img.shields.io/badge/orcid-0000--0001--6526--3037-brightgreen.svg)](https://orcid.org/0000-0001-6526-3037)
+* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://mountainsinmotion.w.uib.no/)
 
 ### Franka Gaiser <img src="https://www.spowi5.uni-bayreuth.de/pool/bilder/team/Gaiser_hp_2022.jpg" align="right" width="120" />
 
-* PhD Student in Quantitative Ecology
-* 🏦University of Bayreuth, Bayreuth, Germany
-* 📬email: franka.gaiser(at)uni-bayreuth.de
+**PhD Student in Quantitative Ecology**
+
+* 🏦 University of Bayreuth, Bayreuth, Germany
+* 📬 Email: franka.gaiser(at)uni-bayreuth.de
 * [![ORCID](https://img.shields.io/badge/orcid-0000--0003--2600--6603-brightgreen.svg)](https://orcid.org/0009-0003-2600-6603)
-* [![personal website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://www.spowi5.uni-bayreuth.de/en/team/Gaiser/index.php)
+* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://www.spowi5.uni-bayreuth.de/en/team/Gaiser/index.php)
 
 ### Irena Šímová <img src="https://www.cts.cuni.cz/img/people/%C5%A0%C3%ADmov%C3%A1.jpg" align="right" width="120" />
 
-* Researcher
-* 🏦Charles University, Czech Republic
-* 📬email: simova(at)cts.cuni.cz
+**Research Group Leader**
+
+* 🏦 Charles University, Czech Republic
+* 📬 Email: simova(at)cts.cuni.cz
 * [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9474--569X-brightgreen.svg)](https://orcid.org/0000-0002-9474-569X)
-* [![personal website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://www.cts.cuni.cz/en/simova.html)
+* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://www.cts.cuni.cz/en/simova.html)
+
+## Project Affiliation
+
+VegVault is part of the [BIODYNAMICS](https://bit.ly/BIODYNAMICS) project, which aims to understand biodiversity dynamics under changing climatic conditions.
+
+## Acknowledgments
+
+We thank the global community of data contributors, including:
+
+- Neotoma Paleoecology Database contributors
+- sPlotOpen consortium members
+- BIEN database contributors  
+- TRY Plant Trait Database contributors
+- CHELSA and WoSIS data providers
+
+## Get Involved
+
+Interested in contributing to VegVault? See our [Contributing Guide](/website/contribute.qmd) for information on:
+
+- Data contributions
+- Code contributions
+- Community involvement
+
+## Contact Us
+
+- **General inquiries**: [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions)
+- **Technical issues**: [GitHub Issues](https://github.com/OndrejMottl/VegVault/issues)
+- **Detailed contact information**: [Contact & Support](/website/contact.qmd)

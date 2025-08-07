@@ -5,53 +5,77 @@ date-modified: last-modified
 sidebar: true
 ---
 
-# Contribute
+# Contributing to VegVault
 
-The **VegVault** project is envisioned as database that will undergo updates for further improvement.
+VegVault is envisioned as a continuously evolving database that will undergo regular updates for further improvement. We greatly appreciate community contributions and thank you for considering participating in the VegVault project.
 
-We appreciate the help :sparkling_heart: and thank you just for considering contributing to **VegVault**.
+To maintain the highest quality of data and code, we adhere to strict guidelines. Please read through this document to understand our contribution process.
 
-To make sure that we maintain the highest quality of data and code, we do have to adhere to some strict guidelines though Please read through this document to help you get up and running.
+## Ways to Contribute
 
-If you would like to report a bug, suggest enhancements, or request a new feature, jump to the [Issues section](/website/contact.qmd#it-does-not-work).
+### 🔍 Report Issues or Request Features
+Found a bug or have an idea for enhancement? Visit our [Contact & Support](/website/contact.qmd#report-issues--bugs) page for detailed reporting guidelines.
 
-## Data Contribution
+### 📊 Data Contributions
 
-We are continuously looking for new data to be included in **VegVault**. If know about data that you would like to add to the next version of **VegVault**, please contact us! See [Get in touch](/website/contact.qmd) for more information.
+We continuously seek new datasets to include in future VegVault versions. If you know of valuable data sources that could enhance VegVault, we'd love to hear from you!
 
-## Code Contribution
+**How to contribute data:**
+1. Review our [Database Structure](/website/database_structure.qmd) to understand current data types
+2. Check our [Database Content](/website/database_content.qmd) to see what's already included
+3. Contact us via [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions) with details about your proposed dataset
+4. Our team will evaluate the data for compatibility and integration feasibility
 
-### Git + GitHub
+### 💻 Code Contributions
 
-We use the [Git](https://git-scm.com/) version control system to manage the developments in the repository hosted on [GitHub](https://github.com). If you are new to Git or GitHub, please read through the [GitHub Bootcamp](https://help.github.com/categories/bootcamp/) to get up to speed.
+We welcome contributions to improve VegVault's codebase, documentation, and functionality.
 
-If you are already familiar with Git and GitHub, please read [Submitting Pull Requests](#submitting-pull-requests).
+#### Prerequisites
 
-### Coding Style Guidelines
+**Git & GitHub Proficiency:**
+- Familiarity with [Git version control](https://git-scm.com/)
+- Understanding of [GitHub workflows](https://help.github.com/categories/bootcamp/)
+- Experience with pull requests and collaborative development
 
-While we do have our style in coding and haven't followed any standards available on the web, we do maintain some uniformity. Specifically, we use the following [Code Convetions](https://ondrejmottl.github.io/collaboration/code_convention.html#coding-style).
+**Coding Standards:**
+We maintain consistency through our established [Code Conventions](https://ondrejmottl.github.io/collaboration/code_convention.html#coding-style). Please review and follow these guidelines for all contributions.
 
-### Submitting Pull Requests
+#### Contribution Workflow
 
-All changes to VegVault must be in the form of a **pull request** (also known as a PR). If you are unfamiliar with pull requests, please read [this](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project>).
+**1. Fork and Setup**
+- [Fork the repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#fork-an-example-repository) to your GitHub account
+- Check out the appropriate branch (usually the next version branch if available)
+- Set up your development environment
 
-Here is the recommended process:
+**2. Development Guidelines**
+- **Single purpose**: Each pull request should accomplish one clear, specific task
+- **Descriptive naming**: Use descriptive branch names (e.g., `fix-database-connection`, `add-trait-validation`)
+- **Small commits**: Each commit should represent one logical change with a clear message
+- **Testing**: Ensure your code passes all existing tests before committing
 
-1. Fork the repo so that you can make your changes without affecting the original project until you are ready to merge them. Check out the [Guide to forking](https://docs.github.com/en/get-started/quickstart/fork-a-repo#fork-an-example-repository)
-2. Check out the branch (named the next version; if there is one).
-3. Commit your updates once you are happy with them. See contributing [guide](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#git-commit-messages) for commit messages.
-4. When you are finished with the changes, create a PR
-   * Click the "Ready for review" so that we can review your PR. This template helps reviewers understand your changes as well as the purpose of your pull request.
-   * Don't forget to [link PR to the Issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) if you are solving one.
-   * Enable the checkbox to [allow maintainer edits](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) so that the branch can be updated for a merge. Once you submit your PR, a HOPE team member will review your proposal. We may ask questions or request additional information.
-   * We may ask for changes to be made before a PR can be merged, either using suggested changes or pull request comments. You can apply suggested changes directly through the user interface (UI). You can make any other changes in your fork, and then commit them to your branch. As you update your PR and apply changes, mark each conversation as [resolved](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/commenting-on-a-pull-request#resolving-conversations)
-   * If you run into any merge issues, check out this [git tutorial](https://lab.github.com/githubtraining/managing-merge-conflicts) to help you resolve merge conflicts and other issues.
+**3. Submit Pull Request**
+When ready to contribute your changes:
 
-Before submitting a pull request, please make sure you follow all the guidelines
-below while working on your changes:
+1. **Prepare your PR**: 
+   - Write clear commit messages following our [guidelines](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#git-commit-messages)
+   - Ensure all tests pass
+   - Update documentation if necessary
 
-* Each pull request should try to accomplish one general task.
-* All work should be done on a branch with a descriptive name relating to the
-  general task (eg. `fix_bug_x` or `add_feature_y`). Each commit should accomplish one small sub-task and should be explainable in a sentence or two.
-* Each commit should have a descriptive commit message.
-* You should make sure your code passes all tests before committing.
+2. **Create the PR**:
+   - Open a pull request with a descriptive title and detailed description
+   - [Link PR to any related issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)
+   - [Allow maintainer edits](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) for easier collaboration
+
+3. **Review process**:
+   - Respond to reviewer feedback promptly
+   - Make requested changes and mark conversations as [resolved](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/commenting-on-a-pull-request#resolving-conversations)
+   - Be patient during the review process
+
+**4. Merge Conflicts**
+If you encounter merge conflicts, consult this [git tutorial](https://lab.github.com/githubtraining/managing-merge-conflicts) for resolution strategies.
+
+## Related Resources
+
+- **[Contact & Support](/website/contact.qmd)** - Community communication channels
+- **[Database Access](/website/database_access.qmd)** - Getting started with VegVault
+- **[Database Examples](/website/database_examples.qmd)** - Usage examples and patterns

@@ -8,12 +8,20 @@ sidebar: false
 
 ## Database linking global paleo-, and neo-vegetation data, functional traits, and climate
 
-This is the official website dedicated to the VegVault project. VegVault is a comprehensive SQLite database that integrates global paleo- and neo-ecological vegetation data with functional traits and abiotic information including climate and soil data. By bridging historical and contemporary data across multiple temporal and spatial scales, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.
+This is the official website dedicated to the VegVault project. VegVault is a comprehensive SQLite database that integrates global paleo- and neo-ecological vegetation data with functional traits and abiotic information, including climate and soil data. By bridging historical and contemporary data across multiple temporal and spatial scales, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.
 
-The project integrates data from multiple well-established sources including Neotoma Paleoecology Database, sPlotOpen, BIEN, TRY Plant Trait Database, CHELSA climate data, and WoSIS soil data to provide a comprehensive view of vegetation dynamics across space and time.
+The project integrates data from multiple well-established sources including the [Neotoma Paleoecology Database](https://www.neotomadb.org/), [sPlotOpen](https://idiv-biodiversity.de/en/splot/splotopen.html), [BIEN](https://bien.nceas.ucsb.edu/bien/), [TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php), [CHELSA climate data](https://chelsa-climate.org/), and [WoSIS soil data](https://www.isric.org/explore/wosis) to provide a comprehensive view of vegetation dynamics across space and time.
 
 Creating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.
 
-The project is part of [BIODYNAMICS](https://bit.ly/BIODYNAMICS) project.
+The project is part of the [BIODYNAMICS](https://bit.ly/BIODYNAMICS) project.
 
-[Access Database](/website/database_access.qmd){.btn} [Database pre-print](https://doi.org/10.1101/2025.01.31.635213){.btn}
+## Quick Navigation
+
+- **[Access the Database](/website/database_access.qmd)** - Download VegVault and get started
+- **[Database Structure](/website/database_structure.qmd)** - Understand the data organization
+- **[Usage Examples](/website/database_examples.qmd)** - See practical applications
+- **[Database Content](/website/database_content.qmd)** - Explore what's included
+- **[Get Involved](/website/contribute.qmd)** - Contribute to the project
+
+[Access Database](/website/database_access.qmd){.btn} [Database Pre-print](https://doi.org/10.1101/2025.01.31.635213){.btn}

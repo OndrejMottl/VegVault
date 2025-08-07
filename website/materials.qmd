@@ -7,40 +7,138 @@ sidebar: true
 
 # Materials & Outputs
 
-## VegVault database
 
-- [Database v1.0.0 ](https://doi.org/10.48700/datst.t21cz-2nq07){.btn} 
-  - Please check [Guidelines for data reuse and update](/website/database_access.qmd#guidelines-for-data-reuse-and-update) 
-- [Database v1.0.0 as flat-files](https://doi.org/10.48700/datst.thktf-5rr35){.btn} 
-  - Note this is not prefered way of using the data, see details [Database Access](/website/database_access.qmd)
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
 
+library(here)
+
+here::i_am("website/materials.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+```
+
+This page provides access to all VegVault-related resources including the database, publications, code, and presentation materials.
+
+## VegVault Database
+
+:::: {.columns}
+
+::: {.column width="70%"}
+
+### Primary Database Access
+
+**VegVault v1.0.0 (SQLite Database - Recommended)**
+[Download Database v1.0.0](https://doi.org/10.48700/datst.t21cz-2nq071){.btn}
+
+Please review our [Database Access Guidelines](/website/database_access.qmd#guidelines-for-data-reuse-and-citation) for proper usage and citation requirements.
+
+:::
+
+::: {.column width="30%"}
+
+```{r}
+#| label: vegvault-logo
+#| echo: false
+knitr::include_graphics(
+  here::here(
+    "Outputs/Figures/website/VegVault_logo.png"
+  )
+)
+```
+
+:::
+
+::::
+
+### Alternative Format
+
+**VegVault v1.0.0 (Flat Files - Not Recommended)**
+[Download Database v1.0.0 as Flat Files](https://doi.org/10.48700/datst.thktf-5rr35){.btn}
+
+::: {.callout-warning}
+**Note**: Flat files are provided for accessibility but are not the preferred method. Many files exceed 1GB and may be difficult to load. We strongly recommend using the SQLite database with [{vaultkeepr}](https://bit.ly/vaultkeepr) for optimal performance.
+:::
 
 ## Publications
 
 ### Pre-print
-  - "*VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers*": [![static-badge](https://img.shields.io/badge/DOI-10.1101/2025.01.31.635213-blue)](https://doi.org/10.1101/2025.01.31.635213).
 
-## {vaultkeepr} R-package
+**"VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers"** [![](https://img.shields.io/badge/DOI-10.1101/2025.01.31.635213-blue)](https://doi.org/10.1101/2025.01.31.635213)
 
- - [{vaultkeepr} R-package](https://bit.ly/vaultkeepr)
+## Software & Tools
 
-## VegVault logo
+### {vaultkeepr} R Package
 
- - [VegVault logo](https://github.com/OndrejMottl/VegVault/tree/main/Outputs/Figures/website/VegVault_logo.png)
+:::: {.columns}
 
-## Posters
+::: {.column width="75%"}
 
-### VegVault poster - CSPE conference September 2024
-- [Low Quality](/Outputs/Figures/poster2024/mottl_poster_compression_9.png)
-- [High Quality](/Outputs/Figures/poster2024/mottl_poster.jpeg)
+**Official R package for VegVault database interaction**
+[{vaultkeepr} Documentation & Download](https://bit.ly/vaultkeepr){.btn}
+
+The package provides:
+
+- Easy database connection and querying
+- Data filtering and extraction functions
+- Automatic citation generation
+- [![Codecov-test-coverage](https://codecov.io/gh/OndrejMottl/vaultkeepr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/OndrejMottl/vaultkeepr?branch=main) code coverage with comprehensive testing
+:::
+
+::: {.column width="25%"}
+```{r}
+#| label: vaultkeepr-logo
+#| echo: false
+knitr::include_graphics(
+  "https://ondrejmottl.github.io/vaultkeepr/reference/figures/vaultkeeper_logo.png"
+)
+```
+:::
+
+::::
+
+## Visual Resources
+
+### VegVault Logo
+
+[Download VegVault Logo](https://github.com/OndrejMottl/VegVault/tree/main/Outputs/Figures/website/VegVault_logo.png){.btn}
+
+Available for use in presentations, publications, and educational materials with proper attribution.
+
+### Conference Posters
+
+**VegVault Poster - CSPE Conference (September 2024)**
+
+- [Low Resolution Version](/Outputs/Figures/poster2024/mottl_poster_compression_9.png)  
+- [High Resolution Version](/Outputs/Figures/poster2024/mottl_poster.jpeg)
 
 ## Presentations
 
-### VegVault - IAVS, Colorado, USA, 2 August 2025
- - [slides](https://ondrejmottl.github.io/VegVault-Presentation-20250802/)
- - [code for slides](https://github.com/OndrejMottl/VegVault-Presentation-20250802)
+### Recent Presentations
 
-### VegVault Flash Presentation - Geobotany meeting, Sudějov 23 March 2025
- - [slides](https://ondrejmottl.github.io/VegVault-FlashPresentation-20250323/)
- - [code for slides](https://github.com/OndrejMottl/VegVault-FlashPresentation-20250323)
+**VegVault - IAVS Conference, Colorado, USA (August 2, 2025)**
+
+- [View Slides](https://ondrejmottl.github.io/VegVault-Presentation-20250802/)
+- [Source Code](https://github.com/OndrejMottl/VegVault-Presentation-20250802)
+
+**VegVault Flash Presentation - Geobotany Meeting, Sudějov (March 23, 2025)**
+
+- [View Slides](https://ondrejmottl.github.io/VegVault-FlashPresentation-20250323/)
+- [Source Code](https://github.com/OndrejMottl/VegVault-FlashPresentation-20250323)
+
+## Additional Resources
+
+- **[Database Access](/website/database_access.qmd)** - Download and setup instructions
+- **[Database Examples](/website/database_examples.qmd)** - Practical usage examples
+- **[Database Structure](/website/database_structure.qmd)** - Technical documentation
+- **[Contact & Support](/website/contact.qmd)** - Get help and report issues
 
