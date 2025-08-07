@@ -1,6 +1,12 @@
-# Internal Database Structure
+# VegVault Database Structure
 
-Currently, the **VegVault** consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal structure of VegVault may not be of relevance to a user, as the {vaultkeepr} R package processes all the data to output only the most relevant information in a "ready-to-analyse" format (see Usage Notes section). We will describe all tables and how they link with each other in the following sections.
+Currently, VegVault consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal database structure may not be directly relevant to most users, as the [{vaultkeepr}](https://bit.ly/vaultkeepr) R package processes all data to output only the most relevant information in a "ready-to-analyze" format.
+
+::: {.callout-note}
+**For Most Users**: If you're primarily interested in using VegVault for research, you may want to start with our [Usage Examples](/website/database_examples.qmd) rather than diving into the technical database structure.
+:::
+
+This section provides comprehensive documentation of all tables and their relationships for users who need detailed technical information about the database architecture.
 
 ```{r}
 #| label: source config
@@ -40,7 +46,13 @@ invisible(
 
 ```
 
-There are currently several tables, which are not directly linked to the data. First is the `Authors` table, which describes the authors and maintainers of VegVault, including the contact information. The next table is `version_control` table, which stores the information about database versions with a description of individual changes at a specific point in time. Finally, there are `sqlite_stat1` and `sqlite_stat4` tables, which hold descriptive information about database indexes, used for improving the performance of data extractions.
+## Metadata Tables
+
+Several tables contain metadata and administrative information that are not directly linked to the scientific data:
+
+- **`Authors`**: Information about VegVault authors and maintainers, including contact details
+- **`version_control`**: Database version information with descriptions of changes over time  
+- **`sqlite_stat1` & `sqlite_stat4`**: SQLite system tables containing database index statistics for query optimization
 
 ```{r}
 #| label: Authors variables scheme structure
@@ -71,7 +83,7 @@ get_db_table_data_types(
 data_comments_version_control <-
   tibble::tribble(
     ~column_name, ~description,
-    "id", "ID a database version (unique)",
+    "id", "ID of a database version (unique)",
     "version", "Version number",
     "update_date", "Date of the creation of that version",
     "changelog", "Text description of main changes in the database"
