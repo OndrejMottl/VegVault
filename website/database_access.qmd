@@ -117,5 +117,6 @@ VegVault's quality depends on the completeness, accuracy, and reliability of pri
 
 - **[Database Structure](/website/database_structure.qmd)** - Detailed technical documentation
 - **[Database Content](/website/database_content.qmd)** - Overview of included data
+- **[Database Assembly](/website/database_assembly.qmd)** - Data processing and integration procedures
 - **[Database Examples](/website/database_examples.qmd)** - Practical usage scenarios
 - **[Contact & Support](/website/contact.qmd)** - Get help and report issues

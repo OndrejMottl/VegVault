@@ -204,7 +204,7 @@ save_figure_to_render(fig_n_taxa_per_source_type)
 
 ### Taxon Classification (`TaxonClassification`)
 
-Each taxonomic name undergoes an automated classification (see [Database Content](/website/database_content.qmd)) and results are stored in the `TaxonClassification` table. To classify the diverse taxa present in the **VegVault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package was used. This tool automatically aligns taxa names with the [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from the [Global Biodiversity Information Facility](https://www.gbif.org/), providing a standardized classification framework. Specifically, we try to find the best match of the raw names of taxa using [Global Names Resolver](https://resolver.globalnames.org/). 
+Each taxonomic name undergoes an automated classification (see [Database Assembly](/website/database_assembly.qmd)) and results are stored in the `TaxonClassification` table. To classify the diverse taxa present in the **VegVault** database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package was used. This tool automatically aligns taxa names with the [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from the [Global Biodiversity Information Facility](https://www.gbif.org/), providing a standardized classification framework. Specifically, we try to find the best match of the raw names of taxa using [Global Names Resolver](https://resolver.globalnames.org/). 
 
 ```{r}
 #| label: TaxonClassification variables scheme structure

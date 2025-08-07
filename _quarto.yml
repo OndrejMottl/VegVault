@@ -24,10 +24,12 @@ website:
         menu:
           - text: VegVault Content
             href: website/database_content.qmd
-          - text: VegVault Access
-            href: website/database_access.qmd
           - text: VegVault Structure
             href: website/database_structure.qmd
+          - text: VegVault Assembly Process
+            href: website/database_assembly.qmd
+          - text: VegVault Access
+            href: website/database_access.qmd
           - text: Examples of usage
             href: website/database_examples.qmd
       - text: Outputs and Materials 

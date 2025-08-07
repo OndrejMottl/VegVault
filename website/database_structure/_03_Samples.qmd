@@ -1,6 +1,6 @@
 ## Samples
 
-`Samples` represent the main unit of data in **VegVault**, serving as the fundamental building blocks for all analyses. There are currently over 13 million `Samples` in **VegVault** v1.0.0 (of which ~ 1.6 million are gridpoints of abiotic data, see [Database content](/website/database_content.qmd)). 
+`Samples` represent the main unit of data in **VegVault**, serving as the fundamental building blocks for all analyses. There are currently over 13 million `Samples` in **VegVault** v1.0.0 (of which ~ 1.6 million are gridpoints of abiotic data, see [Database Assembly](/website/database_assembly.qmd)). 
 
 **VegVault** encompasses both contemporary and paleo data, necessitating accurate age information for each `Sample`. Contemporary `Samples` are assigned an age of `0`, while `Samples` from fossil pollen records are in calibrated years before the present (cal yr BP). The "present" is here specified as 1950 AD. 
 

@@ -118,6 +118,7 @@ The following examples demonstrate VegVault's capabilities across different rese
 ## Additional Resources
 
 - **[Database Access](/website/database_access.qmd)** - Download and setup instructions
+- **[Database Assembly](/website/database_assembly.qmd)** - Data processing and integration procedures
 - **[Database Structure](/website/database_structure.qmd)** - Technical database documentation  
 - **[Database Content](/website/database_content.qmd)** - Overview of available data
 - **[{vaultkeepr} Documentation](https://bit.ly/vaultkeepr)** - Complete function reference

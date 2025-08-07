@@ -78,4 +78,5 @@ If you encounter merge conflicts, consult this [git tutorial](https://lab.github
 
 - **[Contact & Support](/website/contact.qmd)** - Community communication channels
 - **[Database Access](/website/database_access.qmd)** - Getting started with VegVault
+- **[Database Assembly](/website/database_assembly.qmd)** - Data processing and integration procedures
 - **[Database Examples](/website/database_examples.qmd)** - Usage examples and patterns
