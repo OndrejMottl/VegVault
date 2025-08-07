@@ -1,3 +1,6 @@
+#!/bin/bash  
+set -e  # Exit on any error 
+
 quarto render website/database_structure/_01_Description_of_VegVault.qmd
 quarto render website/database_structure/_02_Datasets.qmd 
 quarto render website/database_structure/_03_Samples.qmd 
