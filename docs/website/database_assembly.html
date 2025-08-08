@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-01-24">
+<meta name="dcterms.date" content="2025-08-07">
 
-<title>database_access – VegVault</title>
+<title>database_assembly – VegVault</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -201,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 24, 2025</p>
+      <p class="date">August 7, 2025</p>
     </div>
   </div>
   
@@ -219,134 +219,214 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="database-access-usage" class="level1">
-<h1>Database Access &amp; Usage</h1>
-<section id="download-vegvault-database" class="level2">
-<h2 class="anchored" data-anchor-id="download-vegvault-database">Download VegVault Database</h2>
-<p>VegVault v1.0.0 is available as a comprehensive SQLite database providing integrated access to global vegetation, trait, and environmental data.</p>
-<p><a href="https://doi.org/10.48700/datst.t21cz-2nq071" class="btn">Download VegVault v1.0.0 (SQLite)</a></p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>System Requirements</strong>: VegVault contains over 100GB of data. Ensure your system has sufficient storage space and memory (RAM) before downloading.</p>
-</div>
-</div>
-<section id="alternative-access-flat-files" class="level3">
-<h3 class="anchored" data-anchor-id="alternative-access-flat-files">Alternative Access: Flat Files</h3>
-<p>For users who prefer working with individual data tables, we provide VegVault as separate CSV files:</p>
-<p><a href="https://doi.org/10.48700/datst.thktf-5rr35" class="btn">Download VegVault v1.0.0 (Flat Files)</a></p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Note</strong>: Flat files are not the recommended approach. Many files exceed 1GB and may be difficult to load into memory. We strongly recommend using the SQLite database with the {vaultkeepr} R package for optimal performance.</p>
-</div>
-</div>
+<section id="data-assembly-process" class="level1">
+<h1>Data Assembly Process</h1>
+<p>VegVault v1.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions.</p>
+<section id="primary-data-sources" class="level3">
+<h3 class="anchored" data-anchor-id="primary-data-sources">Primary Data Sources</h3>
+<ol type="1">
+<li><strong><a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a></strong> - Fossil pollen data (0-20,000 years BP)</li>
+<li><strong><a href="https://idiv-biodiversity.de/en/splot/splotopen.html">sPlotOpen</a></strong> - Contemporary vegetation plots<br>
+</li>
+<li><strong><a href="https://bien.nceas.ucsb.edu/bien/">BIEN</a></strong> - Contemporary vegetation and functional traits</li>
+<li><strong><a href="https://www.try-db.org/TryWeb/Home.php">TRY Plant Trait Database</a></strong> - Comprehensive plant functional traits</li>
+<li><strong><a href="https://chelsa-climate.org/">CHELSA</a></strong> - High-resolution climate data (contemporary and paleoclimate)</li>
+<li><strong><a href="https://www.isric.org/explore/wosis">WoSIS</a></strong> - Global soil property data</li>
+</ol>
 </section>
-</section>
-<section id="accessing-vegvault-with-vaultkeepr" class="level2">
-<h2 class="anchored" data-anchor-id="accessing-vegvault-with-vaultkeepr">Accessing VegVault with {vaultkeepr}</h2>
-<div class="columns">
-<div class="column" style="width:75%;">
-<p>To make VegVault easily accessible, we developed <a href="https://bit.ly/vaultkeepr">{vaultkeepr}</a>, a well-tested R package (&gt;95% code coverage) that provides intuitive functions for interacting with the database. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory.</p>
-</div><div class="column" style="width:25%;">
+<section id="assembly-details-of-vegvault-1.0.0" class="level2">
+<h2 class="anchored" data-anchor-id="assembly-details-of-vegvault-1.0.0">Assembly Details of VegVault 1.0.0</h2>
+<p>VegVault version 1.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions.</p>
+<section id="assembly-process-overview" class="level3">
+<h3 class="anchored" data-anchor-id="assembly-process-overview">Assembly Process Overview</h3>
+<p>The assembly workflow visualization:</p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Outputs/Figures/DB_assembly_visualisation/assembly_viz_04.png"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://ondrejmottl.github.io/vaultkeepr/reference/figures/vaultkeeper_logo.png" class="img-fluid figure-img"></p>
+<p><img src="../Outputs/Figures/DB_assembly_visualisation/assembly_viz_04.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-</div>
-</div>
-<section id="installation" class="level3">
-<h3 class="anchored" data-anchor-id="installation">Installation</h3>
-<p>Install {vaultkeepr} from GitHub:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("remotes")</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"OndrejMottl/vaultkeepr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Load the package:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vaultkeepr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="quick-start" class="level3">
-<h3 class="anchored" data-anchor-id="quick-start">Quick Start</h3>
-<p>See our <a href="../website/database_examples.html">Usage Examples</a> for detailed demonstrations of how to:</p>
-<ul>
-<li>Extract vegetation data for specific regions and time periods</li>
-<li>Access functional trait information</li>
-<li>Link abiotic environmental data</li>
-<li>Perform taxonomic harmonization</li>
-</ul>
-</section>
-</section>
-<section id="guidelines-for-data-reuse-and-citation" class="level2">
-<h2 class="anchored" data-anchor-id="guidelines-for-data-reuse-and-citation">Guidelines for Data Reuse and Citation</h2>
-<section id="licensing" class="level3">
-<h3 class="anchored" data-anchor-id="licensing">Licensing</h3>
-<p>VegVault is released under <strong>CC BY 4.0 License</strong> (<a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a>), allowing you to:</p>
-<ul>
-<li>Copy and redistribute the material</li>
-<li>Adapt and build upon the material</li>
-</ul>
-<p><strong>Requirements</strong>: You must provide appropriate attribution to VegVault and cite all primary data sources.</p>
-</section>
-<section id="citation-requirements" class="level3">
-<h3 class="anchored" data-anchor-id="citation-requirements">Citation Requirements</h3>
-<p>When using VegVault in your research:</p>
+<p><strong>Key Assembly Steps:</strong></p>
 <ol type="1">
-<li><strong>Cite VegVault</strong>: Always cite the latest VegVault version with its corresponding DOI</li>
-<li><strong>Cite primary sources</strong>: Acknowledge all original data providers included in your analysis</li>
-<li><strong>Use our helper function</strong>: The <code>vaultkeepr::get_references()</code> function automatically generates the complete list of recommended citations for your specific data compilation</li>
+<li><strong>Data Acquisition</strong>: Raw data obtained from primary sources</li>
+<li><strong>Data Processing</strong>: Individual processing pipelines for each data type using specialized GitHub repositories</li>
+<li><strong>Taxonomic Harmonization</strong>: Using the {taxospace} R package to align taxa with GBIF backbone</li>
+<li><strong>Trait Categorization</strong>: Grouping traits into functional domains following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a></li>
+<li><strong>Spatial-Temporal Linking</strong>: Creating gridpoints for abiotic data and linking to vegetation samples</li>
+<li><strong>Database Integration</strong>: Consolidation into unified SQLite database structure</li>
 </ol>
 </section>
-<section id="publication-pre-print" class="level3">
-<h3 class="anchored" data-anchor-id="publication-pre-print">Publication &amp; Pre-print</h3>
-<p><strong>Pre-print</strong>: “<em>VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers</em>”</p>
-<p><a href="https://doi.org/10.1101/2025.01.31.635213" class="btn">Access Pre-print</a></p>
-<p>For additional citation materials, visit our <a href="../website/materials.html">Materials &amp; Outputs</a> page.</p>
+<section id="reproducibility-through-version-control" class="level3">
+<h3 class="anchored" data-anchor-id="reproducibility-through-version-control">Reproducibility Through Version Control</h3>
+<p>All VegVault processing repositories use <a href="https://docs.github.com/en/repositories/releasing-projects-on-github/viewing-your-repositorys-releases-and-tags">GitHub Tags</a> to ensure complete reproducibility. The specific tagged versions used for v1.0.0 are documented in both our code and documentation, enabling exact replication of the database assembly process.</p>
 </section>
-</section>
-<section id="important-limitations" class="level2">
-<h2 class="anchored" data-anchor-id="important-limitations">Important Limitations</h2>
-<section id="data-quality-considerations" class="level3">
-<h3 class="anchored" data-anchor-id="data-quality-considerations">Data Quality Considerations</h3>
-<p>VegVault’s quality depends on the completeness, accuracy, and reliability of primary data sources. We acknowledge potential issues in global ecological databases (as noted for <a href="https://www.try-db.org/">TRY</a>) but focus on improving data re-usability rather than correcting source data quality issues.</p>
-</section>
-<section id="technical-limitations" class="level3">
-<h3 class="anchored" data-anchor-id="technical-limitations">Technical Limitations</h3>
+<section id="processing-repositories" class="level3">
+<h3 class="anchored" data-anchor-id="processing-repositories">Processing Repositories</h3>
+<p><strong>Specialized Processing Pipelines:</strong></p>
 <ul>
-<li><strong>Storage requirements</strong>: &gt;100GB database size may be challenging for some systems</li>
-<li><strong>Memory requirements</strong>: Large datasets may require substantial RAM for analysis</li>
-<li><strong>Version dependencies</strong>: Always specify the VegVault version used in your research</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v1.0.0">VegVault-FOSSILPOL v1.0.0</a></strong> - Fossil pollen data processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.1.0">VegVault-Vegetation_data v1.1.0</a></strong> - Contemporary vegetation processing<br>
+</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.1.0">VegVault-Trait_data v1.1.0</a></strong> - Functional trait data processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0">VegVault-abiotic_data v1.1.0</a></strong> - Environmental data processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault v1.0.0</a></strong> - Final database integration</li>
 </ul>
 </section>
 </section>
-<section id="additional-resources" class="level2">
-<h2 class="anchored" data-anchor-id="additional-resources">Additional Resources</h2>
+<section id="data-processing-details" class="level2">
+<h2 class="anchored" data-anchor-id="data-processing-details">Data Processing Details</h2>
+<section id="fossil-pollen-records" class="level3">
+<h3 class="anchored" data-anchor-id="fossil-pollen-records">Fossil Pollen Records</h3>
+<p>Fossil pollen records have been downloaded from the <a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a> using their API on 26th June 2023. All data acquisition and processing have been done using the <a href="https://bit.ly/FOSSILPOL">FOSSILPOL: Workflow for processing and standardizing global paleoecological pollen data</a> (version 1.0.0). This includes the selection of depositional environments, ecological groups, chronology control point types, and a minimum number of chronology control points to construct age-depth models. Individual samples and records have been filtered by age limits, number of pollen grains, maximum age interpolation, and number of valid levels. In addition, the accuracy of fossil pollen data is increased by re-estimating all age-depth models using the Bayesian probabilistic approach and including the information about individual age uncertainty.</p>
+<p><strong>Selection Criteria:</strong></p>
 <ul>
-<li><strong><a href="../website/database_structure.html">Database Structure</a></strong> - Detailed technical documentation</li>
-<li><strong><a href="../website/database_content.html">Database Content</a></strong> - Overview of included data</li>
-<li><strong><a href="../website/database_assembly.html">Database Assembly</a></strong> - Data processing and integration procedures</li>
-<li><strong><a href="../website/database_examples.html">Database Examples</a></strong> - Practical usage scenarios</li>
-<li><strong><a href="../website/contact.html">Contact &amp; Support</a></strong> - Get help and report issues</li>
+<li>Only records with type “pollen” with valid geological coordinates (longitude between -180 and 180, latitude between -90 and 90)</li>
+<li>Depositional environments: lakes, bogs, and mires only (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Depositional_environment/Neotoma/depositional_environment_selection_2023-06-26.csv">selection table</a>)</li>
+<li>Specific ecological groups retained (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Eco_group/eco_group_2023-06-28.csv">selection table</a>)</li>
+<li>Minimum 5 chronology control points (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Chronology_setting/Chron_control_point_types/chron_control_point_types_2023-06-28.csv">valid types</a>)</li>
+</ul>
+<p><strong>Quality Filters:</strong></p>
+<ul>
+<li>Minimum 125 pollen grains per sample (balanced for data retention vs.&nbsp;quality)
+<ul>
+<li>While the preferred minimum was initially set at 150, this threshold resulted in significant data loss</li>
+<li>Threshold adjusted to 125 with condition that less than 75% of samples would have low pollen sum</li>
+</ul></li>
+<li>Age limits: 0-20,000 cal yr BP</li>
+<li>Exclusion of samples older than 3000 years of the last chronology control point</li>
+<li>Minimum 5 samples per record</li>
+<li>Re-calculated age-depth models using Bayesian approach ({Bchron} package)</li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745060">VegVault-FOSSILPOL</a></p>
+</section>
+<section id="contemporary-vegetation-plots" class="level3">
+<h3 class="anchored" data-anchor-id="contemporary-vegetation-plots">Contemporary Vegetation Plots</h3>
+<p>The primary sources of contemporary plot-based vegetation data are BIEN (Botanical Information and Ecology Network) and sPlotOpen (the open-access version of sPlot).</p>
+<p><strong>BIEN Processing:</strong></p>
+<ul>
+<li>Downloaded using {RBIEN} R package v1.2.7 on 2nd August 2023 using function <code>BIEN::BIEN_plot_datasource()</code></li>
+<li>Retained key columns: “datasource_id”, “datasource”, “plot_name”, “sampling_protocol”, “methodology_reference”, “methodology_description”, “longitude”, “latitude”, “plot_area_ha”, “subplot”, “individual_count”, “family_matched”, “name_matched”, “name_matched_author”, “verbatim_family”, “verbatim_scientific_name”, “scrubbed_species_binomial”, “scrubbed_taxonomic_status”, “scrubbed_family”, “scrubbed_author”</li>
+<li>All columns renamed using “snake_style”</li>
+<li>Filtered out records with missing essential information (NA values in “datasource_id”, “datasource”, “plot_name”, “longitude”, “latitude”, and/or “plot_area_ha”)</li>
+</ul>
+<p><strong>sPlotOpen Processing:</strong></p>
+<ul>
+<li>Downloaded sPlotOpen v2.0 on 26th September 2023</li>
+<li>Linked tables “DT2.oa” and “header.oa” via “PlotObservationID” column</li>
+<li>Applied quality filters for geographic and area data (filtered out rows with NA values in “PlotObservationID”, “GIVD_ID”, “Longitude”, “Latitude”, and/or “Releve_area”)</li>
+<li>All columns renamed using “snake_style”</li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.16729978">VegVault-Vegetation_data</a></p>
+</section>
+<section id="functional-traits" class="level3">
+<h3 class="anchored" data-anchor-id="functional-traits">Functional Traits</h3>
+<p>Following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a>, we selected six key functional traits representing:</p>
+<ul>
+<li>Stem specific density</li>
+<li>Leaf nitrogen content per unit mass<br>
+</li>
+<li>Diaspore mass</li>
+<li>Plant height</li>
+<li>Leaf area</li>
+<li>Leaf mass per area</li>
+</ul>
+<p><strong>TRY Database Processing:</strong></p>
+<ul>
+<li>Data request ID: 28498 on 29th August 2023</li>
+<li>Requested traits with codes: 3106, 4, 3108, 3110, 3112, 3114, 3116, 3117, 14, and 26 (closest to Díaz et al.&nbsp;2016 description)</li>
+<li>Used {rtry} R package v1.1.0 for data import</li>
+<li>For each trait (“TraitID”), extracted all relevant observations (“ObservationID”), ensuring only observations unique to each trait</li>
+<li>Identified all unique data (“DataID”) associated with each trait</li>
+<li>Excluded non-meaningful trait variations (DataID: 2221, 2222, 2223, 2224, 2225, 3646, 3647, 3698, 3699, 3727, 3728, 3730, 3731, 3849, 3850, 4029, and 4030), e.g., height at 15 days</li>
+<li>Extracted covariate information (additional data stored in “DataName” column)</li>
+<li>All columns renamed using “snake_style”</li>
+<li>Added “Trait Domain” variable to group traits following Díaz et al.&nbsp;(2016) selection for efficient extraction across TRY and BIEN</li>
+</ul>
+<p><strong>BIEN Traits Processing:</strong></p>
+<ul>
+<li>Downloaded using {RBIEN} R package v1.2.7 on 15th December 2023 using function <code>BIEN::BIEN_trait_trait()</code></li>
+<li>Requested traits: “whole plant height”, “stem wood density”, “leaf area”, “leaf area per leaf dry mass”, “leaf nitrogen content per leaf dry mass”, and “seed mass”</li>
+<li>Retained columns: “trait_name”, “trait_value”, “unit”, “id”, “longitude”, “latitude”, “method”, “url_source”, “source_citation”, “project_pi”, “scrubbed_species_binomial”, and “access”</li>
+<li>Calculated derived measures (e.g., leaf mass per area = 1/leaf area per leaf dry mass)</li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745086">VegVault-Trait_data</a></p>
+</section>
+<section id="abiotic-environmental-data" class="level3">
+<h3 class="anchored" data-anchor-id="abiotic-environmental-data">Abiotic Environmental Data</h3>
+<p>The primary sources of abiotic data are CHELSA, CHELSA-TRACE21, and WoSIS Soil Profile Database. The first two data sources provide high-resolution downscaled climatic data, while the latter offers detailed soil information (only available for contemporary data).</p>
+<p><strong>CHELSA Climate Data:</strong></p>
+<ul>
+<li>Contemporary: CHELSA v2.1 downloaded on 8th September 2023</li>
+<li>Used {ClimDatDownloadR} R package with function <code>ClimDatDownloadR::Chelsa.Clim.download()</code></li>
+<li>Selected bio-variables: 1, 4, 6, 12, 15, 18, 19</li>
+<li>Spatial aggregation: 25x factor using median values with {terra} R package function <code>terra::aggregate(factor = 25, fun = "median")</code></li>
+</ul>
+<p><strong>Paleoclimate: CHELSA-TRACE21</strong></p>
+<ul>
+<li>Paleoclimate: CHELSA-TRACE21 v1.0 downloaded on 31st December 2023</li>
+<li>Downloaded values for each 500-year time-slice between 0 and 18,000 years before present (BP)</li>
+<li>Selected bio-variables: 1, 4, 6, 12, 15, 18, 19</li>
+<li>For each time slice, applied spatial aggregation using <code>terra::aggregate(factor = 25, fun = "median")</code></li>
+</ul>
+<p><strong>WoSIS Soil Data:</strong></p>
+<ul>
+<li>Downloaded on 11th September 2023 (both HWSD2_RASTER.zip and HWSD2_DB.zip)</li>
+<li>Extracted soil type names (column “HWSD2_SMU_ID”) by combining tables “HWSD2_SMU” and “D_WRB4”</li>
+<li>Added soil type information to the raster</li>
+<li>Resampled using <code>terra::resample(method = "near")</code> function to match climate data resolution</li>
+<li>Provides essential edaphic context for vegetation-environment relationships (contemporary data only)</li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745293">VegVault-abiotic_data</a></p>
+</section>
+</section>
+<section id="data-integration-procedures" class="level2">
+<h2 class="anchored" data-anchor-id="data-integration-procedures">Data Integration Procedures</h2>
+<p>All processing pipelines with their corresponding Tags are migrated into an SQLite database using the GitHub repository titled <a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault</a>, which can be accessed as DOI: <a href="https://doi.org/10.5281/zenodo.15201994">10.5281/zenodo.15201994</a>.</p>
+<section id="data-migration-details" class="level3">
+<h3 class="anchored" data-anchor-id="data-migration-details">Data Migration Details</h3>
+<p><strong>Migrating sPlotOpen vegetation data:</strong> - Dataset name (dataset_name) created from “plot_observation_id” as “splot_[plot_observation_id]” - Original data source from column “givd_id” stored in DatasetSourcesID table - Sample name (sample_name) created using “plot_observation_id” as “splot_[plot_observation_id]” - Sample Size (sample_size) created from “releve_area” column - All samples automatically assigned age of 0 - Taxonomic names extracted from “Species” column, abundances from “Original_abundance”</p>
+<p><strong>Migrating BIEN vegetation data:</strong> - Dataset name (dataset_name) created as “bien_[row number]” - Original data source from column “datasource” stored in DatasetSourcesID table - Sampling method extracted from “methodology_description” column - Sample name (sample_name) created as “bien_[row number]” - Sample Size (sample_size) created from “plot_area_ha” column, multiplied by 10,000 (stored in square meters) - All samples automatically assigned age of 0 - Taxonomic names extracted from “name_matched” column</p>
+<p><strong>Migrating fossil pollen data:</strong> - Dataset name (dataset_name) created from “dataset_id” (fossilpol_[dataset_id]) - Note: column “dataset_id” from primary source does not match “dataset_id” in VegVault - Original data source from “source_of_data” column stored in DatasetSourcesID table - Sampling method extracted from “depositionalenvironment” column - Individual Dataset Reference extracted from “doi” column - Sample name (sample_name) created using “dataset_id” and “sample_id” as “fossilpol_[dataset_id]_[sample_id]” - Ages extracted from “levels” column - Age uncertainty from age-depth models extracted from “age_uncertainty” column - Taxonomic names and abundances extracted from “counts_harmonised” column</p>
+<p><strong>Migrating TRY functional traits:</strong> - Dataset name (dataset_name) created as “try_[row number]” - Original data source from column “dataset” stored in DatasetSourcesID table - Individual Dataset Reference extracted from “reference_source” column - Sample name (sample_name) created as “try_[row number]” - Individual Sample reference extracted from “dataset_reference_citation” - All samples automatically assigned age of 0 - Trait names extracted from “trait_full_name”, taxonomic names from “acc_species_name”, trait values from “trait_value”</p>
+<p><strong>Migrating BIEN functional traits:</strong> - Dataset name (dataset_name) created as “bien_traits_[row number]” - Original data source from column “project_pi” stored in DatasetSourcesID table - Individual Dataset Reference extracted from “source_citation” column - Sample name (sample_name) created using column “id” as “bien_traits_[id]” - All samples automatically assigned age of 0 - Trait names extracted from “trait_name”, taxonomic names from “scrubbed_species_binomial”, trait values from “trait_value” - Trait “leaf mass per area” calculated from “leaf area per leaf dry mass” as 1/value</p>
+</section>
+<section id="final-database-integration-procedures" class="level3">
+<h3 class="anchored" data-anchor-id="final-database-integration-procedures">Final Database Integration Procedures</h3>
+<p>In addition to the consolidation of all processed data into a unified SQLite database, the final VegVault migration repository performs three critical procedures to ensure data consistency and usability:</p>
+<section id="i-taxonomic-classification" class="level4">
+<h4 class="anchored" data-anchor-id="i-taxonomic-classification">(i) Taxonomic Classification</h4>
+<p>As VegVault integrates data on taxa from various sources, the {taxospace} R package is used to classify diverse taxa into a unifying taxonomic backbone. The {taxospace} tool automatically aligns taxon names with the GBIF taxonomical backbone. Specifically, we find the best match of raw taxon names using the Global Names Resolver, which is then aligned with GBIF. The resulting taxonomic classification information, detailed up to the family level, is stored for each taxon, ensuring consistency and facilitating comparative analyses across different datasets.</p>
+<p><strong>Important limitations</strong>: Taxonomic classification down to the species level is not available for each taxon (e.g., some fossil pollen types can only be identified to the genus or family level). For several taxa, no matching classification could be found. Note that taxonomic classification is additional information—the original taxon name is always present and returned by default. Finally, users should be aware that this classification is an automated process and may contain errors.</p>
+</section>
+<section id="ii-grouping-of-traits-into-trait-domains" class="level4">
+<h4 class="anchored" data-anchor-id="ii-grouping-of-traits-into-trait-domains">(ii) Grouping of Traits into Trait Domains</h4>
+<p>As there are differences in trait names across data sources (e.g., “Leaf nitrogen (N) content per leaf dry mass” vs.&nbsp;“leaf nitrogen content per leaf dry mass”), we added a new variable <code>Trait Domain</code> that groups traits together following the trait selection of Díaz et al.&nbsp;(2016). For example, trait “Plant height vegetative” from TRY and trait “whole plant height” from BIEN are both grouped under the “Plant height” Trait Domain. This grouping serves as an efficient mechanism for extracting comparable traits across both TRY and BIEN datasets.</p>
+</section>
+<section id="iii-creation-of-gridpoints-for-abiotic-data" class="level4">
+<h4 class="anchored" data-anchor-id="iii-creation-of-gridpoints-for-abiotic-data">(iii) Creation of Gridpoints for Abiotic Data</h4>
+<p>We developed a data structure that provides readily available environmental context for each vegetation (and trait) record by creating spatio-temporal links between these records and abiotic information. As raster data are not suitable for storage in an SQLite database, we created artificial points, called ‘gridpoints’, located in the center of each raster cell. This resulted in a uniform spatio-temporal matrix of gridpoints holding the abiotic information.</p>
+<p><strong>Gridpoint naming conventions</strong>: Dataset names (dataset_name) are created as “geo_[longitude]<em>[latitude]” and Sample names (sample_name) are created as ”geo</em>[longitude]<em>[latitude]</em>[age]”.</p>
+<p><strong>Spatial-temporal linking</strong>: We linked gridpoints with other non-gridpoint Samples (vegetation_plot, fossil_pollen_archive, and traits) and calculated the spatial and temporal distances between them. We retained any gridpoint Sample within 50 km and/or 5000 years from any other non-gridpoint Sample and discarded the rest.</p>
+</section>
+</section>
+</section>
+<section id="related-resources" class="level2">
+<h2 class="anchored" data-anchor-id="related-resources">Related Resources</h2>
+<ul>
+<li><strong><a href="../website/database_content.html">Database Content</a></strong> - Overview of available data</li>
+<li><strong><a href="../website/database_structure.html">Database Structure</a></strong> - Technical database schema</li>
+<li><strong><a href="../website/database_access.html">Database Access</a></strong> - Download and setup instructions<br>
+</li>
+<li><strong><a href="../website/database_examples.html">Usage Examples</a></strong> - Practical applications</li>
+<li><strong><a href="../website/materials.html">Materials &amp; Outputs</a></strong> - Publications and resources</li>
 </ul>
 
 
@@ -761,7 +841,7 @@ Warning
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/OndrejMottl/VegVault/blob/main/website/database_access.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/OndrejMottl/VegVault/issues" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions"><ul><li><a href="https://github.com/OndrejMottl/VegVault/blob/main/website/database_assembly.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/OndrejMottl/VegVault/issues" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</p>
 </div>

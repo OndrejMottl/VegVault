@@ -17,7 +17,7 @@ sidebar: true
 
 library(here)
 
-here::i_am("website/_database_examples.qmd")
+here::i_am("website/database_examples.qmd")
 
 # Load configuration
 source(
