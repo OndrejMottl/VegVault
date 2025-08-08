@@ -50,6 +50,7 @@ fonts <-
 
 fonts_definition <-
   c(
+    "// Import Google Fonts\n@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap');\n",
     paste0('$mainFont: "', fonts$body, '", "Arial", sans-serif !default;\n'),
     paste0('$headingFont: "', fonts$heading, '", "Courier New", monospace !default;\n'),
     paste0(

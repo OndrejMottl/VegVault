@@ -1,5 +1,8 @@
 // This file is auto-generated from fonts.json. Do not edit directly.
-$mainFont: "Renogate", "Arial", sans-serif !default;
+// Import Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap');
+
+$mainFont: "Inter", "Arial", sans-serif !default;
 
 $headingFont: "Press Start 2P", "Courier New", monospace !default;
 
