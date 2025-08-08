@@ -1,4 +1,4 @@
-## Taxa
+## [Taxa]{.text-background-blueDark .text-color-white .text-bold}
 
 ```{r}
 #| label: source config
@@ -37,9 +37,9 @@ invisible(
 )
 ```
 
-### Taxa Structure Overview (`Taxa`)
+### [Taxa Structure Overview]{.text-background-blueDark .text-color-white .text-bold} (`[Taxa]{.text-background-blueDark .text-color-white .text-bold}`)
 
-The **VegVault** database records the original taxonomic names derived directly from the primary data sources, and currently, it holds over 100 thousand taxonomic names. 
+The **[VegVault]{.text-background-black .text-color-white .text-bold}** database records the original [taxonomic names]{.text-background-blueDark .text-color-white .text-bold} derived directly from the [primary data sources]{.text-background-brownDark .text-color-white .text-bold}, and currently, it holds over 100 thousand [taxonomic names]{.text-background-blueDark .text-color-white .text-bold}. 
 
 ```{r}
 #| label: Taxa variables scheme structure

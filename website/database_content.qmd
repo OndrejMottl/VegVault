@@ -38,7 +38,7 @@ source(
 
 ## Database Content Overview
 
-VegVault v1.0.0 is a comprehensive SQLite database (~110 GB) that integrates global vegetation data spanning both contemporary and paleovegetation records. This unified database combines fossil pollen records, contemporary vegetation plots, functional trait measurements, and associated abiotic environmental data to provide an unprecedented resource for vegetation ecology research.
+VegVault v1.0.0 is a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} (~110 GB) that integrates global vegetation data spanning both [contemporary]{.text-background-greenLight .text-color-black .text-bold} and [paleovegetation]{.text-background-purpleLight .text-color-black .text-bold} records. This unified database combines [fossil pollen]{.text-background-purpleLight .text-color-black .text-bold} records, [contemporary vegetation plots]{.text-background-greenLight .text-color-black .text-bold}, [functional trait]{.text-background-blueDark .text-color-white .text-bold} measurements, and associated [abiotic environmental data]{.text-background-greenDark .text-color-white .text-bold} to provide an unprecedented resource for vegetation ecology research.
 
 The database consists of 31 interconnected tables with 87 fields (variables). For detailed technical information, see our [Database Structure](/website/database_structure.qmd) documentation.
 
@@ -58,7 +58,7 @@ The database consists of 31 interconnected tables with 87 fields (variables). Fo
 | **Temporal Coverage** | 0-20,000 years BP |
 
 ::: {.callout-tip}
-**Getting Started**: New to VegVault? Check our [Database Access](/website/database_access.qmd) guide for download instructions and our [Usage Examples](/website/database_examples.qmd) for practical applications.
+**Getting Started**: New to [VegVault]{.text-background-black .text-color-white .text-bold}? Check our [Database Access](/website/database_access.qmd) guide for download instructions and our [Usage Examples](/website/database_examples.qmd) for practical applications.
 :::
 
 

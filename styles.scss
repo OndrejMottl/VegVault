@@ -1,57 +1,31 @@
 /*-- scss:defaults --*/
 
-@font-face {
-  font-family: "Renogate" !important;
-  src: local("Fonts/Renogare-Regular.otf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Minecraft" !important;
-  src: local("Fonts/Minecraft.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
 // Vertical spacing between blocks of text
 $smallMargin: 5px;
 $blockMargin: 10px;
 $largeMargin: 20px;
 
-// Colors
-$white: #ffffffff;
+// Colors are now loaded from _colors.scss, which is auto-generated from colors.json.
+// Do not define color variables here. Edit colors.json and regenerate _colors.scss if needed.
+@import "_colors";
 
-$brownDark: #8a554e;
-$bronwLight: #bc7052;
-
-$beigeDark: #ae8a7b;
-$beigeLight: #e6b482;
-
-$blueDark: #242531;
-$blueLight: #52758f;
-
-$greenDark: #5d7841;
-$greenLight: #9bc058;
-
-$body-color: $blueDark !default;
-$link-color: $greenDark !default;
-$selection-bg: $greenDark !default;
-$code-color: $blueDark !default;
+$body-color: $black;
+$link-color: $greenDark;
+$selection-bg: $greenDark;
+$code-color: $black;
 
 // Background
-$backgroundColor: $beigeLight !default;
+$backgroundColor: $beigeLight;
 
 // Typography
-$mainFont: "Renogate", sans-serif !default;
+@import "_fonts";
+
 $mainFontSize: 1rem;
 $h1FontSize: 2.5rem;
 $h2FontSize: 2rem;
 $h3FontSize: 1.5rem;
 $body-line-height: 1.5;
 
-$headingFont-h1: "Minecraft" !default;
-$headingFont: "Renogate" !default;
 $headingLineHeight: 1.2;
 $headingLetterSpacing: normal;
 $headingTextShadow: none;
@@ -72,44 +46,98 @@ body {
 }
 
 a {
-  color: $link-color;
-  text-decoration: none;
+  color: $link-color !important;
+  text-decoration: underline !important;
   transition: color 0.3s ease;
 
   &:hover {
-    text-decoration: underline;
+    color: $greenLight !important;
+    text-decoration: underline !important;
   }
 }
 
 .btn {
-  background-color: $blueDark;
+  background-color: $black;
   color: $white;
-  border-color: $white;
+  border: 2px solid $black;
+  font-family: $mainFont;
   font-variant-caps: all-petite-caps;
   border-radius: 10px;
+  padding: 8px 16px;
+  text-decoration: none !important;
+  display: inline-block;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: $white;
-    color: $blueLight;
-    border-color: $blueLight;
+    color: $black;
+    border-color: $black;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Button variants */
+.btn-primary {
+  background-color: $greenDark;
+  border-color: $greenDark;
+  
+  &:hover {
+    background-color: $greenLight;
+    border-color: $greenLight;
+    color: $black;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  body {
+    font-size: 0.9rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  
+  table {
+    font-size: 0.85rem;
+  }
+  
+  pre, code {
+    font-size: 0.8rem;
   }
 }
 
 /* Headings */
-h1,
-.reveal h1 {
-  font-family: $headingFont-h1;
+h1 {
+  font-family: $headingFont;
   color: $white;
   font-size: $h1FontSize;
   line-height: $headingLineHeight;
   letter-spacing: $headingLetterSpacing;
   font-weight: $headingFontWeight;
   margin-top: $largeMargin;
-  text-shadow: 3px 4px 5px $blueDark;
+  text-shadow: 3px 4px 5px $black;
 }
 
-h2,
-.reveal h2 {
+h2 {
   font-family: $headingFont;
   color: $blueLight;
   font-size: $h2FontSize;
@@ -119,10 +147,9 @@ h2,
   margin-top: $blockMargin;
 }
 
-h3,
-.reveal h3 {
+h3 {
   font-family: $headingFont;
-  color: $blueDark;
+  color: $black;
   font-size: $h3FontSize;
   line-height: $headingLineHeight;
   letter-spacing: $headingLetterSpacing;
@@ -131,10 +158,54 @@ h3,
 }
 
 /* Code block */
+pre,
 code {
-  background-color: darken($backgroundColor, 20%);
-  padding: $smallMargin;
+  background-color: lighten($backgroundColor, 20%) !important;
+  color: $black;
   border-radius: 5px;
+  line-height: 1;
+}
+
+pre {
+  padding: $smallMargin;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+code {
+  padding: 2px 4px;
+}
+
+pre code {
+  background-color: transparent;
+  padding: $smallMargin;
+}
+
+/* Hide scrollbars for WebKit browsers */
+pre::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Ensure proper code formatting */
+div.sourceCode,
+div.sourceCode pre,
+.cell-code pre {
+  overflow: visible !important;
+  max-width: 100% !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+}
+
+/* Code links */
+pre a,
+code a {
+  color: $black;
+  text-decoration: underline;
+
+  &:hover {
+    color: $greenDark;
+  }
 }
 
 /* List styling */
@@ -143,11 +214,118 @@ ul {
   margin-left: $blockMargin;
 }
 
-/* Navbar */
-.nav-item {
-  border-left: 1px solid $blueDark;
+ul ul {
+  margin-left: $blockMargin;
 }
 
+/* Improve readability for website content */
+p {
+  margin-bottom: $blockMargin;
+  line-height: $body-line-height;
+}
+
+/* Blockquotes for website */
+blockquote {
+  background-color: lighten($beigeLight, 10%);
+  border-left: 4px solid $greenDark;
+  padding: $blockMargin;
+  margin: $blockMargin 0;
+  font-style: italic;
+  
+  p {
+    margin-bottom: 0;
+  }
+}
+
+/* Figure and image styling */
+figure {
+  text-align: center;
+  margin: $largeMargin 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+figcaption {
+  font-size: 0.9rem;
+  color: $grey;
+  margin-top: $smallMargin;
+  font-style: italic;
+}
+
+/* Table styling */
+table {
+  background-color: $white;
+  border-collapse: collapse;
+  border: 2px solid $black;
+  margin: $blockMargin auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+table th,
+table td {
+  padding: $smallMargin $blockMargin;
+  border: 1px solid $black;
+  text-align: left;
+  vertical-align: top;
+}
+
+table thead th {
+  background-color: $beigeDark;
+  color: $black;
+  font-weight: bold;
+  text-align: center;
+}
+
+table tbody td {
+  background-color: $white;
+  color: $black;
+}
+
+table tbody tr:nth-child(even) td {
+  background-color: lighten($beigeLight, 10%);
+}
+
+table tbody tr:hover td {
+  background-color: lighten($greenLight, 30%);
+  transition: background-color 0.3s ease;
+}
+
+/* Ensure bottom border is visible */
+table tbody tr:last-child td {
+  border-bottom: 2px solid $black;
+}
+
+/* Navbar */
+.navbar {
+  background-color: $white;
+  border-bottom: 2px solid $black;
+}
+
+.nav-item {
+  border-left: 1px solid $black;
+}
+
+.navbar-brand {
+  font-family: $headingFont;
+  font-weight: bold;
+  color: $black !important;
+}
+
+.nav-link {
+  color: $black !important;
+  
+  &:hover {
+    color: $greenDark !important;
+    background-color: lighten($beigeLight, 10%);
+  }
+}
+
+/* Footer */
 .nav-footer {
   background: $blueLight;
   color: $white;
@@ -155,12 +333,85 @@ ul {
   text-align: center;
 
   a {
-    color: $white;
+    color: $white !important;
 
     &:hover {
+      color: $beigeLight !important;
       text-decoration: underline;
     }
   }
+}
 
+/* Website layout improvements */
+.quarto-container {
+  max-width: $content-max-width;
+}
 
+/* Sidebar navigation */
+.sidebar-navigation {
+  background-color: lighten($beigeLight, 5%);
+  border-right: 1px solid $black;
+}
+
+.sidebar-navigation .nav-link {
+  color: $black;
+  
+  &:hover {
+    background-color: $beigeLight;
+    color: $greenDark;
+  }
+  
+  &.active {
+    background-color: $greenDark;
+    color: $white;
+  }
+}
+
+/* Utility classes */
+.text-color-darker {
+  filter: brightness(50%);
+}
+
+.text-color-brigher {
+  filter: brightness(250%);
+}
+
+.text-size-heading1 {
+  font-size: $h1FontSize !important;
+}
+
+.text-size-heading2 {
+  font-size: $h2FontSize !important;
+}
+
+.text-size-heading3 {
+  font-size: $h3FontSize !important;
+}
+
+.text-bold {
+  font-weight: bold !important;
+}
+
+.text-italic {
+  font-style: italic !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-shadow-light {
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.text-shadow-dark {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }

@@ -9,29 +9,29 @@ sidebar: true
 
 ## Download VegVault Database
 
-VegVault v1.0.0 is available as a comprehensive SQLite database providing integrated access to global vegetation, trait, and environmental data.
+[VegVault]{.text-background-black .text-color-white .text-bold} v1.0.0 is available as a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} providing integrated access to global vegetation, [trait]{.text-background-blueDark .text-color-white .text-bold}, and [environmental data]{.text-background-greenDark .text-color-white .text-bold}.
 
 [Download VegVault v1.0.0 (SQLite)](https://doi.org/10.48700/datst.t21cz-2nq071){.btn} 
 
 ::: {.callout-note}
-**System Requirements**: VegVault contains over 100GB of data. Ensure your system has sufficient storage space and memory (RAM) before downloading.
+**System Requirements**: [VegVault]{.text-background-black .text-color-white .text-bold} contains over 100GB of data. Ensure your system has sufficient storage space and memory (RAM) before downloading.
 :::
 
 ### Alternative Access: Flat Files
 
-For users who prefer working with individual data tables, we provide VegVault as separate CSV files:
+For users who prefer working with individual data tables, we provide [VegVault]{.text-background-black .text-color-white .text-bold} as separate CSV files:
 
 [Download VegVault v1.0.0 (Flat Files)](https://doi.org/10.48700/datst.thktf-5rr35){.btn} 
 
 ::: {.callout-warning}
-**Note**: Flat files are not the recommended approach. Many files exceed 1GB and may be difficult to load into memory. We strongly recommend using the SQLite database with the {vaultkeepr} R package for optimal performance.
+**Note**: Flat files are not the [recommended]{.text-background-brownLight .text-color-white .text-bold} approach. Many files exceed 1GB and may be difficult to load into memory. We strongly recommend using the [SQLite database]{.text-background-brownDark .text-color-white .text-bold} with the {vaultkeepr} R package for optimal performance.
 :::
 
 ## Accessing VegVault with {vaultkeepr}
 
 :::: {.columns}
 ::: {.column width="75%"}
-To make VegVault easily accessible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a well-tested R package (>95% code coverage) that provides intuitive functions for interacting with the database. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory.
+To make [VegVault]{.text-background-black .text-color-white .text-bold} easily accessible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a well-tested R package (>95% code coverage) that provides intuitive functions for interacting with the [database]{.text-background-brownDark .text-color-white .text-bold}. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory.
 :::
 
 ::: {.column width="25%"}

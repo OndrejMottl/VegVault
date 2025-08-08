@@ -1,6 +1,6 @@
-## Abiotic Variables
+## [Abiotic Variables]{.text-background-greenDark .text-color-white .text-bold}
 
-The abiotic data in the **VegVault** database provide essential information on environmental factors affecting vegetation distribution and traits. Currently, **VegVault** includes abiotic data from [CHELSA](https://chelsa-climate.org/), [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/), and [WoSIS](https://www.isric.org/explore/wosis). CHELSA and CHELSA-TRACE21 provide high-resolution climate data, while WoSIS offers detailed soil information.
+The [abiotic data]{.text-background-greenDark .text-color-white .text-bold} in the **[VegVault]{.text-background-black .text-color-white .text-bold}** database provide essential information on [environmental factors]{.text-background-greenDark .text-color-white .text-bold} affecting vegetation distribution and [traits]{.text-background-blueDark .text-color-white .text-bold}. Currently, **[VegVault]{.text-background-black .text-color-white .text-bold}** includes [abiotic data]{.text-background-greenDark .text-color-white .text-bold} from [CHELSA](https://chelsa-climate.org/), [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/), and [WoSIS](https://www.isric.org/explore/wosis). [CHELSA]{.text-background-greenDark .text-color-white .text-bold} and [CHELSA-TRACE21]{.text-background-greenDark .text-color-white .text-bold} provide high-resolution [climate data]{.text-background-greenDark .text-color-white .text-bold}, while [WoSIS]{.text-background-greenDark .text-color-white .text-bold} offers detailed [soil information]{.text-background-greenDark .text-color-white .text-bold}.
 
 ```{r}
 #| label: source config
@@ -39,9 +39,9 @@ invisible(
 )
 ```
 
-### Abiotic variables (`AbioticVariable`)
+### [Abiotic variables]{.text-background-greenDark .text-color-white .text-bold} (`[AbioticVariable]{.text-background-greenDark .text-color-white .text-bold}`)
 
-As **VegVault** contains abiotic variables from several primary sources, the `AbioticVariable` table contains descriptions of abiotic variables (`abiotic_variable_name`), their units (`abiotic_variable_unit`), and measurement details (`measure_details`). These data include variables such as climate and soil conditions, which are crucial for understanding the ecological contexts of vegetation dynamics. 
+As **[VegVault]{.text-background-black .text-color-white .text-bold}** contains [abiotic variables]{.text-background-greenDark .text-color-white .text-bold} from several [primary sources]{.text-background-brownDark .text-color-white .text-bold}, the [`AbioticVariable`]{.text-background-greenDark .text-color-white .text-bold} table contains descriptions of [abiotic variables]{.text-background-greenDark .text-color-white .text-bold} (`abiotic_variable_name`), their units (`abiotic_variable_unit`), and measurement details (`measure_details`). These data include variables such as [climate]{.text-background-greenDark .text-color-white .text-bold} and [soil conditions]{.text-background-greenDark .text-color-white .text-bold}, which are crucial for understanding the ecological contexts of vegetation dynamics. 
 
 ```{r}
 #| label: AbioticVariable scheme structure

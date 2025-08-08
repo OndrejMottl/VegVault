@@ -1,4 +1,4 @@
-## Traits 
+## [Traits]{.text-background-blueDark .text-color-white .text-bold} 
 
 ```{r}
 #| label: source config
@@ -37,9 +37,9 @@ invisible(
 )
 ```
 
-### Traits Structure Overview (`Traits`)
+### [Traits Structure Overview]{.text-background-blueDark .text-color-white .text-bold} (`[Traits]{.text-background-blueDark .text-color-white .text-bold}`)
 
-The **Traits** table contains the list of functional traits currently contained in **VegVault**. The table contains one `Trait` per row, with each `Trait` containing: a unique Trait ID (`trait_id`), original Trait name from primary source (`trait_name`), and Trait Domain (`trait_domain_id`). Functional traits of vegetation taxa follow the same structure of `Dataset` and `Samples` obtained directly from `Dataset` `Source-Types`.
+The **[Traits]{.text-background-blueDark .text-color-white .text-bold}** table contains the list of [functional traits]{.text-background-blueDark .text-color-white .text-bold} currently contained in **[VegVault]{.text-background-black .text-color-white .text-bold}**. The table contains one [`Trait`]{.text-background-blueDark .text-color-white .text-bold} per row, with each [`Trait`]{.text-background-blueDark .text-color-white .text-bold} containing: a unique [Trait ID]{.text-background-blueDark .text-color-white .text-bold} (`trait_id`), original [Trait name]{.text-background-blueDark .text-color-white .text-bold} from [primary source]{.text-background-brownDark .text-color-white .text-bold} (`trait_name`), and [Trait Domain]{.text-background-blueDark .text-color-white .text-bold} (`trait_domain_id`). [Functional traits]{.text-background-blueDark .text-color-white .text-bold} of vegetation [taxa]{.text-background-blueDark .text-color-white .text-bold} follow the same structure of [`Dataset`]{.text-background-brownDark .text-color-white .text-bold} and [`Samples`]{.text-background-brownDark .text-color-white .text-bold} obtained directly from [`Dataset`]{.text-background-brownDark .text-color-white .text-bold} [`Source-Types`]{.text-background-brownDark .text-color-white .text-bold}.
 
 ```{r}
 #| label: Traits variables scheme structure

@@ -6,19 +6,19 @@ sidebar: false
 
 # VegVault<img src="Outputs/Figures/website/VegVault_logo.png" align="right" width="250"/>
 
-## Database linking global paleo-, and neo-vegetation data, functional traits, and climate
+## Database linking global [paleo-]{.text-background-purpleLight .text-color-black .text-bold}, and [neo-vegetation data]{.text-background-greenLight .text-color-black .text-bold}, [functional traits]{.text-background-blueDark .text-color-white .text-bold}, and [climate]{.text-background-greenDark .text-color-white .text-bold}
 
-This is the official website dedicated to the VegVault project. VegVault is a comprehensive SQLite database that integrates global paleo- and neo-ecological vegetation data with functional traits and abiotic information, including climate and soil data. By bridging historical and contemporary data across multiple temporal and spatial scales, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.
+This is the official website dedicated to the [VegVault]{.text-background-black .text-color-white .text-bold} project. [VegVault]{.text-background-black .text-color-white .text-bold} is a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} that integrates global [paleo-]{.text-background-purpleLight .text-color-black .text-bold} and [neo-ecological vegetation data]{.text-background-greenLight .text-color-black .text-bold} with [functional traits]{.text-background-blueDark .text-color-white .text-bold} and [abiotic information]{.text-background-greenDark .text-color-white .text-bold}, including [climate]{.text-background-greenDark .text-color-white .text-bold} and soil data. By bridging historical and contemporary data across multiple temporal and spatial scales, [VegVault]{.text-background-black .text-color-white .text-bold} provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.
 
 The project integrates data from multiple well-established sources including the [Neotoma Paleoecology Database](https://www.neotomadb.org/), [sPlotOpen](https://idiv-biodiversity.de/en/splot/splotopen.html), [BIEN](https://bien.nceas.ucsb.edu/bien/), [TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php), [CHELSA climate data](https://chelsa-climate.org/), and [WoSIS soil data](https://www.isric.org/explore/wosis) to provide a comprehensive view of vegetation dynamics across space and time.
 
-Creating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.
+Creating such an [integrated database]{.text-background-brownDark .text-color-white .text-bold}, in which gathering and processing of the data is [reproducible]{.text-background-brownLight .text-color-white .text-bold}, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.
 
 The project is part of the [BIODYNAMICS](https://bit.ly/BIODYNAMICS) project.
 
 ## Quick Navigation
 
-- **[Access the Database](/website/database_access.qmd)** - Download VegVault and get started
+- **[Access the Database](/website/database_access.qmd)** - Download [VegVault]{.text-background-black .text-color-white .text-bold} and get started
 - **[Database Structure](/website/database_structure.qmd)** - Understand the data organization
 - **[Usage Examples](/website/database_examples.qmd)** - See practical applications
 - **[Database Content](/website/database_content.qmd)** - Explore what's included

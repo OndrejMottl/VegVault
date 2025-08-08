@@ -1,8 +1,8 @@
-## Samples
+## [Samples]{.text-background-brownDark .text-color-white .text-bold}
 
-`Samples` represent the main unit of data in **VegVault**, serving as the fundamental building blocks for all analyses. There are currently over 13 million `Samples` in **VegVault** v1.0.0 (of which ~ 1.6 million are gridpoints of abiotic data, see [Database Assembly](/website/database_assembly.qmd)). 
+[`Samples`]{.text-background-brownDark .text-color-white .text-bold} represent the main unit of data in **[VegVault]{.text-background-black .text-color-white .text-bold}**, serving as the fundamental building blocks for all analyses. There are currently over 13 million [`Samples`]{.text-background-brownDark .text-color-white .text-bold} in **[VegVault]{.text-background-black .text-color-white .text-bold}** v1.0.0 (of which ~ 1.6 million are [gridpoints]{.text-background-greenDark .text-color-white .text-bold} of [abiotic data]{.text-background-greenDark .text-color-white .text-bold}, see [Database Assembly](/website/database_assembly.qmd)). 
 
-**VegVault** encompasses both contemporary and paleo data, necessitating accurate age information for each `Sample`. Contemporary `Samples` are assigned an age of `0`, while `Samples` from fossil pollen records are in calibrated years before the present (cal yr BP). The "present" is here specified as 1950 AD. 
+**[VegVault]{.text-background-black .text-color-white .text-bold}** encompasses both [contemporary]{.text-background-greenLight .text-color-black .text-bold} and [paleo data]{.text-background-purpleLight .text-color-black .text-bold}, necessitating accurate [age information]{.text-background-purpleLight .text-color-black .text-bold} for each [`Sample`]{.text-background-brownDark .text-color-white .text-bold}. [Contemporary]{.text-background-greenLight .text-color-black .text-bold} [`Samples`]{.text-background-brownDark .text-color-white .text-bold} are assigned an [age of `0`]{.text-background-greenLight .text-color-black .text-bold}, while [`Samples`]{.text-background-brownDark .text-color-white .text-bold} from [fossil pollen records]{.text-background-purpleLight .text-color-black .text-bold} are in [calibrated years before the present (cal yr BP)]{.text-background-purpleLight .text-color-black .text-bold}. The "present" is here specified as 1950 AD. 
 
 ```{r}
 #| label: source config
@@ -43,9 +43,9 @@ invisible(
 sel_dataset_for_example <- 91256
 ```
 
-### Sample Structure Overview (`Samples`)
+### [Sample Structure Overview]{.text-background-brownDark .text-color-white .text-bold} (`[Samples]{.text-background-brownDark .text-color-white .text-bold}`)
 
-The table contains one `Sample` per row, with each `Sample` containing: a unique Sample ID (`sample_id`), Sample name (`sample_name`), temporal information about Sample (`age`), sample site (size of the plot if available; `sample_size_id`), and additional information about sample (`sample_details`; this is currently not being used in v1.0.0.). As **VegVault** encompasses both contemporary and paleo-data, accurate age information is required for each Sample. 
+The table contains one [`Sample`]{.text-background-brownDark .text-color-white .text-bold} per row, with each [`Sample`]{.text-background-brownDark .text-color-white .text-bold} containing: a unique [Sample ID]{.text-background-brownDark .text-color-white .text-bold} (`sample_id`), [Sample name]{.text-background-brownDark .text-color-white .text-bold} (`sample_name`), temporal information about [Sample]{.text-background-brownDark .text-color-white .text-bold} ([`age`]{.text-background-purpleLight .text-color-black .text-bold}), sample site (size of the plot if available; `sample_size_id`), and additional information about sample (`sample_details`; this is currently not being used in v1.0.0.). As **[VegVault]{.text-background-black .text-color-white .text-bold}** encompasses both [contemporary]{.text-background-greenLight .text-color-black .text-bold} and [paleo-data]{.text-background-purpleLight .text-color-black .text-bold}, accurate [age information]{.text-background-purpleLight .text-color-black .text-bold} is required for each [Sample]{.text-background-brownDark .text-color-white .text-bold}. 
 
 ```{r}
 #| label: Samples variables scheme structure

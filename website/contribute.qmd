@@ -7,7 +7,7 @@ sidebar: true
 
 # Contributing to VegVault
 
-VegVault is envisioned as a continuously evolving database that will undergo regular updates for further improvement. We greatly appreciate community contributions and thank you for considering participating in the VegVault project.
+[VegVault]{.text-background-black .text-color-white .text-bold} is envisioned as a continuously evolving [database]{.text-background-brownDark .text-color-white .text-bold} that will undergo regular updates for further improvement. We greatly appreciate [community contributions]{.text-background-brownLight .text-color-white .text-bold} and thank you for considering participating in the [VegVault]{.text-background-black .text-color-white .text-bold} project.
 
 To maintain the highest quality of data and code, we adhere to strict guidelines. Please read through this document to understand our contribution process.
 
@@ -18,7 +18,7 @@ Found a bug or have an idea for enhancement? Visit our [Contact & Support](/webs
 
 ### 📊 Data Contributions
 
-We continuously seek new datasets to include in future VegVault versions. If you know of valuable data sources that could enhance VegVault, we'd love to hear from you!
+We continuously seek new [datasets]{.text-background-brownDark .text-color-white .text-bold} to include in future [VegVault]{.text-background-black .text-color-white .text-bold} versions. If you know of valuable data sources that could enhance [VegVault]{.text-background-black .text-color-white .text-bold}, we'd love to hear from you!
 
 **How to contribute data:**
 1. Review our [Database Structure](/website/database_structure.qmd) to understand current data types
@@ -28,7 +28,7 @@ We continuously seek new datasets to include in future VegVault versions. If you
 
 ### 💻 Code Contributions
 
-We welcome contributions to improve VegVault's codebase, documentation, and functionality.
+We welcome contributions to improve [VegVault]{.text-background-black .text-color-white .text-bold}'s [codebase]{.text-background-brownLight .text-color-white .text-bold}, documentation, and functionality.
 
 #### Prerequisites
 
