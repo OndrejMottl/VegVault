@@ -1,7 +1,7 @@
 project:
   type: website
   output-dir: docs
-  pre-render: R/04_Website/generate_theme.R
+  pre-render: R/04_Webiste/generate_theme.R
 
 website:
   title: "VegVault"

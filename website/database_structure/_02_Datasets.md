@@ -1,16 +1,29 @@
 
 
-## Datasets
+## <span class="text-background-brownDark text-color-white text-bold">Datasets</span>
 
-### Dataset Structure Overview (`Datasets`)
+### <span class="text-background-brownDark text-color-white text-bold">Dataset Structure Overview</span> (`[Datasets]{.text-background-brownDark .text-color-white .text-bold}`)
 
-The `Datasets` table represents the main organizational structure in
-**VegVault**, serving as the keystone for managing and organizing all
-data. Each Dataset contains one row with a unique Dataset ID
-(`dataset_id`), Dataset name (`dataset_name`), geographic location
-(`coord_lat`, `coord_long`), Dataset Type (`dataset_type_id`), Dataset
-Source (`data_source_id`), Dataset Source Type
-(`dataset_source_type_id`), and Sampling Method (`sampling_method_id`).
+The
+<span class="text-background-brownDark text-color-white text-bold">`Datasets`</span>
+table represents the main organizational structure in
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**,
+serving as the keystone for managing and organizing all data. Each
+<span class="text-background-brownDark text-color-white text-bold">Dataset</span>
+contains one row with a unique
+<span class="text-background-brownDark text-color-white text-bold">Dataset
+ID</span> (`dataset_id`),
+<span class="text-background-brownDark text-color-white text-bold">Dataset
+name</span> (`dataset_name`), geographic location (`coord_lat`,
+`coord_long`),
+<span class="text-background-brownDark text-color-white text-bold">Dataset
+Type</span> (`dataset_type_id`),
+<span class="text-background-brownDark text-color-white text-bold">Dataset
+Source</span> (`data_source_id`),
+<span class="text-background-brownDark text-color-white text-bold">Dataset
+Source Type</span> (`dataset_source_type_id`), and
+<span class="text-background-brownLight text-color-black text-bold">Sampling
+Method</span> (`sampling_method_id`).
 
 | column_name         | data_type | description                          |
 |---------------------|-----------|--------------------------------------|
@@ -29,25 +42,49 @@ Column names and types for table Datasets.
 src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
 style="width:100.0%" data-fig-align="center" />
 
-#### Dataset Types (`DatasetTypeID`)
+#### <span class="text-background-brownDark text-color-white text-bold">Dataset Types</span> (`[DatasetTypeID]{.text-background-brownDark .text-color-white .text-bold}`)
 
-The `Dataset Type` defines the most basic classification of each
-`Dataset`, ensuring that the vast amount of data is categorized
-systematically. Currently, **VegVault** contains the following types of
-`Datasets`:
+The
+<span class="text-background-brownDark text-color-white text-bold">`Dataset Type`</span>
+defines the most basic classification of each
+<span class="text-background-brownDark text-color-white text-bold">`Dataset`</span>,
+ensuring that the vast amount of data is categorized systematically.
+Currently,
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**
+contains the following types of
+<span class="text-background-brownDark text-color-white text-bold">`Datasets`</span>:
 
-- `vegetation_plot`: This type includes contemporary vegetation plot
-  data, capturing contemporary vegetation characteristics and
-  distributions.
-- `fossil_pollen_archive`: This type encompasses past vegetation plot
-  data derived from fossil pollen records, providing insights into past
-  vegetation and climate dynamics.
-- `traits`: This type contains functional trait data, detailing specific
-  characteristics of plant species that influence their ecological
-  roles.
-- `gridpoints`: This type holds artificially created `Datasets` to
-  manage abiotic data, here climate and soil information (a dataset type
-  created to hold abiotic data, see details in the Methods section).
+- <span class="text-background-greenLight text-color-black text-bold">`vegetation_plot`</span>:
+  This type includes
+  <span class="text-background-greenLight text-color-black text-bold">contemporary
+  vegetation plot data</span>, capturing contemporary vegetation
+  characteristics and distributions.
+- <span class="text-background-purpleLight text-color-black text-bold">`fossil_pollen_archive`</span>:
+  This type encompasses
+  <span class="text-background-purpleLight text-color-black text-bold">past
+  vegetation plot data</span> derived from
+  <span class="text-background-purpleLight text-color-black text-bold">fossil
+  pollen records</span>, providing insights into past vegetation and
+  climate dynamics.
+- <span class="text-background-blueDark text-color-white text-bold">`traits`</span>:
+  This type contains
+  <span class="text-background-blueDark text-color-white text-bold">functional
+  trait data</span>, detailing specific characteristics of plant species
+  that influence their ecological roles.
+- <span class="text-background-greenDark text-color-white text-bold">`gridpoints`</span>:
+  This type holds artificially created
+  <span class="text-background-brownDark text-color-white text-bold">`Datasets`</span>
+  to manage
+  <span class="text-background-greenDark text-color-white text-bold">abiotic
+  data</span>, here
+  <span class="text-background-greenDark text-color-white text-bold">climate</span>
+  and
+  <span class="text-background-greenDark text-color-white text-bold">soil
+  information</span> (a
+  <span class="text-background-brownDark text-color-white text-bold">dataset
+  type</span> created to hold
+  <span class="text-background-greenDark text-color-white text-bold">abiotic
+  data</span>, see details in the Methods section).
 
 | column_name | data_type | description |
 |----|----|----|
@@ -64,33 +101,64 @@ style="width:100.0%" data-fig-align="center" />
 src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_type.png"
 style="width:100.0%" data-fig-align="center" />
 
-#### Dataset Source-Types (`DatasetSourceTypeID`)
+#### <span class="text-background-brownDark text-color-white text-bold">Dataset Source-Types</span> (`[DatasetSourceTypeID]{.text-background-brownDark .text-color-white .text-bold}`)
 
-**VegVault** maintains detailed information about the primary data
-source, thereby enhancing the findability and referencing of primary
-data sources. Each `Dataset` is derived from a specific `Source-Type`
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**
+maintains detailed information about the
+<span class="text-background-brownDark text-color-white text-bold">primary
+data source</span>, thereby enhancing the findability and referencing of
+<span class="text-background-brownDark text-color-white text-bold">primary
+data sources</span>. Each
+<span class="text-background-brownDark text-color-white text-bold">`Dataset`</span>
+is derived from a specific
+<span class="text-background-brownDark text-color-white text-bold">`Source-Type`</span>
 that provides detailed information on the source used to retrieve the
-original data. The current `Source-Types` in **VegVault** include:
+original data. The current
+<span class="text-background-brownDark text-color-white text-bold">`Source-Types`</span>
+in
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**
+include:
 
-- **BIEN** - [Botanical Information and Ecology
+- **<span class="text-background-greenLight text-color-black text-bold">BIEN</span>** -
+  [Botanical Information and Ecology
   Network](https://bien.nceas.ucsb.edu/bien/)
-- **sPlotOpen** - [The open-access version of
+- **<span class="text-background-greenLight text-color-black text-bold">sPlotOpen</span>** -
+  [The open-access version of
   sPlot](https://idiv-biodiversity.de/en/splot/splotopen.html)
-- **TRY** - [TRY Plant Trait
-  Database](https://www.try-db.org/TryWeb/Home.php)
-- **Neotoma-FOSSILPOL** - [The workflow that aims to process and
-  standardise global palaeoecological pollen
+- **<span class="text-background-blueDark text-color-white text-bold">TRY</span>** -
+  [TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php)
+- **<span class="text-background-purpleLight text-color-black text-bold">Neotoma-FOSSILPOL</span>** -
+  [The workflow that aims to process and standardise global
+  palaeoecological pollen
   data](https://hope-uib-bio.github.io/FOSSILPOL-website/). Note that we
-  specifically state Neotoma-FOSSILPOL and not just Neotoma, as
-  FOSSILPOL not only provides the data acquisition but also alters it
-  (e.g., creating new age-depth models). It also addresses major
-  challenges in paleoecological data integration, such as age
-  uncertainty, by incorporating probabilistic age-depth models and their
-  associated uncertainty matrices. This enables the propagation of
-  temporal uncertainty in subsequent analyses, a critical advancement
-  for robust macroecological studies, previously flagged as a major
-  issue with paleo-data.
-- **gridpoints** - artificially created `Datasets` to hold abiotic data
+  specifically state
+  <span class="text-background-purpleLight text-color-black text-bold">Neotoma-FOSSILPOL</span>
+  and not just Neotoma, as
+  <span class="text-background-purpleLight text-color-black text-bold">FOSSILPOL</span>
+  not only provides the
+  <span class="text-background-brownLight text-color-black text-bold">data
+  acquisition</span> but also alters it (e.g., creating new
+  <span class="text-background-purpleLight text-color-black text-bold">age-depth
+  models</span>). It also addresses major challenges in
+  <span class="text-background-purpleLight text-color-black text-bold">paleoecological
+  data integration</span>, such as
+  <span class="text-background-purpleLight text-color-black text-bold">age
+  uncertainty</span>, by incorporating
+  <span class="text-background-purpleLight text-color-black text-bold">probabilistic
+  age-depth models</span> and their associated
+  <span class="text-background-purpleLight text-color-black text-bold">uncertainty
+  matrices</span>. This enables the propagation of
+  <span class="text-background-purpleLight text-color-black text-bold">temporal
+  uncertainty</span> in subsequent analyses, a critical advancement for
+  robust macroecological studies, previously flagged as a major issue
+  with
+  <span class="text-background-purpleLight text-color-black text-bold">paleo-data</span>.
+- **<span class="text-background-greenDark text-color-white text-bold">gridpoints</span>** -
+  artificially created
+  <span class="text-background-brownDark text-color-white text-bold">`Datasets`</span>
+  to hold
+  <span class="text-background-greenDark text-color-white text-bold">abiotic
+  data</span>
 
 | column_name | data_type | description |
 |----|----|----|

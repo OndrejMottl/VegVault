@@ -1,12 +1,18 @@
 
 
-## Taxa
+## <span class="text-background-blueDark text-color-white text-bold">Taxa</span>
 
-### Taxa Structure Overview (`Taxa`)
+### <span class="text-background-blueDark text-color-white text-bold">Taxa Structure Overview</span> (`[Taxa]{.text-background-blueDark .text-color-white .text-bold}`)
 
-The **VegVault** database records the original taxonomic names derived
-directly from the primary data sources, and currently, it holds over 100
-thousand taxonomic names.
+The
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**
+database records the original
+<span class="text-background-blueDark text-color-white text-bold">taxonomic
+names</span> derived directly from the
+<span class="text-background-brownDark text-color-white text-bold">primary
+data sources</span>, and currently, it holds over 100 thousand
+<span class="text-background-blueDark text-color-white text-bold">taxonomic
+names</span>.
 
 | column_name | data_type | description                          |
 |-------------|-----------|--------------------------------------|

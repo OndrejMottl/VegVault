@@ -1,28 +1,68 @@
 
 
-## Samples
+## <span class="text-background-brownDark text-color-white text-bold">Samples</span>
 
-`Samples` represent the main unit of data in **VegVault**, serving as
-the fundamental building blocks for all analyses. There are currently
-over 13 million `Samples` in **VegVault** v1.0.0 (of which ~ 1.6 million
-are gridpoints of abiotic data, see [Database
-Assembly](.\website/database_assembly.qmd)).
+<span class="text-background-brownDark text-color-white text-bold">`Samples`</span>
+represent the main unit of data in
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**,
+serving as the fundamental building blocks for all analyses. There are
+currently over 13 million
+<span class="text-background-brownDark text-color-white text-bold">`Samples`</span>
+in
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**
+v1.0.0 (of which ~ 1.6 million are
+<span class="text-background-greenDark text-color-white text-bold">gridpoints</span>
+of
+<span class="text-background-greenDark text-color-white text-bold">abiotic
+data</span>, see [Database Assembly](.\website/database_assembly.qmd)).
 
-**VegVault** encompasses both contemporary and paleo data, necessitating
-accurate age information for each `Sample`. Contemporary `Samples` are
-assigned an age of `0`, while `Samples` from fossil pollen records are
-in calibrated years before the present (cal yr BP). The “present” is
-here specified as 1950 AD.
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**
+encompasses both
+<span class="text-background-greenLight text-color-black text-bold">contemporary</span>
+and
+<span class="text-background-purpleLight text-color-black text-bold">paleo
+data</span>, necessitating accurate
+<span class="text-background-purpleLight text-color-black text-bold">age
+information</span> for each
+<span class="text-background-brownDark text-color-white text-bold">`Sample`</span>.
+<span class="text-background-greenLight text-color-black text-bold">Contemporary</span>
+<span class="text-background-brownDark text-color-white text-bold">`Samples`</span>
+are assigned an
+<span class="text-background-greenLight text-color-black text-bold">age
+of `0`</span>, while
+<span class="text-background-brownDark text-color-white text-bold">`Samples`</span>
+from
+<span class="text-background-purpleLight text-color-black text-bold">fossil
+pollen records</span> are in
+<span class="text-background-purpleLight text-color-black text-bold">calibrated
+years before the present (cal yr BP)</span>. The “present” is here
+specified as 1950 AD.
 
-### Sample Structure Overview (`Samples`)
+### <span class="text-background-brownDark text-color-white text-bold">Sample Structure Overview</span> (`[Samples]{.text-background-brownDark .text-color-white .text-bold}`)
 
-The table contains one `Sample` per row, with each `Sample` containing:
-a unique Sample ID (`sample_id`), Sample name (`sample_name`), temporal
-information about Sample (`age`), sample site (size of the plot if
-available; `sample_size_id`), and additional information about sample
-(`sample_details`; this is currently not being used in v1.0.0.). As
-**VegVault** encompasses both contemporary and paleo-data, accurate age
-information is required for each Sample.
+The table contains one
+<span class="text-background-brownDark text-color-white text-bold">`Sample`</span>
+per row, with each
+<span class="text-background-brownDark text-color-white text-bold">`Sample`</span>
+containing: a unique
+<span class="text-background-brownDark text-color-white text-bold">Sample
+ID</span> (`sample_id`),
+<span class="text-background-brownDark text-color-white text-bold">Sample
+name</span> (`sample_name`), temporal information about
+<span class="text-background-brownDark text-color-white text-bold">Sample</span>
+(<span class="text-background-purpleLight text-color-black text-bold">`age`</span>),
+sample site (size of the plot if available; `sample_size_id`), and
+additional information about sample (`sample_details`; this is currently
+not being used in v1.0.0.). As
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**
+encompasses both
+<span class="text-background-greenLight text-color-black text-bold">contemporary</span>
+and
+<span class="text-background-purpleLight text-color-black text-bold">paleo-data</span>,
+accurate
+<span class="text-background-purpleLight text-color-black text-bold">age
+information</span> is required for each
+<span class="text-background-brownDark text-color-white text-bold">Sample</span>.
 
 | column_name | data_type | description |
 |----|----|----|

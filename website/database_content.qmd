@@ -106,7 +106,7 @@ fig_world_empty <-
   tibble::tibble() %>%
   ggplot2::ggplot() +
   ggplot2::borders(
-    fill = col_grey,
+    fill = col_black,
     col = NA
   ) +
   ggplot2::labs(

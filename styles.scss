@@ -31,9 +31,6 @@ $headingLetterSpacing: normal;
 $headingTextShadow: none;
 $headingFontWeight: normal;
 
-// Layout
-$content-max-width: 900px;
-
 /*-- scss:rules --*/
 
 /* General text styling */
@@ -95,7 +92,7 @@ a {
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
+@media ( max-width: 90%) {
   body {
     font-size: 0.9rem;
   }
@@ -340,11 +337,6 @@ table tbody tr:last-child td {
       text-decoration: underline;
     }
   }
-}
-
-/* Website layout improvements */
-.quarto-container {
-  max-width: $content-max-width;
 }
 
 /* Sidebar navigation */

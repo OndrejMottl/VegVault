@@ -1,16 +1,38 @@
 
 
-## Traits
+## <span class="text-background-blueDark text-color-white text-bold">Traits</span>
 
-### Traits Structure Overview (`Traits`)
+### <span class="text-background-blueDark text-color-white text-bold">Traits Structure Overview</span> (`[Traits]{.text-background-blueDark .text-color-white .text-bold}`)
 
-The **Traits** table contains the list of functional traits currently
-contained in **VegVault**. The table contains one `Trait` per row, with
-each `Trait` containing: a unique Trait ID (`trait_id`), original Trait
-name from primary source (`trait_name`), and Trait Domain
-(`trait_domain_id`). Functional traits of vegetation taxa follow the
-same structure of `Dataset` and `Samples` obtained directly from
-`Dataset` `Source-Types`.
+The
+**<span class="text-background-blueDark text-color-white text-bold">Traits</span>**
+table contains the list of
+<span class="text-background-blueDark text-color-white text-bold">functional
+traits</span> currently contained in
+**<span class="text-background-black text-color-white text-bold">VegVault</span>**.
+The table contains one
+<span class="text-background-blueDark text-color-white text-bold">`Trait`</span>
+per row, with each
+<span class="text-background-blueDark text-color-white text-bold">`Trait`</span>
+containing: a unique
+<span class="text-background-blueDark text-color-white text-bold">Trait
+ID</span> (`trait_id`), original
+<span class="text-background-blueDark text-color-white text-bold">Trait
+name</span> from
+<span class="text-background-brownDark text-color-white text-bold">primary
+source</span> (`trait_name`), and
+<span class="text-background-blueDark text-color-white text-bold">Trait
+Domain</span> (`trait_domain_id`).
+<span class="text-background-blueDark text-color-white text-bold">Functional
+traits</span> of vegetation
+<span class="text-background-blueDark text-color-white text-bold">taxa</span>
+follow the same structure of
+<span class="text-background-brownDark text-color-white text-bold">`Dataset`</span>
+and
+<span class="text-background-brownDark text-color-white text-bold">`Samples`</span>
+obtained directly from
+<span class="text-background-brownDark text-color-white text-bold">`Dataset`</span>
+<span class="text-background-brownDark text-color-white text-bold">`Source-Types`</span>.
 
 | column_name | data_type | description |
 |----|----|----|

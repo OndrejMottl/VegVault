@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-64859d97642be391e2e2320459a8de7a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-69720362075ada8d78af988affa4822b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -220,12 +220,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <section id="vegvault-usage-examples" class="level1">
-<h1>VegVault Usage Examples</h1>
+<h1><span class="text-background-black text-color-white text-bold">VegVault</span> Usage Examples</h1>
 <section id="introduction-to-vaultkeepr" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-to-vaultkeepr">Introduction to {vaultkeepr}</h2>
 <div class="columns">
 <div class="column" style="width:75%;">
-<p>To make VegVault as accessible as possible, we developed <a href="https://bit.ly/vaultkeepr">{vaultkeepr}</a>, a comprehensive R package providing intuitive functions for interacting with the database. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory. With &gt;95% code coverage, {vaultkeepr} is a well-tested interface for VegVault.</p>
+<p>To make <span class="text-background-black text-color-white text-bold">VegVault</span> as accessible as possible, we developed <a href="https://bit.ly/vaultkeepr">{vaultkeepr}</a>, a comprehensive R package providing intuitive functions for interacting with the <span class="text-background-brownDark text-color-white text-bold">database</span>. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory. With &gt;95% code coverage, {vaultkeepr} is a <span class="text-background-brownLight text-color-white text-bold">well-tested</span> interface for <span class="text-background-black text-color-white text-bold">VegVault</span>.</p>
 </div><div class="column" style="width:25%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -282,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="practical-examples" class="level2">
 <h2 class="anchored" data-anchor-id="practical-examples">Practical Examples</h2>
-<p>The following examples demonstrate VegVault’s capabilities across different research scenarios. Note that these examples focus on <strong>data extraction</strong> rather than analysis—they show how to obtain properly formatted datasets for your research projects.</p>
+<p>The following examples demonstrate <span class="text-background-black text-color-white text-bold">VegVault</span>’s capabilities across different research scenarios. Note that these examples focus on <strong>data extraction</strong> rather than analysis—they show how to obtain properly formatted <span class="text-background-brownDark text-color-white text-bold">datasets</span> for your research projects.</p>
 </section>
 <section id="example-1-spatiotemporal-patterns-of-the-picea-genus-across-north-america-since-the-lgm" class="level2">
 <h2 class="anchored" data-anchor-id="example-1-spatiotemporal-patterns-of-the-picea-genus-across-north-america-since-the-lgm">Example 1: Spatiotemporal patterns of the <em>Picea</em> genus across North America since the LGM</h2>
@@ -389,7 +389,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add trait information &amp; clasify all data to a genus level</span></span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  vaultkeepr<span class="sc">::</span><span class="fu">get_traits</span>(<span class="at">classify_to =</span> <span class="st">"genus"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Only select the plant height</span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  vaultkeepr<span class="sc">::</span><span class="fu">select_traits_by_domain_name</span>(<span class="at">sel_domain =</span> <span class="st">"Plant heigh"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  vaultkeepr<span class="sc">::</span><span class="fu">select_traits_by_domain_name</span>(<span class="at">sel_domain =</span> <span class="st">"Plant height"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  vaultkeepr<span class="sc">::</span><span class="fu">extract_data</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now let’s plot the overview of the data</p>
 <p><img src="../Outputs/Figures/website/DB_example/fig_la_merge.png" style="width:100.0%" data-fig-align="center"></p>
