@@ -147,7 +147,7 @@ fig_template <-
   ggplot2::geom_sf(
     data = data_cz_border,
     fill = NA,
-    colour = "red"
+    colour = col_purple # [config] - highlighting border
   )
 
 fig_europe <-
