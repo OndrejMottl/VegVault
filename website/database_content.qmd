@@ -139,51 +139,6 @@ fig_vegetation_space <-
   ) +
   ggplot2::coord_sf()
 
-# alternative time figure using density
-if (
-  FALSE
-) {
-  fig_vegetation_time <-
-    data_vegetation_samples_time %>%
-    ggplot2::ggplot(
-      ggplot2::aes(
-        x = age,
-        y = ggplot2::after_stat(count)
-      )
-    ) +
-    ggplot2::geom_density(
-      ggplot2::aes(
-        fill = dataset_type
-      ),
-      alpha = 0.75,
-      adjust = 5
-    ) +
-    ggplot2::scale_fill_manual(
-      values = palette_dataset_type # [config]
-    ) +
-    ggplot2::scale_x_continuous(
-      transform = scales::transform_log1p(),
-      breaks = c(0, 100, 1e3, 5e3, 10e3, 20e3),
-      labels = c("0", 0.1, 1, 5, 10, 20)
-    ) +
-    ggplot2::scale_y_continuous(
-      transform = scales::transform_log1p(),
-      breaks = c(1, 10, 100, 1e3, 10e3, 100e3),
-      labels = c("1", "10", "100", "1e3", "1e4", "1e5")
-    ) +
-    ggplot2::guides(
-      color = ggplot2::guide_legend(override.aes = list(size = point_size))
-    ) +
-    ggplot2::theme(
-      legend.position = "top"
-    ) +
-    ggplot2::labs(
-      x = "Age (ka cal yr BP)",
-      y = "Number of Samples",
-      fill = "Dataset Type"
-    )
-}
-
 fig_vegetation_time <-
   data_vegetation_samples_time %>%
   ggplot2::ggplot(
@@ -254,7 +209,7 @@ fig_vegetation <-
     rel_heights = c(0.1, 1)
   )
 
-plot(fig_vegetation)
+plot(fig_vegetation, bg = col_beige_light)
 ```
 
 ## Related Resources
