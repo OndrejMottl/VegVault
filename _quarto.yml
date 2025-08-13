@@ -15,10 +15,19 @@ website:
   image: Outputs\Figures\website\VegVault_image.png
   favicon: Outputs\Figures\website\VegVault_logo.png
   back-to-top-navigation: true
+ 
   navbar:
+    title: VegVault
+
+    search: true
+
+    tools:
+      - icon: bluesky
+        href: https://bsky.app/profile/ondrejmottl.bsky.social
+      - icon: github
+        href: https://github.com/OndrejMottl/VegVault
+
     left:
-      - text: About
-        href: index.qmd
       - text: People
         href: website/people.qmd
       - text: Database
@@ -39,13 +48,7 @@ website:
         href: website/contact.qmd
       - text: Contribute!
         href: website/contribute.qmd
-    search: true
-    tools:
-      - icon: bluesky
-        href: https://bsky.app/profile/ondrejmottl.bsky.social
-      - icon: github
-        href: https://github.com/OndrejMottl/VegVault
-
+ 
 format:
   html:
     theme: 
