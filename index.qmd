@@ -6,7 +6,7 @@ sidebar: false
 
 # VegVault<img src="Outputs/Figures/website/VegVault_logo.png" align="right" width="250"/>
 
-## Database linking global [paleo-]{.text-background-purpleLight .text-color-black .text-bold}, and [neo-vegetation data]{.text-background-greenLight .text-color-black .text-bold}, [functional traits]{.text-background-blueDark .text-color-white .text-bold}, and [climate]{.text-background-greenDark .text-color-white .text-bold}
+## Database linking global paleo-, and neo-vegetation data, functional traits, and climate
 
 This is the official website dedicated to the [VegVault]{.text-background-black .text-color-white .text-bold} project. [VegVault]{.text-background-black .text-color-white .text-bold} is a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} that integrates global [paleo-]{.text-background-purpleLight .text-color-black .text-bold} and [neo-ecological vegetation data]{.text-background-greenLight .text-color-black .text-bold} with [functional traits]{.text-background-blueDark .text-color-white .text-bold} and [abiotic information]{.text-background-greenDark .text-color-white .text-bold}, including [climate]{.text-background-greenDark .text-color-white .text-bold} and soil data. By bridging historical and contemporary data across multiple temporal and spatial scales, [VegVault]{.text-background-black .text-color-white .text-bold} provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.
 
