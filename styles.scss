@@ -42,82 +42,36 @@ body {
   background-color: $backgroundColor;
 }
 
-a {
-  color: $link-color !important;
-  text-decoration: underline !important;
-  transition: color 0.3s ease;
 
-  &:hover {
-    color: $greenLight !important;
-    text-decoration: underline !important;
-  }
-}
-
-.btn {
-  background-color: $black;
-  color: $white;
-  border: 2px solid $black;
-  font-family: $mainFont;
-  font-variant-caps: all-petite-caps;
-  border-radius: 10px;
-  padding: 8px 16px;
-  text-decoration: none !important;
-  display: inline-block;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: $white;
-    color: $black;
-    border-color: $black;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-}
-
-/* Button variants */
-.btn-primary {
-  background-color: $greenDark;
-  border-color: $greenDark;
-  
-  &:hover {
-    background-color: $greenLight;
-    border-color: $greenLight;
-    color: $black;
-  }
-}
 
 /* Responsive design */
-@media ( max-width: 90%) {
+@media (max-width: 90%) {
   body {
     font-size: 0.9rem;
   }
-  
+
   h1 {
     font-size: 2rem;
   }
-  
+
   h2 {
     font-size: 1.5rem;
   }
-  
+
   h3 {
     font-size: 1.2rem;
   }
-  
+
   .navbar-brand {
     font-size: 1.2rem;
   }
-  
+
   table {
     font-size: 0.85rem;
   }
-  
-  pre, code {
+
+  pre,
+  code {
     font-size: 0.8rem;
   }
 }
@@ -142,6 +96,7 @@ h2 {
   letter-spacing: $headingLetterSpacing;
   font-weight: $headingFontWeight;
   margin-top: $blockMargin;
+  text-shadow: 2px 3px 4px $black;
 }
 
 h3 {
@@ -194,15 +149,103 @@ div.sourceCode pre,
   word-wrap: break-word !important;
 }
 
-/* Code links */
+/* Links */
+@mixin link-hover-effect {
+  &:hover {
+    color: $black;
+    background-color: $white;
+    border: 2px solid $black;
+    border-radius: 5px;
+  }
+}
+
+@mixin button-hover-invert {
+  &:hover {
+    background-color: $white !important;
+    color: $black !important;
+    border-color: $black !important;
+  }
+}
+
+a,
 pre a,
 code a {
   color: $black;
   text-decoration: underline;
+  @include link-hover-effect;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Buttons */
+@mixin nav-hover-effect {
+  &:hover {
+    color: $black !important;
+    background-color: $blueLight !important;
+    text-decoration: underline !important;
+    border: none !important;
+  }
+}
+
+.btn {
+  background-color: $black !important;
+  color: $white !important;
+  border: 2px solid $black;
+  font-family: $mainFont;
+  font-variant-caps: all-petite-caps;
+  border-radius: 10px;
+  padding: 8px 16px;
+  text-decoration: none !important;
+  display: inline-block;
+  transition: all 0.3s ease;
+
+  a {
+    color: $white !important;
+    background-color: $black !important;
+    @include button-hover-invert;
+  }
+
+  @include button-hover-invert;
 
   &:hover {
-    color: $greenDark;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.btn-primary {
+  background-color: $black !important;
+  border-color: $black !important;
+  @include button-hover-invert;
+}
+
+/* Navbar */
+.navbar {
+  background-color: $blueLight;
+  border-bottom: 2px solid $black;
+}
+
+.nav-item {
+  border-left: 1px solid $black;
+}
+
+.navbar-brand {
+  font-family: $headingFont;
+  font-weight: bold;
+  color: $black !important;
+  @include nav-hover-effect;
+}
+
+.nav-link {
+  color: $black !important;
+  @include nav-hover-effect;
 }
 
 /* List styling */
@@ -228,7 +271,7 @@ blockquote {
   padding: $blockMargin;
   margin: $blockMargin 0;
   font-style: italic;
-  
+
   p {
     margin-bottom: 0;
   }
@@ -297,30 +340,8 @@ table tbody tr:last-child td {
   border-bottom: 2px solid $black;
 }
 
-/* Navbar */
-.navbar {
-  background-color: $white;
-  border-bottom: 2px solid $black;
-}
 
-.nav-item {
-  border-left: 1px solid $black;
-}
 
-.navbar-brand {
-  font-family: $headingFont;
-  font-weight: bold;
-  color: $black !important;
-}
-
-.nav-link {
-  color: $black !important;
-  
-  &:hover {
-    color: $greenDark !important;
-    background-color: lighten($beigeLight, 10%);
-  }
-}
 
 /* Footer */
 .nav-footer {
@@ -347,12 +368,12 @@ table tbody tr:last-child td {
 
 .sidebar-navigation .nav-link {
   color: $black;
-  
+
   &:hover {
     background-color: $beigeLight;
     color: $greenDark;
   }
-  
+
   &.active {
     background-color: $greenDark;
     color: $white;
