@@ -27,9 +27,9 @@ source(
 )
 
 # Load dynamic colors and fonts from JSON
-colors_data <- 
+colors_data <-
   jsonlite::fromJSON(here::here("colors.json"))
-fonts_data <- 
+fonts_data <-
   jsonlite::fromJSON(here::here("fonts.json"))
 
 #----------------------------------------------------------#
@@ -53,13 +53,18 @@ line_size <- 0.1
 point_size <- 3
 
 # define font - using dynamic font system
-font_family <- 
+font_family <-
   fonts_data$body
 
-sysfonts::font_add(
-  family = font_family,
-  regular = here::here("Fonts/Renogare-Regular.otf")
-)
+
+if (
+  !font_family %in% sysfonts::font_families()
+) {
+  sysfonts::font_add_google(
+    name = font_family
+  )
+}
+
 showtext::showtext_auto()
 
 # define output sizes
@@ -156,8 +161,8 @@ palette_dataset_type <-
   ) %>%
   rlang::set_names(
     nm = c(
-      "vegetation_plot",
-      "fossil_pollen_archive",
+      "vegetation plot",
+      "fossil pollen archive",
       "traits",
       "gridpoints"
     )
