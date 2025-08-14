@@ -1,4 +1,4 @@
-# [VegVault Database Structure]{.text-background-black .text-color-white .text-bold}
+# VegVault Database Structure
 
 Currently, [VegVault]{.text-background-black .text-color-white .text-bold} consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal [database structure]{.text-background-brownDark .text-color-white .text-bold} may not be directly relevant to most users, as the [{vaultkeepr}](https://bit.ly/vaultkeepr) R package processes all data to output only the most relevant information in a "[ready-to-analyze]{.text-background-brownLight .text-color-black .text-bold}" format.
 
@@ -46,17 +46,17 @@ invisible(
 
 ```
 
-## [Metadata Tables]{.text-background-brownDark .text-color-white .text-bold}
+## Metadata Tables
 
 Several tables contain [metadata]{.text-background-brownDark .text-color-white .text-bold} and administrative information that are not directly linked to the scientific data:
 
-- **[`Authors`]{.text-background-brownDark .text-color-white .text-bold}**: Information about [VegVault]{.text-background-black .text-color-white .text-bold} authors and maintainers, including contact details
-- **[`version_control`]{.text-background-brownDark .text-color-white .text-bold}**: [Database version]{.text-background-brownDark .text-color-white .text-bold} information with descriptions of changes over time  
-- **[`sqlite_stat1`]{.text-background-brownDark .text-color-white .text-bold} & [`sqlite_stat4`]{.text-background-brownDark .text-color-white .text-bold}**: SQLite system tables containing [database index statistics]{.text-background-brownLight .text-color-black .text-bold} for query optimization
+- `Authors`: Information about [VegVault]{.text-background-black .text-color-white .text-bold} authors and maintainers, including contact details
+- `version_control`: [Database version information]{.text-background-brownDark .text-color-white .text-bold} with descriptions of changes over time
+- `sqlite_stat1` & `sqlite_stat4`: [SQLite system tables]{.text-background-brownDark .text-color-white .text-bold} containing [database index statistics]{.text-background-brownDark .text-color-white .text-bold} for query optimization
 
 ```{r}
 #| label: Authors variables scheme structure
-#| tbl-cap: "Column names and types for table Authors."
+#| tbl-cap: "Column names and types for table `Authors`."
 data_comments_authors <-
   tibble::tribble(
     ~column_name, ~description,
@@ -79,7 +79,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Version Control variables scheme structure
-#| tbl-cap: "Column names and types for table version_control."
+#| tbl-cap: "Column names and types for table `version_control`."
 data_comments_version_control <-
   tibble::tribble(
     ~column_name, ~description,
