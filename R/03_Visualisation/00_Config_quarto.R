@@ -99,20 +99,20 @@ ggplot2::theme_set(
     ggplot2::theme(
       text = ggplot2::element_text(
         size = text_size,
-        colour = col_blue_dark,
+        colour = col_black,
         family = font_family
       ),
       line = ggplot2::element_line(
         linewidth = line_size,
-        colour = col_blue_dark
+        colour = col_black
       ),
       axis.text = ggplot2::element_text(
-        colour = col_blue_dark,
+        colour = col_black,
         size = text_size,
         family = font_family
       ),
       axis.title = ggplot2::element_text(
-        colour = col_blue_dark,
+        colour = col_black,
         size = text_size,
         family = font_family
       ),
@@ -129,6 +129,25 @@ ggplot2::theme_set(
         fill = col_brown_light,
         colour = col_brown_light
       ),
+      strip.background = ggplot2::element_rect(
+        fill = col_brown_dark,
+        colour = col_black
+      ),
+      strip.text = ggplot2::element_text(
+        colour = col_white,
+        size = text_size,
+        family = font_family
+      ),
+      strip.text.x = ggplot2::element_text(
+        colour = col_white,
+        size = text_size,
+        family = font_family
+      ),
+      strip.text.y = ggplot2::element_text(
+        colour = col_white,
+        size = text_size,
+        family = font_family
+      )
     )
 )
 

@@ -5,7 +5,7 @@ date-modified: last-modified
 format:
   html:
     toc: true
-    toc-depth: 3
+    toc-depth: 4
     fig-width: 10
     embed-resources: true
 

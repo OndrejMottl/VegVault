@@ -6,7 +6,7 @@ plot_waffle <- function(
     n_rows = NULL,
     plot_title = "",
     col_background = col_brown_light, # [config]
-    col_lines = col_blue_dark, # [config]
+    col_lines = col_black, # [config]
     legend_position = "right",
     legend_n_col = 1,
     data_point_name = "data points",
