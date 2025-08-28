@@ -38,7 +38,7 @@ This page provides access to all VegVault-related resources including the databa
 ### Primary Database Access
 
 **VegVault v1.0.0 (SQLite Database - Recommended)**
-[Download Database v1.0.0](https://doi.org/10.48700/datst.t21cz-2nq071){.btn}
+[Download Database v1.0.0](https://doi.org/10.48700/datst.t21cz-2nq07){.btn}
 
 Please review our [Database Access Guidelines](/website/database_access.qmd#guidelines-for-data-reuse-and-citation) for proper usage and citation requirements.
 

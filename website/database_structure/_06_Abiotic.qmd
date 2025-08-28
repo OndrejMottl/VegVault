@@ -1,6 +1,6 @@
-## [Abiotic Variables]{.text-background-greenDark .text-color-white .text-bold}
+## Abiotic Variables
 
-The [abiotic data]{.text-background-greenDark .text-color-white .text-bold} in the **[VegVault]{.text-background-black .text-color-white .text-bold}** database provide essential information on [environmental factors]{.text-background-greenDark .text-color-white .text-bold} affecting vegetation distribution and [traits]{.text-background-blueDark .text-color-white .text-bold}. Currently, **[VegVault]{.text-background-black .text-color-white .text-bold}** includes [abiotic data]{.text-background-greenDark .text-color-white .text-bold} from [CHELSA](https://chelsa-climate.org/), [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/), and [WoSIS](https://www.isric.org/explore/wosis). [CHELSA]{.text-background-greenDark .text-color-white .text-bold} and [CHELSA-TRACE21]{.text-background-greenDark .text-color-white .text-bold} provide high-resolution [climate data]{.text-background-greenDark .text-color-white .text-bold}, while [WoSIS]{.text-background-greenDark .text-color-white .text-bold} offers detailed [soil information]{.text-background-greenDark .text-color-white .text-bold}.
+The [abiotic data]{.abiotic} in the [VegVault]{.vegvault} database provide essential information on [environmental factors]{.abiotic} affecting vegetation distribution and [traits]{.traits}. Currently, [VegVault]{.vegvault} includes [abiotic data]{.abiotic} from [CHELSA](https://chelsa-climate.org/), [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/), and [WoSIS](https://www.isric.org/explore/wosis). [CHELSA]{.abiotic} and [CHELSA-TRACE21]{.abiotic} provide high-resolution [climate data]{.abiotic}, while [WoSIS]{.abiotic} offers detailed [soil information]{.abiotic}.
 
 ```{r}
 #| label: source config
@@ -39,22 +39,13 @@ invisible(
 )
 ```
 
-### [Abiotic variables]{.text-background-greenDark .text-color-white .text-bold} (`[AbioticVariable]{.text-background-greenDark .text-color-white .text-bold}`)
+### [Abiotic variables]{.abiotic} (`AbioticVariable`)
 
-As **[VegVault]{.text-background-black .text-color-white .text-bold}** contains [abiotic variables]{.text-background-greenDark .text-color-white .text-bold} from several [primary sources]{.text-background-brownDark .text-color-white .text-bold}, the [`AbioticVariable`]{.text-background-greenDark .text-color-white .text-bold} table contains descriptions of [abiotic variables]{.text-background-greenDark .text-color-white .text-bold} (`abiotic_variable_name`), their units (`abiotic_variable_unit`), and measurement details (`measure_details`). These data include variables such as [climate]{.text-background-greenDark .text-color-white .text-bold} and [soil conditions]{.text-background-greenDark .text-color-white .text-bold}, which are crucial for understanding the ecological contexts of vegetation dynamics. 
-
-```{r}
-#| label: AbioticVariable scheme structure
-include_graphics_absolute_path(
-  here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/AbioticVariable.png"
-  )
-)
-```
+As [VegVault]{.vegvault} contains [abiotic variables]{.abiotic} from several [primary sources]{.database}, the `AbioticVariable` table contains descriptions of [abiotic variables]{.abiotic} (`abiotic_variable_name`), their units (`abiotic_variable_unit`), and measurement details (`measure_details`). These data include variables such as [climate]{.abiotic} and [soil conditions]{.abiotic}, which are crucial for understanding the ecological contexts of vegetation dynamics. 
 
 ```{r}
 #| label: AbioticVariable variables scheme structure
-#| tbl-cap: "Column names and types for table AbioticVariable."
+#| tbl-cap: "Column names and types for table `AbioticVariable`."
 data_comments_abiotic_variable <-
   tibble::tribble(
     ~column_name, ~description,
@@ -77,7 +68,17 @@ get_db_table_data_types(
 ```
 
 ```{r}
+#| label: AbioticVariable scheme structure
+include_graphics_absolute_path(
+  here::here(
+    "Outputs/Figures/website/DB_scheme_visualisation/AbioticVariable.png"
+  )
+)
+```
+
+```{r}
 #| label: show abiotic variables
+#| tbl-cap: "Table showing abiotic variables."
 dplyr::tbl(con, "AbioticVariable") %>%
   dplyr::select(abiotic_variable_name, abiotic_variable_unit, measure_details) %>%
   dplyr::collect() %>%
@@ -91,9 +92,21 @@ dplyr::tbl(con, "AbioticVariable") %>%
   plot_table()
 ```
 
-### Abiotic Data (`AbioticData`) 
+### [Abiotic Data]{.abiotic} (`AbioticData`) 
 
 The `AbioticData` table holds the actual values of abiotic variables (the units are the same for each `AbioticVariable`).
+
+```{r}
+#| label:  AbioticData variables scheme structure
+#| tbl-cap: "Column names and types for table `AbioticData`."
+data_comments_abiotic_data <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "sample_id", "ID of a Sample",
+    "abiotic_variable_id", "ID of an Abiotic Variable",
+    "abiotic_value", "Value of an Abiotic Variable"
+  )
+```
 
 ```{r}
 #| label: AbioticData scheme structure
@@ -105,35 +118,13 @@ include_graphics_absolute_path(
 ```
 
 
-```{r}
-#| label:  AbioticData variables scheme structure
-#| tbl-cap: "Column names and types for table AbioticData."
-data_comments_abiotic_data <-
-  tibble::tribble(
-    ~column_name, ~description,
-    "sample_id", "ID of a Sample",
-    "abiotic_variable_id", "ID of an Abiotic Variable",
-    "abiotic_value", "Value of an Abiotic Variable"
-  )
-```
-
 ### Gridpoints (`AbioticDataReference`)
 
-Gridpoints are stored in artificially created `Datasets` and `Samples`, with one `Dataset` holding more `Samples` only if they differ in age. We have estimated the spatial and temporal distance between each `gridpoint` and other non-`gridpoint` `Samples` (`vegetation_plot`, `fossil_pollen_archive`, and `traits`). We store the link between `gridpoint` and non-`gridpoint` `Samples` as well as the spatial and temporal distance. As this results in very large amounts of data, we have discarded any `gridpoint` `Sample`, which is not close to 50 km and/or 5000 years to any other non-`gridpoint` `Samples` as not relevant for the vegetation dynamics.
-
-
-```{r}
-#| label: AbioticDataReference scheme structure
-include_graphics_absolute_path(
-  here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
-  )
-)
-```
+Gridpoints are stored in artificially created [Datasets]{.database} and [Samples]{.database}, with one [Dataset]{.database} holding more [Samples]{.database} only if they differ in age. We have estimated the spatial and temporal distance between each [gridpoint]{.abiotic} and other non-[gridpoint]{.abiotic} [Samples]{.database} (`vegetation_plot`, `fossil_pollen_archive`, and `traits`). We store the link between [gridpoint]{.abiotic} and non-[gridpoint]{.abiotic} [Samples]{.database} as well as the spatial and temporal distance. As this results in very large amounts of data, we have discarded any [gridpoint]{.abiotic} [Sample]{.database}, which is not close to 50 km and/or 5000 years to any other non-[gridpoint]{.abiotic} [Samples]{.database} as not relevant for the vegetation dynamics.
 
 ```{r}
 #| label: AbioticDataReference variables scheme structure
-#| tbl-cap: "Column names and types for table AbioticDataReference."
+#| tbl-cap: "Column names and types for table `AbioticDataReference`."
 data_comments_abiotic_data_reference <-
   tibble::tribble(
     ~column_name, ~description,
@@ -154,7 +145,16 @@ get_db_table_data_types(
   plot_table()
 ```
 
-Such data structure allows that environmental context is readily available for each vegetation and trait `Sample`. For each non-`gridpoint` `Sample`, users can select the closest spatio-temporally abiotic data or get average from all surrounding `gridpoints`.
+```{r}
+#| label: AbioticDataReference scheme structure
+include_graphics_absolute_path(
+  here::here(
+    "Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
+  )
+)
+```
+
+Such data structure allows that environmental context is readily available for each vegetation and trait [Sample]{.database}. For each non-[gridpoint]{.abiotic} [Sample]{.database}, users can select the closest spatio-temporally abiotic data or get average from all surrounding [gridpoints]{.abiotic}.
 
 ```{r}
 #| label: distribution of gridpoints
@@ -202,13 +202,14 @@ fig_data_grid_coord <-
   ) +
   ggplot2::borders(
     fill = NA,
-    col = "red"
+    col = col_blue_light, # [config]
+    size = line_size * 10 # [config]
   ) +
   ggplot2::geom_point(
     shape = 15,
     size = point_size / 2,
     alpha = 0.75,
-    col = col_blue_dark
+    col = col_green_dark
   )
 
 save_figure_to_render(fig_data_grid_coord)
@@ -292,7 +293,8 @@ fig_gridpoint_links_example <-
   ) +
   ggplot2::borders(
     fill = NA,
-    col = "red"
+    col = col_blue_light, # [config]
+    size = line_size * 10 # [config]
   ) +
   ggplot2::geom_segment(
     data = data_links,
@@ -302,7 +304,7 @@ fig_gridpoint_links_example <-
       xend = coord_long_veg,
       yend = coord_lat_veg
     ),
-    col = col_blue_dark,
+    col = col_white,
     linewidth = line_size
   ) +
   ggplot2::geom_point(
@@ -314,7 +316,7 @@ fig_gridpoint_links_example <-
     shape = 15,
     alpha = 0.75,
     size = point_size / 2,
-    col = col_blue_dark
+    col = col_green_dark
   ) +
   ggplot2::geom_point(
     data = data_vegetation,
@@ -325,7 +327,7 @@ fig_gridpoint_links_example <-
     shape = 20,
     alpha = 0.75,
     size = point_size * 0.75,
-    col = col_green_dark
+    col = col_green_light
   )
 
 save_figure_to_render(fig_gridpoint_links_example)
@@ -334,11 +336,11 @@ save_figure_to_render(fig_gridpoint_links_example)
 
 ### Abiotic Variable Reference (`AbioticVariableReference`)
 
-Each `Abiotic Variable` can have a separate `Reference`, in addition to a `Dataset` and `Sample`. 
+Each [Abiotic Variable]{.abiotic} can have a separate [Reference]{.database}, in addition to a [Dataset]{.database} and [Sample]{.database}. 
 
 ```{r}
 #| label: AbioticVariableReference variables scheme structure
-#| tbl-cap: "Column names and types for table AbioticVariableReference."
+#| tbl-cap: "Column names and types for table `AbioticVariableReference`."
 data_comments_abiotic_variable_reference <-
   tibble::tribble(
     ~column_name, ~description,
@@ -356,3 +358,5 @@ get_db_table_data_types(
   ) %>%
   plot_table()
 ```
+
+<br>

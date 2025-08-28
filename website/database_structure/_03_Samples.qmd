@@ -1,8 +1,8 @@
-## [Samples]{.text-background-brownDark .text-color-white .text-bold}
+## Samples
 
-[`Samples`]{.text-background-brownDark .text-color-white .text-bold} represent the main unit of data in **[VegVault]{.text-background-black .text-color-white .text-bold}**, serving as the fundamental building blocks for all analyses. There are currently over 13 million [`Samples`]{.text-background-brownDark .text-color-white .text-bold} in **[VegVault]{.text-background-black .text-color-white .text-bold}** v1.0.0 (of which ~ 1.6 million are [gridpoints]{.text-background-greenDark .text-color-white .text-bold} of [abiotic data]{.text-background-greenDark .text-color-white .text-bold}, see [Database Assembly](/website/database_assembly.qmd)). 
+[Samples]{.database} represent the main unit of data in [VegVault]{.vegvault}, serving as the fundamental building blocks for all analyses. There are currently over 13 million [Samples]{.database} in [VegVault]{.vegvault} v1.0.0 (of which ~ 1.6 million are [gridpoints]{.abiotic} of [abiotic data]{.abiotic}, see [Database Assembly](/website/database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)). 
 
-**[VegVault]{.text-background-black .text-color-white .text-bold}** encompasses both [contemporary]{.text-background-greenLight .text-color-black .text-bold} and [paleo data]{.text-background-purpleLight .text-color-black .text-bold}, necessitating accurate [age information]{.text-background-purpleLight .text-color-black .text-bold} for each [`Sample`]{.text-background-brownDark .text-color-white .text-bold}. [Contemporary]{.text-background-greenLight .text-color-black .text-bold} [`Samples`]{.text-background-brownDark .text-color-white .text-bold} are assigned an [age of `0`]{.text-background-greenLight .text-color-black .text-bold}, while [`Samples`]{.text-background-brownDark .text-color-white .text-bold} from [fossil pollen records]{.text-background-purpleLight .text-color-black .text-bold} are in [calibrated years before the present (cal yr BP)]{.text-background-purpleLight .text-color-black .text-bold}. The "present" is here specified as 1950 AD. 
+[VegVault]{.vegvault} encompasses both [contemporary]{.neo-vegetation} and [paleo data]{.paleo}, necessitating accurate [age information]{.paleo} for each [Sample]{.database}. [Contemporary]{.neo-vegetation} [Samples]{.database} are assigned an age of `0`, while [Samples]{.database} from [fossil pollen records]{.paleo} are in [calibrated years before the present (cal yr BP)]{.paleo}. The *present* is here specified as `1950 AD`. 
 
 ```{r}
 #| label: source config
@@ -43,20 +43,20 @@ invisible(
 sel_dataset_for_example <- 91256
 ```
 
-### [Sample Structure Overview]{.text-background-brownDark .text-color-white .text-bold} (`[Samples]{.text-background-brownDark .text-color-white .text-bold}`)
+### [Sample Structure Overview]{.database} (`Samples`)
 
-The table contains one [`Sample`]{.text-background-brownDark .text-color-white .text-bold} per row, with each [`Sample`]{.text-background-brownDark .text-color-white .text-bold} containing: a unique [Sample ID]{.text-background-brownDark .text-color-white .text-bold} (`sample_id`), [Sample name]{.text-background-brownDark .text-color-white .text-bold} (`sample_name`), temporal information about [Sample]{.text-background-brownDark .text-color-white .text-bold} ([`age`]{.text-background-purpleLight .text-color-black .text-bold}), sample site (size of the plot if available; `sample_size_id`), and additional information about sample (`sample_details`; this is currently not being used in v1.0.0.). As **[VegVault]{.text-background-black .text-color-white .text-bold}** encompasses both [contemporary]{.text-background-greenLight .text-color-black .text-bold} and [paleo-data]{.text-background-purpleLight .text-color-black .text-bold}, accurate [age information]{.text-background-purpleLight .text-color-black .text-bold} is required for each [Sample]{.text-background-brownDark .text-color-white .text-bold}. 
+The table contains one [Sample]{.database} per row, with each [Sample]{.database} containing: a unique [Sample ID]{.database} (`sample_id`), [Sample name]{.database} (`sample_name`), temporal information about [Sample]{.database} ([age]{.paleo}), sample site (size of the plot if available; `sample_size_id`), and additional information about sample (`sample_details`; this is currently not being used in v1.0.0.). As [VegVault]{.vegvault} encompasses both [contemporary]{.neo-vegetation} and [paleo-data]{.paleo}, accurate [age information]{.paleo} is required for each [Sample]{.database}. 
 
 ```{r}
 #| label: Samples variables scheme structure
-#| tbl-cap: "Column names and types for table Samples."
+#| tbl-cap: "Column names and types for table `Samples`."
 data_comments_samples <-
   tibble::tribble(
     ~column_name, ~description,
     "sample_id", "ID of a Sample (unique)",
     "sample_name", "Name of a Sample",
     "sample_details", "Specific description of a Sample. Currently not being used.",
-    "age", "Age of sample. Mainly used for fossil_pollen_archives, where note the age of a Sample in calibrated years before present. Note that all contemporary Samples, have age of 0.",
+    "age", "Age of sample. Mainly used for `fossil_pollen_archives`, where note the age of a [Sample]{.database} in calibrated years before present. Note that all contemporary [Samples]{.database}, have age of 0.",
     "sample_size_id", "ID of a Sample Size"
   )
 
@@ -81,13 +81,13 @@ include_graphics_absolute_path(
 )
 ```
 
-### Dataset-Sample (`DatasetSample`)
+### [Dataset-Sample]{.database} (`DatasetSample`)
 
-Each Sample is linked to a specific `Dataset` via the `DatasetSample` table, which ensures that every Sample is correctly associated with its corresponding `Dataset Type` (whether it is `vegetation_plot`, `fossil_pollen_archive`, `traits`, or `gridpoint`) and other `Dataset` properties (e.g., geographic location). One `Dataset` contains several `Samples` only in a case where they differ in time (`age`). 
+Each [Sample]{.database} is linked to a specific [Dataset]{.database} via the `DatasetSample` table, which ensures that every [Sample]{.database} is correctly associated with its corresponding [Dataset Type]{.database} (whether it is `vegetation_plot`, `fossil_pollen_archive`, `traits`, or `gridpoint`) and other [Dataset]{.database} properties (e.g., geographic location). One [Dataset]{.database} contains several [Samples]{.database} only in a case where they differ in time (`age`). 
 
 ```{r}
 #| label: DatasetSample variables scheme structure
-#| tbl-cap: "Column names and types for table DatasetSample."
+#| tbl-cap: "Column names and types for table `DatasetSample`."
 data_comments_dataset_sample <-
   tibble::tribble(
     ~column_name, ~description,
@@ -148,13 +148,13 @@ fig_n_samples_per_dataset_type <-
   )
 ```
 
-### Sample Size (`SampleSizeID`)
+### [Sample Size]{.database} (`SampleSizeID`)
 
-The size of vegetation plots can vary substantially. This detail is crucial for ecological studies where plot size can influence species diversity and abundance metrics, thus impacting follow-up analyses and interpretations. To account for this variability, information about the plot size is recorded separately for each contemporary Sample. 
+The size of vegetation plots can vary substantially. This detail is crucial for ecological studies where plot size can influence species diversity and abundance metrics, thus impacting follow-up analyses and interpretations. To account for this variability, information about the plot size is recorded separately for each [contemporary]{.neo-vegetation} [Sample]{.database}. 
 
 ```{r}
 #| label: SampleSizeID variables scheme structure
-#| tbl-cap: "Column names and types for table SampleSizeID."
+#| tbl-cap: "Column names and types for table `SampleSizeID`."
 data_comments_sample_size <-
   tibble::tribble(
     ~column_name, ~description,
@@ -238,7 +238,7 @@ if (
       y = "Number of Samples"
     ) +
     ggplot2::geom_histogram(
-      fill = col_blue_light,
+      fill = col_green_light,
       col = NA,
       bins = 15
     )
@@ -247,14 +247,14 @@ if (
 }
 ```
 
-### Sample age uncertainty (`SampleUncertainty`)
+### [Sample age uncertainty]{.paleo} (`SampleUncertainty`)
 
-Each Sample from the `fossil_pollen_archive` `Dataset` is also associated with an uncertainty matrix generated during the re-estimation of ages using FOSSILPOL workflow. This matrix provides a range of potential ages derived from age-depth modelling, reflecting the inherent uncertainty in dating paleoecological records. 
+Each [Sample]{.database} from the `fossil_pollen_archive` [Dataset]{.database} is also associated with an [uncertainty matrix]{.paleo} generated during the re-estimation of ages using [FOSSILPOL workflow]([https](https://bit.ly/FOSSILPOL)). This matrix provides a range of potential ages derived from [age-depth modelling]{.paleo}, reflecting the inherent uncertainty in dating [paleoecological records]{.paleo}. 
 
 
 ```{r}
 #| label: SampleUncertainty variables scheme structure
-#| tbl-cap: "Column names and types for table SampleUncertainty."
+#| tbl-cap: "Column names and types for table `SampleUncertainty`."
 data_comments_sample_uncertainty <-
   tibble::tribble(
     ~column_name, ~description,
@@ -348,21 +348,21 @@ fig_sample_age <-
     x = "Potential age of Samples (cal yr BP)"
   ) +
   ggplot2::geom_boxplot(
-    col = col_blue_dark,
-    fill = col_blue_light,
+    col = col_purple_dark,
+    fill = col_purple_light,
     outlier.shape = NA
   )
 
 save_figure_to_render(fig_sample_age)
 ```
 
-### Sample Reference
+### [Sample Reference]{.database}
 
-Each `Sample` in **VegVault** can have specific `References` in addition to those at the `Dataset`-level. These individual `Sample References` provide detailed provenance and citation information, ensuring that users can trace the origin and validation of each data point. Note that a single `Sample` can have several References. This level of referencing enhances the transparency and reliability of the data, especially when the dataset continues to be updated in the future. 
+Each [Sample]{.database} in [VegVault]{.vegvault} can have specific [References]{.database} in addition to those at the [Dataset]{.database}-level. These individual [Sample References]{.database} provide detailed provenance and citation information, ensuring that users can trace the origin and validation of each data point. Note that a single [Sample]{.database} can have several [References]{.database}. This level of referencing enhances the transparency and reliability of the data, especially when the dataset continues to be updated in the future. 
 
 ```{r}
 #| label: SampleReference variables scheme structure
-#| tbl-cap: "Column names and types for table SampleReference."
+#| tbl-cap: "Column names and types for table `SampleReference`."
 data_comments_sample_reference <-
   tibble::tribble(
     ~column_name, ~description,
@@ -388,3 +388,5 @@ include_graphics_absolute_path(
   )
 )
 ```
+
+<br>

@@ -11,7 +11,7 @@ sidebar: true
 
 [VegVault]{.text-background-black .text-color-white .text-bold} v1.0.0 is available as a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} providing integrated access to global vegetation, [trait]{.text-background-blueDark .text-color-white .text-bold}, and [environmental data]{.text-background-greenDark .text-color-white .text-bold}.
 
-[Download VegVault v1.0.0 (SQLite)](https://doi.org/10.48700/datst.t21cz-2nq071){.btn} 
+[Download VegVault v1.0.0 (SQLite)](https://doi.org/10.48700/datst.t21cz-2nq07){.btn} 
 
 ::: {.callout-note}
 **System Requirements**: [VegVault]{.text-background-black .text-color-white .text-bold} contains over 100GB of data. Ensure your system has sufficient storage space and memory (RAM) before downloading.

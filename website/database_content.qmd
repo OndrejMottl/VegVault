@@ -106,7 +106,7 @@ fig_world_empty <-
   tibble::tibble() %>%
   ggplot2::ggplot() +
   ggplot2::borders(
-    fill = col_black,
+    fill = col_beige_dark,
     col = NA
   ) +
   ggplot2::labs(
@@ -163,11 +163,12 @@ fig_vegetation_time <-
     labels = c("1", "10", "100", "1e3", "1e4", "1e5", "1e6", "1e7", "1e8", "1e9")
   ) +
   ggplot2::scale_x_continuous(
-    breaks = seq(0, 20e3, by = 5e3),
-    labels = seq(0, 20, by = 5)
+    transform = "reverse",
+    breaks = seq(20e3, 0, by = -5e3),
+    labels = seq(20, 0, by = -5)
   ) +
   ggplot2::coord_cartesian(
-    xlim = c(0.2, 20e3),
+    xlim = c(20e3, 0.2),
     ylim = c(1, 1e9)
   ) +
   ggplot2::guides(
@@ -203,13 +204,21 @@ fig_vegetation <-
     rel_widths = c(1.5, 1)
   ) %>%
   cowplot::plot_grid(
-    fig_legend,
     .,
+    fig_legend,
     nrow = 2,
-    rel_heights = c(0.1, 1)
+    rel_heights = c(1, 0.1)
   )
 
-plot(fig_vegetation, bg = col_beige_light)
+ggplot2::ggsave(
+  here::here("Outputs/Figures/website/DB_overview/fig_db_spatiotemporal_overview.png"),
+  plot = fig_vegetation,
+  width = 10,
+  height = 4,
+  bg = col_beige_light # [config]
+)
+
+knitr::include_graphics(here::here("Outputs/Figures/website/DB_overview/fig_db_spatiotemporal_overview.png"))
 ```
 
 ## Related Resources

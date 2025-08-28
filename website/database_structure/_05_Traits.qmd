@@ -1,4 +1,4 @@
-## [Traits]{.text-background-blueDark .text-color-white .text-bold} 
+## Traits
 
 ```{r}
 #| label: source config
@@ -37,13 +37,13 @@ invisible(
 )
 ```
 
-### [Traits Structure Overview]{.text-background-blueDark .text-color-white .text-bold} (`[Traits]{.text-background-blueDark .text-color-white .text-bold}`)
+### [Traits Structure Overview]{.traits} (`Traits`)
 
-The **[Traits]{.text-background-blueDark .text-color-white .text-bold}** table contains the list of [functional traits]{.text-background-blueDark .text-color-white .text-bold} currently contained in **[VegVault]{.text-background-black .text-color-white .text-bold}**. The table contains one [`Trait`]{.text-background-blueDark .text-color-white .text-bold} per row, with each [`Trait`]{.text-background-blueDark .text-color-white .text-bold} containing: a unique [Trait ID]{.text-background-blueDark .text-color-white .text-bold} (`trait_id`), original [Trait name]{.text-background-blueDark .text-color-white .text-bold} from [primary source]{.text-background-brownDark .text-color-white .text-bold} (`trait_name`), and [Trait Domain]{.text-background-blueDark .text-color-white .text-bold} (`trait_domain_id`). [Functional traits]{.text-background-blueDark .text-color-white .text-bold} of vegetation [taxa]{.text-background-blueDark .text-color-white .text-bold} follow the same structure of [`Dataset`]{.text-background-brownDark .text-color-white .text-bold} and [`Samples`]{.text-background-brownDark .text-color-white .text-bold} obtained directly from [`Dataset`]{.text-background-brownDark .text-color-white .text-bold} [`Source-Types`]{.text-background-brownDark .text-color-white .text-bold}.
+The [Traits]{.traits} table contains the list of [functional traits]{.traits} currently contained in [VegVault]{.vegvault}. The table contains one [Trait]{.traits} per row, with each [Trait]{.traits} containing: a unique [Trait ID]{.traits} (`trait_id`), original [Trait name]{.traits} from primary source (`trait_name`), and [Trait Domain]{.traits} (`trait_domain_id`). [Functional traits]{.traits} of vegetation [taxa]{.database} follow the same structure of [Dataset]{.database} and [Samples]{.database} obtained directly from [Dataset]{.database} [Source-Types]{.database}.
 
 ```{r}
 #| label: Traits variables scheme structure
-#| tbl-cap: "Column names and types for table Traits."
+#| tbl-cap: "Column names and types for table `Traits`."
 data_comments_traits <-
   tibble::tribble(
     ~column_name, ~description,
@@ -72,12 +72,43 @@ include_graphics_absolute_path(
 )
 ```
 
-### Traits Domain (`TraitsDomain`)
+### [Traits Domain]{.traits} (`TraitsDomain`)
 
-Traits are grouped into `Trait Domains` to allow for easier aggregation of `Traits` across data sources. As there are differences in trait names across sources of data and individual `Datasets`, the **VegVault** database contains `Trait Domain` information to group traits together. In total, six `Trait Domains` are present: `Stem specific density`, `Leaf nitrogen content per unit mass`, `Diaspore mass`, `Plant height`, `Leaf area`, `Leaf mass per area`, following [Diaz et al. (2016)](https://www.nature.com/articles/nature16489). Yet, it is up to the user to decide how to further aggregate trait values if multiple trait `Samples` of one `Trait Domain` are available for the same environmental or taxonomic entity. 
+Traits are grouped into [Trait Domains]{.traits} to allow for easier aggregation of [Traits]{.traits} across data sources. As there are differences in trait names across sources of data and individual [Datasets]{.database}, the [VegVault]{.vegvault} database contains [Trait Domain]{.traits} information to group traits together. In total, six [Trait Domains]{.traits} are present: `Stem specific density`, `Leaf nitrogen content per unit mass`, `Diaspore mass`, `Plant height`, `Leaf area`, `Leaf mass per area`, following [Diaz et al. (2016)](https://www.nature.com/articles/nature16489). Yet, it is up to the user to decide how to further aggregate trait values if multiple trait [Samples]{.database} of one [Trait Domain]{.traits} are available for the same environmental or taxonomic entity.
+
+```{r}
+#| label: TraitsDomain variables scheme structure
+#| tbl-cap: "Column names and types for table `TraitsDomain`."
+data_comments_traits_domain <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "trait_domain_id", "ID of a Trait Domain (unique)",
+    "trait_domain_name", "Name of the Trait Domain from Diaz et al. (2016)",
+    "trait_domain_description", "Additional information about the Trait Domain"
+  )
+get_db_table_data_types(
+  con,
+  "TraitsDomain"
+) %>%
+  dplyr::full_join(
+    data_comments_traits_domain,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
+```{r}
+#| label: TraitsDomain scheme structure
+include_graphics_absolute_path(
+  here::here(
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitsDomain.png"
+  )
+)
+```
 
 ```{r}
 #| label: show trait domains
+#| tbl-cap: "Overview of Trait Domains and their associated Traits"
 dplyr::tbl(con, "TraitsDomain") %>%
   dplyr::inner_join(
     dplyr::tbl(con, "Traits"),
@@ -120,36 +151,6 @@ dplyr::tbl(con, "TraitsDomain") %>%
 ```
 
 ```{r}
-#| label: TraitsDomain variables scheme structure
-#| tbl-cap: "Column names and types for table TraitsDomain."
-data_comments_traits_domain <-
-  tibble::tribble(
-    ~column_name, ~description,
-    "trait_domain_id", "ID of a Trait Domain (unique)",
-    "trait_domain_name", "Name of the Trait Domain from Diaz et al. (2016)",
-    "trait_domain_description", "Additional information about the Trait Domain"
-  )
-get_db_table_data_types(
-  con,
-  "TraitsDomain"
-) %>%
-  dplyr::full_join(
-    data_comments_traits_domain,
-    by = "column_name"
-  ) %>%
-  plot_table()
-```
-
-```{r}
-#| label: TraitsDomain scheme structure
-include_graphics_absolute_path(
-  here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/TraitsDomain.png"
-  )
-)
-```
-
-```{r}
 #| label: trait per domain plot
 
 n_traits_per_domain <-
@@ -180,7 +181,7 @@ fig_n_traits_per_domain <-
   ggplot2::guides(
     fill = "none"
   ) +
-  ggplot2::coord_cartesian(
+  ggplot2::coord_flip(
     ylim = c(0, 7)
   ) +
   ggplot2::geom_segment(
@@ -189,14 +190,14 @@ fig_n_traits_per_domain <-
       xend = trait_domain_name,
       yend = 0
     ),
-    color = col_blue_dark,
+    color = col_black,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_point(
     fill = col_white,
     size = point_size,
     shape = 21,
-    col = col_blue_dark,
+    col = col_black,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_label(
@@ -211,22 +212,13 @@ fig_n_traits_per_domain <-
 save_figure_to_render(fig_n_traits_per_domain)
 ```
 
-### Traits value (`TraitsValue`)
+### [Traits value]{.traits} (`TraitsValue`)
 
-In general, data of functional traits of vegetation taxa follow the same structure of the `Dataset` and `Samples` obtained directly from the `Dataset Source-Types`. Therefore, `TraitsValue` table contains not only the actual measured value of Trait observation but also information about linking information across `Datasets`, `Samples`, and `Taxa`. This comprehensive linkage ensures that each Trait value is accurately associated with its relevant ecological, environmental and taxonomic context.
-
-```{r}
-#| label: TraitsValue scheme structure
-include_graphics_absolute_path(
-  here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/TraitsValue.png"
-  )
-)
-```
+In general, data of functional traits of vegetation taxa follow the same structure of the [Dataset]{.database} and [Samples]{.database} obtained directly from the [Dataset Source-Types]{.database}. Therefore, `TraitsValue` table contains not only the actual measured value of [Trait]{.traits} observation but also information about linking information across [Datasets]{.database}, [Samples]{.database}, and [Taxa]{.database}. This comprehensive linkage ensures that each Trait value is accurately associated with its relevant ecological, environmental and taxonomic context.
 
 ```{r}
 #| label: TraitsValue variables scheme structure
-#| tbl-cap: "Column names and types for table TraitsValue."
+#| tbl-cap: "Column names and types for table `TraitsValue`."
 data_comments_traits_value <-
   tibble::tribble(
     ~column_name, ~description,
@@ -248,6 +240,14 @@ get_db_table_data_types(
   plot_table()
 ```
 
+```{r}
+#| label: TraitsValue scheme structure
+include_graphics_absolute_path(
+  here::here(
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitsValue.png"
+  )
+)
+```
 
 ```{r}
 #| label: trait value occurences plot
@@ -287,7 +287,7 @@ fig_n_occurences_per_dommain <-
     breaks = scales::trans_breaks("log10", function(x) 10^x),
     labels = scales::trans_format("log10", scales::math_format(10^.x))
   ) +
-  ggplot2::coord_cartesian(
+  ggplot2::coord_flip(
     ylim = c(10e3, 10e9)
   ) +
   ggplot2::labs(
@@ -304,14 +304,14 @@ fig_n_occurences_per_dommain <-
       xend = trait_domain_name,
       yend = 0
     ),
-    color = col_blue_dark,
+    color = col_black,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_point(
     fill = col_white,
     size = point_size,
     shape = 21,
-    col = col_blue_dark,
+    col = col_black,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_label(
@@ -326,13 +326,13 @@ fig_n_occurences_per_dommain <-
 save_figure_to_render(fig_n_occurences_per_dommain)
 ```
 
-### Traits Reference (`TraitsReference`)
+### [Traits Reference]{.traits} (`TraitsReference`)
 
-To ensure clarity and reproducibility, each `Trait` in **VegVault** can have additional `References` beyond the general `Dataset` and `Sample` `References`. These `Trait`-specific `References` provide detailed provenance and citation information, supporting rigorous scientific research and enabling users to trace the origins and validation of each trait value. 
+To ensure clarity and reproducibility, each [Trait]{.traits} in [VegVault]{.vegvault} can have additional [References]{.database} beyond the general [Dataset]{.database} and [Sample]{.database} [References]{.database}. These [Trait]{.traits}-specific [References]{.database} provide detailed provenance and citation information, supporting rigorous scientific research and enabling users to trace the origins and validation of each trait value. 
 
 ```{r}
 #| label: TraitsReference variables scheme structure
-#| tbl-cap: "Column names and types for table TraitsReference."
+#| tbl-cap: "Column names and types for table `TraitsReference`."
 data_comments_traits_reference <-
   tibble::tribble(
     ~column_name, ~description,
@@ -359,3 +359,5 @@ include_graphics_absolute_path(
   )
 )
 ```
+
+<br>

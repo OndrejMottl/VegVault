@@ -45,13 +45,13 @@ invisible(
 )
 ```
 
-# [VegVault]{.text-background-black .text-color-white .text-bold} Usage Examples
+# VegVault Usage Examples
 
 ## Introduction to {vaultkeepr}
 
 :::: {.columns}
 ::: {.column width="75%"}
-To make [VegVault]{.text-background-black .text-color-white .text-bold} as accessible as possible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a comprehensive R package providing intuitive functions for interacting with the [database]{.text-background-brownDark .text-color-white .text-bold}. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory. With >95% code coverage, {vaultkeepr} is a [well-tested]{.text-background-brownLight .text-color-white .text-bold} interface for [VegVault]{.text-background-black .text-color-white .text-bold}.
+To make [VegVault]{.vegvault} as accessible as possible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a comprehensive R package providing intuitive functions for interacting with the [database]{.database}. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory. With >95% code coverage, {vaultkeepr} is a [well-tested]{.reproducibility} interface for [VegVault]{.vegvault}.
 :::
 
 ::: {.column width="25%"}
@@ -92,7 +92,7 @@ The following diagram illustrates the systematic workflow for accessing and extr
 #| label: figure-extracting-data
 knitr::include_graphics(
   here::here(
-    "Outputs/Figures/Scheme_extraction/Scheme_03.png"
+    "Outputs/Figures/Scheme_extraction/Scheme_04.png"
   )
 )
 ```
@@ -111,7 +111,7 @@ knitr::include_graphics(
 
 ## Practical Examples
 
-The following examples demonstrate [VegVault]{.text-background-black .text-color-white .text-bold}'s capabilities across different research scenarios. Note that these examples focus on **data extraction** rather than analysis—they show how to obtain properly formatted [datasets]{.text-background-brownDark .text-color-white .text-bold} for your research projects.
+The following examples demonstrate [VegVault]{.vegvault}'s capabilities across different research scenarios. Note that these examples focus on **data extraction** rather than analysis—they show how to obtain properly formatted [datasets]{.database} for your research projects.
 
 {{< include _database_examples.md >}}
 

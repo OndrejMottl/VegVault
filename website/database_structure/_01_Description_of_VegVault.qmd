@@ -1,12 +1,12 @@
 # VegVault Database Structure
 
-Currently, [VegVault]{.text-background-black .text-color-white .text-bold} consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal [database structure]{.text-background-brownDark .text-color-white .text-bold} may not be directly relevant to most users, as the [{vaultkeepr}](https://bit.ly/vaultkeepr) R package processes all data to output only the most relevant information in a "[ready-to-analyze]{.text-background-brownLight .text-color-black .text-bold}" format.
+Currently, [VegVault]{.vegvault} consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal [database structure]{.database} may not be directly relevant to most users, as the [{vaultkeepr}](https://bit.ly/vaultkeepr) R package processes all data to output only the most relevant information in a "[ready-to-analyze]{.data-processing}" format.
 
 ::: {.callout-note}
-**For Most Users**: If you're primarily interested in using [VegVault]{.text-background-black .text-color-white .text-bold} for research, you may want to start with our [Usage Examples](/website/database_examples.qmd) rather than diving into the technical [database structure]{.text-background-brownDark .text-color-white .text-bold}.
+**For Most Users**: If you're primarily interested in using [VegVault]{.vegvault} for research, you may want to start with our [Usage Examples](/website/database_examples.qmd) rather than diving into the technical [database structure]{.database}.
 :::
 
-This section provides comprehensive documentation of all tables and their relationships for users who need detailed technical information about the [database architecture]{.text-background-brownDark .text-color-white .text-bold}.
+This section provides comprehensive documentation of all tables and their relationships for users who need detailed technical information about the [database architecture]{.database}.
 
 ```{r}
 #| label: source config
@@ -46,13 +46,15 @@ invisible(
 
 ```
 
+<br>
+
 ## Metadata Tables
 
-Several tables contain [metadata]{.text-background-brownDark .text-color-white .text-bold} and administrative information that are not directly linked to the scientific data:
+Several tables contain [metadata]{.database} and administrative information that are not directly linked to the scientific data:
 
-- `Authors`: Information about [VegVault]{.text-background-black .text-color-white .text-bold} authors and maintainers, including contact details
-- `version_control`: [Database version information]{.text-background-brownDark .text-color-white .text-bold} with descriptions of changes over time
-- `sqlite_stat1` & `sqlite_stat4`: [SQLite system tables]{.text-background-brownDark .text-color-white .text-bold} containing [database index statistics]{.text-background-brownDark .text-color-white .text-bold} for query optimization
+- `Authors`: Information about [VegVault]{.vegvault} authors and maintainers, including contact details
+- `version_control`: [Database version information]{.database} with descriptions of changes over time
+- `sqlite_stat1` & `sqlite_stat4`: [SQLite system tables]{.database} containing [database index statistics]{.database} for query optimization
 
 ```{r}
 #| label: Authors variables scheme structure
@@ -99,3 +101,5 @@ get_db_table_data_types(
   ) %>%
   plot_table()
 ```
+
+<br>

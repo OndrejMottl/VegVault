@@ -13,26 +13,28 @@ To maintain the highest quality of data and code, we adhere to strict guidelines
 
 ## Ways to Contribute
 
-### 🔍 Report Issues or Request Features
+### Report Issues or Request Features
 Found a bug or have an idea for enhancement? Visit our [Contact & Support](/website/contact.qmd#report-issues--bugs) page for detailed reporting guidelines.
 
-### 📊 Data Contributions
+### Data Contributions
 
 We continuously seek new [datasets]{.text-background-brownDark .text-color-white .text-bold} to include in future [VegVault]{.text-background-black .text-color-white .text-bold} versions. If you know of valuable data sources that could enhance [VegVault]{.text-background-black .text-color-white .text-bold}, we'd love to hear from you!
 
 **How to contribute data:**
+
 1. Review our [Database Structure](/website/database_structure.qmd) to understand current data types
 2. Check our [Database Content](/website/database_content.qmd) to see what's already included
 3. Contact us via [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions) with details about your proposed dataset
 4. Our team will evaluate the data for compatibility and integration feasibility
 
-### 💻 Code Contributions
+### Code Contributions
 
 We welcome contributions to improve [VegVault]{.text-background-black .text-color-white .text-bold}'s [codebase]{.text-background-brownLight .text-color-white .text-bold}, documentation, and functionality.
 
 #### Prerequisites
 
 **Git & GitHub Proficiency:**
+
 - Familiarity with [Git version control](https://git-scm.com/)
 - Understanding of [GitHub workflows](https://help.github.com/categories/bootcamp/)
 - Experience with pull requests and collaborative development

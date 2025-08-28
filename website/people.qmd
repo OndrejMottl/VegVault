@@ -7,6 +7,32 @@ sidebar: true
 
 # VegVault Team
 
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("website/people.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Visualisation/00_Config_quarto.R"
+  )
+)
+
+```
+
 Meet the team behind VegVault - researchers dedicated to advancing vegetation ecology through integrated data science.
 
 ## Main Developer
@@ -17,8 +43,8 @@ Meet the team behind VegVault - researchers dedicated to advancing vegetation ec
 
 * 🏦 Department of Botany, Faculty of Science, Charles University, Prague, Czech Republic
 * 📬 Email: ondrej.mottl(at)gmail.com
-* [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9796--5081-brightgreen.svg)](https://orcid.org/0000-0002-9796-5081)
-* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://ondrejmottl.github.io/)
+* [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9796--5081-`r paste0(colors_data_short$greenLight)`.svg)](https://orcid.org/0000-0002-9796-5081)
+* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-`r paste0(colors_data_short$purpleLight)`.svg)](https://ondrejmottl.github.io/)
 
 ## Core Collaborators
 
@@ -28,8 +54,8 @@ Meet the team behind VegVault - researchers dedicated to advancing vegetation ec
 
 * 🏦 University of Bergen, Norway 
 * 📬 Email: suzette.flantua(at)uib.no
-* [![ORCID](https://img.shields.io/badge/orcid-0000--0001--6526--3037-brightgreen.svg)](https://orcid.org/0000-0001-6526-3037)
-* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://mountainsinmotion.w.uib.no/)
+* [![ORCID](https://img.shields.io/badge/orcid-0000--0001--6526--3037-`r paste0(colors_data_short$greenLight)`.svg)](https://orcid.org/0000-0001-6526-3037)
+* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-`r paste0(colors_data_short$purpleLight)`.svg)](https://mountainsinmotion.w.uib.no/)
 
 ### Franka Gaiser <img src="https://www.spowi5.uni-bayreuth.de/pool/bilder/team/Gaiser_hp_2022.jpg" align="right" width="120" />
 
@@ -37,8 +63,8 @@ Meet the team behind VegVault - researchers dedicated to advancing vegetation ec
 
 * 🏦 University of Bayreuth, Bayreuth, Germany
 * 📬 Email: franka.gaiser(at)uni-bayreuth.de
-* [![ORCID](https://img.shields.io/badge/orcid-0000--0003--2600--6603-brightgreen.svg)](https://orcid.org/0009-0003-2600-6603)
-* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://www.spowi5.uni-bayreuth.de/en/team/Gaiser/index.php)
+* [![ORCID](https://img.shields.io/badge/orcid-0000--0003--2600--6603-`r paste0(colors_data_short$greenLight)`.svg)](https://orcid.org/0009-0003-2600-6603)
+* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-`r paste0(colors_data_short$purpleLight)`.svg)](https://www.spowi5.uni-bayreuth.de/en/team/Gaiser/index.php)
 
 ### Irena Šímová <img src="https://www.cts.cuni.cz/img/people/%C5%A0%C3%ADmov%C3%A1.jpg" align="right" width="120" />
 
@@ -46,8 +72,8 @@ Meet the team behind VegVault - researchers dedicated to advancing vegetation ec
 
 * 🏦 Charles University, Czech Republic
 * 📬 Email: simova(at)cts.cuni.cz
-* [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9474--569X-brightgreen.svg)](https://orcid.org/0000-0002-9474-569X)
-* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-93C54B.svg)](https://www.cts.cuni.cz/en/simova.html)
+* [![ORCID](https://img.shields.io/badge/orcid-0000--0002--9474--569X-`r paste0(colors_data_short$greenLight)`.svg)](https://orcid.org/0000-0002-9474-569X)
+* [![Personal Website](https://img.shields.io/badge/🔗-personal--website-`r paste0(colors_data_short$purpleLight)`.svg)](https://www.cts.cuni.cz/en/simova.html)
 
 ## Project Affiliation
 
