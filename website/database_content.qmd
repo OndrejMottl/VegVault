@@ -40,7 +40,7 @@ source(
 
 VegVault v1.0.0 is a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} (~110 GB) that integrates global vegetation data spanning both [contemporary]{.text-background-greenLight .text-color-black .text-bold} and [paleovegetation]{.text-background-purpleLight .text-color-black .text-bold} records. This unified database combines [fossil pollen]{.text-background-purpleLight .text-color-black .text-bold} records, [contemporary vegetation plots]{.text-background-greenLight .text-color-black .text-bold}, [functional trait]{.text-background-blueDark .text-color-white .text-bold} measurements, and associated [abiotic environmental data]{.text-background-greenDark .text-color-white .text-bold} to provide an unprecedented resource for vegetation ecology research.
 
-The database consists of 31 interconnected tables with 87 fields (variables). For detailed technical information, see our [Database Structure](/website/database_structure.qmd) documentation.
+The database consists of 31 interconnected tables with 87 fields (variables). For detailed technical information, see our [Database Structure](database_structure.qmd) documentation.
 
 ## Database Statistics
 
@@ -58,7 +58,7 @@ The database consists of 31 interconnected tables with 87 fields (variables). Fo
 | **Temporal Coverage** | 0-20,000 years BP |
 
 ::: {.callout-tip}
-**Getting Started**: New to [VegVault]{.text-background-black .text-color-white .text-bold}? Check our [Database Access](/website/database_access.qmd) guide for download instructions and our [Usage Examples](/website/database_examples.qmd) for practical applications.
+**Getting Started**: New to [VegVault]{.text-background-black .text-color-white .text-bold}? Check our [Database Access](database_access.qmd) guide for download instructions and our [Usage Examples](database_examples.qmd) for practical applications.
 :::
 
 
@@ -172,7 +172,7 @@ fig_vegetation_time <-
     ylim = c(1, 1e9)
   ) +
   ggplot2::guides(
-    color = ggplot2::guide_legend(override.aes = list(size = point_size))
+    fill = ggplot2::guide_legend(override.aes = list(size = point_size))
   ) +
   ggplot2::theme(
     legend.position = "top"
@@ -223,8 +223,8 @@ knitr::include_graphics(here::here("Outputs/Figures/website/DB_overview/fig_db_s
 
 ## Related Resources
 
-- **[Database Structure](/website/database_structure.qmd)** - Technical database schema
-- **[Database Assembly](/website/database_assembly.qmd)** - Overview of the data assembly process
-- **[Database Access](/website/database_access.qmd)** - Download and setup instructions
-- **[Usage Examples](/website/database_examples.qmd)** - Practical applications
-- **[Materials & Outputs](/website/materials.qmd)** - Publications and resources 
+- **[Database Structure](database_structure.qmd)** - Technical database schema
+- **[Database Assembly](database_assembly.qmd)** - Overview of the data assembly process
+- **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Usage Examples](database_examples.qmd)** - Practical applications
+- **[Materials & Outputs](materials.qmd)** - Publications and resources

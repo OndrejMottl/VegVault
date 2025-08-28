@@ -237,8 +237,8 @@ We developed a data structure that provides readily available [environmental con
 
 ## Related Resources
 
-- **[Database Content](/website/database_content.qmd)** - Overview of available data
-- **[Database Structure](/website/database_structure.qmd)** - Technical database schema
-- **[Database Access](/website/database_access.qmd)** - Download and setup instructions  
-- **[Usage Examples](/website/database_examples.qmd)** - Practical applications
-- **[Materials & Outputs](/website/materials.qmd)** - Publications and resources 
+- **[Database Content](database_content.qmd)** - Overview of available data
+- **[Database Structure](database_structure.qmd)** - Technical database schema
+- **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Usage Examples](database_examples.qmd)** - Practical applications
+- **[Materials & Outputs](materials.qmd)** - Publications and resources

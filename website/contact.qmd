@@ -43,7 +43,7 @@ Found a problem? Please use our [Issues page](https://github.com/OndrejMottl/Veg
 
 ## Contributing to VegVault
 
-Interested in contributing to VegVault development? See our [Contributing Guide](/website/contribute.qmd) for detailed information on:
+Interested in contributing to VegVault development? See our [Contributing Guide](contribute.qmd) for detailed information on:
 - Data contributions
 - Code contributions  
 - Development guidelines
@@ -51,7 +51,7 @@ Interested in contributing to VegVault development? See our [Contributing Guide]
 
 ## Additional Resources
 
-- **[Database Access](/website/database_access.qmd)** - Download and setup instructions
-- **[Database Assembly](/website/database_assembly.qmd)** - Data processing and integration procedures
-- **[Database Examples](/website/database_examples.qmd)** - Practical usage examples
-- **[Database Structure](/website/database_structure.qmd)** - Technical documentation
+- **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Database Assembly](database_assembly.qmd)** - Data processing and integration procedures
+- **[Database Examples](database_examples.qmd)** - Practical usage examples
+- **[Database Structure](database_structure.qmd)** - Technical documentation

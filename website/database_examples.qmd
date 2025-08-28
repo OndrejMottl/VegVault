@@ -99,7 +99,7 @@ knitr::include_graphics(
 
 ### Key Workflow Steps:
 
-1. **[Download VegVault](/website/database_access.qmd)** database and install {vaultkeepr}
+1. **[Download VegVault](database_access.qmd)** database and install {vaultkeepr}
 2. **Select Dataset Types**: Choose from `vegetation_plot`, `fossil_pollen_archive`, `traits`, or `gridpoints`
 3. **Geographic Filtering**: Define spatial extent using `vaultkeepr::select_dataset_by_geo()`
 4. **Temporal Filtering**: Set age ranges with `vaultkeepr::select_samples_by_age()`
@@ -117,8 +117,8 @@ The following examples demonstrate [VegVault]{.vegvault}'s capabilities across d
 
 ## Additional Resources
 
-- **[Database Access](/website/database_access.qmd)** - Download and setup instructions
-- **[Database Assembly](/website/database_assembly.qmd)** - Data processing and integration procedures
-- **[Database Structure](/website/database_structure.qmd)** - Technical database documentation  
-- **[Database Content](/website/database_content.qmd)** - Overview of available data
+- **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Database Assembly](database_assembly.qmd)** - Data processing and integration procedures
+- **[Database Structure](database_structure.qmd)** - Technical database documentation
+- **[Database Content](database_content.qmd)** - Overview of available data
 - **[{vaultkeepr} Documentation](https://bit.ly/vaultkeepr)** - Complete function reference

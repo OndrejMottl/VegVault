@@ -184,8 +184,8 @@ fig_na_plots_picea <-
   ) +
   ggplot2::labs(
     subtitle = "Each point is a presence of the Picea genus at a given time",
-    x = "Latitude",
-    y = "Longitude",
+    y = "Latitude",
+    x = "Longitude",
     col = "Dataset type"
   ) +
   ggplot2::scale_colour_manual(

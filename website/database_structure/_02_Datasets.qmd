@@ -166,7 +166,7 @@ data_comments_dataset_source_type <-
   tibble::tribble(
     ~column_name, ~description,
     "data_source_type_id", "ID of a Dataset Source-Type (unique)",
-    "dataset_source_type", "Text description of individual Dataset Source-Type (currently, BEIN, sPlotOpen, TRY, Neotoma-FOSSILPOL, gridpoints)"
+    "dataset_source_type", "Text description of individual Dataset Source-Type (currently, BIEN, sPlotOpen, TRY, Neotoma-FOSSILPOL, gridpoints)"
   )
 
 get_db_table_data_types(

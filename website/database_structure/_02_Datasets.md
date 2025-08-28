@@ -119,7 +119,7 @@ current <span class="database">Source-Types</span> in
 | column_name | data_type | description |
 |----|----|----|
 | data_source_type_id | INTEGER | ID of a Dataset Source-Type (unique) |
-| dataset_source_type | TEXT | Text description of individual Dataset Source-Type (currently, BEIN, sPlotOpen, TRY, Neotoma-FOSSILPOL, gridpoints) |
+| dataset_source_type | TEXT | Text description of individual Dataset Source-Type (currently, BIEN, sPlotOpen, TRY, Neotoma-FOSSILPOL, gridpoints) |
 
 Column names and types for table `DatasetSourceTypeID`.
 

@@ -40,7 +40,7 @@ This page provides access to all VegVault-related resources including the databa
 **VegVault v1.0.0 (SQLite Database - Recommended)**
 [Download Database v1.0.0](https://doi.org/10.48700/datst.t21cz-2nq07){.btn}
 
-Please review our [Database Access Guidelines](/website/database_access.qmd#guidelines-for-data-reuse-and-citation) for proper usage and citation requirements.
+Please review our [Database Access Guidelines](database_access.qmd#guidelines-for-data-reuse-and-citation) for proper usage and citation requirements.
 
 :::
 
@@ -137,9 +137,9 @@ Available for use in presentations, publications, and educational materials with
 
 ## Additional Resources
 
-- **[Database Access](/website/database_access.qmd)** - Download and setup instructions
-- **[Database Assembly](/website/database_assembly.qmd)** - Data processing and integration procedures
-- **[Database Examples](/website/database_examples.qmd)** - Practical usage examples
-- **[Database Structure](/website/database_structure.qmd)** - Technical documentation
-- **[Contact & Support](/website/contact.qmd)** - Get help and report issues
+- **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Database Assembly](database_assembly.qmd)** - Data processing and integration procedures
+- **[Database Examples](database_examples.qmd)** - Practical usage examples
+- **[Database Structure](database_structure.qmd)** - Technical documentation
+- **[Contact & Support](contact.qmd)** - Get help and report issues
 

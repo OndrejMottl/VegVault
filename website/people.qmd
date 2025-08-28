@@ -91,7 +91,7 @@ We thank the global community of data contributors, including:
 
 ## Get Involved
 
-Interested in contributing to VegVault? See our [Contributing Guide](/website/contribute.qmd) for information on:
+Interested in contributing to VegVault? See our [Contributing Guide](website/contribute.qmd) for information on:
 
 - Data contributions
 - Code contributions
@@ -101,4 +101,4 @@ Interested in contributing to VegVault? See our [Contributing Guide](/website/co
 
 - **General inquiries**: [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions)
 - **Technical issues**: [GitHub Issues](https://github.com/OndrejMottl/VegVault/issues)
-- **Detailed contact information**: [Contact & Support](/website/contact.qmd)
+- **Detailed contact information**: [Contact & Support](website/contact.qmd)
