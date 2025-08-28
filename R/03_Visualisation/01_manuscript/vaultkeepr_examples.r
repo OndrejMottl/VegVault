@@ -436,14 +436,14 @@ fig_la_datasets <-
     mapping = ggplot2::aes(
       x = age_min
     ),
-    col = col_purple, # [config]
+    col = col_purple_light, # [config]
     size = point_size # [config]
   ) +
   ggplot2::geom_point(
     mapping = ggplot2::aes(
       x = age_max
     ),
-    col = col_purple, # [config]
+    col = col_purple_light, # [config]
     size = point_size # [config]
   ) +
   ggplot2::theme(
