@@ -5,30 +5,53 @@ date-modified: last-modified
 sidebar: true
 ---
 
-# Get in touch!
+# Contact & Support
 
-We would love to build a community around VegVault and there are various ways to get in touch and grow together.
+We are committed to building an active community around VegVault and provide multiple channels for communication, support, and collaboration.
 
-## Contact us
+## Get in Touch
 
-We have set up [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions) as a main hub for communication. Do you have a question? Have you thought about a cool new feature? Let's write us a message. We hope that the **Discussions** page will serve as a line of communication to the developers as well as between various users.
+### Primary Communication Hub
 
-## "It does not work!"
+We use [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions) as our main platform for community interaction. Whether you have questions, ideas for new features, or want to connect with other users, this is the best place to start.
 
-No software is without problems and if you find a nasty bug while using this workflow, please use the [Issues page](https://github.com/OndrejMottl/VegVault/issues) to report it.
+**Before posting, please:**
+- Search existing discussions to avoid duplicates
+- Use clear, descriptive titles
+- Provide context and relevant details
 
-Consider the following steps before and when opening a new Issue:
+### Report Issues & Bugs
 
-1. Have you or someone else asked about it at the [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions)? The "Q&A" section is perfect for that!
-2. Have you checked that similar issues may have been already reported? The issue tracker has a filter function to search for keywords in open Issues. You can narrow down the search using `labels`:label: as filters. See [Labels](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels) for more information. As a general rule, we don't assign issues to anyone.
+Found a problem? Please use our [Issues page](https://github.com/OndrejMottl/VegVault/issues) to report bugs or technical problems.
 
-To open a new Issue:
+**Issue Reporting Guidelines:**
 
-1. Click on the green **New issue** button in the upper right corner, and select **Bug report**.
-2. Describe your problem in as much detail as possible. The issue should state what the problem is, what the expected behaviour should be, and, maybe, suggest a solution. Note that you can also attach files (e.g. sample data, R code, etc.) or images to the issue.
-3. Select a suitable `label` from the drop-down menu called **Labels**.
-4. Click on the green **Submit new issue** button and wait for a reply.
+1. **Check first**: Search [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions) Q&A section and existing [Issues](https://github.com/OndrejMottl/VegVault/issues) to see if your problem has been reported
+2. **Use filters**: Search using keywords and `labels` to narrow down results
+3. **Be specific**: When opening a new issue, provide detailed information including:
+   - Clear description of the problem
+   - Expected vs. actual behavior
+   - Steps to reproduce the issue
+   - Relevant files, code, or screenshots
 
-## Contribute
+**To Report a New Issue:**
+1. Click the green **New issue** button
+2. Select **Bug report** template
+3. Fill in all relevant details
+4. Choose appropriate labels
+5. Submit and await response from our team
 
-If you would like to contribute to the development of VegVault, please see the [Contributing page](/website/contribute.qmd) for more information.
+## Contributing to VegVault
+
+Interested in contributing to VegVault development? See our [Contributing Guide](contribute.qmd) for detailed information on:
+- Data contributions
+- Code contributions  
+- Development guidelines
+- Pull request process
+
+## Additional Resources
+
+- **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Database Assembly](database_assembly.qmd)** - Data processing and integration procedures
+- **[Database Examples](database_examples.qmd)** - Practical usage examples
+- **[Database Structure](database_structure.qmd)** - Technical documentation

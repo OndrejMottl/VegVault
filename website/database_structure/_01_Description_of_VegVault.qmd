@@ -1,14 +1,117 @@
-# Section I: Description of VegVault
+# VegVault Database Structure
 
-**VegVault** is a SQLite interdisciplinary database linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers .
+Currently, [VegVault]{.vegvault} consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal [database structure]{.database} may not be directly relevant to most users, as the [{vaultkeepr}](https://bit.ly/vaultkeepr) R package processes all data to output only the most relevant information in a "[ready-to-analyze]{.data-processing}" format.
 
-**VegVault** integrates data from multiple well-established sources to provide a comprehensive view of vegetation dynamics. By organizing data into clearly defined types and providing comprehensive referencing, **VegVault** supports detailed and high-quality ecological research. This structured approach ensures that data are accessible, reliable, traceable, and facilitate a wide range of analyses and applications across disciplines.  
+::: {.callout-note}
+**For Most Users**: If you're primarily interested in using [VegVault]{.vegvault} for research, you may want to start with our [Usage Examples](/website/database_examples.qmd) rather than diving into the technical [database structure]{.database}.
+:::
 
-**VegVault** is organized into several sections to systematically manage the varying datasets it integrates. The main structure is the `Dataset`, which serves as the cornerstone of the database structure. `Datasets` are composed of `Samples`, representing individual data points within each dataset. Each `Dataset` will only contain several `Samples` if these differ in age. There are four types of `Datasets`:
+This section provides comprehensive documentation of all tables and their relationships for users who need detailed technical information about the [database architecture]{.database}.
 
-1. contemporary vegetation plots
-2. past vegetation (fossil pollen records)
-3. functional traits
-4. gridpoint (a dataset type created to hold abiotic data, see details in Section III).  
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
 
-For the contemporary (1) and past (2) vegetation `Datasets`, the `Samples` hold information about `Taxa` as derived directly from the primary data sources. Trait information is organised in separate `Datasets` (as they are associated with unique information about their spatio-temporal location, references, etc) but linked to the same `Taxa` codes as those taxa in the vegetation `Datasets` (if present). Moreover, each `Taxa`, disregarding of the source, is associated with classification information (i.e. species, genus and family name; see Section III). 
+library(here)
+
+here::i_am("website/database_structure/_01_Description_of_VegVault.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+
+source(
+  here::here(
+    "R/03_Visualisation/00_Config_quarto.R"
+  )
+)
+
+invisible(
+  lapply(
+    list.files(
+      path = here::here("R/Functions"),
+      pattern = "*.R",
+      recursive = TRUE,
+      full.names = TRUE
+    ),
+    source
+  )
+)
+
+```
+
+<br>
+
+## Full Database Schema
+
+```{r}
+#| label: full-database-schema
+#| echo: false
+knitr::include_graphics(
+  here::here(
+    "Outputs/Figures/schema_diagram.png"
+  )
+)
+```
+
+## Metadata Tables
+
+Several tables contain [metadata]{.database} and administrative information that are not directly linked to the scientific data:
+
+- `Authors`: Information about [VegVault]{.vegvault} authors and maintainers, including contact details
+- `version_control`: [Database version information]{.database} with descriptions of changes over time
+- `sqlite_stat1` & `sqlite_stat4`: [SQLite system tables]{.database} containing [database index statistics]{.database} for query optimization
+
+```{r}
+#| label: Authors variables scheme structure
+#| tbl-cap: "Column names and types for table `Authors`."
+data_comments_authors <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "author_id", "ID of an Author (unique)",
+    "author_fullname", "Full name of an Author",
+    "author_email", "Contact email of an Author",
+    "author_orcid", "ORCID ID of an Author"
+  )
+
+get_db_table_data_types(
+  con,
+  "Authors"
+) %>%
+  dplyr::full_join(
+    data_comments_authors,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
+```{r}
+#| label: Version Control variables scheme structure
+#| tbl-cap: "Column names and types for table `version_control`."
+data_comments_version_control <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "id", "ID of a database version (unique)",
+    "version", "Version number",
+    "update_date", "Date of the creation of that version",
+    "changelog", "Text description of main changes in the database"
+  )
+
+get_db_table_data_types(
+  con,
+  "version_control"
+) %>%
+  dplyr::full_join(
+    data_comments_version_control,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
+<br>

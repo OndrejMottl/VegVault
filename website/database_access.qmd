@@ -5,25 +5,33 @@ date-modified: last-modified
 sidebar: true
 ---
 
-## Guidelines for data reuse and update
+# Database Access & Usage
 
-Due to the version system of **VegVault**, the database is expected to be updated using new data and/or changing the process of data migration and processing. Therefore, we recommend citing the latest **VegVault** version with corresponding DOI. 
+## Download VegVault Database
 
-[Access Database v1.0.0 ](https://doi.org/10.48700/datst.m7ky4-4de51){.btn} 
+[VegVault]{.text-background-black .text-color-white .text-bold} v1.0.0 is available as a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} providing integrated access to global vegetation, [trait]{.text-background-blueDark .text-color-white .text-bold}, and [environmental data]{.text-background-greenDark .text-color-white .text-bold}.
 
-As the primary data sources are held under various licences, the **VegVault** has an `CC BY-NC-ND` 4.0 Licence (https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en), allowing the usage of more restricted data (i.e. BIEN data is under `CC BY-NC-ND`). We recommend users to carefully read the constricts associated with data usage. In addition, when citing the usage of **VegVault**, users should always cite the primary sources of the data, as well as any individual datasets. For those purposes, we created a function `vaulkeeper::get_references()` within the {vaultkeepr} R package (see below) that will output a list of recommended references for the specific data compilation created by the user.
+[Download VegVault v1.0.0 (SQLite)](https://doi.org/10.48700/datst.t21cz-2nq07){.btn} 
 
-[Access and cite the Database preprint](/website/materials.qmd){.btn}
+::: {.callout-note}
+**System Requirements**: [VegVault]{.text-background-black .text-color-white .text-bold} contains over 100GB of data. Ensure your system has sufficient storage space and memory (RAM) before downloading.
+:::
 
-## Limitations and considerations for future research
+### Alternative Access: Flat Files
 
-Potential limitation lies in the completeness, accuracy, and reliability of the primary data sources. For example, it has been suggested that improper data practices erode the quality of global ecological databases such as TRY38, which have been used in **VegVault**. We do not attempt to solve these problems as **VegVault**'s main purpose is the re-usability of the data. Note that for some cases we are not permitted to make modifications based on the original data (e.g. BIEN data has `CC BY-NC-ND` licence).
+For users who prefer working with individual data tables, we provide [VegVault]{.text-background-black .text-color-white .text-bold} as separate CSV files:
 
-## {vaultkeeper}: R-package for accessing the **VegVault** database    
+[Download VegVault v1.0.0 (Flat Files)](https://doi.org/10.48700/datst.thktf-5rr35){.btn} 
+
+::: {.callout-warning}
+**Note**: Flat files are not the [recommended]{.text-background-brownLight .text-color-white .text-bold} approach. Many files exceed 1GB and may be difficult to load into memory. We strongly recommend using the [SQLite database]{.text-background-brownDark .text-color-white .text-bold} with the {vaultkeepr} R package for optimal performance.
+:::
+
+## Accessing VegVault with {vaultkeepr}
 
 :::: {.columns}
 ::: {.column width="75%"}
-In order to make usage of the **VegVault** database as easy as possible, we have developed an R-package called [{vaultkeepr}](https://bit.ly/vaultkeepr), providing a suite of functions to effectively interact with the database directly from the [R programming language](https://en.wikipedia.org/wiki/R_(programming_language)). Functions include opening the database, extracting datasets, filtering samples, and accessing specific taxa and traits. This package is a well-tested interface (>95% code coverage).
+To make [VegVault]{.text-background-black .text-color-white .text-bold} easily accessible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a well-tested R package (>95% code coverage) that provides intuitive functions for interacting with the [database]{.text-background-brownDark .text-color-white .text-bold}. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory.
 :::
 
 ::: {.column width="25%"}
@@ -35,10 +43,11 @@ knitr::include_graphics(
 )
 ```
 :::
-
 ::::
 
-The {vaultkeepr} can be installed from [GitHub](https://github.com/) with:
+### Installation
+
+Install {vaultkeepr} from GitHub:
 
 ```{r}
 #| label: install
@@ -48,7 +57,7 @@ The {vaultkeepr} can be installed from [GitHub](https://github.com/) with:
 remotes::install_github("OndrejMottl/vaultkeepr")
 ```
 
-and then all functions will be made available by attaching as: 
+Load the package:
 
 ```{r}
 #| label: example
@@ -56,4 +65,58 @@ and then all functions will be made available by attaching as:
 library(vaultkeepr)
 ```
 
-See [Exampe of usage](/website/database_examples.qmd) for more details.
+### Quick Start
+
+See our [Usage Examples](database_examples.qmd) for detailed demonstrations of how to:
+
+- Extract vegetation data for specific regions and time periods
+- Access functional trait information
+- Link abiotic environmental data
+- Perform taxonomic harmonization
+
+## Guidelines for Data Reuse and Citation
+
+### Licensing
+
+VegVault is released under **CC BY 4.0 License** ([Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/)), allowing you to:
+
+- Copy and redistribute the material
+- Adapt and build upon the material
+
+**Requirements**: You must provide appropriate attribution to VegVault and cite all primary data sources.
+
+### Citation Requirements
+
+When using VegVault in your research:
+
+1. **Cite VegVault**: Always cite the latest VegVault version with its corresponding DOI
+2. **Cite primary sources**: Acknowledge all original data providers included in your analysis
+3. **Use our helper function**: The `vaultkeepr::get_references()` function automatically generates the complete list of recommended citations for your specific data compilation
+
+### Publication & Pre-print
+
+**Pre-print**: "*VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers*" 
+
+[Access Pre-print](https://doi.org/10.1101/2025.01.31.635213){.btn}
+
+For additional citation materials, visit our [Materials & Outputs](materials.qmd) page.
+
+## Important Limitations
+
+### Data Quality Considerations
+
+VegVault's quality depends on the completeness, accuracy, and reliability of primary data sources. We acknowledge potential issues in global ecological databases (as noted for [TRY](https://www.try-db.org/)) but focus on improving data re-usability rather than correcting source data quality issues.
+
+### Technical Limitations
+
+- **Storage requirements**: >100GB database size may be challenging for some systems
+- **Memory requirements**: Large datasets may require substantial RAM for analysis
+- **Version dependencies**: Always specify the VegVault version used in your research
+
+## Additional Resources
+
+- **[Database Structure](database_structure.qmd)** - Detailed technical documentation
+- **[Database Content](database_content.qmd)** - Overview of included data
+- **[Database Assembly](database_assembly.qmd)** - Data processing and integration procedures
+- **[Database Examples](database_examples.qmd)** - Practical usage scenarios
+- **[Contact & Support](contact.qmd)** - Get help and report issues

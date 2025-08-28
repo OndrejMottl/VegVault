@@ -1,0 +1,244 @@
+---
+date: 2025/08/07
+date-format: long
+date-modified: last-modified
+format:
+  html:
+    fig-width: 10
+sidebar: true
+---
+
+# Data Assembly Process of VegVault 1.0.0
+
+[VegVault]{.vegvault} v1.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions.
+
+The assembly workflow visualization:
+
+```{r}
+#| label: assembly scheme
+#| echo: false
+knitr::include_graphics(
+  here::here(
+    "Outputs/Figures/DB_assembly_visualisation/assembly_viz_04.png"
+  )
+)
+
+```
+
+## Figure legend:
+
+**Primary data sources**:
+
+1. **[Neotoma Paleoecology Database](https://www.neotomadb.org/)** - [Fossil pollen data]{.paleo} (0-20,000 years BP)
+2. **[sPlotOpen](https://idiv-biodiversity.de/en/splot/splotopen.html)** - [Contemporary vegetation plots]{.neo-vegetation}  
+3. **[BIEN](https://bien.nceas.ucsb.edu/bien/)** - [Contemporary vegetation]{.neo-vegetation} and [functional traits]{.traits}
+4. **[TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php)** - Comprehensive [plant functional traits]{.traits}
+5. **[CHELSA](https://chelsa-climate.org/)** - High-resolution [climate data]{.abiotic} (contemporary and paleoclimate)
+6. **[WoSIS](https://www.isric.org/explore/wosis)** - Global [soil property data]{.abiotic}
+
+**Data Processing**: Individual processing pipelines for each data type using specialized [GitHub repositories]{.reproducibility}
+
+7. **[VegVault-FOSSILPOL v1.0.0](https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v1.0.0)** - [Fossil pollen data]{.paleo} processing
+8. **[VegVault-Vegetation_data v1.1.0](https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.1.0)** - [Contemporary vegetation]{.neo-vegetation} processing  
+9. **[VegVault-Trait_data v1.1.0](https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.1.0)** - [Functional trait data]{.traits} processing
+10. **[VegVault-abiotic_data v1.1.0](https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0)** - [Environmental data]{.abiotic} processing
+11. **[VegVault v1.0.0](https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo)** - Consolidation into unified [SQLite database]{.database} structure with key steps:
+    - **[Taxonomic Harmonization]{.traits}**: Using the {taxospace} R package to align taxa with GBIF backbone
+    - **[Trait Categorization]{.traits}**: Grouping [traits]{.traits} into functional domains following [Díaz et al. (2016)](https://doi.org/10.1038/nature16489)
+    - **Spatial-Temporal Linking**: Creating gridpoints for [abiotic data]{.abiotic} and linking to [vegetation samples]{.neo-vegetation}
+
+## [Reproducibility]{.reproducibility} Through Version Control
+
+All [VegVault]{.vegvault} processing repositories use [GitHub Tags](https://docs.github.com/en/repositories/releasing-projects-on-github/viewing-your-repositorys-releases-and-tags) to ensure complete [reproducibility]{.reproducibility}. The specific tagged versions used for v1.0.0 are documented in both our code and documentation, enabling exact replication of the [database assembly]{.database} process.
+
+## Data Processing Details
+
+### [Fossil Pollen Records]{.paleo}
+
+[Fossil pollen records]{.paleo} have been downloaded from the [Neotoma Paleoecology Database](https://www.neotomadb.org/) using their API on 26th June 2023. All data acquisition and processing have been done using the [FOSSILPOL: Workflow for processing and standardizing global paleoecological pollen data](https://bit.ly/FOSSILPOL) (version 1.0.0). This includes the selection of depositional environments, ecological groups, chronology control point types, and a minimum number of chronology control points to construct age-depth models. Individual samples and records have been filtered by age limits, number of [pollen grains]{.paleo}, maximum age interpolation, and number of valid levels. In addition, the accuracy of [fossil pollen data]{.paleo} is increased by re-estimating all age-depth models using the Bayesian probabilistic approach and including the information about individual age uncertainty.
+
+**Selection Criteria:**
+
+- Only records with type "pollen" with valid geological coordinates (longitude between -180 and 180, latitude between -90 and 90)
+- Depositional environments: lakes, bogs, and mires only ([selection table](https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Depositional_environment/Neotoma/depositional_environment_selection_2023-06-26.csv))
+- Specific ecological groups retained ([selection table](https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Eco_group/eco_group_2023-06-28.csv))
+- Minimum 5 chronology control points ([valid types](https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Chronology_setting/Chron_control_point_types/chron_control_point_types_2023-06-28.csv))
+
+**Quality Filters:**
+
+- Minimum 125 [pollen grains]{.paleo} per sample (balanced for data retention vs. quality)
+  - While the preferred minimum was initially set at 150, this threshold resulted in significant data loss
+  - Threshold adjusted to 125 with condition that less than 75% of samples would have low pollen sum
+- Age limits: 0-20,000 cal yr BP
+- Exclusion of samples older than 3000 years of the last chronology control point
+- Minimum 5 samples per record
+- Re-calculated age-depth models using Bayesian approach [{Bchron} package](https://andrewcparnell.github.io/Bchron/)
+
+**Processing Details**: Available at [VegVault-FOSSILPOL](https://doi.org/10.5281/zenodo.14745060)
+
+### [Contemporary Vegetation Plots]{.neo-vegetation}
+
+The primary sources of [contemporary plot-based vegetation data]{.neo-vegetation} are BIEN (Botanical Information and Ecology Network) and sPlotOpen (the open-access version of sPlot).
+
+**BIEN Processing:**
+
+- Downloaded using [{RBIEN} R package](https://cran.r-project.org/web/packages/BIEN/index.html) v1.2.7 on 2nd August 2023 using function `BIEN::BIEN_plot_datasource()`
+- Retained key columns: `datasource_id`, `datasource`, `plot_name`, `sampling_protocol`, `methodology_reference`, `methodology_description`, `longitude`, `latitude`, `plot_area_ha`, `subplot`, `individual_count`, `family_matched`, `name_matched`, `name_matched_author`, `verbatim_family`, `verbatim_scientific_name`, `scrubbed_species_binomial`, `scrubbed_taxonomic_status`, `scrubbed_family`, `scrubbed_author`
+- All columns renamed using [snake case](https://en.wikipedia.org/wiki/Snake_case)
+- Filtered out records with missing essential information (NA values in `datasource_id`, `datasource`, `plot_name`, `longitude`, `latitude`, and/or `plot_area_ha`)
+
+**sPlotOpen Processing:**
+
+- Downloaded sPlotOpen v2.0 on 26th September 2023
+- Linked tables `DT2.oa` and `header.oa` via `PlotObservationID` column
+- Applied quality filters for geographic and area data (filtered out rows with NA values in `PlotObservationID`, `GIVD_ID`, `Longitude`, `Latitude`, and/or `Releve_area`)
+- All columns renamed using [snake case](https://en.wikipedia.org/wiki/Snake_case)
+
+**Processing Details**: Available at [VegVault-Vegetation_data](https://doi.org/10.5281/zenodo.16729978)
+
+### [Functional Traits]{.traits}
+
+Following [Díaz et al. (2016)](https://doi.org/10.1038/nature16489), we selected six key [functional traits]{.traits} representing:
+
+- `Stem specific density`
+- `Leaf nitrogen content per unit mass`
+- `Diaspore mass`
+- `Plant height`
+- `Leaf area`
+- `Leaf mass per area`
+
+**[TRY Database]{.traits} Processing:**
+
+- Data request ID: `28498` on 29th August 2023
+- Requested [traits]{.traits} with codes: `3106`, `4`, `3108`, `3110`, `3112`, `3114`, `3116`, `3117`, `14`, and `26` (closest to Díaz et al. 2016 description)
+- Used {rtry} R package v1.1.0 for data import
+- For each [trait]{.traits} (`TraitID`), extracted all relevant observations (`ObservationID`), ensuring only observations unique to each [trait]{.traits}
+- Identified all unique data (`DataID`) associated with each [trait]{.traits}
+- Excluded non-meaningful [trait]{.traits} variations (DataID: `2221`, `2222`, `2223`, `2224`, `2225`, `3646`, `3647`, `3698`, `3699`, `3727`, `3728`, `3730`, `3731`, `3849`, `3850`, `4029`, and `4030`), e.g., `height at 15 days`
+- Extracted covariate information (additional data stored in `DataName` column)
+- All columns renamed using [snake case](https://en.wikipedia.org/wiki/Snake_case)
+- Added `Trait Domain` variable to group [traits]{.traits} following Díaz et al. (2016) selection for efficient extraction across TRY and BIEN
+
+**[BIEN Traits]{.traits} Processing:**
+
+- Downloaded using {RBIEN} R package v1.2.7 on 15th December 2023 using function `BIEN::BIEN_trait_trait()`
+- Requested [traits]{.traits}: `whole plant height`, `stem wood density`, `leaf area`, `leaf area per leaf dry mass`, `leaf nitrogen content per leaf dry mass`, and `seed mass`
+- Retained columns: `trait_name`, `trait_value`, `unit`, `id`, `longitude`, `latitude`, `method`, `url_source`, `source_citation`, `project_pi`, `scrubbed_species_binomial`, and `access`
+- Calculated derived measures (e.g., `leaf mass per area` = 1/`leaf area per leaf dry mass`)
+
+**Processing Details**: Available at [VegVault-Trait_data](https://doi.org/10.5281/zenodo.14745086)
+
+### [Abiotic Environmental Data]{.abiotic}
+
+The primary sources of [abiotic data]{.abiotic} are CHELSA, CHELSA-TRACE21, and WoSIS Soil Profile Database. The first two data sources provide high-resolution downscaled [climatic data]{.abiotic}, while the latter offers detailed [soil information]{.abiotic} (only available for [contemporary data]{.neo-vegetation}).
+
+**[CHELSA Climate Data]{.abiotic}:**
+
+- [Contemporary]{.neo-vegetation}: CHELSA v2.1 downloaded on 8th September 2023
+- Used [{ClimDatDownloadR} R package](https://github.com/HelgeJentsch/ClimDatDownloadR) with function `ClimDatDownloadR::Chelsa.Clim.download()`
+- Selected bio-variables: `1`, `4`, `6`, `12`, `15`, `18`, `19`
+- Spatial aggregation: 25x factor using median values with [{terra} R package](https://rspatial.github.io/terra/) function `terra::aggregate(factor = 25, fun = "median")`
+
+**[Paleoclimate]{.paleo}: CHELSA-TRACE21**
+
+- [Paleoclimate]{.paleo}: CHELSA-TRACE21 v1.0 downloaded on 31st December 2023
+- Downloaded values for each 500-year time-slice between 0 and 18,000 years before present (BP)
+- Selected bio-variables: `1`, `4`, `6`, `12`, `15`, `18`, `19`
+- For each time slice, applied spatial aggregation using `terra::aggregate(factor = 25, fun = "median")`
+
+**[WoSIS Soil Data]{.abiotic}:**
+
+- Downloaded on 11th September 2023 (both `HWSD2_RASTER.zip` and `HWSD2_DB.zip`)
+- Extracted [soil type names]{.abiotic} (column `HWSD2_SMU_ID`) by combining tables `HWSD2_SMU` and `D_WRB4`
+- Added [soil type information]{.abiotic} to the raster
+- [Resampled]{.reproducibility} using `terra::resample(method = "near")` function to match [climate data]{.abiotic} resolution
+- Provides essential [edaphic context]{.abiotic} for vegetation-environment relationships ([contemporary data]{.neo-vegetation} only)
+
+**Processing Details**: Available at [VegVault-abiotic_data](https://doi.org/10.5281/zenodo.14745293)
+
+## [Data Integration Procedures]{.reproducibility}
+
+All [processing pipelines]{.reproducibility} with their corresponding [Tags]{.database} are migrated into an [SQLite database]{.vegvault} using the GitHub repository titled [VegVault](https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo), which can be accessed as DOI: [10.5281/zenodo.15201994](https://doi.org/10.5281/zenodo.15201994).
+
+### [Data Migration Details]{.reproducibility}
+
+**[Migrating sPlotOpen vegetation data]{.neo-vegetation}:**
+
+- [Dataset name]{.database} (`dataset_name`) created from `plot_observation_id` as `splot_[plot_observation_id]`
+- Original [data source]{.database} from column `givd_id` stored in `DatasetSourcesID` table
+- [Sample name]{.database} (`sample_name`) created using `plot_observation_id` as `splot_[plot_observation_id]`
+- [Sample Size]{.database} (`sample_size`) created from `releve_area` column
+- All samples automatically assigned age of 0
+- Taxonomic names extracted from `Species` column, abundances from `Original_abundance`
+
+**Migrating BIEN vegetation data:**
+
+- [Dataset name]{.database} (`dataset_name`) created as `bien_[row number]`
+- Original [data source]{.database} from column `datasource` stored in `DatasetSourcesID` table
+- [Sampling method]{.reproducibility} extracted from `methodology_description` column
+- [Sample name]{.database} (`sample_name`) created as `bien_[row number]`
+- [Sample Size]{.database} (`sample_size`) created from `plot_area_ha` column, multiplied by 10,000 (stored in square meters)
+- All samples automatically assigned age of 0
+- [Taxonomic names]{.traits} extracted from `name_matched` column
+
+**[Migrating fossil pollen data]{.paleo}:**
+
+- [Dataset name]{.database}(`dataset_name`) created from `dataset_id` (fossilpol_[dataset_id])
+- Note: column `dataset_id` from primary source does not match `dataset_id` in [VegVault]{.vegvault}
+- Original [data source]{.database} from `source_of_data` column stored in `DatasetSourcesID` table
+- [Sampling method]{.reproducibility} extracted from `depositionalenvironment` column
+- Individual [Dataset Reference]{.database} extracted from `doi` column
+- [Sample name]{.database} (`sample_name`) created using `dataset_id` and `sample_id` as `fossilpol_[dataset_id]_[sample_id]`
+- [Ages]{.paleo} extracted from `levels` column
+- [Age uncertainty]{.paleo} from age-depth models extracted from `age_uncertainty` column
+- [Taxonomic names]{.traits} and [abundances]{.paleo} extracted from `counts_harmonised` column
+
+**[Migrating TRY functional traits]{.traits}:**
+
+- [Dataset name]{.database} (`dataset_name`) created as `try_[row number]`
+- Original [data source]{.database} from column `dataset` stored in `DatasetSourcesID` table
+- Individual [Dataset Reference]{.database} extracted from `reference_source` column
+- [Sample name]{.database} (`sample_name`) created as `try_[row number]`
+- Individual [Sample reference]{.database} extracted from `dataset_reference_citation`
+- All samples automatically assigned age of 0
+- Trait names extracted from `trait_full_name`, taxonomic names from `acc_species_name`, trait values from `trait_value`
+
+**[Migrating BIEN functional traits]{.traits}:**
+
+- [Dataset name]{.database} (`dataset_name`) created as `bien_traits_[row number]`
+- Original [data source]{.database} from column `project_pi` stored in `DatasetSourcesID` table
+- Individual [Dataset Reference]{.database} extracted from `source_citation` column
+- [Sample name]{.database} (`sample_name`) created using column `id` as `bien_traits_[id]`
+- All samples automatically assigned age of 0
+- [Trait names]{.traits} extracted from `trait_name`, [taxonomic names]{.traits} from `scrubbed_species_binomial`, [trait values]{.traits} from `trait_value`
+- [Trait]{.traits} `leaf mass per area` calculated from `leaf area per leaf dry mass` as 1/value
+
+### [Final Database Integration Procedures]{.reproducibility}
+
+In addition to the consolidation of all [processed data]{.reproducibility} into a unified [SQLite database]{.vegvault}, the final [VegVault]{.vegvault} migration repository performs three critical procedures to ensure [data consistency]{.reproducibility} and usability:
+
+#### (i) [Taxonomic Classification]{.traits}
+
+As [VegVault]{.vegvault} integrates data on [taxa]{.traits} from various sources, the [{taxospace}]{.reproducibility} R package is used to classify diverse [taxa]{.traits} into a unifying [taxonomic backbone]{.traits}. The [{taxospace}]{.reproducibility} tool automatically aligns [taxon names]{.traits} with the [GBIF taxonomical backbone]{.traits}. Specifically, we find the best match of raw [taxon names]{.traits} using the Global Names Resolver, which is then aligned with GBIF. The resulting [taxonomic classification]{.traits} information, detailed up to the family level, is stored for each [taxon]{.traits}, ensuring consistency and facilitating comparative analyses across different datasets.
+
+**Important limitations**: [Taxonomic classification]{.traits} down to the species level is not available for each [taxon]{.traits} (e.g., some [fossil pollen types]{.paleo} can only be identified to the genus or family level). For several [taxa]{.traits}, no matching classification could be found. Note that [taxonomic classification]{.traits} is additional information—the original [taxon name]{.traits} is always present and returned by default. Finally, users should be aware that this classification is an [automated process]{.reproducibility} and may contain errors.
+
+#### (ii) [Grouping of Traits into Trait Domains]{.traits}
+
+As there are differences in [trait names]{.traits} across data sources (e.g., "Leaf nitrogen (N) content per leaf dry mass" vs. "leaf nitrogen content per leaf dry mass"), we added a new variable `Trait Domain` that groups [traits]{.traits} together following the [trait selection]{.traits} of Díaz et al. (2016). For example, [trait]{.traits} `Plant height vegetative` from [TRY]{.traits} and [trait]{.traits} `whole plant height` from [BIEN]{.traits} are both grouped under the `Plant height` [Trait Domain]{.traits}. This grouping serves as an efficient mechanism for extracting comparable [traits]{.traits} across both [TRY]{.traits} and [BIEN]{.traits} datasets.
+
+#### (iii) [Creation of Gridpoints for Abiotic Data]{.abiotic}
+
+We developed a data structure that provides readily available [environmental context]{.abiotic} for each [vegetation]{.neo-vegetation} (and [trait]{.traits}) record by creating spatio-temporal links between these records and [abiotic information]{.abiotic}. As raster data are not suitable for storage in an [SQLite database]{.database}, we created artificial points, called '[gridpoints]{.abiotic}', located in the center of each raster cell. This resulted in a uniform spatio-temporal matrix of [gridpoints]{.abiotic} holding the [abiotic information]{.abiotic}.
+
+**[Gridpoint naming conventions]{.reproducibility}**: `dataset_name` are created as "geo_[longitude]_[latitude]" and `sample_name` are created as "geo_[longitude]_[latitude]_[age]".
+
+**[Spatial-temporal linking]{.reproducibility}**: We linked [gridpoints]{.abiotic} with other non-gridpoint [Samples]{.database} (`vegetation_plot`, `fossil_pollen_archive`, and [traits]{.traits}) and calculated the spatial and temporal distances between them. We retained any [gridpoint Sample]{.abiotic} within 50 km and/or 5000 years from any other non-gridpoint [Sample]{.database} and discarded the rest.
+
+## Related Resources
+
+- **[Database Content](database_content.qmd)** - Overview of available data
+- **[Database Structure](database_structure.qmd)** - Technical database schema
+- **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Usage Examples](database_examples.qmd)** - Practical applications
+- **[Materials & Outputs](materials.qmd)** - Publications and resources

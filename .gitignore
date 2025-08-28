@@ -51,7 +51,9 @@ rsconnect/
 
 # Large files
 Outputs/Data/VegVault/VegVault.sqlite
-Data/Processed/Classified_taxa/*
+Outputs/Data/VegVault/Flat_files/
+!Outputs/Data/VegVault/Flat_files/Column_names/*.csv
+Data/Processed/Classified_taxa/
 
 # debug
 debug.R

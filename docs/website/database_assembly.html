@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-08-07">
+
+<title>database_assembly – VegVault</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../Outputs/Figures/website/VegVault_logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-df840db130585f2fd40f9e00b1cc23e2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">VegVault</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../website/people.html"> 
+<span class="menu-text">People</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-database" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Database</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-database">    
+        <li>
+    <a class="dropdown-item" href="../website/database_content.html">
+ <span class="dropdown-text">VegVault Content</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../website/database_structure.html">
+ <span class="dropdown-text">VegVault Structure</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../website/database_assembly.html">
+ <span class="dropdown-text">VegVault Assembly Process</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../website/database_access.html">
+ <span class="dropdown-text">VegVault Access</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../website/database_examples.html">
+ <span class="dropdown-text">Examples of usage</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../website/materials.html"> 
+<span class="menu-text">Outputs and Materials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../website/contact.html"> 
+<span class="menu-text">Get in touch!</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../website/contribute.html"> 
+<span class="menu-text">Contribute!</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://bsky.app/profile/ondrejmottl.bsky.social" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bluesky"></i></a>
+    <a href="https://github.com/OndrejMottl/VegVault" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 7, 2025</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">August 28, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="data-assembly-process-of-vegvault-1.0.0" class="level1">
+<h1>Data Assembly Process of VegVault 1.0.0</h1>
+<p><span class="vegvault">VegVault</span> v1.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions.</p>
+<p>The assembly workflow visualization:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../Outputs/Figures/DB_assembly_visualisation/assembly_viz_04.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="figure-legend" class="level2">
+<h2 class="anchored" data-anchor-id="figure-legend">Figure legend:</h2>
+<p><strong>Primary data sources</strong>:</p>
+<ol type="1">
+<li><strong><a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a></strong> - <span class="paleo">Fossil pollen data</span> (0-20,000 years BP)</li>
+<li><strong><a href="https://idiv-biodiversity.de/en/splot/splotopen.html">sPlotOpen</a></strong> - <span class="neo-vegetation">Contemporary vegetation plots</span><br>
+</li>
+<li><strong><a href="https://bien.nceas.ucsb.edu/bien/">BIEN</a></strong> - <span class="neo-vegetation">Contemporary vegetation</span> and <span class="traits">functional traits</span></li>
+<li><strong><a href="https://www.try-db.org/TryWeb/Home.php">TRY Plant Trait Database</a></strong> - Comprehensive <span class="traits">plant functional traits</span></li>
+<li><strong><a href="https://chelsa-climate.org/">CHELSA</a></strong> - High-resolution <span class="abiotic">climate data</span> (contemporary and paleoclimate)</li>
+<li><strong><a href="https://www.isric.org/explore/wosis">WoSIS</a></strong> - Global <span class="abiotic">soil property data</span></li>
+</ol>
+<p><strong>Data Processing</strong>: Individual processing pipelines for each data type using specialized <span class="reproducibility">GitHub repositories</span></p>
+<ol start="7" type="1">
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v1.0.0">VegVault-FOSSILPOL v1.0.0</a></strong> - <span class="paleo">Fossil pollen data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.1.0">VegVault-Vegetation_data v1.1.0</a></strong> - <span class="neo-vegetation">Contemporary vegetation</span> processing<br>
+</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.1.0">VegVault-Trait_data v1.1.0</a></strong> - <span class="traits">Functional trait data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0">VegVault-abiotic_data v1.1.0</a></strong> - <span class="abiotic">Environmental data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault v1.0.0</a></strong> - Consolidation into unified <span class="database">SQLite database</span> structure with key steps:
+<ul>
+<li><strong><span class="traits">Taxonomic Harmonization</span></strong>: Using the {taxospace} R package to align taxa with GBIF backbone</li>
+<li><strong><span class="traits">Trait Categorization</span></strong>: Grouping <span class="traits">traits</span> into functional domains following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a></li>
+<li><strong>Spatial-Temporal Linking</strong>: Creating gridpoints for <span class="abiotic">abiotic data</span> and linking to <span class="neo-vegetation">vegetation samples</span></li>
+</ul></li>
+</ol>
+</section>
+<section id="reproducibility-through-version-control" class="level2">
+<h2 class="anchored" data-anchor-id="reproducibility-through-version-control"><span class="reproducibility">Reproducibility</span> Through Version Control</h2>
+<p>All <span class="vegvault">VegVault</span> processing repositories use <a href="https://docs.github.com/en/repositories/releasing-projects-on-github/viewing-your-repositorys-releases-and-tags">GitHub Tags</a> to ensure complete <span class="reproducibility">reproducibility</span>. The specific tagged versions used for v1.0.0 are documented in both our code and documentation, enabling exact replication of the <span class="database">database assembly</span> process.</p>
+</section>
+<section id="data-processing-details" class="level2">
+<h2 class="anchored" data-anchor-id="data-processing-details">Data Processing Details</h2>
+<section id="fossil-pollen-records" class="level3">
+<h3 class="anchored" data-anchor-id="fossil-pollen-records"><span class="paleo">Fossil Pollen Records</span></h3>
+<p><span class="paleo">Fossil pollen records</span> have been downloaded from the <a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a> using their API on 26th June 2023. All data acquisition and processing have been done using the <a href="https://bit.ly/FOSSILPOL">FOSSILPOL: Workflow for processing and standardizing global paleoecological pollen data</a> (version 1.0.0). This includes the selection of depositional environments, ecological groups, chronology control point types, and a minimum number of chronology control points to construct age-depth models. Individual samples and records have been filtered by age limits, number of <span class="paleo">pollen grains</span>, maximum age interpolation, and number of valid levels. In addition, the accuracy of <span class="paleo">fossil pollen data</span> is increased by re-estimating all age-depth models using the Bayesian probabilistic approach and including the information about individual age uncertainty.</p>
+<p><strong>Selection Criteria:</strong></p>
+<ul>
+<li>Only records with type “pollen” with valid geological coordinates (longitude between -180 and 180, latitude between -90 and 90)</li>
+<li>Depositional environments: lakes, bogs, and mires only (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Depositional_environment/Neotoma/depositional_environment_selection_2023-06-26.csv">selection table</a>)</li>
+<li>Specific ecological groups retained (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Eco_group/eco_group_2023-06-28.csv">selection table</a>)</li>
+<li>Minimum 5 chronology control points (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Chronology_setting/Chron_control_point_types/chron_control_point_types_2023-06-28.csv">valid types</a>)</li>
+</ul>
+<p><strong>Quality Filters:</strong></p>
+<ul>
+<li>Minimum 125 <span class="paleo">pollen grains</span> per sample (balanced for data retention vs.&nbsp;quality)
+<ul>
+<li>While the preferred minimum was initially set at 150, this threshold resulted in significant data loss</li>
+<li>Threshold adjusted to 125 with condition that less than 75% of samples would have low pollen sum</li>
+</ul></li>
+<li>Age limits: 0-20,000 cal yr BP</li>
+<li>Exclusion of samples older than 3000 years of the last chronology control point</li>
+<li>Minimum 5 samples per record</li>
+<li>Re-calculated age-depth models using Bayesian approach <a href="https://andrewcparnell.github.io/Bchron/">{Bchron} package</a></li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745060">VegVault-FOSSILPOL</a></p>
+</section>
+<section id="contemporary-vegetation-plots" class="level3">
+<h3 class="anchored" data-anchor-id="contemporary-vegetation-plots"><span class="neo-vegetation">Contemporary Vegetation Plots</span></h3>
+<p>The primary sources of <span class="neo-vegetation">contemporary plot-based vegetation data</span> are BIEN (Botanical Information and Ecology Network) and sPlotOpen (the open-access version of sPlot).</p>
+<p><strong>BIEN Processing:</strong></p>
+<ul>
+<li>Downloaded using <a href="https://cran.r-project.org/web/packages/BIEN/index.html">{RBIEN} R package</a> v1.2.7 on 2nd August 2023 using function <code>BIEN::BIEN_plot_datasource()</code></li>
+<li>Retained key columns: <code>datasource_id</code>, <code>datasource</code>, <code>plot_name</code>, <code>sampling_protocol</code>, <code>methodology_reference</code>, <code>methodology_description</code>, <code>longitude</code>, <code>latitude</code>, <code>plot_area_ha</code>, <code>subplot</code>, <code>individual_count</code>, <code>family_matched</code>, <code>name_matched</code>, <code>name_matched_author</code>, <code>verbatim_family</code>, <code>verbatim_scientific_name</code>, <code>scrubbed_species_binomial</code>, <code>scrubbed_taxonomic_status</code>, <code>scrubbed_family</code>, <code>scrubbed_author</code></li>
+<li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
+<li>Filtered out records with missing essential information (NA values in <code>datasource_id</code>, <code>datasource</code>, <code>plot_name</code>, <code>longitude</code>, <code>latitude</code>, and/or <code>plot_area_ha</code>)</li>
+</ul>
+<p><strong>sPlotOpen Processing:</strong></p>
+<ul>
+<li>Downloaded sPlotOpen v2.0 on 26th September 2023</li>
+<li>Linked tables <code>DT2.oa</code> and <code>header.oa</code> via <code>PlotObservationID</code> column</li>
+<li>Applied quality filters for geographic and area data (filtered out rows with NA values in <code>PlotObservationID</code>, <code>GIVD_ID</code>, <code>Longitude</code>, <code>Latitude</code>, and/or <code>Releve_area</code>)</li>
+<li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.16729978">VegVault-Vegetation_data</a></p>
+</section>
+<section id="functional-traits" class="level3">
+<h3 class="anchored" data-anchor-id="functional-traits"><span class="traits">Functional Traits</span></h3>
+<p>Following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a>, we selected six key <span class="traits">functional traits</span> representing:</p>
+<ul>
+<li><code>Stem specific density</code></li>
+<li><code>Leaf nitrogen content per unit mass</code></li>
+<li><code>Diaspore mass</code></li>
+<li><code>Plant height</code></li>
+<li><code>Leaf area</code></li>
+<li><code>Leaf mass per area</code></li>
+</ul>
+<p><strong><span class="traits">TRY Database</span> Processing:</strong></p>
+<ul>
+<li>Data request ID: <code>28498</code> on 29th August 2023</li>
+<li>Requested <span class="traits">traits</span> with codes: <code>3106</code>, <code>4</code>, <code>3108</code>, <code>3110</code>, <code>3112</code>, <code>3114</code>, <code>3116</code>, <code>3117</code>, <code>14</code>, and <code>26</code> (closest to Díaz et al.&nbsp;2016 description)</li>
+<li>Used {rtry} R package v1.1.0 for data import</li>
+<li>For each <span class="traits">trait</span> (<code>TraitID</code>), extracted all relevant observations (<code>ObservationID</code>), ensuring only observations unique to each <span class="traits">trait</span></li>
+<li>Identified all unique data (<code>DataID</code>) associated with each <span class="traits">trait</span></li>
+<li>Excluded non-meaningful <span class="traits">trait</span> variations (DataID: <code>2221</code>, <code>2222</code>, <code>2223</code>, <code>2224</code>, <code>2225</code>, <code>3646</code>, <code>3647</code>, <code>3698</code>, <code>3699</code>, <code>3727</code>, <code>3728</code>, <code>3730</code>, <code>3731</code>, <code>3849</code>, <code>3850</code>, <code>4029</code>, and <code>4030</code>), e.g., <code>height at 15 days</code></li>
+<li>Extracted covariate information (additional data stored in <code>DataName</code> column)</li>
+<li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
+<li>Added <code>Trait Domain</code> variable to group <span class="traits">traits</span> following Díaz et al.&nbsp;(2016) selection for efficient extraction across TRY and BIEN</li>
+</ul>
+<p><strong><span class="traits">BIEN Traits</span> Processing:</strong></p>
+<ul>
+<li>Downloaded using {RBIEN} R package v1.2.7 on 15th December 2023 using function <code>BIEN::BIEN_trait_trait()</code></li>
+<li>Requested <span class="traits">traits</span>: <code>whole plant height</code>, <code>stem wood density</code>, <code>leaf area</code>, <code>leaf area per leaf dry mass</code>, <code>leaf nitrogen content per leaf dry mass</code>, and <code>seed mass</code></li>
+<li>Retained columns: <code>trait_name</code>, <code>trait_value</code>, <code>unit</code>, <code>id</code>, <code>longitude</code>, <code>latitude</code>, <code>method</code>, <code>url_source</code>, <code>source_citation</code>, <code>project_pi</code>, <code>scrubbed_species_binomial</code>, and <code>access</code></li>
+<li>Calculated derived measures (e.g., <code>leaf mass per area</code> = 1/<code>leaf area per leaf dry mass</code>)</li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745086">VegVault-Trait_data</a></p>
+</section>
+<section id="abiotic-environmental-data" class="level3">
+<h3 class="anchored" data-anchor-id="abiotic-environmental-data"><span class="abiotic">Abiotic Environmental Data</span></h3>
+<p>The primary sources of <span class="abiotic">abiotic data</span> are CHELSA, CHELSA-TRACE21, and WoSIS Soil Profile Database. The first two data sources provide high-resolution downscaled <span class="abiotic">climatic data</span>, while the latter offers detailed <span class="abiotic">soil information</span> (only available for <span class="neo-vegetation">contemporary data</span>).</p>
+<p><strong><span class="abiotic">CHELSA Climate Data</span>:</strong></p>
+<ul>
+<li><span class="neo-vegetation">Contemporary</span>: CHELSA v2.1 downloaded on 8th September 2023</li>
+<li>Used <a href="https://github.com/HelgeJentsch/ClimDatDownloadR">{ClimDatDownloadR} R package</a> with function <code>ClimDatDownloadR::Chelsa.Clim.download()</code></li>
+<li>Selected bio-variables: <code>1</code>, <code>4</code>, <code>6</code>, <code>12</code>, <code>15</code>, <code>18</code>, <code>19</code></li>
+<li>Spatial aggregation: 25x factor using median values with <a href="https://rspatial.github.io/terra/">{terra} R package</a> function <code>terra::aggregate(factor = 25, fun = "median")</code></li>
+</ul>
+<p><strong><span class="paleo">Paleoclimate</span>: CHELSA-TRACE21</strong></p>
+<ul>
+<li><span class="paleo">Paleoclimate</span>: CHELSA-TRACE21 v1.0 downloaded on 31st December 2023</li>
+<li>Downloaded values for each 500-year time-slice between 0 and 18,000 years before present (BP)</li>
+<li>Selected bio-variables: <code>1</code>, <code>4</code>, <code>6</code>, <code>12</code>, <code>15</code>, <code>18</code>, <code>19</code></li>
+<li>For each time slice, applied spatial aggregation using <code>terra::aggregate(factor = 25, fun = "median")</code></li>
+</ul>
+<p><strong><span class="abiotic">WoSIS Soil Data</span>:</strong></p>
+<ul>
+<li>Downloaded on 11th September 2023 (both <code>HWSD2_RASTER.zip</code> and <code>HWSD2_DB.zip</code>)</li>
+<li>Extracted <span class="abiotic">soil type names</span> (column <code>HWSD2_SMU_ID</code>) by combining tables <code>HWSD2_SMU</code> and <code>D_WRB4</code></li>
+<li>Added <span class="abiotic">soil type information</span> to the raster</li>
+<li><span class="reproducibility">Resampled</span> using <code>terra::resample(method = "near")</code> function to match <span class="abiotic">climate data</span> resolution</li>
+<li>Provides essential <span class="abiotic">edaphic context</span> for vegetation-environment relationships (<span class="neo-vegetation">contemporary data</span> only)</li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745293">VegVault-abiotic_data</a></p>
+</section>
+</section>
+<section id="data-integration-procedures" class="level2">
+<h2 class="anchored" data-anchor-id="data-integration-procedures"><span class="reproducibility">Data Integration Procedures</span></h2>
+<p>All <span class="reproducibility">processing pipelines</span> with their corresponding <span class="database">Tags</span> are migrated into an <span class="vegvault">SQLite database</span> using the GitHub repository titled <a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault</a>, which can be accessed as DOI: <a href="https://doi.org/10.5281/zenodo.15201994">10.5281/zenodo.15201994</a>.</p>
+<section id="data-migration-details" class="level3">
+<h3 class="anchored" data-anchor-id="data-migration-details"><span class="reproducibility">Data Migration Details</span></h3>
+<p><strong><span class="neo-vegetation">Migrating sPlotOpen vegetation data</span>:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created from <code>plot_observation_id</code> as <code>splot_[plot_observation_id]</code></li>
+<li>Original <span class="database">data source</span> from column <code>givd_id</code> stored in <code>DatasetSourcesID</code> table</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created using <code>plot_observation_id</code> as <code>splot_[plot_observation_id]</code></li>
+<li><span class="database">Sample Size</span> (<code>sample_size</code>) created from <code>releve_area</code> column</li>
+<li>All samples automatically assigned age of 0</li>
+<li>Taxonomic names extracted from <code>Species</code> column, abundances from <code>Original_abundance</code></li>
+</ul>
+<p><strong>Migrating BIEN vegetation data:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>bien_[row number]</code></li>
+<li>Original <span class="database">data source</span> from column <code>datasource</code> stored in <code>DatasetSourcesID</code> table</li>
+<li><span class="reproducibility">Sampling method</span> extracted from <code>methodology_description</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created as <code>bien_[row number]</code></li>
+<li><span class="database">Sample Size</span> (<code>sample_size</code>) created from <code>plot_area_ha</code> column, multiplied by 10,000 (stored in square meters)</li>
+<li>All samples automatically assigned age of 0</li>
+<li><span class="traits">Taxonomic names</span> extracted from <code>name_matched</code> column</li>
+</ul>
+<p><strong><span class="paleo">Migrating fossil pollen data</span>:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span>(<code>dataset_name</code>) created from <code>dataset_id</code> (fossilpol_[dataset_id])</li>
+<li>Note: column <code>dataset_id</code> from primary source does not match <code>dataset_id</code> in <span class="vegvault">VegVault</span></li>
+<li>Original <span class="database">data source</span> from <code>source_of_data</code> column stored in <code>DatasetSourcesID</code> table</li>
+<li><span class="reproducibility">Sampling method</span> extracted from <code>depositionalenvironment</code> column</li>
+<li>Individual <span class="database">Dataset Reference</span> extracted from <code>doi</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created using <code>dataset_id</code> and <code>sample_id</code> as <code>fossilpol_[dataset_id]_[sample_id]</code></li>
+<li><span class="paleo">Ages</span> extracted from <code>levels</code> column</li>
+<li><span class="paleo">Age uncertainty</span> from age-depth models extracted from <code>age_uncertainty</code> column</li>
+<li><span class="traits">Taxonomic names</span> and <span class="paleo">abundances</span> extracted from <code>counts_harmonised</code> column</li>
+</ul>
+<p><strong><span class="traits">Migrating TRY functional traits</span>:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>try_[row number]</code></li>
+<li>Original <span class="database">data source</span> from column <code>dataset</code> stored in <code>DatasetSourcesID</code> table</li>
+<li>Individual <span class="database">Dataset Reference</span> extracted from <code>reference_source</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created as <code>try_[row number]</code></li>
+<li>Individual <span class="database">Sample reference</span> extracted from <code>dataset_reference_citation</code></li>
+<li>All samples automatically assigned age of 0</li>
+<li>Trait names extracted from <code>trait_full_name</code>, taxonomic names from <code>acc_species_name</code>, trait values from <code>trait_value</code></li>
+</ul>
+<p><strong><span class="traits">Migrating BIEN functional traits</span>:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>bien_traits_[row number]</code></li>
+<li>Original <span class="database">data source</span> from column <code>project_pi</code> stored in <code>DatasetSourcesID</code> table</li>
+<li>Individual <span class="database">Dataset Reference</span> extracted from <code>source_citation</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created using column <code>id</code> as <code>bien_traits_[id]</code></li>
+<li>All samples automatically assigned age of 0</li>
+<li><span class="traits">Trait names</span> extracted from <code>trait_name</code>, <span class="traits">taxonomic names</span> from <code>scrubbed_species_binomial</code>, <span class="traits">trait values</span> from <code>trait_value</code></li>
+<li><span class="traits">Trait</span> <code>leaf mass per area</code> calculated from <code>leaf area per leaf dry mass</code> as 1/value</li>
+</ul>
+</section>
+<section id="final-database-integration-procedures" class="level3">
+<h3 class="anchored" data-anchor-id="final-database-integration-procedures"><span class="reproducibility">Final Database Integration Procedures</span></h3>
+<p>In addition to the consolidation of all <span class="reproducibility">processed data</span> into a unified <span class="vegvault">SQLite database</span>, the final <span class="vegvault">VegVault</span> migration repository performs three critical procedures to ensure <span class="reproducibility">data consistency</span> and usability:</p>
+<section id="i-taxonomic-classification" class="level4">
+<h4 class="anchored" data-anchor-id="i-taxonomic-classification">(i) <span class="traits">Taxonomic Classification</span></h4>
+<p>As <span class="vegvault">VegVault</span> integrates data on <span class="traits">taxa</span> from various sources, the <span class="reproducibility">{taxospace}</span> R package is used to classify diverse <span class="traits">taxa</span> into a unifying <span class="traits">taxonomic backbone</span>. The <span class="reproducibility">{taxospace}</span> tool automatically aligns <span class="traits">taxon names</span> with the <span class="traits">GBIF taxonomical backbone</span>. Specifically, we find the best match of raw <span class="traits">taxon names</span> using the Global Names Resolver, which is then aligned with GBIF. The resulting <span class="traits">taxonomic classification</span> information, detailed up to the family level, is stored for each <span class="traits">taxon</span>, ensuring consistency and facilitating comparative analyses across different datasets.</p>
+<p><strong>Important limitations</strong>: <span class="traits">Taxonomic classification</span> down to the species level is not available for each <span class="traits">taxon</span> (e.g., some <span class="paleo">fossil pollen types</span> can only be identified to the genus or family level). For several <span class="traits">taxa</span>, no matching classification could be found. Note that <span class="traits">taxonomic classification</span> is additional information—the original <span class="traits">taxon name</span> is always present and returned by default. Finally, users should be aware that this classification is an <span class="reproducibility">automated process</span> and may contain errors.</p>
+</section>
+<section id="ii-grouping-of-traits-into-trait-domains" class="level4">
+<h4 class="anchored" data-anchor-id="ii-grouping-of-traits-into-trait-domains">(ii) <span class="traits">Grouping of Traits into Trait Domains</span></h4>
+<p>As there are differences in <span class="traits">trait names</span> across data sources (e.g., “Leaf nitrogen (N) content per leaf dry mass” vs.&nbsp;“leaf nitrogen content per leaf dry mass”), we added a new variable <code>Trait Domain</code> that groups <span class="traits">traits</span> together following the <span class="traits">trait selection</span> of Díaz et al.&nbsp;(2016). For example, <span class="traits">trait</span> <code>Plant height vegetative</code> from <span class="traits">TRY</span> and <span class="traits">trait</span> <code>whole plant height</code> from <span class="traits">BIEN</span> are both grouped under the <code>Plant height</code> <span class="traits">Trait Domain</span>. This grouping serves as an efficient mechanism for extracting comparable <span class="traits">traits</span> across both <span class="traits">TRY</span> and <span class="traits">BIEN</span> datasets.</p>
+</section>
+<section id="iii-creation-of-gridpoints-for-abiotic-data" class="level4">
+<h4 class="anchored" data-anchor-id="iii-creation-of-gridpoints-for-abiotic-data">(iii) <span class="abiotic">Creation of Gridpoints for Abiotic Data</span></h4>
+<p>We developed a data structure that provides readily available <span class="abiotic">environmental context</span> for each <span class="neo-vegetation">vegetation</span> (and <span class="traits">trait</span>) record by creating spatio-temporal links between these records and <span class="abiotic">abiotic information</span>. As raster data are not suitable for storage in an <span class="database">SQLite database</span>, we created artificial points, called ‘<span class="abiotic">gridpoints</span>’, located in the center of each raster cell. This resulted in a uniform spatio-temporal matrix of <span class="abiotic">gridpoints</span> holding the <span class="abiotic">abiotic information</span>.</p>
+<p><strong><span class="reproducibility">Gridpoint naming conventions</span></strong>: <code>dataset_name</code> are created as “geo_[longitude]<em>[latitude]” and <code>sample_name</code> are created as ”geo</em>[longitude]<em>[latitude]</em>[age]”.</p>
+<p><strong><span class="reproducibility">Spatial-temporal linking</span></strong>: We linked <span class="abiotic">gridpoints</span> with other non-gridpoint <span class="database">Samples</span> (<code>vegetation_plot</code>, <code>fossil_pollen_archive</code>, and <span class="traits">traits</span>) and calculated the spatial and temporal distances between them. We retained any <span class="abiotic">gridpoint Sample</span> within 50 km and/or 5000 years from any other non-gridpoint <span class="database">Sample</span> and discarded the rest.</p>
+</section>
+</section>
+</section>
+<section id="related-resources" class="level2">
+<h2 class="anchored" data-anchor-id="related-resources">Related Resources</h2>
+<ul>
+<li><strong><a href="../website/database_content.html">Database Content</a></strong> - Overview of available data</li>
+<li><strong><a href="../website/database_structure.html">Database Structure</a></strong> - Technical database schema</li>
+<li><strong><a href="../website/database_access.html">Database Access</a></strong> - Download and setup instructions</li>
+<li><strong><a href="../website/database_examples.html">Usage Examples</a></strong> - Practical applications</li>
+<li><strong><a href="../website/materials.html">Materials &amp; Outputs</a></strong> - Publications and resources</li>
+</ul>
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ondrejmottl\.github\.io\/VegVault");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions"><ul><li><a href="https://github.com/OndrejMottl/VegVault/blob/main/website/database_assembly.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/OndrejMottl/VegVault/issues" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

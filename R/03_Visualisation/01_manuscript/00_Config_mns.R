@@ -26,6 +26,11 @@ source(
   )
 )
 
+# Load dynamic colors and fonts from JSON
+colors_data <-
+  jsonlite::fromJSON(here::here("colors.json"))
+
+
 #----------------------------------------------------------#
 # 1. Conect to Database -----
 #----------------------------------------------------------#
@@ -60,26 +65,37 @@ list_img_width <-
 image_units <- "mm"
 
 ## 2.1 define common color -----
-col_green_light <- "#3DDC97"
-col_green_dark <- "#3DDC47"
-col_purple <- "#AA6DA3"
-col_dark_blue <- "#156064"
+# define colors using dynamic color system
+col_brown_light <- colors_data$brownLight
+col_brown_dark <- colors_data$brownDark
 col_brown_neutral <- "#5F634F"
 
-col_brown_light <- "#BC7052"
-col_brown_dark <- "#8A554E"
+col_green_light <- colors_data$greenLight
+col_green_dark <- colors_data$greenDark
 
-col_white <- "white"
+col_blue_light <- colors_data$blueLight
+col_blue_dark <- colors_data$blueDark
+
+col_beige_light <- colors_data$beigeLight
+col_beige_dark <- colors_data$beigeDark
+
+col_white <- colors_data$white
+col_black <- colors_data$black
 col_grey <- "#999999"
-col_black <- "#242531"
+
+# Additional colors for expanded palette
+col_purple_light <- colors_data$purpleLight
+col_purple_dark <- colors_data$purpleDark
+
+col_red <- "red"
 
 ## 2.2 palette setup -----
 palette_dataset_type <-
   c(
-    col_green_dark,
-    col_purple,
-    col_dark_blue,
-    col_brown_neutral
+    col_green_light,
+    col_purple_light,
+    col_blue_dark,
+    col_green_dark
   ) %>%
   rlang::set_names(
     nm = c(
@@ -93,16 +109,16 @@ palette_dataset_type <-
 palette_dataset_source_type <-
   c(
     col_green_light,
-    col_green_dark,
-    col_purple,
-    col_dark_blue,
-    col_brown_neutral
+    col_green_light,
+    col_purple_light,
+    col_blue_dark,
+    col_green_dark
   ) %>%
   rlang::set_names(
     nm = c(
       "BIEN",
       "sPlotOpen",
-      "Neotoma - FOSSILPOL",
+      "FOSSILPOL",
       "TRY",
       "gridpoints"
     )
@@ -111,8 +127,8 @@ palette_dataset_source_type <-
 palette_trait_dommanins <-
   grDevices::colorRampPalette(
     c(
-      col_brown_light,
-      col_brown_dark
+      col_blue_dark,
+      col_brown_light
     )
   )(6) %>%
   rlang::set_names(

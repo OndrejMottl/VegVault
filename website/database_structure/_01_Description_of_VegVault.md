@@ -1,38 +1,64 @@
 
 
-# Section I: Description of VegVault
+# VegVault Database Structure
 
-**VegVault** is a SQLite interdisciplinary database linking global
-paleo-, and neo-vegetation data with functional traits and abiotic
-drivers .
+Currently, <span class="vegvault">VegVault</span> consists of 31
+interconnected tables with 87 fields (variables), which are described in
+detail below. However, the internal <span class="database">database
+structure</span> may not be directly relevant to most users, as the
+[{vaultkeepr}](https://bit.ly/vaultkeepr) R package processes all data
+to output only the most relevant information in a
+“<span class="data-processing">ready-to-analyze</span>” format.
 
-**VegVault** integrates data from multiple well-established sources to
-provide a comprehensive view of vegetation dynamics. By organizing data
-into clearly defined types and providing comprehensive referencing,
-**VegVault** supports detailed and high-quality ecological research.
-This structured approach ensures that data are accessible, reliable,
-traceable, and facilitate a wide range of analyses and applications
-across disciplines.
+> [!NOTE]
+>
+> **For Most Users**: If you’re primarily interested in using
+> <span class="vegvault">VegVault</span> for research, you may want to
+> start with our [Usage Examples](.\website/database_examples.qmd)
+> rather than diving into the technical <span class="database">database
+> structure</span>.
 
-**VegVault** is organized into several sections to systematically manage
-the varying datasets it integrates. The main structure is the `Dataset`,
-which serves as the cornerstone of the database structure. `Datasets`
-are composed of `Samples`, representing individual data points within
-each dataset. Each `Dataset` will only contain several `Samples` if
-these differ in age. There are four types of `Datasets`:
+This section provides comprehensive documentation of all tables and
+their relationships for users who need detailed technical information
+about the <span class="database">database architecture</span>.
 
-1.  contemporary vegetation plots
-2.  past vegetation (fossil pollen records)
-3.  functional traits
-4.  gridpoint (a dataset type created to hold abiotic data, see details
-    in Section III).
+<br>
 
-For the contemporary (1) and past (2) vegetation `Datasets`, the
-`Samples` hold information about `Taxa` as derived directly from the
-primary data sources. Trait information is organised in separate
-`Datasets` (as they are associated with unique information about their
-spatio-temporal location, references, etc) but linked to the same `Taxa`
-codes as those taxa in the vegetation `Datasets` (if present). Moreover,
-each `Taxa`, disregarding of the source, is associated with
-classification information (i.e. species, genus and family name; see
-Section III).
+## Full Database Schema
+
+<img src="../../Outputs/Figures/schema_diagram.png" style="width:100.0%"
+data-fig-align="center" />
+
+## Metadata Tables
+
+Several tables contain <span class="database">metadata</span> and
+administrative information that are not directly linked to the
+scientific data:
+
+- `Authors`: Information about <span class="vegvault">VegVault</span>
+  authors and maintainers, including contact details
+- `version_control`: <span class="database">Database version
+  information</span> with descriptions of changes over time
+- `sqlite_stat1` & `sqlite_stat4`: <span class="database">SQLite system
+  tables</span> containing <span class="database">database index
+  statistics</span> for query optimization
+
+| column_name     | data_type | description                |
+|-----------------|-----------|----------------------------|
+| author_id       | INTEGER   | ID of an Author (unique)   |
+| author_fullname | TEXT      | Full name of an Author     |
+| author_email    | TEXT      | Contact email of an Author |
+| author_orcid    | TEXT      | ORCID ID of an Author      |
+
+Column names and types for table `Authors`.
+
+| column_name | data_type | description                                      |
+|-------------|-----------|--------------------------------------------------|
+| id          | INTEGER   | ID of a database version (unique)                |
+| version     | TEXT      | Version number                                   |
+| update_date | TEXT      | Date of the creation of that version             |
+| changelog   | TEXT      | Text description of main changes in the database |
+
+Column names and types for table `version_control`.
+
+<br>

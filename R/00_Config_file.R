@@ -53,7 +53,6 @@ package_list <-
     "assertthat",
     "DBI",
     "here",
-    "httpgd",
     "janitor",
     "jsonlite",
     "knitr",

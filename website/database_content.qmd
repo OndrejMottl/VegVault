@@ -10,27 +10,6 @@ sidebar: true
 
 # Database content
 
-The **VegVault** database v1.0.0 is an SQLite database of a size of ~ 110 GB
-
-Currently, the `SQLite` database consists of 29 interconnected tables with 87 fields (variables). See [Databse Structure](/website/database_structure.qmd) for more information.
-
-|||
-|-----|-----|
-Datasets | > 480 000 |
-Samples | > 13 000 000|
-Taxa | > 110 000|
-Vegetation Traits | 6|
-Trait values | > 11 000 000|
-Abiotic variables | 8|
-
-
-See [Database Access](/website/database_access.qmd) for more information on how to access the database.
-
-
-!!! There should be spatio-temporal overview of the database content !!!
-
-## Assembly details of VegVault 1.0.0
-
 ```{r}
 #| label: source config
 #| include: FALSE
@@ -57,64 +36,195 @@ source(
 
 ```
 
-The **VegVault** version **1.0.0** has been assembled from other publicly available databases. 
+## Database Content Overview
+
+VegVault v1.0.0 is a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} (~110 GB) that integrates global vegetation data spanning both [contemporary]{.text-background-greenLight .text-color-black .text-bold} and [paleovegetation]{.text-background-purpleLight .text-color-black .text-bold} records. This unified database combines [fossil pollen]{.text-background-purpleLight .text-color-black .text-bold} records, [contemporary vegetation plots]{.text-background-greenLight .text-color-black .text-bold}, [functional trait]{.text-background-blueDark .text-color-white .text-bold} measurements, and associated [abiotic environmental data]{.text-background-greenDark .text-color-white .text-bold} to provide an unprecedented resource for vegetation ecology research.
+
+The database consists of 31 interconnected tables with 87 fields (variables). For detailed technical information, see our [Database Structure](database_structure.qmd) documentation.
+
+## Database Statistics
+
+**VegVault v1.0.0 contains:**
+
+|||
+|-----|-----|
+| **Datasets** | > 480,000 |  
+| **Samples** | > 13,000,000|
+| **Taxa** | > 110,000|
+| **Vegetation Traits** | 6|
+| **Trait Values** | > 11,000,000|
+| **Abiotic Variables** | 8|
+| **Geographic Coverage** | Global |
+| **Temporal Coverage** | 0-20,000 years BP |
+
+::: {.callout-tip}
+**Getting Started**: New to [VegVault]{.text-background-black .text-color-white .text-bold}? Check our [Database Access](database_access.qmd) guide for download instructions and our [Usage Examples](database_examples.qmd) for practical applications.
+:::
 
 
-## Assembly process
-
-Here is a general visualisation of the assembly process:
+## Spatio-temporal overview of the database content
 
 ```{r}
-#| label: VV assembly scheme
-knitr::include_graphics(
-  here::here(
-    "Outputs/Figures/DB_assembly_visualisation/assembly_viz_04.png"
+data_vegetation_samples <-
+  vaultkeepr::open_vault(
+    path = path_to_vegvault # [config]
+  ) %>%
+  # Add the dataset information
+  vaultkeepr::get_datasets() %>%
+  # Select modern plot data and climate
+  vaultkeepr::select_dataset_by_type(
+    sel_dataset_type = c(
+      "vegetation_plot",
+      "fossil_pollen_archive"
+    )
+  ) %>%
+  # Add samples
+  vaultkeepr::get_samples() %>%
+  # select only modern data
+  # Add abiotic data
+  vaultkeepr::extract_data(
+    return_raw_data = TRUE,
+    verbose = FALSE
+  ) %>%
+  dplyr::mutate(
+    dataset_type = stringr::str_replace_all(
+      dataset_type,
+      "_",
+      " "
+    )
   )
+
+data_vegetation_samples_space <-
+  data_vegetation_samples %>%
+  dplyr::distinct(dataset_type, coord_long, coord_lat)
+
+data_vegetation_samples_time <-
+  data_vegetation_samples %>%
+  dplyr::distinct(dataset_id, dataset_type, age)
+
+fig_world_empty <-
+  tibble::tibble() %>%
+  ggplot2::ggplot() +
+  ggplot2::borders(
+    fill = col_beige_dark,
+    col = NA
+  ) +
+  ggplot2::labs(
+    x = "Longitude",
+    y = "Latitude"
+  ) +
+  ggplot2::scale_y_continuous(breaks = seq(-90, 90, by = 30)) +
+  ggplot2::scale_x_continuous(breaks = seq(-180, 180, by = 60))
+
+fig_vegetation_space <-
+  fig_world_empty +
+  ggplot2::geom_point(
+    data = data_vegetation_samples_space,
+    mapping = ggplot2::aes(
+      x = coord_long,
+      y = coord_lat,
+      col = dataset_type
+    ),
+    size = point_size / 10, # [config]
+    alpha = 0.5
+  ) +
+  ggplot2::scale_color_manual(
+    values = palette_dataset_type # [config]
+  ) +
+  ggplot2::guides(
+    color = ggplot2::guide_legend(override.aes = list(size = point_size))
+  ) +
+  ggplot2::theme(
+    legend.position = "top",
+  ) +
+  ggplot2::coord_sf()
+
+fig_vegetation_time <-
+  data_vegetation_samples_time %>%
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = age,
+      y = ggplot2::after_stat(count)
+    )
+  ) +
+  ggplot2::geom_histogram(
+    ggplot2::aes(
+      fill = dataset_type
+    ),
+    alpha = 1,
+    bins = 20
+  ) +
+  ggplot2::scale_fill_manual(
+    values = palette_dataset_type # [config]
+  ) +
+  ggplot2::scale_y_continuous(
+    transform = scales::transform_log1p(),
+    breaks = c(1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9),
+    labels = c("1", "10", "100", "1e3", "1e4", "1e5", "1e6", "1e7", "1e8", "1e9")
+  ) +
+  ggplot2::scale_x_continuous(
+    transform = "reverse",
+    breaks = seq(20e3, 0, by = -5e3),
+    labels = seq(20, 0, by = -5)
+  ) +
+  ggplot2::coord_cartesian(
+    xlim = c(20e3, 0.2),
+    ylim = c(1, 1e9)
+  ) +
+  ggplot2::guides(
+    fill = ggplot2::guide_legend(override.aes = list(size = point_size))
+  ) +
+  ggplot2::theme(
+    legend.position = "top"
+  ) +
+  ggplot2::labs(
+    x = "Age (ka cal yr BP)",
+    y = "Number of Samples",
+    fill = "Dataset Type"
+  )
+
+fig_legend <-
+  cowplot::get_plot_component(
+    fig_vegetation_time,
+    "guide-box-top",
+    return_all = TRUE
+  )
+
+fig_vegetation <-
+  cowplot::plot_grid(
+    fig_vegetation_space +
+      ggplot2::theme(
+        legend.position = "none"
+      ),
+    fig_vegetation_time +
+      ggplot2::theme(
+        legend.position = "none"
+      ),
+    nrow = 1,
+    rel_widths = c(1.5, 1)
+  ) %>%
+  cowplot::plot_grid(
+    .,
+    fig_legend,
+    nrow = 2,
+    rel_heights = c(1, 0.1)
+  )
+
+ggplot2::ggsave(
+  here::here("Outputs/Figures/website/DB_overview/fig_db_spatiotemporal_overview.png"),
+  plot = fig_vegetation,
+  width = 10,
+  height = 4,
+  bg = col_beige_light # [config]
 )
 
+knitr::include_graphics(here::here("Outputs/Figures/website/DB_overview/fig_db_spatiotemporal_overview.png"))
 ```
 
-**Figure legend**:
+## Related Resources
 
-1. **[Neotoma Paleoecology Database](https://www.neotomadb.org/)** - open, community-curated data and services for paleoecological and paleoenvironmental data
-     * source of fossil pollen data 
-2. **[sPlotOpen](https://idiv-biodiversity.de/en/splot/splotopen.html)** - The open-access version of sPlot
-     * source of current vegetation plot data
-3. **[Botanical Information and Ecology Network](https://bien.nceas.ucsb.edu/bien/)** - global patterns of plot inventories and surveys
-    * source of current vegetation plot and vegetation trait data
-4.  **[TRY Plant Trait Database](https://www.try-db.org/TryWeb/Home.php)** - open access plant trait data 
-    * source of vegetation trait data
-5. **[Climatologies at High resolution for the Earth's Land Surface Area](https://chelsa-climate.org/)** - Long-term, transient modern- and paleo-climate data
-    * source of abiotic data
-6. **[World Soil Information Service](https://www.isric.org/explore/wosis)** - harmonised soil profile database
-    * source of abiotic data
-7.  **[VegVault-FOSSILPOL GitHub repo](https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v1.0.0)**
-    * a Tag (v1.0.0) to obtain and process fossil pollen data
-8.  **[VegVault-Vegetation_data GitHub repo](https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.0.0)**
-    * a Tag (v1.0.0) to process current vegetation plot data
-9.  **[VegVault-Trait_data GitHub repo](https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.1.0)**
-    * a Tag (v1.1.0) to process vegetation trait data
-10. **[VegVault-abiotic_data GitHub repo](https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0)**
-    * a Tag (v1.1.0) to process abiotic data
-11. **[VegVault GitHub repo](https://github.com/OndrejMottl/VegVault)**
-    * a Tag (v1.0.0) to transfer the data into the SQLite database. S
-    * ee details below.
-12. **VegVault** - SQLite database (v1.0.0)
-
-### Note on GitHub Tags
-
-*...Tags are ref's that point to specific points in Git history. Tagging is generally used to capture a point in history...* 
-
-Here, the Tags have been used to ensure reproducibility of this version of **VegVault**. GitHub repo can change but the specific Tag used here (and also used in the code to source the data) ensure the transparency of the state of the database. 
-
-### VegVault GitHub repo
-
-In addition to the consolidation of all processed data into a unified SQLite database, the final **VegVault** "migration" repository performs three additional procedures: (i) taxa classification, (ii) grouping of traits into Trait Domains, and (iii) creation of gridpoints for abiotic data. 
-
-* #### (i) Taxa classification 
-  As **VegVault** consist of data on taxa from various sources, the [{taxospace} R package](https://github.com/OndrejMottl/taxospace) is used to classify the diverse taxa into a unifying backbone in the **VegVault** database. The {taxospace} tool automatically aligns taxa names with the taxonomical backbone of the GBIF. Specifically, we find the best match of the raw names of taxa using [Global Names Resolver](https://resolver.globalnames.org/)  that is then aligned with GBIF. Taxonomic information, detailed up to the family level, is stored for each taxon, ensuring consistency and facilitating comparative analyses across different datasets.
-* #### (ii) Grouping of Traits into Trait Domains 
-  As there are differences in trait names across sources of data (e.g., "*Leaf nitrogen (N) content per leaf dry mass*" and "*leaf nitrogen content per leaf dry mass*"), we added a new variable `Trait Domain` that   groups traits together following the trait selection of Diaz et al. (2016). For example, trait "*Plant height vegetative*" from TRY and trait "*whole plant height*" from BIEN are both grouped under "*Plant height*" `Trait Domain`. 
-* #### (iii) Creation of gridpoints of abiotic data
-  The abiotic data in the **VegVault** database provide essential information on environmental factors affecting vegetation distribution and traits, namely climate and soil variables. We developed a data structure that provides readily available environmental context for each vegetation (and trait) record by creating spatio-temporal links between these records and abiotic information. We first unified the resolution of the original rasters by resampling all abiotic data into ~ 25km resolution at 500-year time slices, reducing the amount of data. Next, as the rasters are not suitable to be stored in an SQLite database, we created artificial points, called `gridpoints`, located in the middle of each raster cell. This resulted in a uniform spatio-temporal matrix of `gridpoints` holding the abiotic information. 
-  Next, we linked `gridpoints` and other non-gridpoint `Samples`, namely vegetation_plot, fossil_pollen_archive, and traits (see [database structure](/website/database_structure.qmd)), and calculated the spatial and temporal distances between them. We discarded any gridpoint `Sample` beyond 50 km and/or 5000 years to any other non-gridpoint `Sample`. In **VegVault**, users can select the information for each non-gridpoint `Sample` from the closest spatio-temporal abiotic data or get the average from all surrounding `gridpoints`. By providing such comprehensive and well-linked structure between vegetation and abiotic data, **VegVault** enhances the ability to study the interactions between vegetation and their environment, facilitating the workflow to advanced ecological research and modelling efforts. 
+- **[Database Structure](database_structure.qmd)** - Technical database schema
+- **[Database Assembly](database_assembly.qmd)** - Overview of the data assembly process
+- **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Usage Examples](database_examples.qmd)** - Practical applications
+- **[Materials & Outputs](materials.qmd)** - Publications and resources

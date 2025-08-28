@@ -169,10 +169,11 @@ data_na_plots_picea <-
     )
   )
 
+
 fig_na_plots_picea <-
   data_na_plots_picea %>%
   ggplot2::ggplot(
-     mapping = ggplot2::aes(
+    mapping = ggplot2::aes(
       x = coord_long,
       y = coord_lat
     )
@@ -181,35 +182,53 @@ fig_na_plots_picea <-
     xlim = x_lim_na,
     ylim = y_lim_na
   ) +
-  ggplot2::scale_fill_gradient2(
-    low = col_brown_light, # [config]
-    mid = col_beige_dark, # [config]
-    high = "white",
-    midpoint = 5.8,
-    guide = "none"
-  ) +
   ggplot2::labs(
     subtitle = "Each point is a presence of the Picea genus at a given time",
-    x = "Latitude",
-    y = "Longitude",
+    y = "Latitude",
+    x = "Longitude",
     col = "Dataset type"
   ) +
+  ggplot2::scale_colour_manual(
+    values = c(
+      col_purple_light,
+      col_green_light
+    ),
+    name = "Dataset type",
+    labels = c(
+      "fossil pollen archive",
+      "vegetation plot"
+    )
+  ) +
+  ggplot2::scale_shape_manual(
+    values = c(15, 16),
+    name = "Dataset type",
+    labels = c(
+      "fossil pollen archive",
+      "vegetation plot"
+    )
+  ) +
+  ggplot2::theme(
+    legend.position = "bottom"
+  ) +
   ggplot2::borders(
-    fill = col_brown_light, # [config]
+    fill = col_beige_dark, # [config]
     col = NA
   ) +
   ggplot2::borders(
     fill = NA,
-    col = col_blue_dark, # [config]
+    col = col_blue_light, # [config]
     size = line_size # [config]
   ) +
   ggplot2::geom_point(
-    size = point_size, # [config]
-    col = col_blue_light # [config]
+    mapping = ggplot2::aes(
+      col = dataset_type,
+      shape = dataset_type
+    ),
+    size = point_size # [config]
   ) +
   ggplot2::geom_point(
     size = 0.1,
-    col = col_green_light # [config]
+    col = col_black # [config]
   ) +
   ggplot2::facet_wrap(
     ~age_bin_class
@@ -354,20 +373,13 @@ fig_cz_jsdm <-
   ggplot2::labs(
     x = "Longtitude",
     y = "Latitude",
-    colour = "MAT (°C)",
+    fill = "MAT (°C)",
     size = "Species richness",
     subtitle = "Each point represents one vegetation plot"
   ) +
-  ggplot2::scale_fill_gradient2(
-    low = col_brown_light, # [config]
-    mid = col_beige_dark, # [config]
-    high = "white",
-    midpoint = 5.8,
-    guide = "none"
-  ) +
-  ggplot2::scale_colour_steps(
-    low = col_blue_dark, # [config]
-    high = col_blue_light # [config]
+  ggplot2::scale_fill_steps(
+    low = col_green_dark, # [config]
+    high = col_white # [config]
   ) +
   ggplot2::scale_size_continuous(
     breaks = scales::pretty_breaks(n = 5),
@@ -378,6 +390,14 @@ fig_cz_jsdm <-
   ) +
   ggplot2::theme(
     legend.position = "right"
+  ) +
+  ggplot2::guides(
+    size = ggplot2::guide_legend(
+      override.aes = list(
+        shape = 19,
+        col = col_green_light # [config]
+      )
+    )
   ) +
   ggplot2::borders(
     fill = col_brown_light, # [config]
@@ -395,24 +415,25 @@ fig_cz_jsdm <-
   ) +
   ggplot2::borders(
     fill = NA,
-    col = col_blue_dark, # [config]
-    size = line_size # [config]
+    col = col_blue_light, # [config]
+    size = line_size * 10 # [config]
   ) +
   ggplot2::geom_point(
     data = data_cz_jsdm,
     mapping = ggplot2::aes(
       x = coord_long,
       y = coord_lat,
-      col = abiotic_value,
+      fill = abiotic_value,
       size = n_taxa
-    )
+    ),
+    shape = 21,
+    col = col_green_light
   ) +
   ggplot2::geom_point(
     data = data_cz_jsdm,
-    col = col_green_light, # [config]
+    col = col_black, # [config]
     size = 0.1
   )
-
 
 ggplot2::ggsave(
   here::here("Outputs/Figures/website/DB_example/fig_cz_jsdm.png"),
@@ -465,7 +486,7 @@ data_la_traits <-
   # add trait information & clasify all data to a genus level
   vaultkeepr::get_traits(classify_to = "genus") %>%
   # Only select the plant height
-  vaultkeepr::select_traits_by_domain_name(sel_domain = "Plant heigh") %>%
+  vaultkeepr::select_traits_by_domain_name(sel_domain = "Plant height") %>%
   vaultkeepr::extract_data()
 ```
 
@@ -576,22 +597,24 @@ fig_la_datasets <-
     )
   ) +
   ggplot2::geom_segment(
-    linewidth = 2,
-    col = col_blue_dark
+    linewidth = 1,
+    col = col_purple_dark
   ) +
   ggplot2::geom_point(
     mapping = ggplot2::aes(
       x = age_min
     ),
-    col = col_green_light,
-    size = point_size
+    col = col_purple_light,
+    size = point_size,
+    shape = 15
   ) +
   ggplot2::geom_point(
     mapping = ggplot2::aes(
       x = age_max
     ),
-    col = col_green_dark,
-    size = point_size
+    col = col_purple_light,
+    size = point_size,
+    shape = 15
   ) +
   ggplot2::theme(
     axis.text.y = ggplot2::element_blank(),
@@ -623,13 +646,13 @@ fig_la_taxa <-
   ) +
   ggplot2::geom_violin(
     fill = col_blue_light,
-    col = col_blue_dark
+    col = col_black
   ) +
   ggplot2::geom_boxplot(
     width = 0.2,
     outlier.shape = NA,
     fill = col_white,
-    col = col_blue_dark
+    col = col_black
   ) +
   ggplot2::theme(
     axis.title.x = ggplot2::element_blank(),
@@ -657,14 +680,14 @@ fig_la_height <-
     )
   ) +
   ggplot2::geom_violin(
-    fill = col_green_light,
-    col = col_green_dark
+    fill = col_blue_dark,
+    col = col_black
   ) +
   ggplot2::geom_boxplot(
     width = 0.2,
     outlier.shape = NA,
     fill = col_white,
-    col = col_green_dark
+    col = col_black
   ) +
   ggplot2::theme(
     axis.title.x = ggplot2::element_blank(),

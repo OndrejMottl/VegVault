@@ -26,6 +26,20 @@ source(
   )
 )
 
+# Load dynamic colors and fonts from JSON
+colors_data <-
+  jsonlite::fromJSON(here::here("colors.json"))
+
+colors_data_short <-
+  colors_data %>%
+  purrr::map(
+    .f = ~ stringr::str_remove(., "#") %>%
+      stringr::str_sub(1, 6)
+  )
+
+fonts_data <-
+  jsonlite::fromJSON(here::here("fonts.json"))
+
 #----------------------------------------------------------#
 # 2. Conect to Database -----
 #----------------------------------------------------------#
@@ -46,11 +60,19 @@ text_size <- 32
 line_size <- 0.1
 point_size <- 3
 
-# define font
-sysfonts::font_add(
-  family = "Renogare",
-  regular = here::here("Fonts/Renogare-Regular.otf")
-)
+# define font - using dynamic font system
+font_family <-
+  fonts_data$body
+
+
+if (
+  !font_family %in% sysfonts::font_families()
+) {
+  sysfonts::font_add_google(
+    name = font_family
+  )
+}
+
 showtext::showtext_auto()
 
 # define output sizes
@@ -58,20 +80,25 @@ image_width <- 2450
 image_height <- 1200
 image_units <- "px"
 
-# define common color
-col_brown_light <- "#BC7052"
-col_brown_dark <- "#8A554E"
+# define colors using dynamic color system
+col_brown_light <- colors_data$brownLight
+col_brown_dark <- colors_data$brownDark
 
-col_green_light <- "#9BC058"
-col_green_dark <- "#5D7841"
+col_green_light <- colors_data$greenLight
+col_green_dark <- colors_data$greenDark
 
-col_blue_light <- "#52758F"
-col_blue_dark <- "#242531"
+col_blue_light <- colors_data$blueLight
+col_blue_dark <- colors_data$blueDark
 
-col_beige_light <- "#E6B482"
-col_beige_dark <- "#AE8a7B"
+col_beige_light <- colors_data$beigeLight
+col_beige_dark <- colors_data$beigeDark
 
-col_white <- "white"
+col_white <- colors_data$white
+col_black <- colors_data$black
+
+# Additional colors for expanded palette
+col_purple_light <- colors_data$purpleLight
+col_purple_dark <- colors_data$purpleDark
 
 
 # set ggplot output
@@ -80,22 +107,22 @@ ggplot2::theme_set(
     ggplot2::theme(
       text = ggplot2::element_text(
         size = text_size,
-        colour = col_blue_dark,
-        family = "Renogare"
+        colour = col_black,
+        family = font_family
       ),
       line = ggplot2::element_line(
         linewidth = line_size,
-        colour = col_blue_dark
+        colour = col_black
       ),
       axis.text = ggplot2::element_text(
-        colour = col_blue_dark,
+        colour = col_black,
         size = text_size,
-        family = "Renogare"
+        family = font_family
       ),
       axis.title = ggplot2::element_text(
-        colour = col_blue_dark,
+        colour = col_black,
         size = text_size,
-        family = "Renogare"
+        family = font_family
       ),
       panel.grid.major = ggplot2::element_line(
         colour = col_white,
@@ -110,6 +137,25 @@ ggplot2::theme_set(
         fill = col_brown_light,
         colour = col_brown_light
       ),
+      strip.background = ggplot2::element_rect(
+        fill = col_brown_dark,
+        colour = col_black
+      ),
+      strip.text = ggplot2::element_text(
+        colour = col_white,
+        size = text_size,
+        family = font_family
+      ),
+      strip.text.x = ggplot2::element_text(
+        colour = col_white,
+        size = text_size,
+        family = font_family
+      ),
+      strip.text.y = ggplot2::element_text(
+        colour = col_white,
+        size = text_size,
+        family = font_family
+      )
     )
 )
 
@@ -135,15 +181,15 @@ fig_width_def <- 60 # this is used to wrap text.
 # 3.1 palette setup -----
 palette_dataset_type <-
   c(
-    col_green_dark,
-    col_blue_light,
-    col_brown_dark,
-    col_white
+    col_green_light,
+    col_purple_light,
+    col_blue_dark,
+    col_green_dark
   ) %>%
   rlang::set_names(
     nm = c(
-      "vegetation_plot",
-      "fossil_pollen_archive",
+      "vegetation plot",
+      "fossil pollen archive",
       "traits",
       "gridpoints"
     )
@@ -151,11 +197,11 @@ palette_dataset_type <-
 
 palette_dataset_source_type <-
   c(
-    col_green_dark,
     col_green_light,
-    col_blue_light,
-    col_brown_dark,
-    col_white
+    col_green_light,
+    col_purple_light,
+    col_blue_dark,
+    col_green_dark
   ) %>%
   rlang::set_names(
     nm = c(
@@ -170,8 +216,8 @@ palette_dataset_source_type <-
 palette_trait_dommanins <-
   grDevices::colorRampPalette(
     c(
-      col_brown_light,
-      col_brown_dark
+      col_blue_dark,
+      col_brown_light
     )
   )(6) %>%
   rlang::set_names(

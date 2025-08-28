@@ -127,7 +127,7 @@ fig_sample_age <-
   ) +
   ggplot2::geom_point(
     shape = 21,
-    fill = col_purple,
+    fill = col_purple_light,
     size = point_size,
     col = col_black
   ) 

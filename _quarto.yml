@@ -1,6 +1,7 @@
 project:
   type: website
   output-dir: docs
+  pre-render: R/04_Webiste/generate_theme.R
 
 website:
   title: "VegVault"
@@ -11,23 +12,34 @@ website:
   issue-url: https://github.com/OndrejMottl/VegVault/issues
   repo-actions: [source, issue]
   
-  image: Outputs\Figures\website\VegVault_image.png
-  favicon: Outputs\Figures\website\VegVault_logo.png
+  image: Outputs/Figures/website/VegVault_image.png
+  favicon: Outputs/Figures/website/VegVault_logo.png
   back-to-top-navigation: true
+ 
   navbar:
+    title: VegVault
+
+    search: true
+
+    tools:
+      - icon: bluesky
+        href: https://bsky.app/profile/ondrejmottl.bsky.social
+      - icon: github
+        href: https://github.com/OndrejMottl/VegVault
+
     left:
-      - text: About
-        href: index.qmd
       - text: People
         href: website/people.qmd
       - text: Database
         menu:
           - text: VegVault Content
             href: website/database_content.qmd
-          - text: VegVault Access
-            href: website/database_access.qmd
           - text: VegVault Structure
             href: website/database_structure.qmd
+          - text: VegVault Assembly Process
+            href: website/database_assembly.qmd
+          - text: VegVault Access
+            href: website/database_access.qmd
           - text: Examples of usage
             href: website/database_examples.qmd
       - text: Outputs and Materials 
@@ -36,13 +48,7 @@ website:
         href: website/contact.qmd
       - text: Contribute!
         href: website/contribute.qmd
-    search: true
-    tools:
-      - icon: bluesky
-        href: https://bsky.app/profile/ondrejmottl.bsky.social
-      - icon: github
-        href: https://github.com/OndrejMottl/VegVault
-
+ 
 format:
   html:
     theme: 
