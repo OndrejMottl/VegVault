@@ -21,41 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -76,7 +41,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-69720362075ada8d78af988affa4822b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-df840db130585f2fd40f9e00b1cc23e2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -125,10 +90,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
-<span class="menu-text">About</span></a>
-  </li>  
   <li class="nav-item">
     <a class="nav-link" href="../website/people.html"> 
 <span class="menu-text">People</span></a>
@@ -208,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">August 8, 2025</p>
+      <p class="date-modified">August 28, 2025</p>
     </div>
   </div>
     
@@ -219,33 +180,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="data-assembly-process" class="level1">
-<h1>Data Assembly Process</h1>
-<p><span class="text-background-black text-color-white text-bold">VegVault</span> v1.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions.</p>
-<section id="primary-data-sources" class="level3">
-<h3 class="anchored" data-anchor-id="primary-data-sources">Primary Data Sources</h3>
-<ol type="1">
-<li><strong><a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a></strong> - <span class="text-background-purpleLight text-color-black text-bold">Fossil pollen data</span> (0-20,000 years BP)</li>
-<li><strong><a href="https://idiv-biodiversity.de/en/splot/splotopen.html">sPlotOpen</a></strong> - <span class="text-background-greenLight text-color-black text-bold">Contemporary vegetation plots</span><br>
-</li>
-<li><strong><a href="https://bien.nceas.ucsb.edu/bien/">BIEN</a></strong> - <span class="text-background-greenLight text-color-black text-bold">Contemporary vegetation</span> and <span class="text-background-blueDark text-color-white text-bold">functional traits</span></li>
-<li><strong><a href="https://www.try-db.org/TryWeb/Home.php">TRY Plant Trait Database</a></strong> - Comprehensive <span class="text-background-blueDark text-color-white text-bold">plant functional traits</span></li>
-<li><strong><a href="https://chelsa-climate.org/">CHELSA</a></strong> - High-resolution <span class="text-background-greenDark text-color-white text-bold">climate data</span> (contemporary and paleoclimate)</li>
-<li><strong><a href="https://www.isric.org/explore/wosis">WoSIS</a></strong> - Global <span class="text-background-greenDark text-color-white text-bold">soil property data</span></li>
-</ol>
-</section>
-<section id="assembly-details-of-vegvault-1.0.0" class="level2">
-<h2 class="anchored" data-anchor-id="assembly-details-of-vegvault-1.0.0">Assembly Details of VegVault 1.0.0</h2>
-<p><span class="text-background-black text-color-white text-bold">VegVault</span> version 1.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions.</p>
-<section id="assembly-process-overview" class="level3">
-<h3 class="anchored" data-anchor-id="assembly-process-overview">Assembly Process Overview</h3>
+<section id="data-assembly-process-of-vegvault-1.0.0" class="level1">
+<h1>Data Assembly Process of VegVault 1.0.0</h1>
+<p><span class="vegvault">VegVault</span> v1.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions.</p>
 <p>The assembly workflow visualization:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  here<span class="sc">::</span><span class="fu">here</span>(</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Outputs/Figures/DB_assembly_visualisation/assembly_viz_04.png"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -254,38 +193,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><strong>Key Assembly Steps:</strong></p>
+<section id="figure-legend" class="level2">
+<h2 class="anchored" data-anchor-id="figure-legend">Figure legend:</h2>
+<p><strong>Primary data sources</strong>:</p>
 <ol type="1">
-<li><strong>Data Acquisition</strong>: Raw data obtained from primary sources</li>
-<li><strong>Data Processing</strong>: Individual processing pipelines for each data type using specialized <span class="text-background-brownLight text-color-white text-bold">GitHub repositories</span></li>
-<li><strong><span class="text-background-blueDark text-color-white text-bold">Taxonomic Harmonization</span></strong>: Using the {taxospace} R package to align taxa with GBIF backbone</li>
-<li><strong><span class="text-background-blueDark text-color-white text-bold">Trait Categorization</span></strong>: Grouping <span class="text-background-blueDark text-color-white text-bold">traits</span> into functional domains following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a></li>
-<li><strong>Spatial-Temporal Linking</strong>: Creating gridpoints for <span class="text-background-greenDark text-color-white text-bold">abiotic data</span> and linking to <span class="text-background-greenLight text-color-black text-bold">vegetation samples</span></li>
-<li><strong><span class="text-background-brownDark text-color-white text-bold">Database Integration</span></strong>: Consolidation into unified <span class="text-background-brownDark text-color-white text-bold">SQLite database</span> structure</li>
+<li><strong><a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a></strong> - <span class="paleo">Fossil pollen data</span> (0-20,000 years BP)</li>
+<li><strong><a href="https://idiv-biodiversity.de/en/splot/splotopen.html">sPlotOpen</a></strong> - <span class="neo-vegetation">Contemporary vegetation plots</span><br>
+</li>
+<li><strong><a href="https://bien.nceas.ucsb.edu/bien/">BIEN</a></strong> - <span class="neo-vegetation">Contemporary vegetation</span> and <span class="traits">functional traits</span></li>
+<li><strong><a href="https://www.try-db.org/TryWeb/Home.php">TRY Plant Trait Database</a></strong> - Comprehensive <span class="traits">plant functional traits</span></li>
+<li><strong><a href="https://chelsa-climate.org/">CHELSA</a></strong> - High-resolution <span class="abiotic">climate data</span> (contemporary and paleoclimate)</li>
+<li><strong><a href="https://www.isric.org/explore/wosis">WoSIS</a></strong> - Global <span class="abiotic">soil property data</span></li>
+</ol>
+<p><strong>Data Processing</strong>: Individual processing pipelines for each data type using specialized <span class="reproducibility">GitHub repositories</span></p>
+<ol start="7" type="1">
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v1.0.0">VegVault-FOSSILPOL v1.0.0</a></strong> - <span class="paleo">Fossil pollen data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.1.0">VegVault-Vegetation_data v1.1.0</a></strong> - <span class="neo-vegetation">Contemporary vegetation</span> processing<br>
+</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.1.0">VegVault-Trait_data v1.1.0</a></strong> - <span class="traits">Functional trait data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0">VegVault-abiotic_data v1.1.0</a></strong> - <span class="abiotic">Environmental data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault v1.0.0</a></strong> - Consolidation into unified <span class="database">SQLite database</span> structure with key steps:
+<ul>
+<li><strong><span class="traits">Taxonomic Harmonization</span></strong>: Using the {taxospace} R package to align taxa with GBIF backbone</li>
+<li><strong><span class="traits">Trait Categorization</span></strong>: Grouping <span class="traits">traits</span> into functional domains following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a></li>
+<li><strong>Spatial-Temporal Linking</strong>: Creating gridpoints for <span class="abiotic">abiotic data</span> and linking to <span class="neo-vegetation">vegetation samples</span></li>
+</ul></li>
 </ol>
 </section>
-<section id="reproducibility-through-version-control" class="level3">
-<h3 class="anchored" data-anchor-id="reproducibility-through-version-control"><span class="text-background-brownLight text-color-white text-bold">Reproducibility</span> Through Version Control</h3>
-<p>All <span class="text-background-black text-color-white text-bold">VegVault</span> processing repositories use <a href="https://docs.github.com/en/repositories/releasing-projects-on-github/viewing-your-repositorys-releases-and-tags">GitHub Tags</a> to ensure complete <span class="text-background-brownLight text-color-white text-bold">reproducibility</span>. The specific tagged versions used for v1.0.0 are documented in both our code and documentation, enabling exact replication of the <span class="text-background-brownDark text-color-white text-bold">database assembly</span> process.</p>
-</section>
-<section id="processing-repositories" class="level3">
-<h3 class="anchored" data-anchor-id="processing-repositories">Processing Repositories</h3>
-<p><strong>Specialized Processing Pipelines:</strong></p>
-<ul>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v1.0.0">VegVault-FOSSILPOL v1.0.0</a></strong> - <span class="text-background-purpleLight text-color-black text-bold">Fossil pollen data</span> processing</li>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.1.0">VegVault-Vegetation_data v1.1.0</a></strong> - <span class="text-background-greenLight text-color-black text-bold">Contemporary vegetation</span> processing<br>
-</li>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.1.0">VegVault-Trait_data v1.1.0</a></strong> - <span class="text-background-blueDark text-color-white text-bold">Functional trait data</span> processing</li>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0">VegVault-abiotic_data v1.1.0</a></strong> - <span class="text-background-greenDark text-color-white text-bold">Environmental data</span> processing</li>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault v1.0.0</a></strong> - Final <span class="text-background-brownDark text-color-white text-bold">database integration</span></li>
-</ul>
-</section>
+<section id="reproducibility-through-version-control" class="level2">
+<h2 class="anchored" data-anchor-id="reproducibility-through-version-control"><span class="reproducibility">Reproducibility</span> Through Version Control</h2>
+<p>All <span class="vegvault">VegVault</span> processing repositories use <a href="https://docs.github.com/en/repositories/releasing-projects-on-github/viewing-your-repositorys-releases-and-tags">GitHub Tags</a> to ensure complete <span class="reproducibility">reproducibility</span>. The specific tagged versions used for v1.0.0 are documented in both our code and documentation, enabling exact replication of the <span class="database">database assembly</span> process.</p>
 </section>
 <section id="data-processing-details" class="level2">
 <h2 class="anchored" data-anchor-id="data-processing-details">Data Processing Details</h2>
 <section id="fossil-pollen-records" class="level3">
-<h3 class="anchored" data-anchor-id="fossil-pollen-records"><span class="text-background-purpleLight text-color-black text-bold">Fossil Pollen Records</span></h3>
-<p><span class="text-background-purpleLight text-color-black text-bold">Fossil pollen records</span> have been downloaded from the <a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a> using their API on 26th June 2023. All data acquisition and processing have been done using the <a href="https://bit.ly/FOSSILPOL">FOSSILPOL: Workflow for processing and standardizing global paleoecological pollen data</a> (version 1.0.0). This includes the selection of depositional environments, ecological groups, chronology control point types, and a minimum number of chronology control points to construct age-depth models. Individual samples and records have been filtered by age limits, number of <span class="text-background-purpleLight text-color-black text-bold">pollen grains</span>, maximum age interpolation, and number of valid levels. In addition, the accuracy of <span class="text-background-purpleLight text-color-black text-bold">fossil pollen data</span> is increased by re-estimating all age-depth models using the Bayesian probabilistic approach and including the information about individual age uncertainty.</p>
+<h3 class="anchored" data-anchor-id="fossil-pollen-records"><span class="paleo">Fossil Pollen Records</span></h3>
+<p><span class="paleo">Fossil pollen records</span> have been downloaded from the <a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a> using their API on 26th June 2023. All data acquisition and processing have been done using the <a href="https://bit.ly/FOSSILPOL">FOSSILPOL: Workflow for processing and standardizing global paleoecological pollen data</a> (version 1.0.0). This includes the selection of depositional environments, ecological groups, chronology control point types, and a minimum number of chronology control points to construct age-depth models. Individual samples and records have been filtered by age limits, number of <span class="paleo">pollen grains</span>, maximum age interpolation, and number of valid levels. In addition, the accuracy of <span class="paleo">fossil pollen data</span> is increased by re-estimating all age-depth models using the Bayesian probabilistic approach and including the information about individual age uncertainty.</p>
 <p><strong>Selection Criteria:</strong></p>
 <ul>
 <li>Only records with type “pollen” with valid geological coordinates (longitude between -180 and 180, latitude between -90 and 90)</li>
@@ -295,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p><strong>Quality Filters:</strong></p>
 <ul>
-<li>Minimum 125 <span class="text-background-purpleLight text-color-black text-bold">pollen grains</span> per sample (balanced for data retention vs.&nbsp;quality)
+<li>Minimum 125 <span class="paleo">pollen grains</span> per sample (balanced for data retention vs.&nbsp;quality)
 <ul>
 <li>While the preferred minimum was initially set at 150, this threshold resulted in significant data loss</li>
 <li>Threshold adjusted to 125 with condition that less than 75% of samples would have low pollen sum</li>
@@ -303,118 +246,163 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Age limits: 0-20,000 cal yr BP</li>
 <li>Exclusion of samples older than 3000 years of the last chronology control point</li>
 <li>Minimum 5 samples per record</li>
-<li>Re-calculated age-depth models using Bayesian approach ({Bchron} package)</li>
+<li>Re-calculated age-depth models using Bayesian approach <a href="https://andrewcparnell.github.io/Bchron/">{Bchron} package</a></li>
 </ul>
 <p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745060">VegVault-FOSSILPOL</a></p>
 </section>
 <section id="contemporary-vegetation-plots" class="level3">
-<h3 class="anchored" data-anchor-id="contemporary-vegetation-plots"><span class="text-background-greenLight text-color-black text-bold">Contemporary Vegetation Plots</span></h3>
-<p>The primary sources of <span class="text-background-greenLight text-color-black text-bold">contemporary plot-based vegetation data</span> are BIEN (Botanical Information and Ecology Network) and sPlotOpen (the open-access version of sPlot).</p>
+<h3 class="anchored" data-anchor-id="contemporary-vegetation-plots"><span class="neo-vegetation">Contemporary Vegetation Plots</span></h3>
+<p>The primary sources of <span class="neo-vegetation">contemporary plot-based vegetation data</span> are BIEN (Botanical Information and Ecology Network) and sPlotOpen (the open-access version of sPlot).</p>
 <p><strong>BIEN Processing:</strong></p>
 <ul>
-<li>Downloaded using {RBIEN} R package v1.2.7 on 2nd August 2023 using function <code>BIEN::BIEN_plot_datasource()</code></li>
-<li>Retained key columns: “datasource_id”, “datasource”, “plot_name”, “sampling_protocol”, “methodology_reference”, “methodology_description”, “longitude”, “latitude”, “plot_area_ha”, “subplot”, “individual_count”, “family_matched”, “name_matched”, “name_matched_author”, “verbatim_family”, “verbatim_scientific_name”, “scrubbed_species_binomial”, “scrubbed_taxonomic_status”, “scrubbed_family”, “scrubbed_author”</li>
-<li>All columns renamed using “snake_style”</li>
-<li>Filtered out records with missing essential information (NA values in “datasource_id”, “datasource”, “plot_name”, “longitude”, “latitude”, and/or “plot_area_ha”)</li>
+<li>Downloaded using <a href="https://cran.r-project.org/web/packages/BIEN/index.html">{RBIEN} R package</a> v1.2.7 on 2nd August 2023 using function <code>BIEN::BIEN_plot_datasource()</code></li>
+<li>Retained key columns: <code>datasource_id</code>, <code>datasource</code>, <code>plot_name</code>, <code>sampling_protocol</code>, <code>methodology_reference</code>, <code>methodology_description</code>, <code>longitude</code>, <code>latitude</code>, <code>plot_area_ha</code>, <code>subplot</code>, <code>individual_count</code>, <code>family_matched</code>, <code>name_matched</code>, <code>name_matched_author</code>, <code>verbatim_family</code>, <code>verbatim_scientific_name</code>, <code>scrubbed_species_binomial</code>, <code>scrubbed_taxonomic_status</code>, <code>scrubbed_family</code>, <code>scrubbed_author</code></li>
+<li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
+<li>Filtered out records with missing essential information (NA values in <code>datasource_id</code>, <code>datasource</code>, <code>plot_name</code>, <code>longitude</code>, <code>latitude</code>, and/or <code>plot_area_ha</code>)</li>
 </ul>
 <p><strong>sPlotOpen Processing:</strong></p>
 <ul>
 <li>Downloaded sPlotOpen v2.0 on 26th September 2023</li>
-<li>Linked tables “DT2.oa” and “header.oa” via “PlotObservationID” column</li>
-<li>Applied quality filters for geographic and area data (filtered out rows with NA values in “PlotObservationID”, “GIVD_ID”, “Longitude”, “Latitude”, and/or “Releve_area”)</li>
-<li>All columns renamed using “snake_style”</li>
+<li>Linked tables <code>DT2.oa</code> and <code>header.oa</code> via <code>PlotObservationID</code> column</li>
+<li>Applied quality filters for geographic and area data (filtered out rows with NA values in <code>PlotObservationID</code>, <code>GIVD_ID</code>, <code>Longitude</code>, <code>Latitude</code>, and/or <code>Releve_area</code>)</li>
+<li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
 </ul>
 <p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.16729978">VegVault-Vegetation_data</a></p>
 </section>
 <section id="functional-traits" class="level3">
-<h3 class="anchored" data-anchor-id="functional-traits"><span class="text-background-blueDark text-color-white text-bold">Functional Traits</span></h3>
-<p>Following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a>, we selected six key <span class="text-background-blueDark text-color-white text-bold">functional traits</span> representing:</p>
+<h3 class="anchored" data-anchor-id="functional-traits"><span class="traits">Functional Traits</span></h3>
+<p>Following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a>, we selected six key <span class="traits">functional traits</span> representing:</p>
 <ul>
-<li><span class="text-background-blueDark text-color-white text-bold">Stem specific density</span></li>
-<li><span class="text-background-blueDark text-color-white text-bold">Leaf nitrogen content per unit mass</span><br>
-</li>
-<li><span class="text-background-blueDark text-color-white text-bold">Diaspore mass</span></li>
-<li><span class="text-background-blueDark text-color-white text-bold">Plant height</span></li>
-<li><span class="text-background-blueDark text-color-white text-bold">Leaf area</span></li>
-<li><span class="text-background-blueDark text-color-white text-bold">Leaf mass per area</span></li>
+<li><code>Stem specific density</code></li>
+<li><code>Leaf nitrogen content per unit mass</code></li>
+<li><code>Diaspore mass</code></li>
+<li><code>Plant height</code></li>
+<li><code>Leaf area</code></li>
+<li><code>Leaf mass per area</code></li>
 </ul>
-<p><strong><span class="text-background-blueDark text-color-white text-bold">TRY Database</span> Processing:</strong></p>
+<p><strong><span class="traits">TRY Database</span> Processing:</strong></p>
 <ul>
-<li>Data request ID: 28498 on 29th August 2023</li>
-<li>Requested <span class="text-background-blueDark text-color-white text-bold">traits</span> with codes: 3106, 4, 3108, 3110, 3112, 3114, 3116, 3117, 14, and 26 (closest to Díaz et al.&nbsp;2016 description)</li>
+<li>Data request ID: <code>28498</code> on 29th August 2023</li>
+<li>Requested <span class="traits">traits</span> with codes: <code>3106</code>, <code>4</code>, <code>3108</code>, <code>3110</code>, <code>3112</code>, <code>3114</code>, <code>3116</code>, <code>3117</code>, <code>14</code>, and <code>26</code> (closest to Díaz et al.&nbsp;2016 description)</li>
 <li>Used {rtry} R package v1.1.0 for data import</li>
-<li>For each <span class="text-background-blueDark text-color-white text-bold">trait</span> (“TraitID”), extracted all relevant observations (“ObservationID”), ensuring only observations unique to each <span class="text-background-blueDark text-color-white text-bold">trait</span></li>
-<li>Identified all unique data (“DataID”) associated with each <span class="text-background-blueDark text-color-white text-bold">trait</span></li>
-<li>Excluded non-meaningful <span class="text-background-blueDark text-color-white text-bold">trait</span> variations (DataID: 2221, 2222, 2223, 2224, 2225, 3646, 3647, 3698, 3699, 3727, 3728, 3730, 3731, 3849, 3850, 4029, and 4030), e.g., height at 15 days</li>
-<li>Extracted covariate information (additional data stored in “DataName” column)</li>
-<li>All columns renamed using “snake_style”</li>
-<li>Added “<span class="text-background-blueDark text-color-white text-bold">Trait Domain</span>” variable to group <span class="text-background-blueDark text-color-white text-bold">traits</span> following Díaz et al.&nbsp;(2016) selection for efficient extraction across TRY and BIEN</li>
+<li>For each <span class="traits">trait</span> (<code>TraitID</code>), extracted all relevant observations (<code>ObservationID</code>), ensuring only observations unique to each <span class="traits">trait</span></li>
+<li>Identified all unique data (<code>DataID</code>) associated with each <span class="traits">trait</span></li>
+<li>Excluded non-meaningful <span class="traits">trait</span> variations (DataID: <code>2221</code>, <code>2222</code>, <code>2223</code>, <code>2224</code>, <code>2225</code>, <code>3646</code>, <code>3647</code>, <code>3698</code>, <code>3699</code>, <code>3727</code>, <code>3728</code>, <code>3730</code>, <code>3731</code>, <code>3849</code>, <code>3850</code>, <code>4029</code>, and <code>4030</code>), e.g., <code>height at 15 days</code></li>
+<li>Extracted covariate information (additional data stored in <code>DataName</code> column)</li>
+<li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
+<li>Added <code>Trait Domain</code> variable to group <span class="traits">traits</span> following Díaz et al.&nbsp;(2016) selection for efficient extraction across TRY and BIEN</li>
 </ul>
-<p><strong><span class="text-background-blueDark text-color-white text-bold">BIEN Traits</span> Processing:</strong></p>
+<p><strong><span class="traits">BIEN Traits</span> Processing:</strong></p>
 <ul>
 <li>Downloaded using {RBIEN} R package v1.2.7 on 15th December 2023 using function <code>BIEN::BIEN_trait_trait()</code></li>
-<li>Requested <span class="text-background-blueDark text-color-white text-bold">traits</span>: “<span class="text-background-blueDark text-color-white text-bold">whole plant height</span>”, “<span class="text-background-blueDark text-color-white text-bold">stem wood density</span>”, “<span class="text-background-blueDark text-color-white text-bold">leaf area</span>”, “<span class="text-background-blueDark text-color-white text-bold">leaf area per leaf dry mass</span>”, “<span class="text-background-blueDark text-color-white text-bold">leaf nitrogen content per leaf dry mass</span>”, and “<span class="text-background-blueDark text-color-white text-bold">seed mass</span>”</li>
-<li>Retained columns: “trait_name”, “trait_value”, “unit”, “id”, “longitude”, “latitude”, “method”, “url_source”, “source_citation”, “project_pi”, “scrubbed_species_binomial”, and “access”</li>
-<li>Calculated derived measures (e.g., <span class="text-background-blueDark text-color-white text-bold">leaf mass per area</span> = 1/<span class="text-background-blueDark text-color-white text-bold">leaf area per leaf dry mass</span>)</li>
+<li>Requested <span class="traits">traits</span>: <code>whole plant height</code>, <code>stem wood density</code>, <code>leaf area</code>, <code>leaf area per leaf dry mass</code>, <code>leaf nitrogen content per leaf dry mass</code>, and <code>seed mass</code></li>
+<li>Retained columns: <code>trait_name</code>, <code>trait_value</code>, <code>unit</code>, <code>id</code>, <code>longitude</code>, <code>latitude</code>, <code>method</code>, <code>url_source</code>, <code>source_citation</code>, <code>project_pi</code>, <code>scrubbed_species_binomial</code>, and <code>access</code></li>
+<li>Calculated derived measures (e.g., <code>leaf mass per area</code> = 1/<code>leaf area per leaf dry mass</code>)</li>
 </ul>
 <p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745086">VegVault-Trait_data</a></p>
 </section>
 <section id="abiotic-environmental-data" class="level3">
-<h3 class="anchored" data-anchor-id="abiotic-environmental-data"><span class="text-background-greenDark text-color-white text-bold">Abiotic Environmental Data</span></h3>
-<p>The primary sources of <span class="text-background-greenDark text-color-white text-bold">abiotic data</span> are CHELSA, CHELSA-TRACE21, and WoSIS Soil Profile Database. The first two data sources provide high-resolution downscaled <span class="text-background-greenDark text-color-white text-bold">climatic data</span>, while the latter offers detailed <span class="text-background-greenDark text-color-white text-bold">soil information</span> (only available for <span class="text-background-greenLight text-color-black text-bold">contemporary data</span>).</p>
-<p><strong><span class="text-background-greenDark text-color-white text-bold">CHELSA Climate Data</span>:</strong></p>
+<h3 class="anchored" data-anchor-id="abiotic-environmental-data"><span class="abiotic">Abiotic Environmental Data</span></h3>
+<p>The primary sources of <span class="abiotic">abiotic data</span> are CHELSA, CHELSA-TRACE21, and WoSIS Soil Profile Database. The first two data sources provide high-resolution downscaled <span class="abiotic">climatic data</span>, while the latter offers detailed <span class="abiotic">soil information</span> (only available for <span class="neo-vegetation">contemporary data</span>).</p>
+<p><strong><span class="abiotic">CHELSA Climate Data</span>:</strong></p>
 <ul>
-<li><span class="text-background-greenLight text-color-black text-bold">Contemporary</span>: CHELSA v2.1 downloaded on 8th September 2023</li>
-<li>Used {ClimDatDownloadR} R package with function <code>ClimDatDownloadR::Chelsa.Clim.download()</code></li>
-<li>Selected bio-variables: 1, 4, 6, 12, 15, 18, 19</li>
-<li>Spatial aggregation: 25x factor using median values with {terra} R package function <code>terra::aggregate(factor = 25, fun = "median")</code></li>
+<li><span class="neo-vegetation">Contemporary</span>: CHELSA v2.1 downloaded on 8th September 2023</li>
+<li>Used <a href="https://github.com/HelgeJentsch/ClimDatDownloadR">{ClimDatDownloadR} R package</a> with function <code>ClimDatDownloadR::Chelsa.Clim.download()</code></li>
+<li>Selected bio-variables: <code>1</code>, <code>4</code>, <code>6</code>, <code>12</code>, <code>15</code>, <code>18</code>, <code>19</code></li>
+<li>Spatial aggregation: 25x factor using median values with <a href="https://rspatial.github.io/terra/">{terra} R package</a> function <code>terra::aggregate(factor = 25, fun = "median")</code></li>
 </ul>
-<p><strong><span class="text-background-purpleLight text-color-black text-bold">Paleoclimate</span>: CHELSA-TRACE21</strong></p>
+<p><strong><span class="paleo">Paleoclimate</span>: CHELSA-TRACE21</strong></p>
 <ul>
-<li><span class="text-background-purpleLight text-color-black text-bold">Paleoclimate</span>: CHELSA-TRACE21 v1.0 downloaded on 31st December 2023</li>
+<li><span class="paleo">Paleoclimate</span>: CHELSA-TRACE21 v1.0 downloaded on 31st December 2023</li>
 <li>Downloaded values for each 500-year time-slice between 0 and 18,000 years before present (BP)</li>
-<li>Selected bio-variables: 1, 4, 6, 12, 15, 18, 19</li>
+<li>Selected bio-variables: <code>1</code>, <code>4</code>, <code>6</code>, <code>12</code>, <code>15</code>, <code>18</code>, <code>19</code></li>
 <li>For each time slice, applied spatial aggregation using <code>terra::aggregate(factor = 25, fun = "median")</code></li>
 </ul>
-<p><strong><span class="text-background-greenDark text-color-white text-bold">WoSIS Soil Data</span>:</strong></p>
+<p><strong><span class="abiotic">WoSIS Soil Data</span>:</strong></p>
 <ul>
-<li>Downloaded on 11th September 2023 (both HWSD2_RASTER.zip and HWSD2_DB.zip)</li>
-<li>Extracted <span class="text-background-greenDark text-color-white text-bold">soil type names</span> (column “HWSD2_SMU_ID”) by combining tables “HWSD2_SMU” and “D_WRB4”</li>
-<li>Added <span class="text-background-greenDark text-color-white text-bold">soil type information</span> to the raster</li>
-<li><span class="text-background-brownLight text-color-black text-bold">Resampled</span> using <code>terra::resample(method = "near")</code> function to match <span class="text-background-greenDark text-color-white text-bold">climate data</span> resolution</li>
-<li>Provides essential <span class="text-background-greenDark text-color-white text-bold">edaphic context</span> for vegetation-environment relationships (<span class="text-background-greenLight text-color-black text-bold">contemporary data</span> only)</li>
+<li>Downloaded on 11th September 2023 (both <code>HWSD2_RASTER.zip</code> and <code>HWSD2_DB.zip</code>)</li>
+<li>Extracted <span class="abiotic">soil type names</span> (column <code>HWSD2_SMU_ID</code>) by combining tables <code>HWSD2_SMU</code> and <code>D_WRB4</code></li>
+<li>Added <span class="abiotic">soil type information</span> to the raster</li>
+<li><span class="reproducibility">Resampled</span> using <code>terra::resample(method = "near")</code> function to match <span class="abiotic">climate data</span> resolution</li>
+<li>Provides essential <span class="abiotic">edaphic context</span> for vegetation-environment relationships (<span class="neo-vegetation">contemporary data</span> only)</li>
 </ul>
 <p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745293">VegVault-abiotic_data</a></p>
 </section>
 </section>
 <section id="data-integration-procedures" class="level2">
-<h2 class="anchored" data-anchor-id="data-integration-procedures"><span class="text-background-brownLight text-color-black text-bold">Data Integration Procedures</span></h2>
-<p>All <span class="text-background-brownLight text-color-black text-bold">processing pipelines</span> with their corresponding <span class="text-background-brownDark text-color-white text-bold">Tags</span> are migrated into an <span class="text-background-black text-color-white text-bold">SQLite database</span> using the GitHub repository titled <a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault</a>, which can be accessed as DOI: <a href="https://doi.org/10.5281/zenodo.15201994">10.5281/zenodo.15201994</a>.</p>
+<h2 class="anchored" data-anchor-id="data-integration-procedures"><span class="reproducibility">Data Integration Procedures</span></h2>
+<p>All <span class="reproducibility">processing pipelines</span> with their corresponding <span class="database">Tags</span> are migrated into an <span class="vegvault">SQLite database</span> using the GitHub repository titled <a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault</a>, which can be accessed as DOI: <a href="https://doi.org/10.5281/zenodo.15201994">10.5281/zenodo.15201994</a>.</p>
 <section id="data-migration-details" class="level3">
-<h3 class="anchored" data-anchor-id="data-migration-details"><span class="text-background-brownLight text-color-black text-bold">Data Migration Details</span></h3>
-<p><strong><span class="text-background-greenLight text-color-black text-bold">Migrating sPlotOpen vegetation data</span>:</strong> - <span class="text-background-brownDark text-color-white text-bold">Dataset name</span> (dataset_name) created from “plot_observation_id” as “splot_[plot_observation_id]” - Original <span class="text-background-brownDark text-color-white text-bold">data source</span> from column “givd_id” stored in <span class="text-background-brownDark text-color-white text-bold">DatasetSourcesID</span> table - <span class="text-background-brownDark text-color-white text-bold">Sample name</span> (sample_name) created using “plot_observation_id” as “splot_[plot_observation_id]” - <span class="text-background-brownDark text-color-white text-bold">Sample Size</span> (sample_size) created from “releve_area” column - All samples automatically assigned age of 0 - Taxonomic names extracted from “Species” column, abundances from “Original_abundance”</p>
-<p><strong>Migrating BIEN vegetation data:</strong> - <span class="text-background-brownDark text-color-white text-bold">Dataset name</span> (dataset_name) created as “bien_[row number]” - Original <span class="text-background-brownDark text-color-white text-bold">data source</span> from column “datasource” stored in <span class="text-background-brownDark text-color-white text-bold">DatasetSourcesID</span> table - <span class="text-background-brownLight text-color-black text-bold">Sampling method</span> extracted from “methodology_description” column - <span class="text-background-brownDark text-color-white text-bold">Sample name</span> (sample_name) created as “bien_[row number]” - <span class="text-background-brownDark text-color-white text-bold">Sample Size</span> (sample_size) created from “plot_area_ha” column, multiplied by 10,000 (stored in square meters) - All samples automatically assigned <span class="text-background-greenLight text-color-black text-bold">age of 0</span> - <span class="text-background-blueDark text-color-white text-bold">Taxonomic names</span> extracted from “name_matched” column</p>
-<p><strong><span class="text-background-purpleLight text-color-black text-bold">Migrating fossil pollen data</span>:</strong> - <span class="text-background-brownDark text-color-white text-bold">Dataset name</span> (dataset_name) created from “dataset_id” (fossilpol_[dataset_id]) - Note: column “dataset_id” from primary source does not match “dataset_id” in <span class="text-background-black text-color-white text-bold">VegVault</span> - Original <span class="text-background-brownDark text-color-white text-bold">data source</span> from “source_of_data” column stored in <span class="text-background-brownDark text-color-white text-bold">DatasetSourcesID</span> table - <span class="text-background-brownLight text-color-black text-bold">Sampling method</span> extracted from “depositionalenvironment” column - Individual <span class="text-background-brownDark text-color-white text-bold">Dataset Reference</span> extracted from “doi” column - <span class="text-background-brownDark text-color-white text-bold">Sample name</span> (sample_name) created using “dataset_id” and “sample_id” as “fossilpol_[dataset_id]_[sample_id]” - <span class="text-background-purpleLight text-color-black text-bold">Ages</span> extracted from “levels” column - <span class="text-background-purpleLight text-color-black text-bold">Age uncertainty</span> from age-depth models extracted from “age_uncertainty” column - <span class="text-background-blueDark text-color-white text-bold">Taxonomic names</span> and <span class="text-background-purpleLight text-color-black text-bold">abundances</span> extracted from “counts_harmonised” column</p>
-<p><strong><span class="text-background-blueDark text-color-white text-bold">Migrating TRY functional traits</span>:</strong> - <span class="text-background-brownDark text-color-white text-bold">Dataset name</span> (dataset_name) created as “try_[row number]” - Original <span class="text-background-brownDark text-color-white text-bold">data source</span> from column “dataset” stored in <span class="text-background-brownDark text-color-white text-bold">DatasetSourcesID</span> table - Individual <span class="text-background-brownDark text-color-white text-bold">Dataset Reference</span> extracted from “reference_source” column - <span class="text-background-brownDark text-color-white text-bold">Sample name</span> (sample_name) created as “try_[row number]” - Individual <span class="text-background-brownDark text-color-white text-bold">Sample reference</span> extracted from “dataset_reference_citation” - All samples automatically assigned <span class="text-background-greenLight text-color-black text-bold">age of 0</span> - Trait names extracted from “trait_full_name”, taxonomic names from “acc_species_name”, trait values from “trait_value”</p>
-<p><strong><span class="text-background-blueDark text-color-white text-bold">Migrating BIEN functional traits</span>:</strong> - <span class="text-background-brownDark text-color-white text-bold">Dataset name</span> (dataset_name) created as “bien_traits_[row number]” - Original <span class="text-background-brownDark text-color-white text-bold">data source</span> from column “project_pi” stored in <span class="text-background-brownDark text-color-white text-bold">DatasetSourcesID</span> table - Individual <span class="text-background-brownDark text-color-white text-bold">Dataset Reference</span> extracted from “source_citation” column - <span class="text-background-brownDark text-color-white text-bold">Sample name</span> (sample_name) created using column “id” as “bien_traits_[id]” - All samples automatically assigned <span class="text-background-greenLight text-color-black text-bold">age of 0</span> - <span class="text-background-blueDark text-color-white text-bold">Trait names</span> extracted from “trait_name”, <span class="text-background-blueDark text-color-white text-bold">taxonomic names</span> from “scrubbed_species_binomial”, <span class="text-background-blueDark text-color-white text-bold">trait values</span> from “trait_value” - <span class="text-background-blueDark text-color-white text-bold">Trait</span> “leaf mass per area” calculated from “leaf area per leaf dry mass” as 1/value</p>
+<h3 class="anchored" data-anchor-id="data-migration-details"><span class="reproducibility">Data Migration Details</span></h3>
+<p><strong><span class="neo-vegetation">Migrating sPlotOpen vegetation data</span>:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created from <code>plot_observation_id</code> as <code>splot_[plot_observation_id]</code></li>
+<li>Original <span class="database">data source</span> from column <code>givd_id</code> stored in <code>DatasetSourcesID</code> table</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created using <code>plot_observation_id</code> as <code>splot_[plot_observation_id]</code></li>
+<li><span class="database">Sample Size</span> (<code>sample_size</code>) created from <code>releve_area</code> column</li>
+<li>All samples automatically assigned age of 0</li>
+<li>Taxonomic names extracted from <code>Species</code> column, abundances from <code>Original_abundance</code></li>
+</ul>
+<p><strong>Migrating BIEN vegetation data:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>bien_[row number]</code></li>
+<li>Original <span class="database">data source</span> from column <code>datasource</code> stored in <code>DatasetSourcesID</code> table</li>
+<li><span class="reproducibility">Sampling method</span> extracted from <code>methodology_description</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created as <code>bien_[row number]</code></li>
+<li><span class="database">Sample Size</span> (<code>sample_size</code>) created from <code>plot_area_ha</code> column, multiplied by 10,000 (stored in square meters)</li>
+<li>All samples automatically assigned age of 0</li>
+<li><span class="traits">Taxonomic names</span> extracted from <code>name_matched</code> column</li>
+</ul>
+<p><strong><span class="paleo">Migrating fossil pollen data</span>:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span>(<code>dataset_name</code>) created from <code>dataset_id</code> (fossilpol_[dataset_id])</li>
+<li>Note: column <code>dataset_id</code> from primary source does not match <code>dataset_id</code> in <span class="vegvault">VegVault</span></li>
+<li>Original <span class="database">data source</span> from <code>source_of_data</code> column stored in <code>DatasetSourcesID</code> table</li>
+<li><span class="reproducibility">Sampling method</span> extracted from <code>depositionalenvironment</code> column</li>
+<li>Individual <span class="database">Dataset Reference</span> extracted from <code>doi</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created using <code>dataset_id</code> and <code>sample_id</code> as <code>fossilpol_[dataset_id]_[sample_id]</code></li>
+<li><span class="paleo">Ages</span> extracted from <code>levels</code> column</li>
+<li><span class="paleo">Age uncertainty</span> from age-depth models extracted from <code>age_uncertainty</code> column</li>
+<li><span class="traits">Taxonomic names</span> and <span class="paleo">abundances</span> extracted from <code>counts_harmonised</code> column</li>
+</ul>
+<p><strong><span class="traits">Migrating TRY functional traits</span>:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>try_[row number]</code></li>
+<li>Original <span class="database">data source</span> from column <code>dataset</code> stored in <code>DatasetSourcesID</code> table</li>
+<li>Individual <span class="database">Dataset Reference</span> extracted from <code>reference_source</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created as <code>try_[row number]</code></li>
+<li>Individual <span class="database">Sample reference</span> extracted from <code>dataset_reference_citation</code></li>
+<li>All samples automatically assigned age of 0</li>
+<li>Trait names extracted from <code>trait_full_name</code>, taxonomic names from <code>acc_species_name</code>, trait values from <code>trait_value</code></li>
+</ul>
+<p><strong><span class="traits">Migrating BIEN functional traits</span>:</strong></p>
+<ul>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>bien_traits_[row number]</code></li>
+<li>Original <span class="database">data source</span> from column <code>project_pi</code> stored in <code>DatasetSourcesID</code> table</li>
+<li>Individual <span class="database">Dataset Reference</span> extracted from <code>source_citation</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created using column <code>id</code> as <code>bien_traits_[id]</code></li>
+<li>All samples automatically assigned age of 0</li>
+<li><span class="traits">Trait names</span> extracted from <code>trait_name</code>, <span class="traits">taxonomic names</span> from <code>scrubbed_species_binomial</code>, <span class="traits">trait values</span> from <code>trait_value</code></li>
+<li><span class="traits">Trait</span> <code>leaf mass per area</code> calculated from <code>leaf area per leaf dry mass</code> as 1/value</li>
+</ul>
 </section>
 <section id="final-database-integration-procedures" class="level3">
-<h3 class="anchored" data-anchor-id="final-database-integration-procedures"><span class="text-background-brownLight text-color-black text-bold">Final Database Integration Procedures</span></h3>
-<p>In addition to the consolidation of all <span class="text-background-brownLight text-color-black text-bold">processed data</span> into a unified <span class="text-background-black text-color-white text-bold">SQLite database</span>, the final <span class="text-background-black text-color-white text-bold">VegVault</span> migration repository performs three critical procedures to ensure <span class="text-background-brownLight text-color-black text-bold">data consistency</span> and usability:</p>
+<h3 class="anchored" data-anchor-id="final-database-integration-procedures"><span class="reproducibility">Final Database Integration Procedures</span></h3>
+<p>In addition to the consolidation of all <span class="reproducibility">processed data</span> into a unified <span class="vegvault">SQLite database</span>, the final <span class="vegvault">VegVault</span> migration repository performs three critical procedures to ensure <span class="reproducibility">data consistency</span> and usability:</p>
 <section id="i-taxonomic-classification" class="level4">
-<h4 class="anchored" data-anchor-id="i-taxonomic-classification">(i) <span class="text-background-blueDark text-color-white text-bold">Taxonomic Classification</span></h4>
-<p>As <span class="text-background-black text-color-white text-bold">VegVault</span> integrates data on <span class="text-background-blueDark text-color-white text-bold">taxa</span> from various sources, the <span class="text-background-brownLight text-color-black text-bold">{taxospace}</span> R package is used to classify diverse <span class="text-background-blueDark text-color-white text-bold">taxa</span> into a unifying <span class="text-background-blueDark text-color-white text-bold">taxonomic backbone</span>. The <span class="text-background-brownLight text-color-black text-bold">{taxospace}</span> tool automatically aligns <span class="text-background-blueDark text-color-white text-bold">taxon names</span> with the <span class="text-background-blueDark text-color-white text-bold">GBIF taxonomical backbone</span>. Specifically, we find the best match of raw <span class="text-background-blueDark text-color-white text-bold">taxon names</span> using the Global Names Resolver, which is then aligned with GBIF. The resulting <span class="text-background-blueDark text-color-white text-bold">taxonomic classification</span> information, detailed up to the family level, is stored for each <span class="text-background-blueDark text-color-white text-bold">taxon</span>, ensuring consistency and facilitating comparative analyses across different datasets.</p>
-<p><strong>Important limitations</strong>: <span class="text-background-blueDark text-color-white text-bold">Taxonomic classification</span> down to the species level is not available for each <span class="text-background-blueDark text-color-white text-bold">taxon</span> (e.g., some <span class="text-background-purpleLight text-color-black text-bold">fossil pollen types</span> can only be identified to the genus or family level). For several <span class="text-background-blueDark text-color-white text-bold">taxa</span>, no matching classification could be found. Note that <span class="text-background-blueDark text-color-white text-bold">taxonomic classification</span> is additional information—the original <span class="text-background-blueDark text-color-white text-bold">taxon name</span> is always present and returned by default. Finally, users should be aware that this classification is an <span class="text-background-brownLight text-color-black text-bold">automated process</span> and may contain errors.</p>
+<h4 class="anchored" data-anchor-id="i-taxonomic-classification">(i) <span class="traits">Taxonomic Classification</span></h4>
+<p>As <span class="vegvault">VegVault</span> integrates data on <span class="traits">taxa</span> from various sources, the <span class="reproducibility">{taxospace}</span> R package is used to classify diverse <span class="traits">taxa</span> into a unifying <span class="traits">taxonomic backbone</span>. The <span class="reproducibility">{taxospace}</span> tool automatically aligns <span class="traits">taxon names</span> with the <span class="traits">GBIF taxonomical backbone</span>. Specifically, we find the best match of raw <span class="traits">taxon names</span> using the Global Names Resolver, which is then aligned with GBIF. The resulting <span class="traits">taxonomic classification</span> information, detailed up to the family level, is stored for each <span class="traits">taxon</span>, ensuring consistency and facilitating comparative analyses across different datasets.</p>
+<p><strong>Important limitations</strong>: <span class="traits">Taxonomic classification</span> down to the species level is not available for each <span class="traits">taxon</span> (e.g., some <span class="paleo">fossil pollen types</span> can only be identified to the genus or family level). For several <span class="traits">taxa</span>, no matching classification could be found. Note that <span class="traits">taxonomic classification</span> is additional information—the original <span class="traits">taxon name</span> is always present and returned by default. Finally, users should be aware that this classification is an <span class="reproducibility">automated process</span> and may contain errors.</p>
 </section>
 <section id="ii-grouping-of-traits-into-trait-domains" class="level4">
-<h4 class="anchored" data-anchor-id="ii-grouping-of-traits-into-trait-domains">(ii) <span class="text-background-blueDark text-color-white text-bold">Grouping of Traits into Trait Domains</span></h4>
-<p>As there are differences in <span class="text-background-blueDark text-color-white text-bold">trait names</span> across data sources (e.g., “Leaf nitrogen (N) content per leaf dry mass” vs.&nbsp;“leaf nitrogen content per leaf dry mass”), we added a new variable <code>[Trait Domain]{.text-background-blueDark .text-color-white .text-bold}</code> that groups <span class="text-background-blueDark text-color-white text-bold">traits</span> together following the <span class="text-background-blueDark text-color-white text-bold">trait selection</span> of Díaz et al.&nbsp;(2016). For example, <span class="text-background-blueDark text-color-white text-bold">trait</span> “Plant height vegetative” from <span class="text-background-blueDark text-color-white text-bold">TRY</span> and <span class="text-background-blueDark text-color-white text-bold">trait</span> “whole plant height” from <span class="text-background-blueDark text-color-white text-bold">BIEN</span> are both grouped under the “Plant height” <span class="text-background-blueDark text-color-white text-bold">Trait Domain</span>. This grouping serves as an efficient mechanism for extracting comparable <span class="text-background-blueDark text-color-white text-bold">traits</span> across both <span class="text-background-blueDark text-color-white text-bold">TRY</span> and <span class="text-background-blueDark text-color-white text-bold">BIEN</span> datasets.</p>
+<h4 class="anchored" data-anchor-id="ii-grouping-of-traits-into-trait-domains">(ii) <span class="traits">Grouping of Traits into Trait Domains</span></h4>
+<p>As there are differences in <span class="traits">trait names</span> across data sources (e.g., “Leaf nitrogen (N) content per leaf dry mass” vs.&nbsp;“leaf nitrogen content per leaf dry mass”), we added a new variable <code>Trait Domain</code> that groups <span class="traits">traits</span> together following the <span class="traits">trait selection</span> of Díaz et al.&nbsp;(2016). For example, <span class="traits">trait</span> <code>Plant height vegetative</code> from <span class="traits">TRY</span> and <span class="traits">trait</span> <code>whole plant height</code> from <span class="traits">BIEN</span> are both grouped under the <code>Plant height</code> <span class="traits">Trait Domain</span>. This grouping serves as an efficient mechanism for extracting comparable <span class="traits">traits</span> across both <span class="traits">TRY</span> and <span class="traits">BIEN</span> datasets.</p>
 </section>
 <section id="iii-creation-of-gridpoints-for-abiotic-data" class="level4">
-<h4 class="anchored" data-anchor-id="iii-creation-of-gridpoints-for-abiotic-data">(iii) <span class="text-background-greenDark text-color-white text-bold">Creation of Gridpoints for Abiotic Data</span></h4>
-<p>We developed a data structure that provides readily available <span class="text-background-greenDark text-color-white text-bold">environmental context</span> for each <span class="text-background-greenLight text-color-black text-bold">vegetation</span> (and <span class="text-background-blueDark text-color-white text-bold">trait</span>) record by creating spatio-temporal links between these records and <span class="text-background-greenDark text-color-white text-bold">abiotic information</span>. As raster data are not suitable for storage in an <span class="text-background-black text-color-white text-bold">SQLite database</span>, we created artificial points, called ‘<span class="text-background-greenDark text-color-white text-bold">gridpoints</span>’, located in the center of each raster cell. This resulted in a uniform spatio-temporal matrix of <span class="text-background-greenDark text-color-white text-bold">gridpoints</span> holding the <span class="text-background-greenDark text-color-white text-bold">abiotic information</span>.</p>
-<p><strong><span class="text-background-brownDark text-color-white text-bold">Gridpoint naming conventions</span></strong>: <span class="text-background-brownDark text-color-white text-bold">Dataset names</span> (dataset_name) are created as “geo_[longitude]<em>[latitude]” and <span class="text-background-brownDark text-color-white text-bold">Sample names</span> (sample_name) are created as ”geo</em>[longitude]<em>[latitude]</em>[age]”.</p>
-<p><strong><span class="text-background-brownLight text-color-black text-bold">Spatial-temporal linking</span></strong>: We linked <span class="text-background-greenDark text-color-white text-bold">gridpoints</span> with other non-gridpoint <span class="text-background-brownDark text-color-white text-bold">Samples</span> (<span class="text-background-greenLight text-color-black text-bold">vegetation_plot</span>, <span class="text-background-purpleLight text-color-black text-bold">fossil_pollen_archive</span>, and <span class="text-background-blueDark text-color-white text-bold">traits</span>) and calculated the spatial and temporal distances between them. We retained any <span class="text-background-greenDark text-color-white text-bold">gridpoint Sample</span> within 50 km and/or 5000 years from any other non-gridpoint <span class="text-background-brownDark text-color-white text-bold">Sample</span> and discarded the rest.</p>
+<h4 class="anchored" data-anchor-id="iii-creation-of-gridpoints-for-abiotic-data">(iii) <span class="abiotic">Creation of Gridpoints for Abiotic Data</span></h4>
+<p>We developed a data structure that provides readily available <span class="abiotic">environmental context</span> for each <span class="neo-vegetation">vegetation</span> (and <span class="traits">trait</span>) record by creating spatio-temporal links between these records and <span class="abiotic">abiotic information</span>. As raster data are not suitable for storage in an <span class="database">SQLite database</span>, we created artificial points, called ‘<span class="abiotic">gridpoints</span>’, located in the center of each raster cell. This resulted in a uniform spatio-temporal matrix of <span class="abiotic">gridpoints</span> holding the <span class="abiotic">abiotic information</span>.</p>
+<p><strong><span class="reproducibility">Gridpoint naming conventions</span></strong>: <code>dataset_name</code> are created as “geo_[longitude]<em>[latitude]” and <code>sample_name</code> are created as ”geo</em>[longitude]<em>[latitude]</em>[age]”.</p>
+<p><strong><span class="reproducibility">Spatial-temporal linking</span></strong>: We linked <span class="abiotic">gridpoints</span> with other non-gridpoint <span class="database">Samples</span> (<code>vegetation_plot</code>, <code>fossil_pollen_archive</code>, and <span class="traits">traits</span>) and calculated the spatial and temporal distances between them. We retained any <span class="abiotic">gridpoint Sample</span> within 50 km and/or 5000 years from any other non-gridpoint <span class="database">Sample</span> and discarded the rest.</p>
 </section>
 </section>
 </section>
