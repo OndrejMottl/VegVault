@@ -29,6 +29,14 @@ source(
 # Load dynamic colors and fonts from JSON
 colors_data <-
   jsonlite::fromJSON(here::here("colors.json"))
+
+colors_data_short <-
+  colors_data %>%
+  purrr::map(
+    .f = ~ stringr::str_remove(., "#") %>%
+      stringr::str_sub(1, 6)
+  )
+
 fonts_data <-
   jsonlite::fromJSON(here::here("fonts.json"))
 

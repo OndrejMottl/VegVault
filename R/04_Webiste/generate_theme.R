@@ -27,7 +27,7 @@ colors_definition <-
         ".text-background-", .y, " {\n",
         "background-color: ", unname(.x), ";\n",
         "padding: $smallMargin;\n",
-        "border-radius: 5px;\n",
+        "border-radius: 3px;\n",
         " }", "\n"
       )
     }

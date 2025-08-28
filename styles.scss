@@ -19,6 +19,7 @@ $backgroundColor: $beigeLight;
 
 // Typography
 @import "_fonts";
+@import "_text_highlights";
 
 $mainFontSize: 1rem;
 $h1FontSize: 2.5rem;
@@ -95,18 +96,18 @@ h2 {
   line-height: $headingLineHeight;
   letter-spacing: $headingLetterSpacing;
   font-weight: $headingFontWeight;
-  margin-top: $blockMargin;
+  margin-top: $largeMargin;
   text-shadow: 2px 3px 4px $black;
 }
 
 h3 {
-  font-family: $headingFont;
+  font-family: $mainFont;
   color: $black;
   font-size: $h3FontSize;
   line-height: $headingLineHeight;
   letter-spacing: $headingLetterSpacing;
   font-weight: $headingFontWeight;
-  margin-top: $smallMargin;
+  margin-top: $largeMargin;
 }
 
 /* Code block */
@@ -250,12 +251,12 @@ a:hover {
 
 /* List styling */
 ul {
-  padding-left: 0;
-  margin-left: $blockMargin;
+  padding-left: $smallMargin;
+  margin-left: $largeMargin;
 }
 
 ul ul {
-  margin-left: $blockMargin;
+  margin-left: $largeMargin;
 }
 
 /* Improve readability for website content */

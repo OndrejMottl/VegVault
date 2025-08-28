@@ -1,0 +1,44 @@
+// Higher-level semantic text highlighting classes
+// These combine multiple utility classes for commonly used formatting patterns
+
+.vegvault {
+  @extend .text-background-black;
+  @extend .text-color-white;
+  font-weight: bold;
+}
+
+.paleo {
+  @extend .text-background-purpleLight;
+  @extend .text-color-black;
+  font-weight: bold;
+}
+
+.neo-vegetation {
+  @extend .text-background-greenLight;
+  @extend .text-color-black;
+  font-weight: bold;
+}
+
+.traits {
+  @extend .text-background-blueDark;
+  @extend .text-color-white;
+  font-weight: bold;
+}
+
+.abiotic {
+  @extend .text-background-greenDark;
+  @extend .text-color-white;
+  font-weight: bold;
+}
+
+.reproducibility {
+  @extend .text-background-brownLight;
+  @extend .text-color-white;
+  font-weight: bold;
+}
+
+.database {
+  @extend .text-background-brownDark;
+  @extend .text-color-white;
+  font-weight: bold;
+}
