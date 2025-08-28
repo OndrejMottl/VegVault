@@ -24,6 +24,11 @@ about the <span class="database">database architecture</span>.
 
 <br>
 
+## Full Database Schema
+
+<img src="../../Outputs/Figures/schema_diagram.png" style="width:100.0%"
+data-fig-align="center" />
+
 ## Metadata Tables
 
 Several tables contain <span class="database">metadata</span> and

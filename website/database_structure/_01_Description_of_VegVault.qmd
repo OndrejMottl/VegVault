@@ -48,6 +48,18 @@ invisible(
 
 <br>
 
+## Full Database Schema
+
+```{r}
+#| label: full-database-schema
+#| echo: false
+knitr::include_graphics(
+  here::here(
+    "Outputs/Figures/schema_diagram.png"
+  )
+)
+```
+
 ## Metadata Tables
 
 Several tables contain [metadata]{.database} and administrative information that are not directly linked to the scientific data:
