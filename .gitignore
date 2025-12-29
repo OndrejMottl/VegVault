@@ -60,3 +60,5 @@ debug.R
 
 # quarto
 /.quarto/
+
+**/*.quarto_ipynb

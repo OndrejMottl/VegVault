@@ -71,6 +71,10 @@ knitr::include_graphics(
 
 ## Publications
 
+### Main Article
+
+**"VegVault dataset: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers"** [![](https://img.shields.io/badge/DOI-10.1038/s41597--025--06176--1-blue)](https://doi.org/10.1038/s41597-025-06176-1)
+
 ### Pre-print
 
 **"VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers"** [![](https://img.shields.io/badge/DOI-10.1101/2025.01.31.635213-blue)](https://doi.org/10.1101/2025.01.31.635213)
@@ -108,19 +112,6 @@ knitr::include_graphics(
 
 ## Visual Resources
 
-### VegVault Logo
-
-[Download VegVault Logo](https://github.com/OndrejMottl/VegVault/tree/main/Outputs/Figures/website/VegVault_logo.png){.btn}
-
-Available for use in presentations, publications, and educational materials with proper attribution.
-
-### Conference Posters
-
-**VegVault Poster - CSPE Conference (September 2024)**
-
-- [Low Resolution Version](/Outputs/Figures/poster2024/mottl_poster_compression_9.png)  
-- [High Resolution Version](/Outputs/Figures/poster2024/mottl_poster.jpeg)
-
 ## Presentations
 
 ### Recent Presentations
@@ -134,6 +125,20 @@ Available for use in presentations, publications, and educational materials with
 
 - [View Slides](https://ondrejmottl.github.io/VegVault-FlashPresentation-20250323/)
 - [Source Code](https://github.com/OndrejMottl/VegVault-FlashPresentation-20250323)
+
+### Conference Posters
+
+**VegVault Poster - CSPE Conference (September 2024)**
+
+- [Low Resolution Version](/Outputs/Figures/poster2024/mottl_poster_compression_9.png)  
+- [High Resolution Version](/Outputs/Figures/poster2024/mottl_poster.jpeg)
+
+### VegVault Logo
+
+[Download VegVault Logo](https://github.com/OndrejMottl/VegVault/tree/main/Outputs/Figures/website/VegVault_logo.png){.btn}
+
+Available for use in presentations, publications, and educational materials with proper attribution.
+
 
 ## Additional Resources
 

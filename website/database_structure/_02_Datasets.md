@@ -30,7 +30,7 @@ Type</span> (`dataset_source_type_id`), and
 Column names and types for table `Datasets`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
 style="width:100.0%" data-fig-align="center" />
 
 #### <span class="database">Dataset Types</span> (`DatasetTypeID`)
@@ -68,11 +68,11 @@ that the vast amount of data is categorized systematically. Currently,
 Column names and types for table `DatasetTypeID`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_type.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 #### <span class="database">Dataset Source-Types</span> (`DatasetSourceTypeID`)
@@ -132,11 +132,11 @@ Column names and types for table `DatasetSourceTypeID`.
 Column names and types for table `DatasetSourceTypeReference`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source_type.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 #### <span class="database">Dataset Sources</span> (`DatasetSourcesID`)
@@ -167,14 +167,14 @@ Column names and types for table `DatasetSourcesID`.
 Column names and types for table `DatasetSourcesReference`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.png"
 style="width:100.0%" data-fig-align="center" />
 
 Currently, there are 691 sources of
 <span class="database">Datasets</span>.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source.png"
 style="width:100.0%" data-fig-align="center" />
 
 #### <span class="database">Sampling Methods</span> (`SamplingMethodID`)
@@ -209,11 +209,11 @@ Column names and types for table `SamplingMethodID`.
 Column names and types for table `SamplingMethodReference`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_sampling_methods_per_dataset_type.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_sampling_methods_per_dataset_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 #### <span class="database">Dataset References</span> (`DatasetReferences`)
@@ -239,7 +239,7 @@ users can accurately cite and verify the sources of their data.
 Column names and types for table `DatasetReferences`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.png"
 style="width:100.0%" data-fig-align="center" />
 
 This means that one dataset can have one/several references from each of

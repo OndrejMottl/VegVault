@@ -28,7 +28,7 @@ of <span class="database">Dataset</span> and
 Column names and types for table `Traits`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Traits.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Traits.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="traits">Traits Domain</span> (`TraitsDomain`)
@@ -59,7 +59,7 @@ environmental or taxonomic entity.
 Column names and types for table `TraitsDomain`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TraitsDomain.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TraitsDomain.png"
 style="width:100.0%" data-fig-align="center" />
 
 | Trait domain | Trait | Data Source |
@@ -84,7 +84,7 @@ style="width:100.0%" data-fig-align="center" />
 Overview of Trait Domains and their associated Traits
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_traits_per_domain.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_traits_per_domain.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="traits">Traits value</span> (`TraitsValue`)
@@ -112,11 +112,11 @@ ecological, environmental and taxonomic context.
 Column names and types for table `TraitsValue`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TraitsValue.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TraitsValue.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_occurences_per_dommain.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_occurences_per_dommain.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="traits">Traits Reference</span> (`TraitsReference`)
@@ -141,7 +141,7 @@ enabling users to trace the origins and validation of each trait value.
 Column names and types for table `TraitsReference`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TraitsReference.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TraitsReference.png"
 style="width:100.0%" data-fig-align="center" />
 
 <br>

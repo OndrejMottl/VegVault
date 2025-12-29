@@ -207,7 +207,7 @@
     "href": "index.html",
     "title": "VegVault",
     "section": "",
-    "text": "This is the official website dedicated to the VegVault project. VegVault is a comprehensive SQLite database that integrates global paleo- and neo-ecological vegetation data with functional traits and abiotic information, including climate and soil data. By bridging historical and contemporary data across multiple temporal and spatial scales, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.\nThe project integrates data from multiple well-established sources including the Neotoma Paleoecology Database, sPlotOpen, BIEN, TRY Plant Trait Database, CHELSA climate data, and WoSIS soil data to provide a comprehensive view of vegetation dynamics across space and time.\nCreating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.\nThe project is part of the BIODYNAMICS project.\n\n\n\n\nAccess the Database - Download VegVault and get started\nDatabase Structure - Understand the data organization\nUsage Examples - See practical applications\nDatabase Content - Explore what’s included\nGet Involved - Contribute to the project\n\nAccess Database Database Pre-print"
+    "text": "This is the official website dedicated to the VegVault project. VegVault is a comprehensive SQLite database that integrates global paleo- and neo-ecological vegetation data with functional traits and abiotic information, including climate and soil data. By bridging historical and contemporary data across multiple temporal and spatial scales, VegVault provides a unique resource for examining long-term ecological patterns and processes, thereby enhancing our ability to predict future biodiversity trajectories and ecosystem responses under changing climatic conditions.\nThe project integrates data from multiple well-established sources including the Neotoma Paleoecology Database, sPlotOpen, BIEN, TRY Plant Trait Database, CHELSA climate data, and WoSIS soil data to provide a comprehensive view of vegetation dynamics across space and time.\nCreating such an integrated database, in which gathering and processing of the data is reproducible, is a crucial step toward improving our understanding of biodiversity dynamics under changing climatic conditions and safeguarding biodiversity in an uncertain future.\nThe project is part of the BIODYNAMICS project.\n\n\n\n\nAccess the Database - Download VegVault and get started\nDatabase Structure - Understand the data organization\nUsage Examples - See practical applications\nDatabase Content - Explore what’s included\nGet Involved - Contribute to the project\n\nAccess Database Database paper"
   },
   {
     "objectID": "index.html#database-linking-global-paleo--and-neo-vegetation-data-functional-traits-and-climate",
@@ -221,7 +221,7 @@
     "href": "index.html#quick-navigation",
     "title": "VegVault",
     "section": "",
-    "text": "Access the Database - Download VegVault and get started\nDatabase Structure - Understand the data organization\nUsage Examples - See practical applications\nDatabase Content - Explore what’s included\nGet Involved - Contribute to the project\n\nAccess Database Database Pre-print"
+    "text": "Access the Database - Download VegVault and get started\nDatabase Structure - Understand the data organization\nUsage Examples - See practical applications\nDatabase Content - Explore what’s included\nGet Involved - Contribute to the project\n\nAccess Database Database paper"
   },
   {
     "objectID": "note-colors.html",
@@ -361,7 +361,7 @@
     "href": "website/materials.html",
     "title": "Materials & Outputs",
     "section": "",
-    "text": "This page provides access to all VegVault-related resources including the database, publications, code, and presentation materials.\n\n\n\n\n\n\nVegVault v1.0.0 (SQLite Database - Recommended) Download Database v1.0.0\nPlease review our Database Access Guidelines for proper usage and citation requirements.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nVegVault v1.0.0 (Flat Files - Not Recommended) Download Database v1.0.0 as Flat Files\n\n\n\n\n\n\nWarning\n\n\n\nNote: Flat files are provided for accessibility but are not the preferred method. Many files exceed 1GB and may be difficult to load. We strongly recommend using the SQLite database with {vaultkeepr} for optimal performance.\n\n\n\n\n\n\n\n\n“VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers” \n\n\n\n\n\n\n\n\nOfficial R package for VegVault database interaction {vaultkeepr} Documentation & Download\nThe package provides:\n\nEasy database connection and querying\nData filtering and extraction functions\nAutomatic citation generation\n code coverage with comprehensive testing\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDownload VegVault Logo\nAvailable for use in presentations, publications, and educational materials with proper attribution.\n\n\n\nVegVault Poster - CSPE Conference (September 2024)\n\nLow Resolution Version\n\nHigh Resolution Version\n\n\n\n\n\n\n\nVegVault - IAVS Conference, Colorado, USA (August 2, 2025)\n\nView Slides\nSource Code\n\nVegVault Flash Presentation - Geobotany Meeting, Sudějov (March 23, 2025)\n\nView Slides\nSource Code\n\n\n\n\n\n\nDatabase Access - Download and setup instructions\nDatabase Assembly - Data processing and integration procedures\nDatabase Examples - Practical usage examples\nDatabase Structure - Technical documentation\nContact & Support - Get help and report issues"
+    "text": "This page provides access to all VegVault-related resources including the database, publications, code, and presentation materials.\n\n\n\n\n\n\nVegVault v1.0.0 (SQLite Database - Recommended) Download Database v1.0.0\nPlease review our Database Access Guidelines for proper usage and citation requirements.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nVegVault v1.0.0 (Flat Files - Not Recommended) Download Database v1.0.0 as Flat Files\n\n\n\n\n\n\nWarning\n\n\n\nNote: Flat files are provided for accessibility but are not the preferred method. Many files exceed 1GB and may be difficult to load. We strongly recommend using the SQLite database with {vaultkeepr} for optimal performance.\n\n\n\n\n\n\n\n\n“VegVault dataset: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers” \n\n\n\n“VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers” \n\n\n\n\n\n\n\n\nOfficial R package for VegVault database interaction {vaultkeepr} Documentation & Download\nThe package provides:\n\nEasy database connection and querying\nData filtering and extraction functions\nAutomatic citation generation\n code coverage with comprehensive testing\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nVegVault - IAVS Conference, Colorado, USA (August 2, 2025)\n\nView Slides\nSource Code\n\nVegVault Flash Presentation - Geobotany Meeting, Sudějov (March 23, 2025)\n\nView Slides\nSource Code\n\n\n\n\nVegVault Poster - CSPE Conference (September 2024)\n\nLow Resolution Version\n\nHigh Resolution Version\n\n\n\n\nDownload VegVault Logo\nAvailable for use in presentations, publications, and educational materials with proper attribution.\n\n\n\n\n\nDatabase Access - Download and setup instructions\nDatabase Assembly - Data processing and integration procedures\nDatabase Examples - Practical usage examples\nDatabase Structure - Technical documentation\nContact & Support - Get help and report issues"
   },
   {
     "objectID": "website/materials.html#vegvault-database",
@@ -375,7 +375,7 @@
     "href": "website/materials.html#publications",
     "title": "Materials & Outputs",
     "section": "",
-    "text": "“VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers”"
+    "text": "“VegVault dataset: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers” \n\n\n\n“VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers”"
   },
   {
     "objectID": "website/materials.html#software-tools",
@@ -385,18 +385,11 @@
     "text": "Official R package for VegVault database interaction {vaultkeepr} Documentation & Download\nThe package provides:\n\nEasy database connection and querying\nData filtering and extraction functions\nAutomatic citation generation\n code coverage with comprehensive testing"
   },
   {
-    "objectID": "website/materials.html#visual-resources",
-    "href": "website/materials.html#visual-resources",
-    "title": "Materials & Outputs",
-    "section": "",
-    "text": "Download VegVault Logo\nAvailable for use in presentations, publications, and educational materials with proper attribution.\n\n\n\nVegVault Poster - CSPE Conference (September 2024)\n\nLow Resolution Version\n\nHigh Resolution Version"
-  },
-  {
     "objectID": "website/materials.html#presentations",
     "href": "website/materials.html#presentations",
     "title": "Materials & Outputs",
     "section": "",
-    "text": "VegVault - IAVS Conference, Colorado, USA (August 2, 2025)\n\nView Slides\nSource Code\n\nVegVault Flash Presentation - Geobotany Meeting, Sudějov (March 23, 2025)\n\nView Slides\nSource Code"
+    "text": "VegVault - IAVS Conference, Colorado, USA (August 2, 2025)\n\nView Slides\nSource Code\n\nVegVault Flash Presentation - Geobotany Meeting, Sudějov (March 23, 2025)\n\nView Slides\nSource Code\n\n\n\n\nVegVault Poster - CSPE Conference (September 2024)\n\nLow Resolution Version\n\nHigh Resolution Version\n\n\n\n\nDownload VegVault Logo\nAvailable for use in presentations, publications, and educational materials with proper attribution."
   },
   {
     "objectID": "website/materials.html#additional-resources",

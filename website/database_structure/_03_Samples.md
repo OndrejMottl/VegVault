@@ -50,7 +50,7 @@ information</span> is required for each
 Column names and types for table `Samples`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="database">Dataset-Sample</span> (`DatasetSample`)
@@ -74,7 +74,7 @@ differ in time (`age`).
 Column names and types for table `DatasetSample`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="database">Sample Size</span> (`SampleSizeID`)
@@ -96,11 +96,11 @@ plot size is recorded separately for each
 Column names and types for table `SampleSizeID`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_samples_plot_size.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_samples_plot_size.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="paleo">Sample age uncertainty</span> (`SampleUncertainty`)
@@ -123,14 +123,14 @@ modelling</span>, reflecting the inherent uncertainty in dating
 Column names and types for table `SampleUncertainty`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
 style="width:100.0%" data-fig-align="center" />
 
 We can show this on the previously selected fossil pollen archive with
 dataset ID: 91256.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_sample_age.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_sample_age.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="database">Sample Reference</span>
@@ -155,7 +155,7 @@ the dataset continues to be updated in the future.
 Column names and types for table `SampleReference`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
 style="width:100.0%" data-fig-align="center" />
 
 <br>
