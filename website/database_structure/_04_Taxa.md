@@ -18,7 +18,7 @@ names</span>.
 Column names and types for table `Taxa`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="database">Sample-Taxa</span> (`SampleTaxa`)
@@ -39,11 +39,11 @@ careful while processing data from various sources.
 Column names and types for table SampleTaxa.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_taxa_per_source_type.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_taxa_per_source_type.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="database">Taxon Classification</span> (`TaxonClassification`)
@@ -71,7 +71,7 @@ Resolver](https://resolver.globalnames.org/).
 Column names and types for table `TaxonClassification`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.png"
 style="width:100.0%" data-fig-align="center" />
 
 Taxonomic classification for some <span class="database">Taxa</span>
@@ -84,7 +84,7 @@ holds over 110 thousand taxonomic names, of which we were unable to
 classify only 1312 (1.2%).
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_n_taxa_per_class.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_taxa_per_class.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### <span class="database">Taxon Reference</span> (`TaxonReference`)

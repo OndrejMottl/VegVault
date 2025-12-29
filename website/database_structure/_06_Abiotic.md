@@ -42,7 +42,7 @@ contexts of vegetation dynamics.
 Column names and types for table `AbioticVariable`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/AbioticVariable.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/AbioticVariable.png"
 style="width:100.0%" data-fig-align="center" />
 
 | Variable name | Variable unit | Source of data |
@@ -64,7 +64,7 @@ The `AbioticData` table holds the actual values of abiotic variables
 (the units are the same for each `AbioticVariable`).
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Gridpoints (`AbioticDataReference`)
@@ -99,7 +99,7 @@ dynamics.
 Column names and types for table `AbioticDataReference`.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
 style="width:100.0%" data-fig-align="center" />
 
 Such data structure allows that environmental context is readily
@@ -111,11 +111,11 @@ spatio-temporally abiotic data or get average from all surrounding
 <span class="abiotic">gridpoints</span>.
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_data_grid_coord.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_data_grid_coord.png"
 style="width:100.0%" data-fig-align="center" />
 
 <img
-src="D:/GITHUB/VegVault/Outputs/Figures/website/DB_structure/fig_gridpoint_links_example.png"
+src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_gridpoint_links_example.png"
 style="width:100.0%" data-fig-align="center" />
 
 ### Abiotic Variable Reference (`AbioticVariableReference`)
