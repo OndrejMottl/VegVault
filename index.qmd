@@ -24,4 +24,4 @@ The project is part of the [BIODYNAMICS](https://bit.ly/BIODYNAMICS) project.
 - **[Database Content](/website/database_content.qmd)** - Explore what's included
 - **[Get Involved](/website/contribute.qmd)** - Contribute to the project
 
-[Access Database](/website/database_access.qmd){.btn} [Database Pre-print](https://doi.org/10.1101/2025.01.31.635213){.btn}
+[Access Database](/website/database_access.qmd){.btn} [Database paper](https://doi.org/10.1038/s41597-025-06176-1){.btn}
