@@ -116,6 +116,11 @@ knitr::include_graphics(
 
 ### Recent Presentations
 
+**VegVault - JCU, České Budějovice, Czech Republic (December 110, 2025)**
+
+- [View Slides](https://ondrejmottl.github.io/VegVault-Presentation-20251210/)
+- [Source Code](https://github.com/OndrejMottl/VegVault-Presentation-20251210)
+
 **VegVault - IAVS Conference, Colorado, USA (August 2, 2025)**
 
 - [View Slides](https://ondrejmottl.github.io/VegVault-Presentation-20250802/)
