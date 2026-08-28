@@ -1,0 +1,11 @@
+---
+description: VegVault Quarto and website guidance
+globs:
+  - "**/*.qmd"
+  - "**/*.scss"
+  - "**/*.json"
+  - "_quarto.yml"
+alwaysApply: false
+---
+
+Read `.ai/quarto.md` before editing Quarto or website sources. Apply `.ai/r-coding.md` to R chunks.

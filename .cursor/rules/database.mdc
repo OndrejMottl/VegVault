@@ -1,0 +1,10 @@
+---
+description: VegVault SQLite schema and assembly guidance
+globs:
+  - "Data/SQL/**"
+  - "R/01_Data_processing/**"
+  - "R/02_Main_analyses/**"
+alwaysApply: false
+---
+
+Read `.ai/suite-architecture.md` and `.ai/database.md` before changing database schema, imports, assembly, or validation.
