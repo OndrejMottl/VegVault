@@ -1,0 +1,8 @@
+---
+description: VegVault R coding guidance
+globs:
+  - "**/*.R"
+alwaysApply: false
+---
+
+Read `.ai/suite-architecture.md` and `.ai/r-coding.md` before editing R code.
