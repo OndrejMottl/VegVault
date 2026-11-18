@@ -231,10 +231,9 @@ data_try_trait_audit <-
 path_trait_audit <-
   here::here("Data", "Temp", "trait_database_audit")
 dir.create(path_trait_audit, recursive = TRUE, showWarnings = FALSE)
-qs::qsave(
-  data_try_trait_audit,
-  file.path(path_trait_audit, "trait_database_audit_try.qs"),
-  preset = "high"
+qs2::qs_save(
+  object = data_try_trait_audit,
+  file = file.path(path_trait_audit, "trait_database_audit_try.qs")
 )
 
 

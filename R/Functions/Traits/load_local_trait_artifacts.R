@@ -41,7 +41,7 @@ load_local_trait_artifacts <- function(
 
   data_result <-
     data_selected_files$path %>%
-    purrr::map(qs::qread) %>%
+    purrr::map(qs2::qs_read) %>%
     dplyr::bind_rows()
 
   vec_required <-

@@ -72,7 +72,7 @@ validate_vegvault_trait_units <- function(
   vec_audit_paths <-
     base::list.files(audit_directory, pattern = "[.]qs$", full.names = TRUE)
   if (length(vec_audit_paths) > 0L) {
-    n_audit <- sum(purrr::map_int(vec_audit_paths, ~ nrow(qs::qread(.x))))
+    n_audit <- sum(purrr::map_int(vec_audit_paths, ~ nrow(qs2::qs_read(.x))))
     if (n_audit != nrow(data_values)) {
       cli::cli_abort("Database-keyed audit rows do not match TraitsValue rows.")
     }
