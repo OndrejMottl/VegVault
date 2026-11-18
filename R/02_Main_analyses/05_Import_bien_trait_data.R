@@ -44,29 +44,8 @@ DBI::dbListTables(con)
 # 2. Load data -----
 #----------------------------------------------------------#
 
-url_gh_veg_data <-
-  paste0(
-    "https://raw.githubusercontent.com/",
-    "OndrejMottl/VegVault-Vegetation_data/",
-    "v1.0.0/"
-  )
-
 data_bien_traits <-
-  c(
-    "data_traits_bien_0_2023-12-26__778e51e059ae1955d893ff8d306ded42__.qs",
-    "data_traits_bien_1_2023-12-26__11c73cf35307053de0fff8900915623f__.qs",
-    "data_traits_bien_2_2023-12-26__ab13a3f2bcaa4caac48c301f2bb4a03e__.qs",
-    "data_traits_bien_3_2023-12-26__e87885ac564d6f387d3a031575411da2__.qs"
-  ) %>%
-  purrr::map(
-    .f = ~ paste0(
-      url_gh_veg_data,
-      "Outputs/Data/",
-      .x
-    ) %>%
-      dowload_and_load()
-  ) %>%
-  dplyr::bind_rows()
+  load_local_trait_artifacts("data_traits_bien_")
 
 dplyr::glimpse(data_bien_traits)
 
@@ -230,31 +209,11 @@ bien_traits_taxa_id <-
 
 bien_traits_traits_raw <-
   bien_traits_taxa_raw %>%
-  dplyr::mutate(
-    trait_domain_name = dplyr::case_when(
-      trait_name == "stem wood density" ~ "Stem specific density",
-      trait_name == "leaf nitrogen content per leaf dry mass" ~ "Leaf nitrogen content per unit mass",
-      trait_name == "seed mass" ~ "Diaspore mass",
-      trait_name == "whole plant height" ~ "Plant heigh",
-      trait_name == "leaf area" ~ "Leaf Area",
-      trait_name == "leaf area per leaf dry mass" ~ "Leaf mass per area"
-    ),
-    # need to flip the leaf area per leaf dry mass
-    trait_value = ifelse(trait_name == "leaf area per leaf dry mass",
-      1 / trait_value,
-      trait_value
-    ),
-    trait_name = ifelse(trait_name == "leaf area per leaf dry mass",
-      "leaf mass per area",
-      trait_name
-    )
-  ) %>%
-  dplyr::rename(
-    trait_full_name = trait_name
-  ) %>%
-  dplyr::mutate(
-    trait_reference = "BIEN"
-  )
+    dplyr::rename(trait_domain_name = trait_domain) %>%
+    dplyr::mutate(trait_reference = "BIEN")
+data_bien_trait_rules <-
+  add_trait_rules(con = con)
+
 
 # 7.1 Traits -----
 bien_traits_traits_id <-
@@ -265,22 +224,33 @@ bien_traits_traits_id <-
 
 # 7.3 Trait value -----
 
-bien_traits_traits_raw %>%
-  dplyr::select(
-    dataset_name, sample_name,
-    trait_name = trait_full_name,
-    taxon_name,
-    trait_value
-  ) %>%
-  tidyr::drop_na() %>%
-  add_trait_value(
-    data_source = .,
-    con = con,
-    dataset_id = bien_traits_dataset_id,
-    samples_id = bien_traits_samples_id,
-    traits_id = bien_traits_traits_id,
-    taxa_id = bien_traits_taxa_id
-  )
+data_bien_trait_audit <-
+  bien_traits_traits_raw %>%
+    dplyr::select(
+      source_provider, source_dataset_key, source_record_id, source_trait_id,
+      original_value_string, original_unit, normalized_original_unit,
+      conversion_status, conversion_rule_key, derivation_rule_key, trait_unit,
+      dataset_name, sample_name,
+      trait_name = trait_full_name,
+      taxon_name,
+      trait_value
+    ) %>%
+    add_trait_value(
+      con = con,
+      dataset_id = bien_traits_dataset_id,
+      samples_id = bien_traits_samples_id,
+      traits_id = bien_traits_traits_id,
+      taxa_id = bien_traits_taxa_id
+    )
+
+path_trait_audit <-
+  here::here("Data", "Temp", "trait_database_audit")
+dir.create(path_trait_audit, recursive = TRUE, showWarnings = FALSE)
+qs::qsave(
+  data_bien_trait_audit,
+  file.path(path_trait_audit, "trait_database_audit_bien.qs"),
+  preset = "high"
+)
 
 
 #----------------------------------------------------------#
