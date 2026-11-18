@@ -31,8 +31,10 @@ dowload_and_load <- function(sel_url) {
   if (
     file_format == "qs"
   ) {
+    # Producer artefacts are written by {RUtilpol} with {qs2} under the
+    #   `.qs` extension; legacy {qs} files are not supported on R >= 4.6
     data_load <-
-      qs::qread(
+      qs2::qs_read(
         file = file_full_path
       )
   } else {
