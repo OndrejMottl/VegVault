@@ -64,7 +64,7 @@ validate_trait_records <- function(data_source) {
   directory.
 - The test filename match is exact and mechanically auditable.
 - Do not redefine or source the function under test from its test file; use the
-  project test runner.
+  project test runner described in `.ai/r-environment.md`.
 - Test the documented contract: valid behaviour, output structure and values,
   argument or data-contract failures, and relevant boundary cases.
 - Test files follow the same one-function and local-helper restrictions. Small

@@ -6,6 +6,8 @@ This file is a GitHub Copilot compatibility adapter. Use `AGENTS.md` as the univ
 | --- | --- |
 | Suite routing and producer contracts | `AGENTS.md`, `.ai/suite-architecture.md` |
 | R code and visualisation | `.ai/r-coding.md` |
+| R functions and function tests | `.ai/r-functions.md` |
+| R version, `renv` packages, artefact formats, running tests | `.ai/r-environment.md` |
 | SQLite assembly and schema | `.ai/database.md` |
 | Quarto and website | `.ai/quarto.md` |
 | Git and releases | `.ai/git-workflow.md` |

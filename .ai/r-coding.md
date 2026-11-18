@@ -31,6 +31,8 @@ source(
 
 Do not rely on objects, options, packages, connections, or environment variables left by an interactive session. A reusable function must not source setup files or attach packages.
 
+The R version, `renv` lockfile, package changes, artefact formats, and test runs are covered in `.ai/r-environment.md`.
+
 ## Script structure
 
 - Give each script one clear responsibility.
