@@ -68,7 +68,11 @@ Prefer type prefixes for important objects:
 
 Do not encode issue numbers, pull-request numbers, or temporary plan stages in R identifiers, target names, filenames, comments, or configuration values. Name code after its scientific or computational role.
 
-Prefer a new object for a materially transformed state:
+Treat assigned R objects as immutable within their lexical scope. Once an
+object name has received a value, do not assign another value to that name and
+do not change its columns, elements, or attributes in place. Every filtered,
+validated, enriched, selected, or otherwise transformed state gets a new,
+descriptive object name. Do not overwrite function arguments.
 
 ```r
 data_samples_raw <-
@@ -76,9 +80,14 @@ data_samples_raw <-
 
 data_samples_valid <-
   validate_samples(data_samples_raw)
+
+data_samples_selected <-
+  dplyr::filter(data_samples_valid, .data$quality_flag == "accepted")
 ```
 
-Reuse a name only for deliberate in-place semantics, memory pressure, or a tight loop, and keep the reason clear.
+Memory or performance concerns do not silently override this rule. If measured
+constraints make reassignment necessary, obtain explicit user approval for that
+exception and document its scope and evidence.
 
 ## Formatting
 
@@ -177,8 +186,9 @@ Before reading or writing an expensive artifact, validate its path, expected sch
 
 ## Reusable functions
 
-- Keep one exported or broadly reusable function per matching file under `R/Functions/`.
-- Document new or materially changed functions with roxygen2: purpose, parameters, return structure, units, side effects, and important edge cases.
+- Also read and follow `.ai/r-functions.md` whenever creating or editing a
+  function or its tests. That guide defines the binding one-function-per-file,
+  roxygen2, matching-test-file, helper-exception, and strict-TDD contracts.
 - Validate caller inputs early and fail with actionable messages.
 - End with an explicit `return(res)` or a descriptively named result.
 - Do not mutate global state, open an undeclared live connection, or write files unless that side effect is part of the documented contract.
