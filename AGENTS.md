@@ -8,6 +8,8 @@ This file is the universal entry point for assistants working on the VegVault da
 | --- | --- |
 | Any work in this repository or a sibling producer repository | `AGENTS.md`, `.ai/suite-architecture.md` |
 | R scripts, functions, data processing, or visualisation | `.ai/r-coding.md` |
+| Creating or editing R functions or function tests | `.ai/r-coding.md`, `.ai/r-functions.md`, `.ai/r-environment.md` |
+| R version, `renv` packages, lockfiles, artefact formats, running R or tests | `.ai/r-environment.md` |
 | SQLite schema, imports, database assembly, or database validation | `.ai/database.md` |
 | Quarto, website, README, styles, or rendered documentation | `.ai/quarto.md` |
 | Git, branches, worktrees, commits, or pull requests | `.ai/git-workflow.md` |

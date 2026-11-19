@@ -54,6 +54,7 @@ Outputs/Data/VegVault/VegVault.sqlite
 Outputs/Data/VegVault/Flat_files/
 !Outputs/Data/VegVault/Flat_files/Column_names/*.csv
 Data/Processed/Classified_taxa/
+Data/Temp/
 
 # debug
 debug.R

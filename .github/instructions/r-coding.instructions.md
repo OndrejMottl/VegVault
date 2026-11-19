@@ -5,4 +5,4 @@ description: Compatibility adapter for VegVault R coding and data-processing gui
 
 # R Coding Instructions
 
-Read `AGENTS.md`, `.ai/suite-architecture.md`, and `.ai/r-coding.md` before editing R code.
+Read `AGENTS.md`, `.ai/suite-architecture.md`, and `.ai/r-coding.md` before editing R code. Also read `.ai/r-functions.md` when creating or editing functions or their tests, and `.ai/r-environment.md` before changing packages or running tests.
