@@ -2,12 +2,18 @@
 # Select a profile with the `R_CONFIG_ACTIVE` environment variable; the
 #   `default` profile is used otherwise. Other profiles inherit from
 #   `default` and only list the values they change.
-# Machine-local paths, including every database path, do not belong here;
-#   put them in the git-ignored `secrets.yaml` (see `secrets_example.yaml`).
+# Machine-local paths, including the live and v1 database paths, do not
+#   belong here; put them in the git-ignored `secrets.yaml` (see
+#   `secrets_example.yaml`). The one exception is the disposable database of
+#   the `subset` profile, a path relative to the data root.
+# Profiles: `default` (full build during development), `subset` (regional
+#   rehearsal build) and `release` (the published build).
 # Each pipeline stage has an owner (see .ai/analysis-structure.md); add or
 #   change only the sections of the stages you own.
 
 default:
+  # Name of the active profile, recorded in the build manifest
+  profile: "default"
   seed: 900723
   # Data root used when `secrets.yaml` has no `Data` entry; relative to the
   #   project. Target stores go to `<data root>/Targets_data/`.
@@ -38,8 +44,7 @@ default:
       - roxygen2
       - tinytable
       - usethis
-  # Figure defaults of the template; the VegVault figure settings move here
-  #   from R/03_Visualisation/ when the figure stage is converted
+  # Figure defaults of the template, used by the project setup
   graphical:
     width: 16
     height: 12
@@ -48,6 +53,33 @@ default:
     bg: "white"
     text_size: 10
     line_size: 0.1
+    # Manuscript figures, from R/03_Visualisation/01_manuscript/
+    #   00_Config_mns.R. Palette colours stay in `colors.json`; the three
+    #   colours below are the ones that script sets directly.
+    manuscript:
+      text_size: 14
+      line_size: 0.1
+      point_size: 3
+      # Text width, in characters, at which labels are wrapped
+      text_wrap_width: 60
+      image_units: "mm"
+      image_width:
+        single: 89
+        double: 183
+        full: 247
+      colors:
+        brown_neutral: "#5F634F"
+        grey: "#999999"
+        red: "red"
+    # Website figures, from R/03_Visualisation/00_Config_quarto.R. Colours
+    #   and the font stay in `colors.json` and `fonts.json`.
+    website:
+      text_size: 32
+      line_size: 0.1
+      point_size: 3
+      image_units: "px"
+      image_width: 2450
+      image_height: 1200
   # Database version record; the last entry is the version being built.
   #   Copied from R/00_Config_file.R, which keeps its own copy for the
   #   website and the legacy scripts until they read this file.
@@ -79,12 +111,19 @@ default:
 
   # Pinned producer artefacts and their profiles
   producers: {}
-  # Regional bounding box of the rehearsal build
-  subset: {}
+  # Regional rehearsal build; enabled only in the `subset` profile below
+  subset:
+    enabled: false
   # Release checks of the built database
-  validation: {}
+  validation:
+    # Print every check result, not only failures
+    #   (R/02_Main_analyses/11_Check_database.R)
+    verbose: false
   # Flat-file export
-  export: {}
+  export:
+    # Replace flat files that already exist
+    #   (R/02_Main_analyses/12_Export_db_flat.R)
+    rewrite: false
 
   #--------------------------------------------------#
   # Sections of the database-core stages: gridpoint links and database
@@ -95,3 +134,41 @@ default:
   link: {}
   # Database assembly
   build: {}
+
+
+#----------------------------------------------------------#
+# Regional rehearsal build -----
+#----------------------------------------------------------#
+
+# Builds a small disposable database from the records inside one box, to
+#   rehearse and profile the build. The box holds records of every source
+#   type and land north of 63.3 degrees, where the v1 +-1 degree longitude
+#   window of the gridpoint links is narrower than 50 km. Box and margins are
+#   those of the database research settings, which counted the v1 content of
+#   candidate boxes.
+subset:
+  profile: "subset"
+  subset:
+    enabled: true
+    box_name: "alaska_yukon"
+    lon_min: -170
+    lon_max: -125
+    lat_min: 54
+    lat_max: 72
+    # Margin for gridpoint cells around the box, in degrees. 50 km is about
+    #   0.45 degrees of latitude everywhere and 1.45 degrees of longitude at
+    #   72 degrees north.
+    margin_lat: 0.5
+    margin_lon: 1.5
+    # Disposable database, relative to the data root
+    database_file: "Temp/Subset/VegVault_subset_alaska_yukon.sqlite"
+
+
+#----------------------------------------------------------#
+# Release build -----
+#----------------------------------------------------------#
+
+# The published build. It refuses to run with the subset enabled
+#   (validate_build_profile()).
+release:
+  profile: "release"

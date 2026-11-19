@@ -1,8 +1,10 @@
 #' @title Resolve the path of a VegVault database
 #' @description
-#' Read the path of a VegVault SQLite database from the git-ignored,
-#' machine-local `secrets.yaml`, so that no database path is written in
-#' code or configuration.
+#' Return the path of a VegVault SQLite database. The live and v1.0.0
+#' paths are read from the git-ignored, machine-local `secrets.yaml`, so
+#' that they are never written in code or configuration. In the regional
+#' `subset` profile, the database being built is instead a disposable file
+#' under the data root, named in `config.yml`.
 #' @param key
 #' Character scalar. Entry of `secrets.yaml` holding the path:
 #' `"database_path"` (default) for the database being built, or
@@ -13,11 +15,27 @@
 #' @param path_project
 #' Character scalar. Project root against which a relative path in the
 #' secrets file is resolved.
+#' @param list_subset
+#' Named list. The `subset` section of `config.yml`, with the logical
+#' scalar `enabled` and, when enabled, the relative path `database_file`.
+#' Default: the section of the active configuration profile.
+#' @param path_data_storage
+#' Character scalar. The data root under which `database_file` is
+#' resolved. Default: the data root of the project, as resolved by
+#' `resolve_data_storage_path()`; only evaluated when the subset is
+#' enabled.
 #' @return
 #' Character scalar. The absolute path of the database, with forward
 #' slashes. The file does not need to exist, because a build creates it.
 #' @details
-#' Aborts when the secrets file is missing (create it from
+#' When the subset is enabled and `key` is `"database_path"`, the result is
+#' `<path_data_storage>/<database_file>` and no database path is read from
+#' the secrets file, so a regional rehearsal can never open the live
+#' database. The secrets file is read only for the `Data` root, through the
+#' default of `path_data_storage`. `database_file` must stay under the data
+#' root (`validate_subset_database_file()`). The v1.0.0 path is always read
+#' from the secrets file.
+#' Otherwise, aborts when the secrets file is missing (create it from
 #' `secrets_example.yaml`) or when `key` is absent or not a non-empty text
 #' value. Error messages name the key and the secrets file but never the
 #' path, because database paths are private.
@@ -28,7 +46,13 @@
 resolve_database_path <- function(
   key = "database_path",
   path_secrets = here::here("secrets.yaml"),
-  path_project = here::here()
+  path_project = here::here(),
+  list_subset = load_config_value(value = "subset"),
+  path_data_storage = resolve_data_storage_path(
+    path_default = load_config_value(value = "data_storage_path"),
+    path_secrets = path_secrets,
+    path_project = path_project
+  )
 ) {
   assertthat::assert_that(
     base::is.character(key),
@@ -45,6 +69,46 @@ resolve_database_path <- function(
     base::length(path_project) == 1L,
     msg = "`path_secrets` and `path_project` must be character scalars."
   )
+
+  assertthat::assert_that(
+    base::is.list(list_subset),
+    msg = "`list_subset` must be the `subset` section of config.yml."
+  )
+
+  flag_subset <-
+    purrr::pluck(list_subset, "enabled")
+
+  if (
+    !assertthat::is.flag(flag_subset) ||
+      base::is.na(flag_subset)
+  ) {
+    cli::cli_abort(
+      "{.field enabled} of the {.field subset} settings must be TRUE or
+      FALSE."
+    )
+  }
+
+  # A regional rehearsal builds a disposable database under the data root
+  #   and never reads a database path from the secrets file, so it cannot
+  #   open the live database
+  if (
+    key == "database_path" &&
+      base::isTRUE(flag_subset)
+  ) {
+    database_file <-
+      purrr::pluck(list_subset, "database_file")
+
+    validate_subset_database_file(database_file = database_file)
+
+    res_subset <-
+      base::normalizePath(
+        base::file.path(path_data_storage, database_file),
+        winslash = "/",
+        mustWork = FALSE
+      )
+
+    return(res_subset)
+  }
 
   if (
     !base::file.exists(path_secrets)
