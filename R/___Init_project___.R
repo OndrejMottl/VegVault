@@ -3,122 +3,97 @@
 #
 #                       VegVault
 #
-#                     Project setup
+#                     Project init
 #
 #
 #                       O. Mottl
-#                         2023
+#                         2026
 #
 #----------------------------------------------------------#
+# Prepare the reproducible R environment. Run once per checkout or
+#   worktree from the project root in a fresh session:
+#     Rscript R/___Init_project___.R
+# The exact package versions of the lockfile are restored. Later snapshots
+#   are a separate, deliberate maintenance step (see .ai/r-environment.md).
+# This script uses base R only (plus renv), because it must run before any
+#   project package is installed.
 
-# Script to prepare all components of the environment to run the Project.
-#   Needs to be run only once
 
 #----------------------------------------------------------#
-# Step 0: Install {renv} for package management -----
+# 0. Bootstrap renv -----
 #----------------------------------------------------------#
 
 if (
-  "renv" %in% utils::installed.packages()
+  isFALSE(requireNamespace("renv", quietly = TRUE))
 ) {
-  library(renv)
-} else {
-  # install package
-  utils::install.packages("renv")
+  message("Package {renv} is not installed; installing it from CRAN.")
 
-  # load the package
-  library(renv)
+  utils::install.packages(pkgs = "renv")
 }
 
-#----------------------------------------------------------#
-# Step 1: Activate 'renv' project -----
-#----------------------------------------------------------#
-
-# NOTE: The R may ask the User to restart the session (R).
-#   After that, continue with the next step
-
-renv::activate()
-
-#----------------------------------------------------------#
-# Step 1: Install {here} for file navigation -----
-#----------------------------------------------------------#
-
 if (
-  "here" %in% utils::installed.packages()
+  isFALSE(requireNamespace("renv", quietly = TRUE))
 ) {
-  library(here)
-} else {
-  # install package
-  utils::install.packages("here")
-
-  # load the package
-  library(here)
+  stop(
+    "Package {renv} could not be installed; setup cannot continue.",
+    call. = FALSE
+  )
 }
 
+
 #----------------------------------------------------------#
-# Step 2: Synchronize package versions with the project -----
+# 1. Locate the project -----
 #----------------------------------------------------------#
 
-# If there is no lock file present make a new snapshot
-if (
-  isTRUE("library_list.lock" %in% list.files(here::here("renv")))
-) {
-  cat("The project already has a lockfile. Restoring packages", "\n")
-
-  renv::restore(
-    lockfile = here::here("renv/library_list.lock")
+path_project <-
+  normalizePath(
+    path = ".",
+    winslash = "/",
+    mustWork = TRUE
   )
 
-  cat("Set up completed. You can continute to run the project", "\n")
+path_config <-
+  file.path(path_project, "config.yml")
 
-  cat("Do NOT run the rest of this script", "\n")
-} else {
-  cat("The project seems to be new (no lockfile)", "\n")
+# TODO: switch to the template's renv.lock once the website and the
+#   legacy scripts, which restore from renv/library_list.lock through
+#   R/00_Config_file.R, no longer depend on it
+path_lockfile <-
+  file.path(path_project, "renv", "library_list.lock")
 
-  cat("Continue with this script", "\n")
+if (
+  isFALSE(file.exists(path_config))
+) {
+  stop(
+    "No config.yml in ",
+    path_project,
+    ". Run this script from the project root.",
+    call. = FALSE
+  )
 }
 
+if (
+  isFALSE(file.exists(path_lockfile))
+) {
+  stop(
+    "No lockfile at ",
+    path_lockfile,
+    ". Restore it from git before running this script.",
+    call. = FALSE
+  )
+}
+
+
 #----------------------------------------------------------#
-# Step 3: Install packages to the project -----
+# 2. Restore the locked packages -----
 #----------------------------------------------------------#
 
-# install all packages in the lst from CRAN
-sapply(
-  c(
-    "assertthat",
-    "DBI",
-    "here",
-    "janitor",
-    "jsonlite",
-    "knitr",
-    "languageserver",
-    "renv",
-    "remotes",
-    "rlang",
-    "roxygen2",
-    "RSQLite",
-    "tidyverse",
-    "usethis",
-    "utils"
-  ),
-  utils::install.packages,
-  character.only = TRUE
+message("Restoring the locked package versions.")
+
+renv::restore(
+  project = path_project,
+  lockfile = path_lockfile,
+  prompt = FALSE
 )
 
-# install RUtilpol from GitHub
-remotes::install_github(
-  repo = "HOPE-UIB-BIO/R-Utilpol-package",
-  ref = "HEAD",
-  quiet = FALSE,
-  upgrade = "ask"
-)
-
-#----------------------------------------------------------#
-# Step 4: Save versions of packages -----
-#----------------------------------------------------------#
-
-renv::snapshot(
-  lockfile = here::here("renv/library_list.lock")
-)
-
-cat("Set up completed. You can continute to run the project", "\n")
+message("Setup complete. Start scripts with R/___setup_project___.R.")

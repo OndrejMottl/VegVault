@@ -1,0 +1,97 @@
+# Project configuration read through `load_config_value()`.
+# Select a profile with the `R_CONFIG_ACTIVE` environment variable; the
+#   `default` profile is used otherwise. Other profiles inherit from
+#   `default` and only list the values they change.
+# Machine-local paths, including every database path, do not belong here;
+#   put them in the git-ignored `secrets.yaml` (see `secrets_example.yaml`).
+# Each pipeline stage has an owner (see .ai/analysis-structure.md); add or
+#   change only the sections of the stages you own.
+
+default:
+  seed: 900723
+  # Data root used when `secrets.yaml` has no `Data` entry; relative to the
+  #   project. Target stores go to `<data root>/Targets_data/`.
+  data_storage_path: "Data"
+  # Packages for renv to record. Packages called only as `pkg::fun()` are
+  #   detected automatically.
+  packages:
+    # Attached by `R/___setup_project___.R`. The legacy database writers
+    #   call `%>%` and some functions without a namespace, so the packages
+    #   R/00_Config_file.R attached for them stay attached. Do not attach
+    #   packages that mask base functions (e.g. renv, config).
+    attach:
+      - assertthat
+      - cli
+      - DBI
+      - here
+      - RSQLite
+      - targets
+      - tidyverse
+    # Installed and recorded, but not attached (IDE and workflow tools)
+    tools:
+      - janitor
+      - jsonlite
+      - knitr
+      - languageserver
+      - remotes
+      - rlang
+      - roxygen2
+      - tinytable
+      - usethis
+  # Figure defaults of the template; the VegVault figure settings move here
+  #   from R/03_Visualisation/ when the figure stage is converted
+  graphical:
+    width: 16
+    height: 12
+    units: "cm"
+    dpi: 300
+    bg: "white"
+    text_size: 10
+    line_size: 0.1
+  # Database version record; the last entry is the version being built.
+  #   Copied from R/00_Config_file.R, which keeps its own copy for the
+  #   website and the legacy scripts until they read this file.
+  database:
+    versions:
+      - version: "0.0.2"
+        update_date: "2024-10-17"
+        changelog: "Beging the versioning of the database"
+      - version: "0.0.3"
+        update_date: "2024-11-18"
+        changelog: "Reworked the `References` and flagged `mandatory`"
+      - version: "0.0.4"
+        update_date: "2024-12-19"
+        changelog: >-
+          Update the version control and correct the Dataset References
+      - version: "1.0.0"
+        update_date: "2025-01-20"
+        changelog: "First release of the database"
+      - version: "2.0.0"
+        update_date: "2026-08-28"
+        changelog: >-
+          Development schema for audited trait units and transformation
+          provenance; not a published database release
+
+  #--------------------------------------------------#
+  # Sections of the VegVault pipeline stages: producer import, validation,
+  #   export and figures. Empty until those stages are built.
+  #--------------------------------------------------#
+
+  # Pinned producer artefacts and their profiles
+  producers: {}
+  # Regional bounding box of the rehearsal build
+  subset: {}
+  # Release checks of the built database
+  validation: {}
+  # Flat-file export
+  export: {}
+
+  #--------------------------------------------------#
+  # Sections of the database-core stages: gridpoint links and database
+  #   assembly. Empty until those stages are built.
+  #--------------------------------------------------#
+
+  # Gridpoint links between samples and climate gridpoints
+  link: {}
+  # Database assembly
+  build: {}

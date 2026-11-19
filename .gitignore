@@ -48,6 +48,7 @@ rsconnect/
 
 # secrets
 .secrets/
+secrets.yaml
 
 # Large files
 Outputs/Data/VegVault/VegVault.sqlite
@@ -55,6 +56,8 @@ Outputs/Data/VegVault/Flat_files/
 !Outputs/Data/VegVault/Flat_files/Column_names/*.csv
 Data/Processed/Classified_taxa/
 Data/Temp/
+# {targets} stores, one per pipeline
+Data/Targets_data/
 
 # debug
 debug.R

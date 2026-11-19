@@ -39,6 +39,7 @@ Other `renv` pitfalls seen in this suite:
 ## Running R and tests
 
 - Run scripts non-interactively with `Rscript` from the repository root, so the project `.Rprofile` activates `renv`.
+- VegVault follows the project template (`.ai/analysis-structure.md`): function tests live in `R/Tests/testthat/test-<function_name>.R` and the full suite runs with `Rscript R/Tests/Run_tests.R`, which sources `R/___setup_project___.R`. For a focused run, source the setup and call `run_test_file()`. The rest of this section applies to the producer repositories until they are converted.
 - Function tests live in `tests/testthat/test-<function_name>.R`. The runner `tests/testthat.R` sources every file under `R/Functions/` into a test environment and runs `tests/testthat/`; run the full suite with `Rscript tests/testthat.R` from the repository root. It does not source `R/00_Config_file.R`.
 - For a focused run, source the function files the same way and call `testthat::test_file()` on the matching test file.
 - A repository without `tests/testthat.R` gets that runner, copied from `VegVault-Trait_data`, before its first function test. Script-level integration checks that are not function tests, such as `tests/test_trait_v2_integration.R`, are run directly with `Rscript`.
