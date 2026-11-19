@@ -421,3 +421,19 @@ testthat::test_that("diagnose_producer_elements() flags duplicated names", {
 
   testthat::expect_equal(dplyr::pull(res, column), "counts_harmonised[]")
 })
+
+
+#----------------------------------------------------------#
+# Pipeline use -----
+#----------------------------------------------------------#
+
+testthat::test_that("diagnose_producer_elements() never names itself", {
+  # {targets} reads a function that calls itself by name as a cycle and
+  #   refuses every pipeline that loads it
+  vec_dependencies <-
+    targets::tar_deps_raw(diagnose_producer_elements)
+
+  testthat::expect_false(
+    "diagnose_producer_elements" %in% vec_dependencies
+  )
+})

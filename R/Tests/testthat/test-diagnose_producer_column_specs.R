@@ -382,3 +382,19 @@ testthat::test_that("diagnose_producer_column_specs() needs a list", {
     regexp = "field_path"
   )
 })
+
+
+#----------------------------------------------------------#
+# Pipeline use -----
+#----------------------------------------------------------#
+
+testthat::test_that("diagnose_producer_column_specs() never names itself", {
+  # {targets} reads a function that calls itself by name as a cycle and
+  #   refuses every pipeline that loads it
+  vec_dependencies <-
+    targets::tar_deps_raw(diagnose_producer_column_specs)
+
+  testthat::expect_false(
+    "diagnose_producer_column_specs" %in% vec_dependencies
+  )
+})
