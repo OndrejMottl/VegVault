@@ -76,6 +76,12 @@ save_package_dependencies_manifest(
 # 3. Define options -----
 #----------------------------------------------------------#
 
+# {config} silently falls back to the default profile for an unknown
+#   R_CONFIG_ACTIVE, so a mistyped profile name would run a full build
+#   against the live database; stop here instead (VegVault addition)
+config_profile <-
+  validate_config_profile()
+
 config_seed <-
   load_config_value(value = "seed")
 

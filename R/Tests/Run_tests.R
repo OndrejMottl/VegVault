@@ -39,7 +39,10 @@ source(
 vec_dirs_checked <-
   here::here(
     "R", "Functions",
-    c("Workflow", "Contracts", "Database", "Gridpoints")
+    c(
+      "Workflow", "Contracts", "Database", "Gridpoints", "Database_access",
+      "Build_manifest", "Build_profile"
+    )
   )
 
 vec_dirs_with_files <-
