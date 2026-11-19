@@ -143,7 +143,35 @@ Table TaxonReference {
 table TraitsDomain {
   trait_domain_id INTEGER [PRIMARY KEY]
   trait_domain_name TEXT
+  trait_unit TEXT [not null]
   trait_domanin_description TEXT
+}
+
+table TraitUnitConversion {
+  trait_unit_conversion_id INTEGER [PRIMARY KEY]
+  conversion_rule_key TEXT [not null, unique]
+  rule_version TEXT [not null]
+  source_provider TEXT [not null]
+  source_trait_id TEXT [not null]
+  source_dataset_key TEXT
+  normalized_original_unit TEXT [not null]
+  standardized_unit TEXT [not null]
+  trait_dimension TEXT [not null]
+  operation TEXT [not null]
+  multiplier REAL [not null]
+  evidence TEXT [not null]
+}
+
+table TraitDerivation {
+  trait_derivation_id INTEGER [PRIMARY KEY]
+  derivation_rule_key TEXT [not null, unique]
+  rule_version TEXT [not null]
+  input_unit TEXT [not null]
+  output_unit TEXT [not null]
+  trait_dimension TEXT [not null]
+  operation TEXT [not null]
+  multiplier REAL [not null]
+  evidence TEXT [not null]
 }
 
 table Traits {
@@ -158,6 +186,12 @@ Table TraitsValue {
   sample_id INTEGER //observation ID
   taxon_id INTEGER
   trait_value REAL
+  trait_unit_conversion_id INTEGER [not null]
+  trait_derivation_id INTEGER
+
+  indexes {
+    (trait_id, dataset_id, sample_id, taxon_id) [unique]
+  }
 }
 
 Table TraitsReference {
@@ -254,4 +288,6 @@ Ref: AbioticDataReference.sample_id > Samples.sample_id
 Ref: AbioticDataReference.sample_ref_id > Samples.sample_id
 
 Ref: AbioticVariableReference.abiotic_variable_id > AbioticVariable.abiotic_variable_id
+Ref: TraitsValue.trait_unit_conversion_id > TraitUnitConversion.trait_unit_conversion_id
+Ref: TraitsValue.trait_derivation_id > TraitDerivation.trait_derivation_id
 Ref: AbioticVariableReference.reference_id > References.reference_id
