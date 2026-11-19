@@ -8,6 +8,10 @@
 #' @param field_path
 #' Character scalar. Location of the field in the contract, used at the
 #' start of every message, for example `"columns[12].element"`.
+#' @param fn_diagnose_columns
+#' Function that diagnoses the `columns` of a `"data.frame"` element, with
+#' the arguments `list_columns` and `field_path`: normally
+#' `diagnose_producer_column_specs()`, which passes itself here.
 #' @return
 #' Character vector of problem descriptions, each starting with a field
 #' path. Empty when the element entry is well formed.
@@ -17,7 +21,7 @@
 #' element may be `NULL` or missing). The other allowed fields depend on
 #' the class:
 #' a `"data.frame"` element may have `columns` (column entries, diagnosed
-#' recursively with `diagnose_producer_column_specs()`), `other_columns`
+#' recursively with `fn_diagnose_columns`), `other_columns`
 #' (one rule for every column not listed in `columns`, with `class`,
 #' `nullable` and `description`, and optionally `checks` and
 #' `forbidden_names`; its class must be atomic), `extra_columns`
@@ -28,15 +32,24 @@
 #' any other element may have `checks`.
 #' `min_rows` is a whole number of at least 0. Checks are diagnosed with
 #' `diagnose_producer_check_specs()`. Any other field is a problem.
+#' The column checker is an argument, not called by name, because the two
+#' functions call each other and `{targets}` reads calls by name in both
+#' directions as a cycle.
 diagnose_producer_element_spec <- function(
   list_element,
-  field_path
+  field_path,
+  fn_diagnose_columns
 ) {
   assertthat::assert_that(
     base::is.character(field_path),
     base::length(field_path) == 1L,
     !base::is.na(field_path),
     msg = "'field_path' must be a single character value."
+  )
+
+  assertthat::assert_that(
+    base::is.function(fn_diagnose_columns),
+    msg = "'fn_diagnose_columns' must be a function."
   )
 
   if (
@@ -215,7 +228,7 @@ diagnose_producer_element_spec <- function(
         if (
           !base::is.null(list_columns)
         ) {
-          diagnose_producer_column_specs(
+          fn_diagnose_columns(
             list_columns = list_columns,
             field_path = stringr::str_c(field_path, ".columns")
           )

@@ -40,10 +40,10 @@ During the 2.0.0 release two agent lanes work in this repository. Each edits onl
 | `02_Gridpoints` | Gridpoints and their links to samples | Database-core lane |
 | `03_Database_assembly` | Schema, table assembly and bulk writes, build manifest call | Database-core lane |
 | `04_Validation` | Release checks of the built database | VegVault pipeline lane |
-| `05_Export` | Flat-file export | VegVault pipeline lane |
+| `05_Export` | Flat-file export: every table as CSV, column names and types per table, and a Word list of all columns | VegVault pipeline lane |
 | `06_Visualisation` | Manuscript figures | VegVault pipeline lane |
 
-Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, and the shared build helpers in `R/Functions/Database_access/`, `R/Functions/Build_manifest/` and `R/Functions/Build_profile/` (VegVault pipeline lane; the database-core lane calls them); `Data/SQL/`, `R/Functions/Database/` and `R/Functions/Gridpoints/` (database-core lane). `R/Functions/Workflow/` holds the template helpers, copied from the template at commit `95d176c`; change them only together with the template.
+Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Export/`, and the shared build helpers in `R/Functions/Database_access/`, `R/Functions/Build_manifest/` and `R/Functions/Build_profile/` (VegVault pipeline lane; the database-core lane calls them); `Data/SQL/`, `R/Functions/Database/` and `R/Functions/Gridpoints/` (database-core lane). `R/Functions/Workflow/` holds the template helpers, copied from the template at commit `95d176c`; change them only together with the template.
 
 `config.yml` sections: `producers`, `subset`, `validation` and `export` belong to the VegVault pipeline lane, `link` and `build` to the database-core lane; `seed`, `data_storage_path`, `packages`, `graphical` and `database` are shared.
 
@@ -53,8 +53,21 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, and the shared b
 - A `pipeline.R` only declares targets. It sources the setup, sets `targets::tar_option_set(seed = config_seed)`, and returns a list of targets. Sourcing it never builds targets.
 - Each pipeline owns one store, resolved with `resolve_pipeline_store_path()` under `<data root>/Targets_data/`. Never share a store between pipelines.
 - Target names are quoted strings. Above each target, a short plain comment says what it provides and why it is in the graph.
+- A target name must not repeat the name of an object the setup creates (such as `config_seed`, `config_profile` or `path_data_storage`); `{targets}` ignores the global object and the graph is no longer what it looks like.
+- Branching patterns are written as bare `map()`, `cross()` and so on: `{targets}` accepts only the names from `tar_pattern()` there, not `targets::map()`.
+- Functions in `R/Functions/` never call themselves or each other in a loop by name. `{targets}` reads such calls as a cycle and refuses every pipeline. A recursive function captures itself with `base::sys.function()` and calls that handle; two functions that recurse into each other pass the caller's handle as an argument (see `diagnose_producer_column_specs()`).
+- Settings that may change between runs (paths from `secrets.yaml`, values from `config.yml`, external tools) are read in targets with `cue = targets::tar_cue(mode = "always")`. They are cheap, and downstream targets rerun only when their value changes.
 - When a target command is more than one function call, move the logic into a function in `R/Functions/`. The upstream-import target is the one exception.
 - Never let a stage build, overwrite or hash the live database implicitly. Stages that read the database depend on the build manifest, not on the database file.
+
+## External tools
+
+- `05_Export` needs the `sqlite3` command-line tool on the `PATH` (on Windows: `winget install --exact --id SQLite.SQLite`, then open a new terminal) and Quarto, whose bundled pandoc renders the Word list of columns.
+
+## Export stage
+
+- Every export file is a `format = "file"` target, so `{targets}` writes it again after a new build (a new manifest), after a code change, or when the file is missing or was changed, and otherwise leaves it alone. `export: rewrite: true` in `config.yml` forces every file to be written again (`build_export_cue()`). Export functions always write when they run; they do not skip existing files themselves.
+- Files of tables that a new build no longer has are not deleted; remove them by hand.
 
 ## Database access and the build manifest
 
@@ -92,6 +105,6 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, and the shared b
 ## Tests
 
 - Every function in `R/Functions/` has `R/Tests/testthat/test-<function_name>.R`. Shared fixtures go in `helper-*.R` files.
-- `Rscript R/Tests/Run_tests.R` validates the function files (`validate_function_names()`) and runs the suite in a clean subprocess (`run_project_tests()`). Until the legacy functions are renamed to approved verbs, the name check covers only `Workflow/`, `Contracts/`, `Database/`, `Gridpoints/`, `Database_access/`, `Build_manifest/` and `Build_profile/`.
+- `Rscript R/Tests/Run_tests.R` validates the function files (`validate_function_names()`) and runs the suite in a clean subprocess (`run_project_tests()`). Until the legacy functions are renamed to approved verbs, the name check covers only `Workflow/`, `Contracts/`, `Database/`, `Gridpoints/`, `Database_access/`, `Build_manifest/`, `Build_profile/` and `Export/`.
 - Focused run: source the setup, then `run_test_file(test_file = ...)`.
 - Script-level integration checks that are not function tests, such as `tests/test_trait_v2_integration.R`, run directly with `Rscript` and use a temporary database.

@@ -40,6 +40,7 @@ list_element_matrix <-
 testthat::test_that("diagnose_producer_element_spec() accepts valid entries", {
   res_frame <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = list_element_frame,
       field_path = "columns[1].element"
     )
@@ -50,6 +51,7 @@ testthat::test_that("diagnose_producer_element_spec() accepts valid entries", {
 
   res_matrix <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = list_element_matrix,
       field_path = "columns[1].element"
     )
@@ -58,6 +60,7 @@ testthat::test_that("diagnose_producer_element_spec() accepts valid entries", {
 
   res_atomic <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = base::list(class = "character", nullable = TRUE),
       field_path = "columns[1].element"
     )
@@ -73,6 +76,7 @@ testthat::test_that("diagnose_producer_element_spec() accepts valid entries", {
 testthat::test_that("diagnose_producer_element_spec() checks class, nullable", {
   res_list <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = base::list(class = "list", nullable = TRUE),
       field_path = "columns[2].element"
     )
@@ -83,6 +87,7 @@ testthat::test_that("diagnose_producer_element_spec() checks class, nullable", {
 
   res_missing <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = base::list(class = "character"),
       field_path = "e"
     )
@@ -95,6 +100,7 @@ testthat::test_that("diagnose_producer_element_spec() checks class, nullable", {
 testthat::test_that("diagnose_producer_element_spec() limits fields by class", {
   res_matrix <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = purrr::list_modify(
         list_element_matrix,
         keys = base::list("a")
@@ -108,6 +114,7 @@ testthat::test_that("diagnose_producer_element_spec() limits fields by class", {
 
   res_atomic <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = base::list(
         class = "character",
         nullable = TRUE,
@@ -124,6 +131,7 @@ testthat::test_that("diagnose_producer_element_spec() limits fields by class", {
 testthat::test_that("diagnose_producer_element_spec() checks frame fields", {
   res_keys <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = purrr::list_modify(
         list_element_frame,
         keys = base::list("age")
@@ -137,6 +145,7 @@ testthat::test_that("diagnose_producer_element_spec() checks frame fields", {
 
   res_rows <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = purrr::list_modify(list_element_frame, min_rows = -1),
       field_path = "e"
     )
@@ -147,6 +156,7 @@ testthat::test_that("diagnose_producer_element_spec() checks frame fields", {
 
   res_other <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = purrr::assign_in(
         list_element_frame,
         where = c("other_columns", "description"),
@@ -163,6 +173,7 @@ testthat::test_that("diagnose_producer_element_spec() checks frame fields", {
 testthat::test_that("diagnose_producer_element_spec() recurses into columns", {
   res <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = purrr::assign_in(
         list_element_frame,
         where = base::list("columns", 1, "nullable"),
@@ -179,6 +190,7 @@ testthat::test_that("diagnose_producer_element_spec() recurses into columns", {
 testthat::test_that("diagnose_producer_element_spec() checks matrix fields", {
   res <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = purrr::list_modify(
         list_element_matrix,
         value_class = "data.frame",
@@ -204,6 +216,7 @@ testthat::test_that("diagnose_producer_element_spec() checks matrix fields", {
 testthat::test_that("diagnose_producer_element_spec() needs a map", {
   res <-
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = "data.frame",
       field_path = "columns[1].element"
     )
@@ -214,9 +227,59 @@ testthat::test_that("diagnose_producer_element_spec() needs a map", {
 
   testthat::expect_error(
     diagnose_producer_element_spec(
+      fn_diagnose_columns = diagnose_producer_column_specs,
       list_element = list_element_frame,
       field_path = NA_character_
     ),
     regexp = "field_path"
+  )
+})
+
+
+#----------------------------------------------------------#
+# Column checker -----
+#----------------------------------------------------------#
+
+testthat::test_that("diagnose_producer_element_spec() uses the checker", {
+  res <-
+    diagnose_producer_element_spec(
+      fn_diagnose_columns = function(list_columns, field_path) {
+        stringr::str_c(field_path, ": checked by the given function")
+      },
+      list_element = list(
+        class = "data.frame",
+        nullable = FALSE,
+        columns = list(
+          list(name = "depth", class = "numeric", nullable = FALSE)
+        )
+      ),
+      field_path = "columns[1].element"
+    )
+
+  testthat::expect_equal(
+    res,
+    "columns[1].element.columns: checked by the given function"
+  )
+})
+
+testthat::test_that("diagnose_producer_element_spec() needs a checker", {
+  testthat::expect_error(
+    diagnose_producer_element_spec(
+      fn_diagnose_columns = "diagnose_producer_column_specs",
+      list_element = list(class = "numeric", nullable = FALSE),
+      field_path = "columns[1].element"
+    ),
+    regexp = "fn_diagnose_columns"
+  )
+})
+
+testthat::test_that("diagnose_producer_element_spec() names no checker", {
+  # {targets} reads two functions that call each other by name as a cycle
+  #   and refuses every pipeline that loads them
+  vec_dependencies <-
+    targets::tar_deps_raw(diagnose_producer_element_spec)
+
+  testthat::expect_false(
+    "diagnose_producer_column_specs" %in% vec_dependencies
   )
 })

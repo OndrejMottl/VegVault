@@ -124,6 +124,8 @@ default:
     # Replace flat files that already exist
     #   (R/02_Main_analyses/12_Export_db_flat.R)
     rewrite: false
+    # Folder of the CSV files, relative to the project root (git-ignored)
+    output_dir: "Outputs/Data/VegVault/Flat_files"
 
   #--------------------------------------------------#
   # Sections of the database-core stages: gridpoint links and database
@@ -162,6 +164,9 @@ subset:
     margin_lon: 1.5
     # Disposable database, relative to the data root
     database_file: "Temp/Subset/VegVault_subset_alaska_yukon.sqlite"
+  # A rehearsal export never overwrites the export of a full build
+  export:
+    output_dir: "Data/Temp/Subset/Flat_files"
 
 
 #----------------------------------------------------------#

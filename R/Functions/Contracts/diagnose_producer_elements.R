@@ -51,6 +51,12 @@ diagnose_producer_elements <- function(
   column,
   file_name = NA_character_
 ) {
+  # Nested list-columns recurse through this handle rather than through the
+  #   function name: {targets} reads a self-reference by name as a cycle
+  #   and refuses every pipeline that loads this function
+  fn_diagnose_nested <-
+    base::sys.function()
+
   assertthat::assert_that(
     base::is.list(list_values),
     !base::is.data.frame(list_values),
@@ -266,7 +272,7 @@ diagnose_producer_elements <- function(
               } else if (
                 class_column == "list"
               ) {
-                diagnose_producer_elements(
+                fn_diagnose_nested(
                   list_values = purrr::list_c(list_column_values),
                   list_element = purrr::chuck(list_spec, "element"),
                   contract_id = contract_id,

@@ -25,6 +25,12 @@ diagnose_producer_column_specs <- function(
   list_columns,
   field_path = "columns"
 ) {
+  # Element entries recurse back into this function through this handle,
+  #   because {targets} reads two functions that call each other by name as
+  #   a cycle
+  fn_diagnose_columns <-
+    base::sys.function()
+
   assertthat::assert_that(
     base::is.character(field_path),
     base::length(field_path) == 1L,
@@ -108,7 +114,8 @@ diagnose_producer_column_specs <- function(
           ) {
             diagnose_producer_element_spec(
               list_element = purrr::chuck(list_column, "element"),
-              field_path = stringr::str_c(path_entry, ".element")
+              field_path = stringr::str_c(path_entry, ".element"),
+              fn_diagnose_columns = fn_diagnose_columns
             )
           }
 
