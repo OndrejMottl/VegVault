@@ -33,12 +33,15 @@ default:
       - RSQLite
       - targets
       - tidyverse
-    # Installed and recorded, but not attached (IDE and workflow tools)
+    # Installed and recorded, but not attached (IDE and workflow tools, and
+    #   packages used only through others, such as `maps` for the country
+    #   outlines of ggplot2::map_data())
     tools:
       - janitor
       - jsonlite
       - knitr
       - languageserver
+      - maps
       - remotes
       - rlang
       - roxygen2
@@ -106,7 +109,8 @@ default:
 
   #--------------------------------------------------#
   # Sections of the VegVault pipeline stages: producer import, validation,
-  #   export and figures. Empty until those stages are built.
+  #   export and figures. `graphical: manuscript` above holds the figure
+  #   sizes and colours.
   #--------------------------------------------------#
 
   # Pinned producer artefacts and their profiles
@@ -126,6 +130,119 @@ default:
     rewrite: false
     # Folder of the CSV files, relative to the project root (git-ignored)
     output_dir: "Outputs/Data/VegVault/Flat_files"
+  # Manuscript figures, from the scripts in R/03_Visualisation/01_manuscript/.
+  #   In the `subset` profile every example region is replaced by the
+  #   subset box.
+  figures:
+    # Folder of the figure files, relative to the project root
+    output_dir: "Outputs/Figures/mns"
+    # Sample ages of one fossil pollen dataset with the range of their age
+    #   iterations (age_uncertainty.R)
+    sample_age:
+      # Dataset name, `fossilpol_<Neotoma dataset ID>`. v1 showed the
+      #   dataset with database ID 91256, but IDs change with every build.
+      #   Not chosen yet: this figure stops (the others are drawn) until a
+      #   name is set here.
+      dataset_name: null
+    # Gridpoints and their links to vegetation plots in one country
+    #   (gridpoint_resolution.R)
+    gridpoint_example:
+      # GADM code of the country outlined on the maps
+      country_code: "CZE"
+      abiotic_variable_name: "bio1"
+      region:
+        lon_min: 12
+        lon_max: 18.9
+        lat_min: 48.5
+        lat_max: 51.1
+      # Extent of the overview map
+      overview:
+        lon_min: -10
+        lon_max: 32
+        lat_min: 35
+        lat_max: 60
+    # vaultkeepr example: occurrences of one genus in vegetation plots and
+    #   fossil pollen records (vaultkeepr_examples.r)
+    taxon_example:
+      taxon_name: "Picea"
+      age_min: 0
+      age_max: 12000
+      # Width of the age bins of the fossil records, in years
+      age_bin_width: 2500
+      region:
+        lon_min: -135
+        lon_max: -60
+        lat_min: 22
+        lat_max: 60
+    # vaultkeepr example: vegetation plots with the climate of their
+    #   gridpoint (vaultkeepr_examples.r)
+    climate_example:
+      abiotic_variable_name: "bio1"
+      # Legend title of the variable; its unit is added from the database
+      abiotic_variable_label: "MAT"
+      region:
+        lon_min: 12
+        lon_max: 18.9
+        lat_min: 48.5
+        lat_max: 51.1
+    # vaultkeepr example: fossil pollen records with trait values of their
+    #   genera (vaultkeepr_examples.r)
+    trait_example:
+      # Trait domain name as stored in the database (with its v1 spelling)
+      trait_domain_name: "Plant heigh"
+      # Axis title of the averaged trait values
+      value_label: "Average Plant Height\nper genera"
+      age_min: 6000
+      age_max: 12000
+      region:
+        lon_min: -110
+        lon_max: -38
+        lat_min: -53
+        lat_max: 28
+    # File name, width (a name in `graphical: manuscript: image_width`)
+    #   and height (in `graphical: manuscript: image_units`) of each figure;
+    #   the file names are those of v1
+    files:
+      sample_age:
+        file_name: "fig_sample_age.pdf"
+        width: "double"
+        height: 130
+      datasets:
+        file_name: "fig_datasets.pdf"
+        width: "full"
+        height: 120
+      gridpoint_example:
+        file_name: "fig_gridpoints_example.pdf"
+        width: "full"
+        height: 120
+      plot_size:
+        file_name: "fig_samples_plot_size.pdf"
+        width: "single"
+        height: 60
+      taxa_classification:
+        file_name: "fig_n_taxa_per_class.pdf"
+        width: "double"
+        height: 120
+      sample_coverage:
+        file_name: "fig_vegetation.pdf"
+        width: "full"
+        height: 90
+      taxon_example:
+        file_name: "fig_na_picea.pdf"
+        width: "full"
+        height: 140
+      climate_example:
+        file_name: "fig_cz_jsdm.pdf"
+        width: "double"
+        height: 120
+      trait_example:
+        file_name: "fig_la_traits.pdf"
+        width: "full"
+        height: 120
+      vaultkeepr_examples:
+        file_name: "fig_vaultkeepr_examples.pdf"
+        width: "full"
+        height: 220
 
   #--------------------------------------------------#
   # Sections of the database-core stages: gridpoint links and database
@@ -167,6 +284,9 @@ subset:
   # A rehearsal export never overwrites the export of a full build
   export:
     output_dir: "Data/Temp/Subset/Flat_files"
+  # Nor do rehearsal figures replace the figures of a full build
+  figures:
+    output_dir: "Data/Temp/Subset/Figures"
 
 
 #----------------------------------------------------------#

@@ -1,7 +1,7 @@
 #' @title Validate that a database is the one its build manifest describes
 #' @description
-#' Check that the database an export step reads is the database of the
-#' build manifest passed along with it, so that the export only reads a
+#' Check that the database a pipeline step reads is the database of the
+#' build manifest passed along with it, so that the step only reads a
 #' verified build.
 #' @param path_database
 #' Character scalar. Path of the database file.
@@ -14,17 +14,17 @@
 #' Aborts when the file name of `path_database` differs from
 #' `database: file_name` of the manifest, or when the manifest has no such
 #' field. The full check of size and modification time is done once by
-#' `load_build_manifest()`; the export steps take the manifest as an
-#' argument so that `{targets}` reruns them when a new build writes a new
-#' manifest. Messages never contain the database path.
+#' `load_build_manifest()`; the steps that read the database take the
+#' manifest as an argument so that `{targets}` reruns them when a new build
+#' writes a new manifest. Messages never contain the database path.
 #' @examples
 #' \dontrun{
-#' validate_export_source(
+#' validate_database_source(
 #'   path_database = path_database,
 #'   list_build_manifest = list_build_manifest
 #' )
 #' }
-validate_export_source <- function(
+validate_database_source <- function(
   path_database,
   list_build_manifest
 ) {
@@ -61,7 +61,7 @@ validate_export_source <- function(
     !base::identical(base::basename(path_database), file_name_manifest)
   ) {
     cli::cli_abort(
-      "The database to export is not the database of the build manifest."
+      "The database is not the database of the build manifest."
     )
   }
 

@@ -8,7 +8,7 @@
 #' covering every exported table (see `load_table_column_types()`).
 #' @param dir_export
 #' Character scalar. Folder of the flat-file export (see
-#' `resolve_export_dir()`). The `Column_names` folder in it is created when
+#' `resolve_output_dir()`). The `Column_names` folder in it is created when
 #' missing.
 #' @param dir_pandoc
 #' Character scalar. Folder of the `pandoc` executable used for rendering
@@ -29,7 +29,7 @@
 #' path_docx <-
 #'   render_column_names_document(
 #'     data_column_types = data_column_types,
-#'     dir_export = resolve_export_dir(),
+#'     dir_export = dir_export,
 #'     dir_pandoc = resolve_pandoc_dir()
 #'   )
 #' }

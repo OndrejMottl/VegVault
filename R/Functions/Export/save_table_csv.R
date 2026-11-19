@@ -10,10 +10,10 @@
 #' only.
 #' @param list_build_manifest
 #' Named list. The build manifest of the database (see
-#' `validate_export_source()`).
+#' `validate_database_source()`).
 #' @param dir_export
 #' Character scalar. Folder of the flat-file export (see
-#' `resolve_export_dir()`); created when missing.
+#' `resolve_output_dir()`); created when missing.
 #' @param path_sqlite3
 #' Character scalar. Path of the `sqlite3` executable (see
 #' `resolve_sqlite3_path()`).
@@ -39,7 +39,7 @@
 #'     path_database = path_database,
 #'     table_name = "Datasets",
 #'     list_build_manifest = list_build_manifest,
-#'     dir_export = resolve_export_dir(),
+#'     dir_export = dir_export,
 #'     path_sqlite3 = resolve_sqlite3_path()
 #'   )
 #' }
@@ -50,7 +50,7 @@ save_table_csv <- function(
   dir_export,
   path_sqlite3
 ) {
-  validate_export_source(
+  validate_database_source(
     path_database = path_database,
     list_build_manifest = list_build_manifest
   )

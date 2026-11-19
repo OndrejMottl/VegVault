@@ -15,6 +15,7 @@ if (
   library(jsonlite)
   library(knitr)
   library(languageserver)
+  library(maps)
   library(remotes)
   library(rlang)
   library(roxygen2)

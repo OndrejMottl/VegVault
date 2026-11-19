@@ -2,12 +2,12 @@
 # Outputs -----
 #----------------------------------------------------------#
 
-testthat::test_that("validate_export_source() accepts its manifest", {
+testthat::test_that("validate_database_source() accepts its manifest", {
   path_database <-
     base::file.path(withr::local_tempdir(), "VegVault.sqlite")
 
   res <-
-    validate_export_source(
+    validate_database_source(
       path_database = path_database,
       list_build_manifest = list(
         database = list(file_name = "VegVault.sqlite")
@@ -17,7 +17,7 @@ testthat::test_that("validate_export_source() accepts its manifest", {
   testthat::expect_equal(res, path_database)
 
   testthat::expect_invisible(
-    validate_export_source(
+    validate_database_source(
       path_database = path_database,
       list_build_manifest = list(
         database = list(file_name = "VegVault.sqlite")
@@ -31,19 +31,19 @@ testthat::test_that("validate_export_source() accepts its manifest", {
 # Functionality -----
 #----------------------------------------------------------#
 
-testthat::test_that("validate_export_source() refuses another database", {
+testthat::test_that("validate_database_source() refuses another database", {
   dir_private <-
     withr::local_tempdir(pattern = "private_folder_")
 
   res_error <-
     testthat::expect_error(
-      validate_export_source(
+      validate_database_source(
         path_database = base::file.path(dir_private, "VegVault_old.sqlite"),
         list_build_manifest = list(
           database = list(file_name = "VegVault.sqlite")
         )
       ),
-      regexp = "manifest"
+      regexp = "not the database of the build manifest"
     )
 
   testthat::expect_false(
@@ -59,9 +59,9 @@ testthat::test_that("validate_export_source() refuses another database", {
 # Inputs -----
 #----------------------------------------------------------#
 
-testthat::test_that("validate_export_source() validates arguments", {
+testthat::test_that("validate_database_source() validates arguments", {
   testthat::expect_error(
-    validate_export_source(
+    validate_database_source(
       path_database = c("a.sqlite", "b.sqlite"),
       list_build_manifest = list(database = list(file_name = "a.sqlite"))
     ),
@@ -69,7 +69,7 @@ testthat::test_that("validate_export_source() validates arguments", {
   )
 
   testthat::expect_error(
-    validate_export_source(
+    validate_database_source(
       path_database = "a.sqlite",
       list_build_manifest = list(profile = "default")
     ),
@@ -77,7 +77,7 @@ testthat::test_that("validate_export_source() validates arguments", {
   )
 
   testthat::expect_error(
-    validate_export_source(
+    validate_database_source(
       path_database = "a.sqlite",
       list_build_manifest = "a.sqlite"
     ),
