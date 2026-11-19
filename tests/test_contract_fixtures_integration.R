@@ -17,8 +17,9 @@
 #   R/02_Main_analyses/01 to 09 transform the real artefacts, and written
 #   with the existing writers into an empty schema built from
 #   Data/SQL/make_tables.sql in a temporary SQLite file. The live database
-#   is never touched. Trait imports are not part of this test until the
-#   trait writers of the unit contract are merged.
+#   is never touched. The trait writers read the unit-conversion registry
+#   from the sibling VegVault-Trait_data checkout (add_trait_rules()), as
+#   the trait import scripts do.
 # Also checks that the unit and detail strings of the climate and soil
 #   contracts equal the strings hard-coded in scripts 07, 08 and 09.
 # Run from the repository root:
@@ -64,7 +65,7 @@ con <-
     dbname = path_database
   )
 
-# The connection is closed and the file deleted in section 8; if the
+# The connection is closed and the file deleted in section 9; if the
 #   script stops earlier, R deletes its temporary directory on exit
 DBI::dbExecute(conn = con, statement = "PRAGMA foreign_keys = ON")
 
@@ -91,8 +92,8 @@ text_reference <- "Synthetic reference written by the contract smoke test"
 vec_contract_ids <-
   c(
     "splot_plots", "bien_plots", "fossilpol_assembly",
-    "fossilpol_age_uncertainty", "chelsa_neoclimate",
-    "chelsa_trace21k_palaeoclimate", "wosis_soil"
+    "fossilpol_age_uncertainty", "try_traits", "bien_traits",
+    "chelsa_neoclimate", "chelsa_trace21k_palaeoclimate", "wosis_soil"
   )
 
 list_contracts <-
@@ -644,7 +645,236 @@ add_sample_abiotic_value(
 
 
 #----------------------------------------------------------#
-# 7. Unit strings equal the v1 import scripts -----
+# 7. Traits (as 04_Import_try_data.R and 05) -----
+#----------------------------------------------------------#
+
+#--------------------------------------------------#
+## 7.1 TRY -----
+#--------------------------------------------------#
+
+data_try <-
+  purrr::chuck(list_artefacts, "try_traits", 1)
+
+data_try_records <-
+  data_try |>
+  dplyr::mutate(
+    dataset_type = "traits",
+    dataset_source_type = "TRY",
+    data_source_type_reference = text_reference,
+    data_source_desc = dataset,
+    coord_long = base::as.numeric(longitude),
+    coord_lat = base::as.numeric(latitude),
+    data_source_reference = reference_source,
+    sample_reference = dataset_reference_citation,
+    dataset_reference = NA_character_
+  )
+
+# One dataset per combination of source, location and references
+data_try_datasets <-
+  data_try_records |>
+  dplyr::distinct(
+    dataset_type, dataset_source_type, data_source_type_reference,
+    data_source_desc, coord_long, coord_lat, data_source_reference,
+    dataset_reference
+  ) |>
+  dplyr::mutate(dataset_name = stringr::str_c("try_", dplyr::row_number()))
+
+data_try_dataset_id <-
+  add_datasets(
+    data_source = data_try_datasets,
+    con = con,
+    data_type = add_dataset_type(data_source = data_try_datasets, con = con),
+    data_source_type = add_dataset_source_type(
+      data_source = data_try_datasets,
+      con = con
+    ),
+    dataset_source = add_data_source(
+      data_source = data_try_datasets,
+      con = con
+    )
+  )
+
+data_try_samples <-
+  data_try_records |>
+  dplyr::mutate(sample_name = stringr::str_c("try_", observation_id)) |>
+  dplyr::left_join(
+    data_try_datasets,
+    by = dplyr::join_by(
+      dataset_type, dataset_source_type, data_source_type_reference,
+      data_source_desc, data_source_reference, coord_long, coord_lat,
+      dataset_reference
+    )
+  ) |>
+  dplyr::mutate(
+    age = 0,
+    sample_size = NA_real_,
+    description = NA_character_
+  )
+
+data_try_samples_id <-
+  add_samples(data_source = data_try_samples, con = con)
+
+add_dataset_sample(
+  data_source = data_try_samples,
+  dataset_id = data_try_dataset_id,
+  sample_id = data_try_samples_id,
+  con = con
+)
+
+data_try_taxa_id <-
+  add_taxa(
+    data_source = data_try_samples |>
+      dplyr::rename(taxon_name = acc_species_name) |>
+      dplyr::mutate(taxon_reference = "TRY"),
+    con = con
+  )
+
+data_try_traits <-
+  data_try_samples |>
+  dplyr::rename(trait_domain_name = trait_domain) |>
+  dplyr::mutate(trait_reference = "TRY")
+
+data_trait_rules <-
+  add_trait_rules(con = con)
+
+data_try_traits_id <-
+  add_traits(data_source = data_try_traits, con = con)
+
+data_try_trait_audit <-
+  data_try_traits |>
+  dplyr::select(
+    source_provider, source_dataset_key, source_record_id, source_trait_id,
+    original_value_string, original_unit, normalized_original_unit,
+    conversion_status, conversion_rule_key, derivation_rule_key, trait_unit,
+    dataset_name, sample_name,
+    trait_name = trait_full_name,
+    taxon_name = acc_species_name,
+    trait_value
+  ) |>
+  add_trait_value(
+    dataset_id = data_try_dataset_id,
+    samples_id = data_try_samples_id,
+    traits_id = data_try_traits_id,
+    taxa_id = data_try_taxa_id,
+    con = con
+  )
+
+#--------------------------------------------------#
+## 7.2 BIEN traits -----
+#--------------------------------------------------#
+
+data_bien_traits <-
+  purrr::chuck(list_artefacts, "bien_traits") |>
+  dplyr::bind_rows()
+
+data_bien_trait_records <-
+  data_bien_traits |>
+  dplyr::mutate(
+    dataset_type = "traits",
+    dataset_source_type = "BIEN",
+    data_source_type_reference = text_reference,
+    data_source_desc = project_pi,
+    coord_long = base::as.numeric(longitude),
+    coord_lat = base::as.numeric(latitude),
+    data_source_reference = source_citation,
+    dataset_reference = NA_character_
+  )
+
+data_bien_trait_datasets <-
+  data_bien_trait_records |>
+  dplyr::distinct(
+    dataset_type, dataset_source_type, data_source_type_reference,
+    data_source_desc, coord_long, coord_lat, data_source_reference,
+    dataset_reference
+  ) |>
+  dplyr::mutate(
+    dataset_name = stringr::str_c("bien_traits_", dplyr::row_number())
+  )
+
+data_bien_trait_dataset_id <-
+  add_datasets(
+    data_source = data_bien_trait_datasets,
+    con = con,
+    data_type = add_dataset_type(
+      data_source = data_bien_trait_datasets,
+      con = con
+    ),
+    data_source_type = add_dataset_source_type(
+      data_source = data_bien_trait_datasets,
+      con = con
+    ),
+    dataset_source = add_data_source(
+      data_source = data_bien_trait_datasets,
+      con = con
+    )
+  )
+
+data_bien_trait_samples <-
+  data_bien_trait_records |>
+  dplyr::mutate(sample_name = stringr::str_c("bien_traits_", id)) |>
+  dplyr::left_join(
+    data_bien_trait_datasets,
+    by = dplyr::join_by(
+      dataset_type, data_source_desc, coord_long, coord_lat,
+      dataset_source_type, data_source_type_reference,
+      data_source_reference, dataset_reference
+    )
+  ) |>
+  dplyr::mutate(
+    age = 0,
+    sample_size = NA_real_,
+    description = NA_character_,
+    sample_reference = NA_character_
+  )
+
+data_bien_trait_samples_id <-
+  add_samples(data_source = data_bien_trait_samples, con = con)
+
+add_dataset_sample(
+  data_source = data_bien_trait_samples,
+  dataset_id = data_bien_trait_dataset_id,
+  sample_id = data_bien_trait_samples_id,
+  con = con
+)
+
+data_bien_trait_taxa <-
+  data_bien_trait_samples |>
+  dplyr::rename(taxon_name = scrubbed_species_binomial) |>
+  dplyr::mutate(taxon_reference = "BIEN")
+
+data_bien_trait_taxa_id <-
+  add_taxa(data_source = data_bien_trait_taxa, con = con)
+
+data_bien_trait_traits <-
+  data_bien_trait_taxa |>
+  dplyr::rename(trait_domain_name = trait_domain) |>
+  dplyr::mutate(trait_reference = "BIEN")
+
+data_bien_trait_traits_id <-
+  add_traits(data_source = data_bien_trait_traits, con = con)
+
+data_bien_trait_audit <-
+  data_bien_trait_traits |>
+  dplyr::select(
+    source_provider, source_dataset_key, source_record_id, source_trait_id,
+    original_value_string, original_unit, normalized_original_unit,
+    conversion_status, conversion_rule_key, derivation_rule_key, trait_unit,
+    dataset_name, sample_name,
+    trait_name = trait_full_name,
+    taxon_name,
+    trait_value
+  ) |>
+  add_trait_value(
+    dataset_id = data_bien_trait_dataset_id,
+    samples_id = data_bien_trait_samples_id,
+    traits_id = data_bien_trait_traits_id,
+    taxa_id = data_bien_trait_taxa_id,
+    con = con
+  )
+
+
+#----------------------------------------------------------#
+# 8. Unit strings equal the v1 import scripts -----
 #----------------------------------------------------------#
 
 # Each call of add_chelsa_neo_data() or add_chelsa_trace_data() in the v1
@@ -716,7 +946,7 @@ flag_soil_unit <-
 
 
 #----------------------------------------------------------#
-# 8. Checks -----
+# 9. Checks -----
 #----------------------------------------------------------#
 
 n_splot <- base::nrow(data_splot)
@@ -727,18 +957,27 @@ n_fossilpol_levels <- base::nrow(data_fossilpol_levels)
 
 n_grid_samples <- base::nrow(data_grid_samples)
 
+# Trait records share samples: one sample per observation (TRY) or
+#   measurement (BIEN)
+n_trait_samples <-
+  dplyr::n_distinct(dplyr::pull(data_try_samples, sample_name)) +
+  dplyr::n_distinct(dplyr::pull(data_bien_trait_samples, sample_name))
+
+n_trait_datasets <-
+  base::nrow(data_try_datasets) + base::nrow(data_bien_trait_datasets)
+
 n_samples_expected <-
-  n_splot + n_bien + n_fossilpol_levels + n_grid_samples
+  n_splot + n_bien + n_fossilpol_levels + n_grid_samples + n_trait_samples
 
 data_expected <-
   tibble::tibble(
     table_name = c(
       "Datasets", "Samples", "DatasetSample", "SampleTaxa",
-      "SampleUncertainty", "AbioticData", "AbioticVariable"
+      "SampleUncertainty", "AbioticData", "AbioticVariable", "TraitsValue"
     ),
     n_expected = c(
       n_splot + n_bien + base::nrow(data_fossilpol) +
-        base::nrow(data_neo_grid),
+        base::nrow(data_neo_grid) + n_trait_datasets,
       n_samples_expected,
       n_samples_expected,
       base::nrow(data_splot_sample_taxa) +
@@ -748,7 +987,8 @@ data_expected <-
       base::nrow(data_abiotic_values),
       base::length(
         base::unique(dplyr::pull(data_abiotic_values, abiotic_variable_name))
-      )
+      ),
+      base::nrow(data_try) + base::nrow(data_bien_traits)
     )
   ) |>
   dplyr::mutate(
