@@ -150,7 +150,12 @@ data_version_control <-
     "0.0.4", "2024-12-19",
     "Update the version control and correct the Dataset References",
     "1.0.0", "2025-01-20",
-    "First release of the database"
+    "First release of the database",
+    "2.0.0", "2026-08-28",
+    paste(
+      "Development schema for audited trait units and transformation",
+      "provenance; not a published database release"
+    )
   ) %>%
   dplyr::mutate(
     # check the date format

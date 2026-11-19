@@ -204,9 +204,41 @@ CREATE TABLE "TraitsDomain"
 (
   "trait_domain_id" INTEGER PRIMARY KEY,
   "trait_domain_name" TEXT,
+  "trait_unit" TEXT NOT NULL,
   "trait_domanin_description" TEXT
 );
 CREATE UNIQUE INDEX idx_traitsdomain_trait_domain_id ON TraitsDomain(trait_domain_id);
+CREATE UNIQUE INDEX idx_traitsdomain_trait_domain_name ON TraitsDomain(trait_domain_name);
+
+CREATE TABLE "TraitUnitConversion"
+(
+  "trait_unit_conversion_id" INTEGER PRIMARY KEY,
+  "conversion_rule_key" TEXT NOT NULL UNIQUE,
+  "rule_version" TEXT NOT NULL,
+  "source_provider" TEXT NOT NULL,
+  "source_trait_id" TEXT NOT NULL,
+  "source_dataset_key" TEXT,
+  "normalized_original_unit" TEXT NOT NULL,
+  "standardized_unit" TEXT NOT NULL,
+  "trait_dimension" TEXT NOT NULL,
+  "operation" TEXT NOT NULL,
+  "multiplier" REAL NOT NULL,
+  "evidence" TEXT NOT NULL
+);
+
+CREATE TABLE "TraitDerivation"
+(
+  "trait_derivation_id" INTEGER PRIMARY KEY,
+  "derivation_rule_key" TEXT NOT NULL UNIQUE,
+  "rule_version" TEXT NOT NULL,
+  "input_unit" TEXT NOT NULL,
+  "output_unit" TEXT NOT NULL,
+  "trait_dimension" TEXT NOT NULL,
+  "operation" TEXT NOT NULL,
+  "multiplier" REAL NOT NULL,
+  "evidence" TEXT NOT NULL
+);
+
 
 CREATE TABLE "Traits"
 (
@@ -225,15 +257,22 @@ CREATE TABLE "TraitsValue"
   "sample_id" INTEGER,
   "taxon_id" INTEGER,
   "trait_value" REAL,
+  "trait_unit_conversion_id" INTEGER NOT NULL,
+  "trait_derivation_id" INTEGER,
   FOREIGN KEY ("trait_id") REFERENCES "Traits" ("trait_id"),
   FOREIGN KEY ("dataset_id") REFERENCES "Datasets" ("dataset_id"),
   FOREIGN KEY ("sample_id") REFERENCES "Samples" ("sample_id"),
-  FOREIGN KEY ("taxon_id") REFERENCES "Taxa" ("taxon_id")
+  FOREIGN KEY ("taxon_id") REFERENCES "Taxa" ("taxon_id"),
+  FOREIGN KEY ("trait_unit_conversion_id") REFERENCES "TraitUnitConversion" ("trait_unit_conversion_id"),
+  FOREIGN KEY ("trait_derivation_id") REFERENCES "TraitDerivation" ("trait_derivation_id"),
+  UNIQUE ("trait_id", "dataset_id", "sample_id", "taxon_id")
 );
 CREATE INDEX idx_traitsvalue_trait_id ON TraitsValue(trait_id);
 CREATE INDEX idx_traitsvalue_dataset_id ON TraitsValue(dataset_id);
 CREATE INDEX idx_traitsvalue_sample_id ON TraitsValue(sample_id);
 CREATE INDEX idx_traitsvalue_taxon_id ON TraitsValue(taxon_id);
+CREATE INDEX idx_traitsvalue_trait_unit_conversion_id ON TraitsValue(trait_unit_conversion_id);
+CREATE INDEX idx_traitsvalue_trait_derivation_id ON TraitsValue(trait_derivation_id);
 CREATE INDEX idx_traitsvalue_dataset_id_sample_id_taxon_id ON TraitsValue(dataset_id, sample_id, taxon_id);
 
 CREATE TABLE "TraitsReference"

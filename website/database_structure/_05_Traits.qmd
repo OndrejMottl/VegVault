@@ -84,6 +84,7 @@ data_comments_traits_domain <-
     ~column_name, ~description,
     "trait_domain_id", "ID of a Trait Domain (unique)",
     "trait_domain_name", "Name of the Trait Domain from Diaz et al. (2016)",
+    "trait_unit", "Canonical unit used by all values in the Trait Domain",
     "trait_domain_description", "Additional information about the Trait Domain"
   )
 get_db_table_data_types(
@@ -216,6 +217,14 @@ save_figure_to_render(fig_n_traits_per_domain)
 
 In general, data of functional traits of vegetation taxa follow the same structure of the [Dataset]{.database} and [Samples]{.database} obtained directly from the [Dataset Source-Types]{.database}. Therefore, `TraitsValue` table contains not only the actual measured value of [Trait]{.traits} observation but also information about linking information across [Datasets]{.database}, [Samples]{.database}, and [Taxa]{.database}. This comprehensive linkage ensures that each Trait value is accurately associated with its relevant ecological, environmental and taxonomic context.
 
+VegVault 2 standardises trait values before import. Each row references exactly
+one versioned conversion rule and, when applicable, one derivation rule. The
+original provider value and unit remain in the producer audit companion rather
+than being overwritten in the database. `TraitUnitConversion` records the
+controlled unit operation and evidence; `TraitDerivation` records transformations
+such as the reciprocal from standardised SLA to LMA.
+
+
 ```{r}
 #| label: TraitsValue variables scheme structure
 #| tbl-cap: "Column names and types for table `TraitsValue`."
@@ -226,7 +235,9 @@ data_comments_traits_value <-
     "dataset_id", "ID of a Dataset",
     "sample_id", "ID of a Sample",
     "taxon_id", "ID of a Taxon",
-    "trait_value", "Value of specific measured observation of Trait."
+    "trait_value", "Value of specific measured observation of Trait.",
+    "trait_unit_conversion_id", "ID of the required unit conversion rule",
+    "trait_derivation_id", "ID of an optional derived-trait rule"
   )
 
 get_db_table_data_types(

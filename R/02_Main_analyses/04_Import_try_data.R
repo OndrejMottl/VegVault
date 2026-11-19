@@ -44,22 +44,8 @@ DBI::dbListTables(con)
 # 2. Load data -----
 #----------------------------------------------------------#
 
-url_gh_traits <-
-  paste0(
-    "https://raw.githubusercontent.com/",
-    "OndrejMottl/VegVault-Trait_data/",
-    "v1.1.0/"
-  )
-
-url_try <-
-  paste0(
-    url_gh_traits,
-    "Outputs/Data/",
-    "data_trait_try_2024-09-02__63e33ce9c3693fbafa182e2e340629cf__.qs"
-  )
-
 data_try <-
-  dowload_and_load(url_try)
+  load_local_trait_artifacts("data_trait_try_")
 
 
 #----------------------------------------------------------#
@@ -210,6 +196,9 @@ try_traits_raw <-
     trait_reference = "TRY"
   )
 
+data_try_trait_rules <-
+  add_trait_rules(con = con)
+
 # 7.1 Traits -----
 try_traits_id <-
   add_traits(
@@ -220,21 +209,32 @@ try_traits_id <-
 
 # 7.3 Trait value -----
 
-try_traits_raw %>%
-  dplyr::select(
-    dataset_name, sample_name,
-    trait_name = trait_full_name,
-    taxon_name = acc_species_name,
-    trait_value
-  ) %>%
-  add_trait_value(
-    data_source = .,
-    dataset_id = try_dataset_id,
-    samples_id = try_samples_id,
-    traits_id = try_traits_id,
-    taxa_id = try_taxa_id,
-    con = con
-  )
+data_try_trait_audit <-
+  try_traits_raw %>%
+    dplyr::select(
+      source_provider, source_dataset_key, source_record_id, source_trait_id,
+      original_value_string, original_unit, normalized_original_unit,
+      conversion_status, conversion_rule_key, derivation_rule_key, trait_unit,
+      dataset_name, sample_name,
+      trait_name = trait_full_name,
+      taxon_name = acc_species_name,
+      trait_value
+    ) %>%
+    add_trait_value(
+      dataset_id = try_dataset_id,
+      samples_id = try_samples_id,
+      traits_id = try_traits_id,
+      taxa_id = try_taxa_id,
+      con = con
+    )
+
+path_trait_audit <-
+  here::here("Data", "Temp", "trait_database_audit")
+dir.create(path_trait_audit, recursive = TRUE, showWarnings = FALSE)
+qs2::qs_save(
+  object = data_try_trait_audit,
+  file = file.path(path_trait_audit, "trait_database_audit_try.qs")
+)
 
 
 #----------------------------------------------------------#
