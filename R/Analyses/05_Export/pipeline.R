@@ -81,7 +81,10 @@ list(
   # Folder that receives the export
   targets::tar_target(
     name = "dir_export",
-    command = resolve_export_dir(),
+    command = resolve_output_dir(
+      path_relative = load_config_value(value = c("export", "output_dir")),
+      section_name = "export"
+    ),
     cue = targets::tar_cue(mode = "always")
   ),
   # The sqlite3 tool and the pandoc of Quarto, checked on every run so that

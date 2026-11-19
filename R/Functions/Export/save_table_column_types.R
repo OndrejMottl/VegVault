@@ -8,7 +8,7 @@
 #' the columns `table_name`, `column_name` and `data_type`.
 #' @param dir_export
 #' Character scalar. Folder of the flat-file export (see
-#' `resolve_export_dir()`). The `Column_names` folder in it is created when
+#' `resolve_output_dir()`). The `Column_names` folder in it is created when
 #' missing.
 #' @return
 #' Character scalar: the path of the CSV file, so that the function can be
@@ -24,7 +24,7 @@
 #' path_csv <-
 #'   save_table_column_types(
 #'     data_column_types = data_column_types,
-#'     dir_export = resolve_export_dir()
+#'     dir_export = dir_export
 #'   )
 #' }
 save_table_column_types <- function(

@@ -41,11 +41,11 @@ During the 2.0.0 release two agent lanes work in this repository. Each edits onl
 | `03_Database_assembly` | Schema, table assembly and bulk writes, build manifest call | Database-core lane |
 | `04_Validation` | Release checks of the built database | VegVault pipeline lane |
 | `05_Export` | Flat-file export: every table as CSV, column names and types per table, and a Word list of all columns | VegVault pipeline lane |
-| `06_Visualisation` | Manuscript figures | VegVault pipeline lane |
+| `06_Visualisation` | Manuscript figures: the ten figures of the v1 manuscript, drawn from the built database | VegVault pipeline lane |
 
-Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Export/`, and the shared build helpers in `R/Functions/Database_access/`, `R/Functions/Build_manifest/` and `R/Functions/Build_profile/` (VegVault pipeline lane; the database-core lane calls them); `Data/SQL/`, `R/Functions/Database/` and `R/Functions/Gridpoints/` (database-core lane). `R/Functions/Workflow/` holds the template helpers, copied from the template at commit `95d176c`; change them only together with the template.
+Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Export/`, `R/Functions/Figures/`, `R/Functions/Fixtures/`, and the shared build helpers in `R/Functions/Database_access/`, `R/Functions/Build_manifest/` and `R/Functions/Build_profile/` (VegVault pipeline lane; the database-core lane calls them); `Data/SQL/`, `R/Functions/Database/` and `R/Functions/Gridpoints/` (database-core lane). `R/Functions/Workflow/` holds the template helpers, copied from the template at commit `95d176c` (change those only together with the template), and two VegVault path resolvers of the VegVault pipeline lane: `resolve_database_path()` and `resolve_output_dir()`.
 
-`config.yml` sections: `producers`, `subset`, `validation` and `export` belong to the VegVault pipeline lane, `link` and `build` to the database-core lane; `seed`, `data_storage_path`, `packages`, `graphical` and `database` are shared.
+`config.yml` sections: `producers`, `subset`, `validation`, `export` and `figures` belong to the VegVault pipeline lane, `link` and `build` to the database-core lane; `seed`, `data_storage_path`, `packages`, `graphical` and `database` are shared.
 
 ## Stages and pipelines
 
@@ -57,17 +57,29 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Exp
 - Branching patterns are written as bare `map()`, `cross()` and so on: `{targets}` accepts only the names from `tar_pattern()` there, not `targets::map()`.
 - Functions in `R/Functions/` never call themselves or each other in a loop by name. `{targets}` reads such calls as a cycle and refuses every pipeline. A recursive function captures itself with `base::sys.function()` and calls that handle; two functions that recurse into each other pass the caller's handle as an argument (see `diagnose_producer_column_specs()`).
 - Settings that may change between runs (paths from `secrets.yaml`, values from `config.yml`, external tools) are read in targets with `cue = targets::tar_cue(mode = "always")`. They are cheap, and downstream targets rerun only when their value changes.
+- Read the smallest `config.yml` section a target needs (for example `c("figures", "taxon_example")`, not `"figures"`), so that a changed setting reruns only the targets that use it.
 - When a target command is more than one function call, move the logic into a function in `R/Functions/`. The upstream-import target is the one exception.
 - Never let a stage build, overwrite or hash the live database implicitly. Stages that read the database depend on the build manifest, not on the database file.
 
 ## External tools
 
 - `05_Export` needs the `sqlite3` command-line tool on the `PATH` (on Windows: `winget install --exact --id SQLite.SQLite`, then open a new terminal) and Quarto, whose bundled pandoc renders the Word list of columns.
+- `06_Visualisation` needs the `maps` package (country outlines; listed under `packages: tools` because no code calls it by name), `vaultkeepr` for the five vaultkeepr figures, and internet access the first time it loads the GADM border of the gridpoint figure.
 
 ## Export stage
 
 - Every export file is a `format = "file"` target, so `{targets}` writes it again after a new build (a new manifest), after a code change, or when the file is missing or was changed, and otherwise leaves it alone. `export: rewrite: true` in `config.yml` forces every file to be written again (`build_export_cue()`). Export functions always write when they run; they do not skip existing files themselves.
 - Files of tables that a new build no longer has are not deleted; remove them by hand.
+
+## Figure stage
+
+- Each figure is a chain of targets: one or more `data_*` targets that read the database, a `fig_*` target with the plot object (`plot_*()` functions return plots and never save them), and a `file_fig_*` target with `format = "file"` that `save_manuscript_figure()` writes into `figures: output_dir`. The default folder is the tracked `Outputs/Figures/mns/` with the v1 file names; the `subset` profile writes to `Data/Temp/Subset/Figures/`.
+- Every data target takes the build manifest, so a new build redraws all figures. Figures that only count or list records read the database through `run_with_database(flag_read_only = TRUE)`. The five vaultkeepr figures extract through `vaultkeepr`, which opens the database read-write; their loaders only read and always close the connection.
+- `figures: files` gives each figure its file name, a width name of `graphical: manuscript: image_width` and a height. `build_figure_style()` turns `graphical: manuscript` and `colors.json` into the theme, sizes, colours and palettes that every plot function takes; the theme keeps the v1 manuscript look (`theme_minimal()` based) instead of the project default `theme_classic()`.
+- In the `subset` profile every example region is replaced by the subset box (`resolve_figure_region()`), so a rehearsal database still yields data.
+- The sample-age figure shows the dataset named in `figures: sample_age: dataset_name`, because dataset IDs change with every build; until a name is set, its data target stops with a message. Its three targets have `error = "continue"`, so the other figures are still drawn. A target downstream of a target with `error = "continue"` needs the same setting: on the default `"stop"` it ends the whole run when it cannot load the errored input.
+- Each setting is read by its own always-run target, one value per target (`sel_*`, `list_region_*`, `list_file_*`), so that a changed label or size never extracts data from the database again.
+- Draw country outlines with `build_world_borders_layer()`; `ggplot2::annotation_borders()` fails in facetted plots. Add `coord_sf()` after `geom_sf()`, which brings its own default `coord_sf()` that would replace an earlier one and drop the extent.
 
 ## Database access and the build manifest
 
@@ -105,6 +117,8 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Exp
 ## Tests
 
 - Every function in `R/Functions/` has `R/Tests/testthat/test-<function_name>.R`. Shared fixtures go in `helper-*.R` files.
-- `Rscript R/Tests/Run_tests.R` validates the function files (`validate_function_names()`) and runs the suite in a clean subprocess (`run_project_tests()`). Until the legacy functions are renamed to approved verbs, the name check covers only `Workflow/`, `Contracts/`, `Database/`, `Gridpoints/`, `Database_access/`, `Build_manifest/`, `Build_profile/` and `Export/`.
+- Functions that read the database are tested on `build_database_fixture()`, a small SQLite file with the full schema and fixed rows (documented in its roxygen) that also serves the `vaultkeepr` queries of the figures. Never test against the live or v1 database.
+- `setup-graphics_device.R` sends the drawing of figure tests to a temporary PDF, so no `Rplots.pdf` is left in the test folder.
+- `Rscript R/Tests/Run_tests.R` validates the function files (`validate_function_names()`) and runs the suite in a clean subprocess (`run_project_tests()`). Until the legacy functions are renamed to approved verbs, the name check covers only `Workflow/`, `Contracts/`, `Database/`, `Gridpoints/`, `Database_access/`, `Build_manifest/`, `Build_profile/`, `Export/`, `Figures/` and `Fixtures/`.
 - Focused run: source the setup, then `run_test_file(test_file = ...)`.
 - Script-level integration checks that are not function tests, such as `tests/test_trait_v2_integration.R`, run directly with `Rscript` and use a temporary database.

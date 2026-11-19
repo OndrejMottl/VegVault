@@ -10,7 +10,7 @@
 #' only.
 #' @param list_build_manifest
 #' Named list. The build manifest of the database (see
-#' `validate_export_source()`).
+#' `validate_database_source()`).
 #' @return
 #' A tibble with one row per column, in table order, and the character
 #' columns `table_name`, `column_name` and `data_type` (the first R class
@@ -33,7 +33,7 @@ load_table_column_types <- function(
   table_name,
   list_build_manifest
 ) {
-  validate_export_source(
+  validate_database_source(
     path_database = path_database,
     list_build_manifest = list_build_manifest
   )
