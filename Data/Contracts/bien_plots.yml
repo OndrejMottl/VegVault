@@ -1,0 +1,157 @@
+# Producer artefact contract. Format: Data/Contracts/README.md
+contract_id: bien_plots
+contract_version: 1.0.0
+status: active
+title: BIEN vegetation plots
+description: >-
+  One row per BIEN vegetation plot with its location, plot area, sampling
+  method and the taxa recorded in it. VegVault turns every row into one
+  dataset and one sample (age 0).
+producer:
+  repository: OndrejMottl/VegVault-Vegetation_data
+  directory: Outputs/Data
+consumers:
+  - R/02_Main_analyses/02_Import_bien_data.R
+file:
+  name_templates:
+    - 'data_bien_{date}__{hash}__.qs'
+  evidence: >-
+    R/02_Main_analyses/06_BIEN_output.R in the producer saves with
+    RUtilpol::save_latest_file(file_name = "data_bien", prefered_format =
+    "qs"); v1 file data_bien_2023-12-06__7893b8a80ceb1550103667f95b695e6b__.qs
+    (tag v1.0.0).
+partitioning:
+  scheme: none
+extra_columns: allow
+columns:
+  - name: datasource_id
+    class: numeric
+    nullable: false
+    description: BIEN data source identifier; part of the plot key.
+    evidence: >-
+      Producer drops rows without it (06_BIEN_output.R, drop_na); v1: double,
+      whole numbers 1 to 94, no missing values.
+    checks:
+      whole_number: true
+  - name: datasource
+    class: character
+    nullable: false
+    description: BIEN data source name; stored as the data source description.
+    evidence: >-
+      02_Import_bien_data.R:92; producer drops rows without it; v1: character,
+      5 distinct, no missing values.
+    checks:
+      not_empty: true
+  - name: plot_name
+    class: character
+    nullable: false
+    description: Plot name within its data source; part of the plot key.
+    evidence: >-
+      Producer drops rows without it; v1: character, 24161 distinct in 24233
+      rows, so it is not unique on its own.
+    checks:
+      not_empty: true
+  - name: methodology_reference
+    class: character
+    nullable: true
+    description: >-
+      Reference of the sampling method; "BIEN" is prepended and the result
+      stored as the sampling-method reference.
+    evidence: >-
+      02_Import_bien_data.R:100-105 maps over it; v1: a character column (not
+      a list-column), 18124 missing of 24233.
+  - name: methodology_description
+    class: character
+    nullable: true
+    description: Sampling-method description.
+    evidence: >-
+      02_Import_bien_data.R:107; v1: character, 18408 missing of 24233.
+  - name: longitude
+    class: numeric
+    nullable: false
+    unit: decimal degree (WGS84)
+    description: Plot longitude.
+    evidence: >-
+      02_Import_bien_data.R uses it without coercion; producer drops rows
+      without it; v1: double, -149.95 to 166.83.
+    checks:
+      finite: true
+      range:
+        min: -180
+        max: 180
+  - name: latitude
+    class: numeric
+    nullable: false
+    unit: decimal degree (WGS84)
+    description: Plot latitude.
+    evidence: >-
+      Producer drops rows without it; v1: double, -40.72 to 70.47.
+    checks:
+      finite: true
+      range:
+        min: -90
+        max: 90
+  - name: plot_area_ha
+    class: numeric
+    nullable: false
+    unit: ha
+    description: >-
+      Plot area in hectares; the import multiplies it by 10000 and stores
+      square metres as the sample size.
+    evidence: >-
+      02_Import_bien_data.R:163; producer drops rows without it; v1: double,
+      0.0001 to 5.96, no missing values.
+    checks:
+      finite: true
+      range:
+        min: 0
+        min_inclusive: false
+  - name: plot_data
+    class: list
+    nullable: false
+    description: >-
+      Taxa recorded in the plot: one data frame per plot with one row per
+      taxon record.
+    evidence: >-
+      02_Import_bien_data.R:192-236; v1: list of 24233 tibbles with 11
+      columns, 1 to 424 rows in a sample of 300.
+    element:
+      class: data.frame
+      nullable: false
+      min_rows: 1
+      columns:
+        - name: name_matched
+          class: character
+          nullable: false
+          description: >-
+            Matched taxon name; stored as the taxon name. Missing or empty
+            names are not allowed: the import leaves them out of the Taxa
+            table but add_sample_taxa() still writes their records, with no
+            taxon.
+          evidence: >-
+            02_Import_bien_data.R:197,208-211,230; v1: character, no missing
+            values in 972791 records.
+          checks:
+            not_empty: true
+        - name: individual_count
+          class: numeric
+          nullable: true
+          description: >-
+            Number of individuals; stored as the sample-taxon value. Missing
+            for presence-only records.
+          evidence: >-
+            02_Import_bien_data.R:231; v1: integer, 759788 missing of 972791,
+            1 to 442 in a sample of 300 plots.
+          checks:
+            whole_number: true
+            range:
+              min: 0
+keys:
+  - [datasource_id, plot_name, longitude, latitude]
+notes:
+  - >-
+    v1 has no plot identifier: the import names datasets and samples
+    bien_<row number> (02_Import_bien_data.R:96,160), which changes whenever
+    rows are added or reordered. The key above is unique in v1 (24233 of
+    24233 rows) and is the natural key until the producer exports a stable
+    plot identifier, which has been requested from the vegetation lane.

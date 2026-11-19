@@ -1,0 +1,95 @@
+# Producer artefact contract. Format: Data/Contracts/README.md
+contract_id: fossilpol_age_uncertainty
+contract_version: 1.0.0
+status: active
+title: FOSSILPOL age-uncertainty iterations
+description: >-
+  Age-model iterations of every level of every FOSSILPOL dataset, split into
+  lettered parts to keep each file below the GitHub file-size limit. The
+  parts are bound in letter order; together they hold one row per dataset of
+  the assembly.
+producer:
+  repository: OndrejMottl/VegVault-FOSSILPOL
+  directory: Outputs/Data
+consumers:
+  - R/02_Main_analyses/03_Import_fossilpol_data.R
+file:
+  name_templates:
+    - 'data_age_uncertainty_{partition}_{date}__{hash}__.qs'
+  evidence: >-
+    R/01_Data_processing/07_Outputs/02_Save_assembly.R in the producer; v1
+    files data_age_uncertainty_A_2023-12-12__3aa5658488292372af2b521ca6e48c14__.qs
+    and data_age_uncertainty_B_2023-12-12__7781fda623c5da21cd6d4766e550985d__.qs
+    (tag v1.0.0), 700 and 693 datasets.
+partitioning:
+  scheme: letter
+  first: A
+  contiguous: true
+  evidence: >-
+    v1 used a fixed split at rows 700 and 10000 that silently dropped records
+    beyond 10000 (FOSSILPOL issue 15). The producer branch age_uncertainty_parts
+    (in progress) names consecutive parts A, B, C, ... by estimated size, so the
+    number of parts depends on the data; the contract therefore fixes only
+    the lettering, the start at A and that no letter may be skipped or
+    repeated.
+extra_columns: error
+columns:
+  - name: dataset_id
+    class: character
+    nullable: false
+    description: >-
+      Neotoma dataset identifier, as in the assembly; unique over all parts.
+    evidence: >-
+      03_Import_fossilpol_data.R:236-245; v1: character, unique over both
+      parts (1393 rows).
+    checks:
+      not_empty: true
+  - name: age_uncertainty
+    class: list
+    nullable: false
+    description: >-
+      One matrix per dataset with one row per age-model iteration and one
+      column per level, named by the level's sample_id; values are ages in
+      calibrated years before 1950 CE.
+    evidence: >-
+      03_Import_fossilpol_data.R:246-259 turns every matrix into iteration,
+      sample_id and age; v1: integer matrices of 1000 rows, column names
+      present, no missing values, -73 to 34393. SampleUncertainty.age and
+      iteration are INTEGER in Data/SQL/make_tables.sql.
+    element:
+      class: matrix
+      nullable: false
+      value_class: numeric
+      require_column_names: true
+      min_rows: 1
+      checks:
+        finite: true
+        whole_number: true
+        range:
+          min: -150
+          max: 60000
+keys:
+  - [dataset_id]
+relations:
+  - contract_id: fossilpol_assembly
+    columns:
+      - dataset_id
+    description: >-
+      Every dataset_id is a dataset of the assembly, and every dataset of the
+      assembly has a row. Holds in v1.
+  - contract_id: fossilpol_assembly
+    columns:
+      - age_uncertainty[]
+      - levels[].sample_id
+    description: >-
+      The column names of each matrix equal the sample_id of the dataset's
+      levels. Holds in v1 for all 1393 datasets.
+notes:
+  - >-
+    The import converts each element with as.data.frame(), so it would also
+    accept data frames; the contract requires matrices because the producer
+    writes matrices (v1 and the age-model output).
+  - >-
+    The ages are whole numbers in v1 and the database stores them as INTEGER;
+    the producer should round before export rather than leave the rounding to
+    SQLite.
