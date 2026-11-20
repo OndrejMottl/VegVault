@@ -14,7 +14,7 @@ add_chelsa_neo_data <- function(
 
   # download and load ---
   data_climate <-
-    dowload_and_load(sel_url) %>%
+    load_remote_artefact(sel_url) %>%
     dplyr::mutate(
       var_name = sel_var_name
     )

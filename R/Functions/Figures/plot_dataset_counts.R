@@ -190,7 +190,7 @@ plot_dataset_counts <- function(
     ]
 
   grob_lollipop <-
-    color_facets(
+    build_coloured_facet_strips(
       sel_plot = fig_lollipop,
       sel_palette = vec_strip_colours,
       direction = "horizontal",

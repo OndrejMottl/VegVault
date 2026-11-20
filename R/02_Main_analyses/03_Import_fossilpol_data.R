@@ -59,7 +59,7 @@ url_fossilpol_data <-
   )
 
 data_fossilpol <-
-  dowload_and_load(url_fossilpol_data)
+  load_remote_artefact(url_fossilpol_data)
 
 dplyr::glimpse(data_fossilpol)
 
@@ -74,7 +74,7 @@ data_uncertainty_raw <-
       "Outputs/Data/",
       .x
     ) %>%
-      dowload_and_load()
+      load_remote_artefact()
   ) %>%
   dplyr::bind_rows()
 

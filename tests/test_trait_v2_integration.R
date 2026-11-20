@@ -7,7 +7,7 @@ library(readr)
 library(tibble)
 library(here)
 
-source(here::here("R", "Functions", "test_unique_row_in_table.R"))
+source(here::here("R", "Functions", "validate_unique_rows.R"))
 source(here::here("R", "Functions", "add_to_db.R"))
 source(here::here("R", "Functions", "Traits", "add_trait_rules.R"))
 source(here::here("R", "Functions", "Traits", "validate_trait_import.R"))

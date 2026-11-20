@@ -21,7 +21,7 @@ add_to_db <- function(
       )
 
     is_valid <-
-      test_unique_row_in_table(data_bind)
+      validate_unique_rows(data_bind)
   }
 
   if (

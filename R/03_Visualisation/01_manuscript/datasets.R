@@ -194,7 +194,7 @@ fig_n_datasetes_per_type_per_source_type <-
 
 
 fig_n_datasetes_per_type_per_source_type_colored <-
-  color_facets(
+  build_coloured_facet_strips(
     sel_plot = fig_n_datasetes_per_type_per_source_type,
     #  # need to manually sort the colors due to previous reorder
     sel_palette = c(

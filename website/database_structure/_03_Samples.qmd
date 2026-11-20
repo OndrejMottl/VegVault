@@ -60,7 +60,7 @@ data_comments_samples <-
     "sample_size_id", "ID of a Sample Size"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "Samples"
 ) %>%
@@ -74,7 +74,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Samples scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
   )
@@ -94,7 +94,7 @@ data_comments_dataset_sample <-
     "dataset_id", "ID of a Dataset",
     "sample_id", "ID of a Sample"
   )
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "DatasetSample"
 ) %>%
@@ -107,7 +107,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: DatasetSample scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
   )
@@ -163,7 +163,7 @@ data_comments_sample_size <-
     "description", "Mostly description of units in which the values are stored"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SampleSizeID"
 ) %>%
@@ -176,7 +176,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: SampleSizeID scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
   )
@@ -263,7 +263,7 @@ data_comments_sample_uncertainty <-
     "age", "Potential age of a Sample"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SampleUncertainty"
 ) %>%
@@ -277,7 +277,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: SampleUncertainty scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
   )
@@ -369,7 +369,7 @@ data_comments_sample_reference <-
     "sample_id", "ID of a Sample",
     "reference_id", "ID of a Reference"
   )
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SampleReference"
 ) %>%
@@ -382,7 +382,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: SampleReference scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
   )

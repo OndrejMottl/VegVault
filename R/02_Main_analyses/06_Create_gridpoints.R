@@ -65,7 +65,7 @@ data_paleo_climate <-
       "Outputs/Data/Palaoclimate/",
       .x
     ) %>%
-      dowload_and_load()
+      load_remote_artefact()
   ) %>%
   dplyr::bind_rows() %>%
   dplyr::select(-"value")
@@ -94,7 +94,7 @@ data_neo_coords <-
     "Outputs/Data/Neoclimate/",
     "CHELSA_bio_01_2024-08-06__ff1659d322855ca35555ac7b96d58720__.qs"
   ) %>%
-  dowload_and_load() %>%
+  load_remote_artefact() %>%
   dplyr::select(-c("value", "var_name")) %>%
   round(digits = 2) %>%
   dplyr::distinct(.data$long, .data$lat) %>%
@@ -107,7 +107,7 @@ data_soil_coords <-
     "Outputs/Data/WoSIS/",
     "wosis_data_2024-08-06__e8fb256f5b70deb9576ea69806c59eb1__.qs"
   ) %>%
-  dowload_and_load() %>%
+  load_remote_artefact() %>%
   dplyr::select(-c("value", "var_name")) %>%
   round(digits = 2) %>%
   dplyr::distinct(.data$long, .data$lat) %>%

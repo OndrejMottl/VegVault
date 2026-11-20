@@ -19,7 +19,7 @@ The package has its own standalone `AGENTS.md` and `.ai/` guidance. Do not make 
 
 - Treat producer output filenames, column names, classes, units, identifiers, nesting, and partitioning as cross-repository interfaces.
 - The integration repository must consume reviewed, tagged producer artifacts. Do not silently replace a tag or immutable artifact URL with a branch such as `main`.
-- Before changing an output contract, identify every consumer in `VegVault/R/02_Main_analyses/`, relevant website documentation, and `vaultkeepr` if the resulting SQLite schema or semantics change.
+- Before changing an output contract, identify every consumer in VegVault (`R/Analyses/01_Producer_import/`, `R/Analyses/03_Database_assembly/`, and the legacy `R/02_Main_analyses/` while it is in use), relevant website documentation, and `vaultkeepr` if the resulting SQLite schema or semantics change.
 - Coordinate changes in this order: producer implementation and validation, producer release/tag, pinned integration update, integration validation and database version update, documentation update, then downstream package compatibility work if needed.
 - Preserve provenance: source version, acquisition date, processing version, tagged repository version, filename, and relevant licensing or citation requirements.
 
@@ -33,7 +33,7 @@ The package has its own standalone `AGENTS.md` and `.ai/` guidance. Do not make 
 
 ## Computational safety
 
-The following operations are expensive or materially state-changing and require explicit user authorization: full upstream downloads, Bchron age-depth modelling, global raster processing, broad producer reruns, `R/01_Master.R`, `R/01_Data_processing/00_make_database.R`, and any operation that writes to the configured live database.
+The following operations are expensive or materially state-changing and require explicit user authorization: full upstream downloads, Bchron age-depth modelling, global raster processing, broad producer reruns, `R/Analyses/00_run_main.R`, the VegVault stages that build the database (`R/Analyses/02_Gridpoints/` and `R/Analyses/03_Database_assembly/`), runs of the other stages on the full database, `R/01_Master.R`, `R/01_Data_processing/00_make_database.R`, and any operation that writes to the configured live database.
 
 Before an authorized expensive run, report the entry point, inputs, output location, overwrite controls, expected scope, and whether the operation is restartable. Prefer a narrow script, small representative subset, manifest, or structural check when it can validate the change.
 

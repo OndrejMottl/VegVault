@@ -58,7 +58,7 @@ url_bien <-
   )
 
 data_bien <-
-  dowload_and_load(url_bien)
+  load_remote_artefact(url_bien)
 
 dplyr::glimpse(data_bien)
 
