@@ -37,20 +37,30 @@ artefacts:
       files: []
   - artefact_id: fossilpol_assembly
     contract_version: 1.0.0
-    note: Placeholder until VegVault-FOSSILPOL tags v2.0.0.
+    note: >-
+      dev: the 2.0.0 rerun on the VegVault-FOSSILPOL branch 2.0.0 at
+      180c79b. release: placeholder until VegVault-FOSSILPOL tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      files:
+        - data_assembly_light_2026-11-20__2d58d41c506527e41a5e1ee1a6e5768e__.qs
   - artefact_id: fossilpol_age_uncertainty
     contract_version: 1.0.0
-    note: Placeholder until VegVault-FOSSILPOL tags v2.0.0.
+    note: >-
+      dev: the 2.0.0 rerun on the VegVault-FOSSILPOL branch 2.0.0 at
+      180c79b, parts A to D. release: placeholder until VegVault-FOSSILPOL
+      tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      files:
+        - data_age_uncertainty_A_2026-11-20__a7c6da001c8693cee0b240aab6f0fb11__.qs
+        - data_age_uncertainty_B_2026-11-20__5923c97dab14b49e4a99a113d5dc23e7__.qs
+        - data_age_uncertainty_C_2026-11-20__cc57dfde08adb1c3f14e02fd1550644b__.qs
+        - data_age_uncertainty_D_2026-11-20__f07eb9ae814666b400489a9e2845bc4f__.qs
   - artefact_id: try_traits
     contract_version: 1.0.0
     note: Placeholder until VegVault-Trait_data tags v2.0.0.
