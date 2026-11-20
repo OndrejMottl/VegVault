@@ -39,30 +39,12 @@ con <-
 # 2. Add empty tables -----
 #----------------------------------------------------------#
 
-# load the SQL query to make all tables
-sql_query_full <-
-  readLines(
-    here::here(
-      "Data/SQL/make_tables.sql"
-    )
-  )
-
-# split the query by semicolon
-sql_query_split <-
-  paste(sql_query_full, collapse = "") %>%
-  stringr::str_split(., pattern = "\\;") %>%
-  unlist()
-
-# execute each query
-try(
-  purrr::map(
-    .x = sql_query_split,
-    .f = ~ DBI::dbExecute(
-      conn = con,
-      statement = .x
-    )
-  ),
-  silent = TRUE
+# Create every table, the view and the indexes of the schema file. Any
+#   failed statement stops the script with an error, including a table
+#   that already exists, and the result is checked against the schema file.
+build_database_schema(
+  con = con,
+  path_schema = here::here("Data/SQL/make_tables.sql")
 )
 
 # check the db
