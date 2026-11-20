@@ -40,11 +40,15 @@ testthat::test_that("load_sample_age_ranges() returns each sample once", {
       path_database = base::file.path(withr::local_tempdir(), "f.sqlite")
     )
 
-  run_with_database(
-    path_database = path_database,
-    fn = DBI::dbExecute,
-    statement = "INSERT INTO DatasetSample VALUES (7, 7)",
-    flag_read_only = FALSE
+  # The schema rejects a repeated dataset-sample pair, which v1.0.0 allowed
+  testthat::expect_error(
+    run_with_database(
+      path_database = path_database,
+      fn = DBI::dbExecute,
+      statement = "INSERT INTO DatasetSample VALUES (7, 7)",
+      flag_read_only = FALSE
+    ),
+    regexp = "UNIQUE constraint failed: DatasetSample"
   )
 
   res <-

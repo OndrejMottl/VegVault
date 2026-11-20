@@ -31,7 +31,8 @@ testthat::test_that("build_database_fixture() fills the documented rows", {
       "SampleSizeID", "Taxa", "TaxonClassification", "SampleTaxa",
       "AbioticVariable", "AbioticData", "AbioticDataReference",
       "TraitsDomain", "Traits", "TraitsValue", "TraitUnitConversion",
-      "DatasetTypeID", "DatasetSourceTypeID", "References"
+      "DatasetTypeID", "DatasetSourceTypeID", "References",
+      "Positions", "SamplePosition", "PositionLink"
     )
 
   vec_n_rows <-
@@ -55,8 +56,69 @@ testthat::test_that("build_database_fixture() fills the documented rows", {
   testthat::expect_equal(
     vec_n_rows,
     c(9L, 11L, 11L, 10L, 2L, 7L, 6L, 10L, 2L, 5L, 2L, 2L, 2L, 3L, 1L,
-      4L, 5L, 0L)
+      4L, 5L, 0L, 2L, 2L, 2L)
   )
+})
+
+testthat::test_that("build_database_fixture() links plots 1 and 2", {
+  path_database <-
+    build_database_fixture(
+      path_database = base::file.path(withr::local_tempdir(), "f.sqlite")
+    )
+
+  data_links <-
+    run_with_database(
+      path_database = path_database,
+      fn = DBI::dbGetQuery,
+      statement = "SELECT * FROM AbioticDataReference ORDER BY sample_id",
+      flag_read_only = TRUE
+    )
+
+  testthat::expect_equal(
+    data_links,
+    base::data.frame(
+      sample_id = c(1L, 2L),
+      sample_ref_id = c(3L, 4L),
+      distance_in_km = c(10L, 12L),
+      distance_in_years = c(0L, 0L)
+    )
+  )
+})
+
+testthat::test_that("build_database_fixture() has the project schema", {
+  path_database <-
+    build_database_fixture(
+      path_database = base::file.path(withr::local_tempdir(), "f.sqlite")
+    )
+
+  res <-
+    run_with_database(
+      path_database = path_database,
+      fn = validate_database_schema,
+      flag_read_only = TRUE
+    )
+
+  testthat::expect_equal(base::nrow(res), 65L)
+
+  list_checks <-
+    run_with_database(
+      path_database = path_database,
+      fn = ~ list(
+        foreign_keys = DBI::dbGetQuery(
+          conn = .x,
+          statement = "PRAGMA foreign_key_check"
+        ),
+        integrity = DBI::dbGetQuery(
+          conn = .x,
+          statement = "PRAGMA integrity_check"
+        )
+      ),
+      flag_read_only = TRUE
+    )
+
+  testthat::expect_equal(base::nrow(list_checks[["foreign_keys"]]), 0L)
+
+  testthat::expect_equal(dplyr::pull(list_checks[["integrity"]], 1), "ok")
 })
 
 testthat::test_that("build_database_fixture() numbers gridpoints as 4", {

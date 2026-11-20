@@ -22,7 +22,10 @@
 #'   \item Czechia: vegetation plots 1 (14, 50) and 2 (16, 49.5), and
 #'     gridpoints 3 (14.1, 50.1), 4 (16.1, 49.6) and 5 (18, 49). Plots 1
 #'     and 2 link to gridpoints 3 and 4 (10 and 12 km); gridpoint 5 has no
-#'     link. All their samples are of age 0.
+#'     link. All their samples are of age 0. The links are stored per
+#'     position: positions 1 (14, 50, 0) and 2 (16, 49.5, 0) hold samples
+#'     1 and 2, and the view `AbioticDataReference` returns one row per
+#'     sample.
 #'   \item North America: vegetation plot 6 `bien_na_1` (-100, 45) and
 #'     fossil pollen dataset 7 `fossilpol_1001` (-90, 50) with samples of
 #'     ages 1000 and 6000.
@@ -39,8 +42,10 @@
 #'     domains 1 `Plant heigh` and 2 `Leaf Area`, with values for taxa 1
 #'     and 4 in sample 11.
 #' }
-#' Reference tables are left empty. Aborts when `path_database` exists, so
-#' that no database is ever overwritten.
+#' Reference tables are left empty. The schema, its indexes included, is
+#' created with `build_database_schema()` before the rows are written.
+#' Aborts when `path_database` exists, so that no database is ever
+#' overwritten.
 #' @examples
 #' \dontrun{
 #' path_database <-
@@ -76,13 +81,6 @@ build_database_fixture <- function(
       file."
     )
   }
-
-  vec_statements <-
-    base::readLines(con = path_schema, warn = FALSE) |>
-    stringr::str_c(collapse = "\n") |>
-    stringr::str_split_1(pattern = stringr::fixed(";")) |>
-    stringr::str_trim() |>
-    purrr::keep(.p = ~ base::nzchar(.x))
 
   # Table rows, in an order that respects the foreign keys
   list_tables <-
@@ -207,8 +205,20 @@ build_database_fixture <- function(
         4L, 2L, 550,
         5L, 1L, 7
       ),
-      AbioticDataReference = tibble::tribble(
-        ~sample_id, ~sample_ref_id, ~distance_in_km, ~distance_in_years,
+      # The links of plots 1 and 2, read back per sample through the view
+      #   AbioticDataReference
+      Positions = tibble::tribble(
+        ~position_id, ~coord_long, ~coord_lat, ~age,
+        1L, 14, 50, 0,
+        2L, 16, 49.5, 0
+      ),
+      SamplePosition = tibble::tribble(
+        ~sample_id, ~position_id,
+        1L, 1L,
+        2L, 2L
+      ),
+      PositionLink = tibble::tribble(
+        ~position_id, ~sample_ref_id, ~distance_in_km, ~distance_in_years,
         1L, 3L, 10L, 0L,
         2L, 4L, 12L, 0L
       ),
@@ -242,10 +252,7 @@ build_database_fixture <- function(
   run_with_database(
     path_database = path_database,
     fn = function(con) {
-      purrr::walk(
-        .x = vec_statements,
-        .f = ~ DBI::dbExecute(conn = con, statement = .x)
-      )
+      build_database_schema(con = con, path_schema = path_schema)
 
       purrr::iwalk(
         .x = list_tables,
