@@ -26,12 +26,8 @@ source(
   )
 )
 
-if (
-  isFALSE(require("taxospace"))
-) {
-  remotes::install_github("OndrejMottl/taxospace")
-  library(taxospace)
-}
+# {taxospace} is recorded in renv.lock and restored with the other
+#   packages; every call below names it as taxospace::
 
 chunk_size <- 500
 

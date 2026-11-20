@@ -10,160 +10,61 @@
 #                         2023
 #
 #----------------------------------------------------------#
-# Configuration script with the variables that should be consistent throughout
-#   the whole repo. It loads packages, defines important variables,
-#   authorises the user, and saves config file.
+# Compatibility entry point for the legacy scripts (R/01_Master.R,
+#   R/01_Data_processing/, R/02_Main_analyses/, R/03_Visualisation/) and
+#   the website, which source this file. It sources the project setup and
+#   keeps the objects these scripts use. New code sources
+#   R/___setup_project___.R directly. Remove this file when the website and
+#   the legacy scripts move to the new setup, after the 2.0.0 release.
 
-# Set the current environment
-current_env <- environment()
 
-# set seed
+#----------------------------------------------------------#
+# 0. Setup -----
+#----------------------------------------------------------#
+
+library(here)
+
+# Loads the functions, attaches `packages: attach` of config.yml and
+#   resolves the data root. Packages are restored from renv.lock by
+#   R/___Init_project___.R, no longer here. The legacy scripts call every
+#   other package with its namespace, so none is attached here
+source(
+  here::here("R/___setup_project___.R")
+)
+
+# The seed of the legacy scripts; the setup sets `seed` of config.yml
 set.seed(1234)
 
 
 #----------------------------------------------------------#
-# 1. Load packages -----
+# 1. Database path -----
 #----------------------------------------------------------#
 
-if (
-  isFALSE(
-    exists("already_synch", envir = current_env)
-  )
-) {
-  already_synch <- FALSE
-}
-
-if (
-  isFALSE(already_synch)
-) {
-  library(here)
-  # Synchronise the package versions
-  renv::restore(
-    lockfile = here::here("renv/library_list.lock")
-  )
-  already_synch <- TRUE
-
-  # Save snapshot of package versions
-  # renv::snapshot(lockfile =  "renv/library_list.lock")  # do only for update
-}
-
-# Define packages
-package_list <-
-  c(
-    "assertthat",
-    "DBI",
-    "here",
-    "janitor",
-    "jsonlite",
-    "knitr",
-    "languageserver",
-    "renv",
-    "remotes",
-    "rlang",
-    "roxygen2",
-    "RSQLite",
-    "tidyverse",
-    "tinytable",
-    "usethis",
-    "utils"
-  )
-
-# Attach all packages
-sapply(package_list, library, character.only = TRUE)
+# The database the legacy scripts and the website read and write: the
+#   released v1 database, `database_v1_path` in the git-ignored
+#   secrets.yaml, which replaces .secrets/path.yaml. The 2.0.0 build writes
+#   `database_path` instead. Never run a legacy script that writes the
+#   database without explicit authorization
+path_to_vegvault <-
+  resolve_database_path(key = "database_v1_path")
 
 
 #----------------------------------------------------------#
-# 2. Define space -----
+# 2. Database version -----
 #----------------------------------------------------------#
 
-current_date <- Sys.Date()
-
-# project directory is set up by 'here' package, Adjust if needed
-current_dir <- here::here()
-
-
-#----------------------------------------------------------#
-# 3. Load functions -----
-#----------------------------------------------------------#
-
-# get vector of general functions
-fun_list <-
-  list.files(
-    path = "R/Functions/",
-    pattern = "*.R",
-    recursive = TRUE
-  )
-
-# source them
-if (
-  length(fun_list) > 0
-) {
-  sapply(
-    paste0("R/functions/", fun_list, sep = ""),
-    source
-  )
-}
-
-
-#----------------------------------------------------------#
-# 4. Authorise the user -----
-#----------------------------------------------------------#
-
-# !!!  IMPORTANT  !!!
-
-# This solution was created due to VegVault data not being stored
-#  in publick the repository.
-
-# Pleae download the data from the VegVault repository and place the path to it
-#  in the '.secrets/path.yaml' file.
-
-if (
-  file.exists(
-    here::here(".secrets/path.yaml")
-  )
-) {
-  path_to_vegvault <-
-    yaml::read_yaml(
-      here::here(".secrets/path.yaml")
-    ) %>%
-    purrr::chuck(Sys.info()["user"])
-} else {
-  stop(
-    paste(
-      "The path to the VegVault data is not specified.",
-      " Please, create a 'path.yaml' file."
-    )
-  )
-}
-
-#----------------------------------------------------------#
-# 5. Define variables -----
-#----------------------------------------------------------#
-
+# The version record of config.yml; its last entry is the version being
+#   built
 data_version_control <-
-  tibble::tribble(
-    ~version, ~update_date, ~changelog,
-    "0.0.2", "2024-10-17",
-    "Beging the versioning of the database",
-    "0.0.3", "2024-11-18",
-    "Reworked the `References` and flagged `mandatory`",
-    "0.0.4", "2024-12-19",
-    "Update the version control and correct the Dataset References",
-    "1.0.0", "2025-01-20",
-    "First release of the database",
-    "2.0.0", "2026-08-28",
-    paste(
-      "Development schema for audited trait units and transformation",
-      "provenance; not a published database release"
-    )
-  ) %>%
+  load_config_value(value = c("database", "versions")) |>
+  purrr::map(.f = tibble::as_tibble) |>
+  dplyr::bind_rows() |>
   dplyr::mutate(
-    # check the date format
-    update_date = lubridate::ymd(update_date) %>%
-      as.character()
+    # Checks the date format
+    update_date = base::as.character(lubridate::ymd(update_date))
   )
 
 db_version <-
-  data_version_control %>%
-  dplyr::slice_tail(n = 1) %>%
-  purrr::chuck("version")
+  data_version_control |>
+  dplyr::slice_tail(n = 1) |>
+  dplyr::pull(version)
