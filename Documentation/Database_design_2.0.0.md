@@ -631,7 +631,7 @@ One recommendation per question, each with one tag.
    - **Adopt:**
      - links stored once per position, with the view `AbioticDataReference` that keeps the v1 rows for vaultkeepr;
      - `WITHOUT ROWID` composite primary keys on the junction and value tables except `SampleTaxa`;
-     - the index set of question 4 (drop the 12 unused primary-key duplicates, the 15 unused indexes and the prefix duplicate; keep `idx_samples_sample_id`, `idx_datasets_dataset_id`, the uncertainty key and the coordinate index);
+     - the index set of question 4 (drop the 12 unused primary-key duplicates, the 15 unused indexes and the prefix duplicate; keep `idx_samples_sample_id`, `idx_datasets_dataset_id`, the uncertainty key and the coordinate index); revised at gate G2 to drop only redundant indexes (decision 3 below);
      - `UNIQUE NOT NULL` sample and dataset names, and `CHECK` constraints on coordinates and the link rule;
      - the version hook (build columns and `BuildProducers`).
    - **Keep:** km and years as integers and ages as `REAL`.
@@ -646,6 +646,8 @@ One recommendation per question, each with one tag.
 
 ## Decisions for gate G2
 
+**Gate G2 passed on 2026-11-20.** Ondřej decided all 11 items: decision 3 in a revised form, the other ten as recommended. Each decision below ends with what was decided.
+
 Each decision gives the recommended option, then what it means for the schema task (#88), the linkage task (#89), the assembly task (#90), the validation task (#96) and the vaultkeepr lane (L7, OndrejMottl/vaultkeepr#52).
 
 1. **Links per position.** Recommended: yes, with the compatibility view `AbioticDataReference`. The alternative, keeping one row per sample and gridpoint, projects to 47 GB even with `WITHOUT ROWID`.
@@ -654,40 +656,62 @@ Each decision gives the recommended option, then what it means for the schema ta
    - **#90:** loads the tables in key order.
    - **#96:** compares the v1 links through the view and checks the distances on a sample.
    - **L7:** no change needed.
+   - **Decided by Ondřej on 2026-11-20: as recommended.** The export stage (`R/Analyses/05_Export`, pipeline lane) writes the three position tables and not the view `AbioticDataReference`: `DBI::dbListTables()` also lists views, so the export would otherwise write the view as a CSV of about 2 billion rows. The export documentation says how to join the position tables to the samples.
 2. **Composite primary keys.** Recommended: `WITHOUT ROWID` with composite keys on the 13 junction and value tables, with `SampleTaxa` excluded until its duplicates are resolved.
    - **#88:** writes the DDL.
    - **#90:** loads in key order.
    - **#96:** drops the uniqueness checks the keys cover and flags `SampleTaxa`.
    - **Vegetation lane:** resolves the duplicates.
    - **L7:** none.
+   - **Decided by Ondřej on 2026-11-20: as recommended.** For the 189,639 repeated (sample, taxon) pairs, the vegetation lane finds out whether the sources or the import's matching of taxon names repeat them, and proposes a merge rule per source for Ondřej's approval. If they are not resolved before the build, 2.0.0 keeps `SampleTaxa` as a rowid table and #96 flags the pairs.
 3. **Index set.** Recommended: as in question 4. Drop 28 indexes and keep the two primary-key duplicates that vaultkeepr's reference check uses. Add no index on `PositionLink.gridpoint_id`.
    - **#88:** writes the index list.
    - **#90:** creates the indexes after loading.
    - **L7:** once the reference check changes, the two kept duplicates can go.
+   - **Decided by Ondřej on 2026-11-20, in a revised form.** "Unused" in question 3 means unused by the 11 workloads of vaultkeepr 0.1.0. It does not cover direct SQL users of the file, the two exported functions that were not run, or the query shapes of decision 10, which change the indexes vaultkeepr needs. Once links are stored per position, the indexes that are unused but not redundant take under 1 GB at v1.0.0 size, so they stay. The rule: drop an index only when it is redundant by definition, and keep every other one.
+   - **Drop 29 of the 59 indexes of `Data/SQL/make_tables.sql`:**
+     - the 12 unique indexes that duplicate an `INTEGER PRIMARY KEY` and appear in no plan: `idx_version_control_id`, `idx_authors_author_id`, `idx_datasettypeid_dataset_type_id`, `idx_datasetsourcetypeid_data_source_type_id`, `idx_datasetsourcesid_data_source_id`, `idx_samplingmethodid_sampling_method_id`, `idx_samplesizeid_sample_size_id`, `idx_taxa_taxon_id`, `idx_traitsdomain_trait_domain_id`, `idx_traits_trait_id`, `idx_abioticvariable_abiotic_variable_id` and `idx_references_reference_id`;
+     - the prefix duplicate `idx_sampletaxa_sample_id`, the first column of `idx_sampletaxa_sample_id_taxon_id`;
+     - the two indexes of the v1 link table, which becomes the view `AbioticDataReference` (decision 1): `idx_abioticdatareference_sample_id` and `idx_abioticdatareference_sample_ref_id`;
+     - the 14 indexes that a new primary key makes redundant (decision 2, as in the `without_rowid` prototype): `idx_datasetreferences_dataset_id`, `idx_datasetsourcetypereference_data_source_type_id`, `idx_datasetsourcesreference_data_source_id`, `idx_samplingmethodreference_sampling_method_id`, `idx_samplereference_sample_id`, `idx_datasetsample_dataset_id`, `idx_sampleuncertainty_sample_id`, `idx_taxonreference_taxon_id`, `idx_traitsreference_trait_id`, `idx_abioticdata_sample_id`, `idx_abioticvariablereference_abiotic_variable_id`, `idx_traitsvalue_dataset_id` and `idx_traitsvalue_dataset_id_sample_id_taxon_id` (both lead with the first columns of the key `dataset_id, sample_id, trait_id, taxon_id`), and `idx_taxonclassification_taxon_id` (`taxon_id` becomes the primary key of `TaxonClassification`).
+   - **Keep the other 30**, among them:
+     - the two primary-key duplicates of the reference check, `idx_samples_sample_id` and `idx_datasets_dataset_id`;
+     - 11 indexes that question 3 found unused but that serve lookups from the other direction: `idx_abioticdata_abiotic_variable_id`, `idx_traitsvalue_trait_id`, `idx_traitsvalue_sample_id`, `idx_samples_sample_size_id`, `idx_traits_trait_domain_id`, the three rank indexes of `TaxonClassification` (`taxon_species`, `taxon_genus`, `taxon_family`) and the `reference_id` indexes of `TaxonReference`, `TraitsReference` and `SamplingMethodReference`;
+     - the three indexes added with the trait unit contract after question 3, which were not measured: `idx_traitsdomain_trait_domain_name`, `idx_traitsvalue_trait_unit_conversion_id` and `idx_traitsvalue_trait_derivation_id`.
+   - **Still no index on `PositionLink.gridpoint_id`.** vaultkeepr never reads links by gridpoint, and the index would cover all 95 M position links (its size was not measured). "Which positions use this gridpoint" is the one reverse lookup left unserved.
+   - **Follow-up:** after the vaultkeepr lane changes its query shapes (decision 10), rerun `12_profile_vaultkeepr_queries.R` on the 2.0.0 rehearsal database and revisit the index set. Adding an index later is cheap.
 4. **Natural keys and `CHECK` constraints.** Recommended: `UNIQUE NOT NULL` on sample and dataset names, and `CHECK` on coordinates, link km and years, and `References.mandatory`.
    - **#88:** writes the constraints.
    - **#89:** handles the 514 TRY datasets with coordinates out of range before linking.
    - **#96:** drops the row checks these constraints cover.
    - **L7:** none.
+   - **Decided by Ondřej on 2026-11-20: as recommended.** The trait lane sets coordinates outside −180 to 180 and −90 to 90 to missing in its export, so the trait values stay, unlinked, like the TRY and BIEN datasets that already have no coordinate; the `try_traits` and `bien_traits` contracts already reject coordinates out of range. The trait lane also drops the 238,777 BIEN trait samples without a value. The import (#89) and the `CHECK` constraint stop anything that slips through.
 5. **Distance and age types.** Recommended: keep km as an integer rounded down (as in v1), years as an integer, and ages as `REAL`. The alternative, integer metres, keeps the distance to the metre for 0.17 GB more; 3.3 % of the links lie between 49 and 50 km and are stored as 49.
    - **#88, #89 and L7:** none with the recommended option. Metres would be a vaultkeepr change, because the column and unit change.
+   - **Decided by Ondřej on 2026-11-20: as recommended.**
 6. **Gridpoints.** Recommended: keep them as `Datasets` and `Samples` rows in 2.0.0, and decide dedicated tables later. They would save 4 % and break vaultkeepr 0.1.0, partly without any message.
    - **#88 and L7:** none.
+   - **Decided by Ondřej on 2026-11-20: as recommended.**
 7. **Version hook.** Recommended: build columns on `version_control` (`build_profile`, `git_commit`, `manifest_sha256`), a `BuildProducers` table with one row per producer pin, and version rows written in the order of `config.yml`.
    - **#88:** writes the DDL.
    - **C3 (VegVault issue 84):** fills the 2.0.0 row.
    - **#96:** compares it with the build manifest.
    - **L7:** orders the version reader by `id`.
+   - **Decided by Ondřej on 2026-11-20: as recommended.**
 8. **Build engine and load settings.** Recommended: R in memory with `{targets}` branches of 2,000 to 10,000 positions, one bulk load with the settings of section 6, and `VACUUM INTO` the release file.
    - **#89:** implements the link step.
    - **#90:** implements the assembly.
    - **No new dependency:** DuckDB is not adopted.
+   - **Decided by Ondřej on 2026-11-20: as recommended.**
 9. **Validation split.** Recommended: section 7.
    - **#96:** implements its share.
    - **#88:** provides the constraints P4 relies on.
+   - **Decided by Ondřej on 2026-11-20: as recommended.**
 10. **vaultkeepr query shapes.** Recommended: the five changes of recommendation 3, in vaultkeepr's 2.0.0 release.
     - **L7:** implements them.
     - **The schema:** does not depend on them, except for the two kept primary-key duplicates.
+    - **Decided by Ondřej on 2026-11-20: as recommended.** All five go into vaultkeepr 0.1.1, the release that reads 2.0.0. The change of the box filter also corrects a wrong result: the current filter keeps the datasets of every unselected type, wherever they lie.
 11. **Distribution.** Recommended: one SQLite file plus an xz copy, each with a SHA-256 checksum.
     - **The build task (VegVault issue 83):** records the checksums.
     - **The publication task (VegVault issue 85):** confirms the National Repository quota and versioning before the deposit.
+    - **Decided by Ondřej on 2026-11-20: as recommended**, subject to the National Repository check of VegVault issue 85. If that check rules out this form, the distribution comes back for a decision.
