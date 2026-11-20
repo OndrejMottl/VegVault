@@ -136,6 +136,115 @@ testthat::test_that("render_column_names_document() replaces a document", {
   testthat::expect_equal(base::rawToChar(vec_bytes_start), "PK")
 })
 
+testthat::test_that("render_column_names_document() explains position links", {
+  dir_pandoc <-
+    base::tryCatch(
+      expr = resolve_pandoc_dir(),
+      error = function(cnd) {
+        NULL
+      }
+    )
+
+  testthat::skip_if(
+    base::is.null(dir_pandoc),
+    message = "Quarto and its pandoc are not available"
+  )
+
+  data_column_types <-
+    tibble::tibble(
+      table_name = c("PositionLink", "Positions", "SamplePosition", "Samples"),
+      column_name = c("position_id", "position_id", "sample_id", "sample_id"),
+      data_type = "integer"
+    )
+
+  dir_with_positions <-
+    withr::local_tempdir()
+
+  dir_without_positions <-
+    withr::local_tempdir()
+
+  render_column_names_document(
+    data_column_types = data_column_types,
+    dir_export = dir_with_positions,
+    dir_pandoc = dir_pandoc
+  )
+
+  render_column_names_document(
+    data_column_types = dplyr::filter(
+      data_column_types,
+      table_name == "Samples"
+    ),
+    dir_export = dir_without_positions,
+    dir_pandoc = dir_pandoc
+  )
+
+  vec_text_document <-
+    purrr::map_chr(
+      .x = c(dir_with_positions, dir_without_positions),
+      .f = ~ {
+        dir_unzipped <-
+          withr::local_tempdir()
+
+        utils::unzip(
+          zipfile = base::file.path(
+            .x,
+            "Column_names",
+            "VegVault_column_names.docx"
+          ),
+          files = "word/document.xml",
+          exdir = dir_unzipped
+        )
+
+        base::readLines(
+          con = base::file.path(dir_unzipped, "word", "document.xml"),
+          warn = FALSE,
+          encoding = "UTF-8"
+        ) |>
+          stringr::str_c(collapse = "")
+      }
+    )
+
+  text_with_positions <-
+    vec_text_document[1]
+
+  text_without_positions <-
+    vec_text_document[2]
+
+  # The note comes before the first table and gives the join of the view
+  #   that the flat files leave out
+  position_note <-
+    stringr::str_locate(
+      string = text_with_positions,
+      pattern = "Links between samples and gridpoints"
+    )[, "start"]
+
+  position_first_caption <-
+    stringr::str_locate(
+      string = text_with_positions,
+      pattern = "Column names and types for table"
+    )[, "start"]
+
+  testthat::expect_false(base::is.na(position_note))
+
+  testthat::expect_true(position_note < position_first_caption)
+
+  testthat::expect_true(
+    stringr::str_detect(text_with_positions, "AbioticDataReference")
+  )
+
+  testthat::expect_true(
+    stringr::str_detect(text_with_positions, "JOIN PositionLink")
+  )
+
+  # Without the position tables there is nothing to explain
+  testthat::expect_false(
+    stringr::str_detect(
+      text_without_positions,
+      "Links between samples and gridpoints"
+    )
+  )
+})
+
 
 #----------------------------------------------------------#
 # Inputs -----
