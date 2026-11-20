@@ -80,7 +80,7 @@ data_comments_authors <-
     "author_orcid", "ORCID ID of an Author"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "Authors"
 ) %>%
@@ -103,7 +103,7 @@ data_comments_version_control <-
     "changelog", "Text description of main changes in the database"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "version_control"
 ) %>%

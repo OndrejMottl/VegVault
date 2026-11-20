@@ -56,7 +56,7 @@ data_comments_abiotic_variable <-
     "measure_details", "Additional details about Abiotic Variable"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "AbioticVariable"
 ) %>%
@@ -69,7 +69,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: AbioticVariable scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/AbioticVariable.png"
   )
@@ -110,7 +110,7 @@ data_comments_abiotic_data <-
 
 ```{r}
 #| label: AbioticData scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
   )
@@ -134,7 +134,7 @@ data_comments_abiotic_data_reference <-
     "distance_in_years", "Distance among samples expressed in years"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "AbioticDataReference"
 ) %>%
@@ -147,7 +147,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: AbioticDataReference scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
   )
@@ -348,7 +348,7 @@ data_comments_abiotic_variable_reference <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   table_name = "AbioticVariableReference"
 ) %>%

@@ -59,7 +59,7 @@ data_comments_datasets <-
     "sampling_method_id", "ID of a Sampling Method"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "Datasets"
 ) %>%
@@ -72,7 +72,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Dataset scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
   )
@@ -98,7 +98,7 @@ data_comments_dataset_type <-
     "dataset_type", "Text description of individual Dataset Types (currently vegetation_plot, fossil_pollen_archive, traits, gridpoints)"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "DatasetTypeID"
 ) %>%
@@ -111,7 +111,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Dataset Type scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.png"
   )
@@ -169,7 +169,7 @@ data_comments_dataset_source_type <-
     "dataset_source_type", "Text description of individual Dataset Source-Type (currently, BIEN, sPlotOpen, TRY, Neotoma-FOSSILPOL, gridpoints)"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "DatasetSourceTypeID"
 ) %>%
@@ -190,7 +190,7 @@ data_comments_dataset_sources_type_reference <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "DatasetSourceTypeReference"
 ) %>%
@@ -203,7 +203,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Dataset Source Type scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.png"
   )
@@ -314,7 +314,7 @@ data_comments_dataset_sources <-
     "data_source_desc", "Text description of individual Dataset Sources (e.g., name of the sub-database from the primary source)"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "DatasetSourcesID"
 ) %>%
@@ -335,7 +335,7 @@ data_comments_dataset_sources_reference <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "DatasetSourcesReference"
 ) %>%
@@ -348,7 +348,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Dataset Source ID scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.png"
   )
@@ -467,7 +467,7 @@ data_comments_sampling_method <-
     "sampling_method_details", "Text description of individual Dataset Sampling Methods"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SamplingMethodID"
 ) %>%
@@ -488,7 +488,7 @@ data_comments_sampling_method_reference <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SamplingMethodReference"
 ) %>%
@@ -501,7 +501,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Dataset Sampling method scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.png"
   )
@@ -557,7 +557,7 @@ data_comments_dataset_references <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "DatasetReferences"
 ) %>%
@@ -570,7 +570,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Dataset reference method scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.png"
   )

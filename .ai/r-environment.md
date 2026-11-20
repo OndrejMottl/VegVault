@@ -18,7 +18,7 @@ Canonical guidance for the R version, `renv` package management, artefact format
 Adding, removing, or upgrading a package requires explicit user approval first. Then, from the repository root in a fresh R session:
 
 1. Install with `renv::install()`. Prefer the CRAN release; use a GitHub source only for packages that are not on CRAN.
-2. If scripts attach the package, add it to `package_list` in `R/00_Config_file.R`.
+2. If scripts attach the package, add it to `package_list` in `R/00_Config_file.R`. In VegVault, also list it under `packages` in `config.yml` (`attach`, or `tools` for a package that no code calls by name); the setup writes that list to `R/package_dependencies.R`.
 3. Snapshot with `renv::snapshot(lockfile = "renv/library_list.lock", type = "all")`.
 4. Inspect `git diff -- renv/library_list.lock` and confirm that only the intended packages changed.
 5. In a new session, confirm that `renv::restore(lockfile = "renv/library_list.lock")` reports a synchronised library and that the changed packages load.

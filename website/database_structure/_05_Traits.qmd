@@ -52,7 +52,7 @@ data_comments_traits <-
     "trait_name", "Name of the trait from the primary source. See 'VegVault Content' for the details about the specific columns used from primary sources."
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "Traits"
 ) %>%
@@ -65,7 +65,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Traits scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/Traits.png"
   )
@@ -87,7 +87,7 @@ data_comments_traits_domain <-
     "trait_unit", "Canonical unit used by all values in the Trait Domain",
     "trait_domain_description", "Additional information about the Trait Domain"
   )
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "TraitsDomain"
 ) %>%
@@ -100,7 +100,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: TraitsDomain scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/TraitsDomain.png"
   )
@@ -240,7 +240,7 @@ data_comments_traits_value <-
     "trait_derivation_id", "ID of an optional derived-trait rule"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "TraitsValue"
 ) %>%
@@ -253,7 +253,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: TraitsValue scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/TraitsValue.png"
   )
@@ -351,7 +351,7 @@ data_comments_traits_reference <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "TraitsReference"
 ) %>%
@@ -364,7 +364,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: TraitsReference scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/TraitsReference.png"
   )

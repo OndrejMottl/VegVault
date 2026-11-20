@@ -52,7 +52,7 @@ url_gh_wosis <-
   )
 
 data_wosis <-
-  dowload_and_load(url_gh_wosis)
+  load_remote_artefact(url_gh_wosis)
 
 
 #----------------------------------------------------------#

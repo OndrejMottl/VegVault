@@ -51,7 +51,7 @@ data_comments_taxa <-
     "taxon_name", "Name of a Taxon from primary source."
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "Taxa"
 ) %>%
@@ -64,7 +64,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Taxa scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
   )
@@ -85,7 +85,7 @@ data_comments_sample_taxa <-
     "taxon_id", "ID of a Taxon",
     "value", "Abundance representation of a Taxon (the units may differ among primary sources, i.e. Dataset Source-Types)"
   )
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SampleTaxa"
   ) %>%
@@ -98,7 +98,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: SampleTaxa scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.png"
   )
@@ -219,7 +219,7 @@ data_comments_taxon_classification <-
     "taxon_family", "ID of a Taxon, which was assign as family level"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "TaxonClassification"
 ) %>%
@@ -233,7 +233,7 @@ get_db_table_data_types(
 
 ```{r}
 #| label: TaxonClassification scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
     "Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.png"
   )
@@ -361,7 +361,7 @@ data_comments_taxon_reference <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "TaxonReference"
 ) %>%

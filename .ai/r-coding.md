@@ -6,28 +6,27 @@ Canonical R guidance for scripts, reusable functions, data processing, database 
 
 Apply these conventions to new and materially edited R code. Preserve readable established idioms in untouched legacy sections; do not turn a focused change into a repository-wide restyle. When editing an old block substantially, bring that block toward this guide without changing behavior accidentally.
 
-The main repository areas are:
+The main areas of the VegVault repository are (`.ai/analysis-structure.md` describes the stage layout):
 
-- `R/00_Config_file.R`: shared configuration, packages, constants, secrets-path resolution, and database version
-- `R/01_Master.R`: full workflow orchestrator; never run without explicit authorization
-- `R/01_Data_processing/`: database creation and persistent-write logic
-- `R/02_Main_analyses/`: ordered producer imports, integration, checks, and exports
-- `R/Functions/`: reusable project functions
+- `R/___setup_project___.R`, `config.yml` and the git-ignored `secrets.yaml`: shared setup, settings, and machine-local paths
+- `R/Analyses/`: the `{targets}` stages, each run through its `00_run.R` (all of them through `00_run_main.R`); never run a stage that builds or writes the database without explicit authorization
+- `R/Functions/`: reusable project functions, with tests in `R/Tests/testthat/`
+- `R/00_Config_file.R`, `R/01_Master.R`, `R/01_Data_processing/`, `R/02_Main_analyses/` and `R/03_Visualisation/`: the legacy entry points, kept until the stages replace them; the website still sources `R/00_Config_file.R`, and `R/01_Master.R` is never run without explicit authorization
 - `R/04_Webiste/`: website-support code, retaining the repository's historical directory spelling
 
 ## Project setup and clean execution
 
-Use `R/___Init_project___.R` only for one-time machine setup; it may install packages or restore `renv`. Executable scripts load the repository configuration from a clean R session:
+Use `R/___Init_project___.R` only for one-time machine setup; it may install packages or restore `renv`. Executable scripts load the repository configuration from a clean R session. In VegVault, stage runners, pipelines and tests source the project setup:
 
 ```r
 library(here)
 
 source(
-  here::here(
-    "R/00_Config_file.R"
-  )
+  here::here("R/___setup_project___.R")
 )
 ```
+
+The legacy VegVault scripts, the website and the producer repositories source their `R/00_Config_file.R` the same way.
 
 Do not rely on objects, options, packages, connections, or environment variables left by an interactive session. A reusable function must not source setup files or attach packages.
 
@@ -231,4 +230,4 @@ Profile before optimizing. Prefer reducing downloads, repeated parsing, raster r
 - Do not use environment variables as hidden switches for normal analysis logic; prefer explicit arguments or configuration values.
 - Start validation with parsing/sourcing the smallest affected component in a clean session.
 - Broaden to focused functions, representative subsets, disposable schema checks, and downstream contracts as risk increases.
-- Do not run a full producer pipeline, `R/01_Master.R`, or database assembly solely to validate formatting or documentation.
+- Do not run a full producer pipeline, `R/01_Master.R`, a stage that builds the database, or database assembly solely to validate formatting or documentation.

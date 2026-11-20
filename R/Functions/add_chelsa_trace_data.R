@@ -18,7 +18,7 @@ add_chelsa_trace_data <- function(
         sel_url,
         .x
       ) %>%
-        dowload_and_load()
+        load_remote_artefact()
     ) %>%
     dplyr::bind_rows() %>%
     dplyr::mutate(

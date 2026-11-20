@@ -58,7 +58,7 @@ url_splot <-
   )
 
 data_splot <-
-  dowload_and_load(url_splot)
+  load_remote_artefact(url_splot)
 
 dplyr::glimpse(data_splot)
 
