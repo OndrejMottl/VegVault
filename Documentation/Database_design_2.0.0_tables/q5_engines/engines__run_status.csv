@@ -1,0 +1,15 @@
+call,repetition,engine,label,chunk_order,stop_after,duckdb_threads,flag_expect_stop,exit_status,timed_out,seconds_child,flag_as_expected
+1,1,r_memory,r_memory_rep1,forward,0,0,FALSE,0,FALSE,5.9431610107421875,TRUE
+2,1,sqlite_incremental,sqlite_incremental_rep1,forward,0,0,FALSE,0,FALSE,4.90673303604126,TRUE
+3,1,duckdb,duckdb_rep1,forward,0,0,FALSE,0,FALSE,4.721503019332886,TRUE
+4,2,r_memory,r_memory_rep2,forward,0,0,FALSE,0,FALSE,5.864004135131836,TRUE
+5,2,sqlite_incremental,sqlite_incremental_rep2,forward,0,0,FALSE,0,FALSE,4.990612030029297,TRUE
+6,2,duckdb,duckdb_rep2,forward,0,0,FALSE,0,FALSE,4.850368022918701,TRUE
+7,3,r_memory,r_memory_rep3,forward,0,0,FALSE,0,FALSE,5.775598049163818,TRUE
+8,3,sqlite_incremental,sqlite_incremental_rep3,forward,0,0,FALSE,0,FALSE,4.974188804626465,TRUE
+9,3,duckdb,duckdb_rep3,forward,0,0,FALSE,0,FALSE,4.621023893356323,TRUE
+10,NA,r_memory,r_memory_reverse,reverse,0,0,FALSE,0,FALSE,5.808917999267578,TRUE
+11,NA,sqlite_incremental,sqlite_incremental_reverse,reverse,0,0,FALSE,0,FALSE,5.127156019210815,TRUE
+12,NA,duckdb,duckdb_threads1,forward,0,1,FALSE,0,FALSE,5.59925103187561,TRUE
+13,NA,sqlite_incremental,sqlite_incremental_resume,forward,5,0,TRUE,15,FALSE,2.322751998901367,TRUE
+14,NA,sqlite_incremental,sqlite_incremental_resume,forward,0,0,FALSE,0,FALSE,4.0634989738464355,TRUE

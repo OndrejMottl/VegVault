@@ -1,0 +1,4 @@
+stratum,n_positions,n_v1,n_v1_found,n_v1_same,n_new,across the dateline,longitude difference above the v1 window
+random,2000,498701,498701,498701,500465,0,1764
+dateline,500,10146,10146,10146,15648,5502,0
+polar,500,65384,65384,65384,112904,0,47520

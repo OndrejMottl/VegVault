@@ -1,0 +1,296 @@
+# Settings of the database research scripts in this folder.
+# The `subset` keys mirror the `subset` profile planned for config.yml, so
+#   the box can be swapped for that profile once it exists.
+subset:
+  box_name: alaska_yukon
+  lon_min: -170
+  lon_max: -125
+  lat_min: 54
+  lat_max: 72
+  # Margin for gridpoint cells around the box, in degrees. 50 km is about
+  #   0.45 degrees of latitude everywhere and 1.45 degrees of longitude
+  #   at 72 degrees north.
+  margin_lat: 0.5
+  margin_lon: 1.5
+  # Sample ids per query when copying the link table
+  link_chunk_size: 5000
+
+# Profiling of the v1 gridpoint stage (scripts 07 to 10).
+profiling:
+  # v1 arguments of add_gridpoints_with_links() in
+  #   R/02_Main_analyses/06_Create_gridpoints.R
+  grid_size_degree: 2
+  distance_km: 50
+  distance_years: 5000
+  # Nested boxes inside the subset box, smallest first. Gridpoint
+  #   candidates of a box get the subset margins above.
+  boxes:
+    kenai:
+      lon_min: -152
+      lon_max: -148
+      lat_min: 59
+      lat_max: 62
+    core:
+      lon_min: -165
+      lon_max: -135
+      lat_min: 56
+      lat_max: 70
+    alaska_yukon:
+      lon_min: -170
+      lon_max: -125
+      lat_min: 54
+      lat_max: 72
+  # Batches of the full box timed against the global gridpoint candidates
+  n_global_batches: 3
+  # The v1.1.0 abiotic artefacts are legacy `qs` files, which R 4.6 cannot
+  #   read; they are read once, read-only, with R 4.5.1 and the R 4.5
+  #   library of the trait producer. Paths are relative to the project root.
+  legacy_rscript: "C:/Program Files/R/R-4.5.1/bin/Rscript.exe"
+  legacy_library: "../VegVault-Trait_data/renv/library/R-4.5/x86_64-w64-mingw32"
+  abiotic_artefact_dir: "../VegVault-abiotic_data/Outputs/Data"
+  # The artefacts read by R/02_Main_analyses/06_Create_gridpoints.R and the
+  #   first call of R/02_Main_analyses/07_Import_chelsa_neo_climate_data.R
+  paleo_bio01_files:
+    - "Palaoclimate/bio01_batch_1_2024-08-06__f674adeb38401a05236e0b5e0ad7cc53__.qs"
+    - "Palaoclimate/bio01_batch_2_2024-08-06__b32dfb2e39d295750dc67f1dc145c176__.qs"
+    - "Palaoclimate/bio01_batch_3_2024-08-06__e6997e401e83f216ecf697e2ce3aefe0__.qs"
+  neo_bio01_file: "Neoclimate/CHELSA_bio_01_2024-08-06__ff1659d322855ca35555ac7b96d58720__.qs"
+
+# Query profiling of vaultkeepr (scripts 12 and 12a).
+vaultkeepr:
+  # The released vaultkeepr, exported read-only from the local checkout;
+  #   the path is relative to the project root
+  repo: "../../Packages/vaultkeepr"
+  ref: "origin/main"
+  n_repetitions: 3
+  # Each workload run is a child process stopped after this many seconds
+  seconds_timeout: 1800
+  # The boxes of the vaultkeepr vignettes, used on v1.0.0
+  boxes:
+    west_north_america:
+      long_lim: [-116, -114]
+      lat_lim: [44, 46]
+    europe:
+      long_lim: [14, 16]
+      lat_lim: [44, 46]
+    south_america:
+      long_lim: [-61, -59]
+      lat_lim: [-16, -14]
+  # Used for every workload when the target is the regional subset; the
+  #   2-degree cell of the subset with the most plots that also holds
+  #   pollen and traits
+  subset_box:
+    long_lim: [-150, -148]
+    lat_lim: [68, 70]
+
+# Schema prototypes on the regional subset (scripts 13 and 14).
+prototypes:
+  # Builds of every variant, interleaved; the files of the last one are kept
+  n_build_repetitions: 3
+  # Repetitions of each benchmark query, interleaved over the variants
+  n_query_repetitions: 5
+  # Bulk-load settings of every build, the same for all variants;
+  #   question 6 measures them one by one. cache_size is in KiB (1 GiB).
+  pragmas:
+    journal_mode: "OFF"
+    synchronous: "OFF"
+    foreign_keys: "OFF"
+    cache_size: -1048576
+  # Index sets from question 3 (index usage of vaultkeepr 0.1.0 on v1.0.0)
+  index_sets:
+    # Unique indexes on an INTEGER PRIMARY KEY column, which the rowid
+    #   already provides
+    pk_duplicates:
+      - idx_abioticvariable_abiotic_variable_id
+      - idx_authors_author_id
+      - idx_datasetsourcetypeid_data_source_type_id
+      - idx_datasetsourcesid_data_source_id
+      - idx_datasettypeid_dataset_type_id
+      - idx_datasets_dataset_id
+      - idx_references_reference_id
+      - idx_samplesizeid_sample_size_id
+      - idx_samples_sample_id
+      - idx_samplingmethodid_sampling_method_id
+      - idx_taxa_taxon_id
+      - idx_traits_trait_id
+      - idx_traitsdomain_trait_domain_id
+      - idx_version_control_id
+    # Unused by every plan of question 3. Two unused indexes are kept,
+    #   because they serve the query shapes vaultkeepr should send instead:
+    #   idx_sampleuncertainty_sample_id (instead of the correlated EXISTS)
+    #   and idx_datasets_coord_long_lat (instead of the CASE box filter).
+    unused_in_q3:
+      - idx_abioticdata_abiotic_variable_id
+      - idx_abioticdatareference_sample_ref_id
+      - idx_samplingmethodreference_reference_id
+      - idx_samples_sample_size_id
+      - idx_taxonclassification_taxon_family
+      - idx_taxonclassification_taxon_genus
+      - idx_taxonclassification_taxon_id
+      - idx_taxonclassification_taxon_species
+      - idx_taxonreference_reference_id
+      - idx_traits_trait_domain_id
+      - idx_traitsreference_reference_id
+      - idx_traitsvalue_dataset_id
+      - idx_traitsvalue_dataset_id_sample_id_taxon_id
+      - idx_traitsvalue_sample_id
+      - idx_traitsvalue_trait_id
+    # The leading column of a longer index on the same table
+    prefix_duplicates:
+      - idx_sampletaxa_sample_id
+  # Each variant is the v1 schema (Data/SQL/make_tables.sql) without the
+  #   named index sets, changed by the SQL files in Prototype_schemas/ in
+  #   order. The variants are cumulative, so that each difference has one
+  #   cause.
+  variants:
+    - name: v1
+      drop_index_sets: []
+      sql_files: []
+    - name: no_pk_duplicates
+      drop_index_sets: [pk_duplicates]
+      sql_files: []
+    - name: lean_indexes
+      drop_index_sets: [pk_duplicates, unused_in_q3, prefix_duplicates]
+      sql_files: []
+    - name: without_rowid
+      drop_index_sets: [pk_duplicates, unused_in_q3, prefix_duplicates]
+      sql_files: [without_rowid.sql]
+    - name: tuple_links
+      drop_index_sets: [pk_duplicates, unused_in_q3, prefix_duplicates]
+      sql_files: [without_rowid.sql, tuple_links.sql]
+    - name: gridpoint_tables
+      drop_index_sets: [pk_duplicates, unused_in_q3, prefix_duplicates]
+      sql_files: [without_rowid.sql, tuple_links.sql, gridpoint_tables.sql]
+    - name: constraints
+      drop_index_sets: [pk_duplicates, unused_in_q3, prefix_duplicates]
+      sql_files: [without_rowid.sql, tuple_links.sql, constraints.sql]
+  # The vaultkeepr branch of lane L7 whose version reader is probed
+  #   (script 14); exported read-only with `git archive`
+  vaultkeepr_l7_ref: "OndrejMottl/issue76"
+
+# Read-only checks of the schema candidates on v1.0.0 (script 15).
+v1_schema_checks:
+  seed: 900723
+  # Positions with two or more samples drawn to check that all samples of a
+  #   position have the same links, and samples read per drawn position
+  n_draw_positions: 2000
+  n_draw_samples: 5
+
+# Build engines on the regional subset (scripts 17 and 17a).
+engines:
+  n_repetitions: 3
+  # Positions per chunk of the link computation (v1 used batches of 500)
+  chunk_size: 500
+  # The link rule (decided for 2.0.0): at most 50 km and 5000 years
+  distance_km: 50
+  distance_years: 5000
+  # Candidate windows before the exact distance: the smallest radius of
+  #   curvature of the WGS84 ellipsoid (meridional, at the equator) makes
+  #   the window large enough everywhere; the margin covers the rounding of
+  #   stored coordinates to 0.01 degrees
+  radius_min_km: 6335.4
+  window_margin_deg: 0.01
+  # Limits for DuckDB on the shared build machine
+  duckdb_threads: 8
+  duckdb_memory_limit: "16GB"
+  # DuckDB extensions, installed once from the official repository into
+  #   this folder (relative to the project root)
+  duckdb_extension_dir: "Data/Temp/Database_research/Tools/duckdb_extensions"
+  # Input files prepared by 07_prepare_profiling_inputs.R (relative to the
+  #   project root)
+  cells_file: "Data/Temp/Database_research/Profiling/Inputs/gridpoint_coords_global.rds"
+  ages_file: "Data/Temp/Database_research/Profiling/Inputs/gridpoint_ages.rds"
+  bio1_file: "Data/Temp/Database_research/Profiling/Inputs/chelsa_neo_bio01_global.rds"
+
+# The link step at full size (script 20).
+full_links:
+  seed: 900723
+  # Positions drawn to compare the 2.0.0 links with the v1 links: a random
+  #   draw, plus draws among positions near the dateline and near the poles
+  n_draw_random: 2000
+  n_draw_dateline: 500
+  n_draw_polar: 500
+  # A position is near the dateline when its longitude is at least this far
+  #   from 0, and near a pole when its latitude is
+  dateline_long: 178.5
+  polar_lat: 75
+
+# Bulk-load practice (scripts 21 and 21a), on the full-size position tables
+#   written by script 20.
+bulk_load:
+  n_repetitions: 2
+  seed: 900723
+  # Positions per transaction when a variant commits per chunk
+  chunk_size: 500
+  # The baseline; every other variant changes only what it names. cache_size
+  #   is in KiB when negative (-1048576 is 1 GiB; -2000 is the SQLite
+  #   default of about 2 MB).
+  baseline:
+    page_size: 4096
+    journal_mode: "OFF"
+    synchronous: "OFF"
+    foreign_keys: "OFF"
+    temp_store: "DEFAULT"
+    cache_size: -1048576
+    index_timing: "after"
+    load_order: "sorted"
+    transactions: "single"
+  variants:
+    - name: baseline
+    - name: sqlite_defaults
+      journal_mode: "DELETE"
+      synchronous: "FULL"
+      cache_size: -2000
+    - name: journal_delete_sync_normal
+      journal_mode: "DELETE"
+      synchronous: "NORMAL"
+    - name: journal_wal_sync_normal
+      journal_mode: "WAL"
+      synchronous: "NORMAL"
+    - name: foreign_keys_on
+      foreign_keys: "ON"
+    - name: temp_store_memory
+      temp_store: "MEMORY"
+    - name: cache_default
+      cache_size: -2000
+    - name: cache_8gib
+      cache_size: -8388608
+    - name: page_8k
+      page_size: 8192
+    - name: page_16k
+      page_size: 16384
+    - name: page_64k
+      page_size: 65536
+    - name: indexes_before
+      index_timing: "before"
+    - name: load_shuffled
+      load_order: "shuffled"
+    - name: per_chunk_transactions
+      transactions: "per_chunk"
+    - name: per_chunk_wal_sync_normal
+      transactions: "per_chunk"
+      journal_mode: "WAL"
+      synchronous: "NORMAL"
+  # Tools for the distribution measurements (Git for Windows and MSYS2)
+  xz_threads: 8
+  gzip_exe: "C:/Program Files/Git/usr/bin/gzip.exe"
+  xz_exe: "C:/Program Files/Git/ucrt64/bin/xz.exe"
+  sha256sum_exe: "C:/Program Files/Git/usr/bin/sha256sum.exe"
+
+# The runs whose summary tables are exported next to the design note
+#   (script 22); each is the run the note cites.
+note_tables:
+  target_dir: "Documentation/Database_design_2.0.0_tables"
+  runs:
+    profiling_kenai: "Profiling/kenai/run_20261119_145954"
+    profiling_core: "Profiling/core/run_20261119_150146"
+    profiling_full_box: "Profiling/alaska_yukon/run_20261119_153502"
+    profiling_global: "Profiling/global/run_20261119_154626"
+    profiling_writes: "Profiling/writes/run_20261119_155159"
+    vaultkeepr_v1: "Vaultkeepr/v1/run_20261119_170655"
+    prototypes: "Prototypes/run_20261119_203020"
+    prototype_queries: "Prototypes/run_20261119_203020/queries_20261119_205950"
+    v1_schema_checks: "V1_schema_checks/run_20261119_210338"
+    engines: "Engines/run_20261120_090633"
+    full_links_v1: "Full_links/run_20261120_092514_v1"
+    bulk_load: "Bulk_load/run_20261120_094152"

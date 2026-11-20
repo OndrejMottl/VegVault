@@ -1,0 +1,17 @@
+table_name,key_columns,n_rows,n_dup_keys,n_dup_rows,n_null_key
+DatasetSample,"dataset_id, sample_id",12998979,0,0,0
+SampleTaxa,"sample_id, taxon_id",3689420,189639,647816,1678
+SampleReference,"sample_id, reference_id",1558641,0,0,0
+SampleUncertainty,"sample_id, iteration",88423000,0,0,0
+AbioticData,"sample_id, abiotic_variable_id",10871705,0,0,0
+TraitsValue,"trait_id, dataset_id, sample_id, taxon_id",11366223,0,0,0
+TaxonClassification,taxon_id,108228,0,0,0
+DatasetReferences,"dataset_id, reference_id",107832,0,0,0
+DatasetSourceTypeReference,"data_source_type_id, reference_id",6,0,0,0
+DatasetSourcesReference,"data_source_id, reference_id",6441,0,0,0
+SamplingMethodReference,"sampling_method_id, reference_id",71,0,0,0
+TaxonReference,"taxon_id, reference_id",227213,0,0,0
+TraitsReference,"trait_id, reference_id",16,0,0,0
+AbioticVariableReference,"abiotic_variable_id, reference_id",30,0,0,0
+Samples,sample_name,12998979,0,0,0
+Datasets,dataset_name,426225,0,0,0

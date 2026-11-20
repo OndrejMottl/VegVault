@@ -1,0 +1,2 @@
+script,box_name,run_started,n_gridpoint_candidates_global,n_gridpoint_candidates_box,n_positions_box,n_batches_box,batches_timed,seconds_build_global,seconds_distinct_global,max_memory_mb,r_version
+09_profile_v1_global_batches.R,alaska_yukon,2026-11-19 15:46:26,53386560,774410,5654,12,1 6 12,55.79149794578552,16.33738899230957,17414.100000000002,4.6.2

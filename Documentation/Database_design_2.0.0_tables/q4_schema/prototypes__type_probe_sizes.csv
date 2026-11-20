@@ -1,0 +1,7 @@
+variant,object,type,table_name,n_pages,bytes,payload_bytes,unused_bytes,n_cells
+type_probes,link_km_real,table,link_km_real,16494,67559424,51560486,8392121,2469631
+type_probes,link_m_integer,table,link_m_integer,12716,52084736,38127073,6396182,2469631
+type_probes,link_km_integer,table,link_km_integer,11639,47673344,34269608,5855179,2469631
+type_probes,samples_age_real,table,samples_age_real,615,2519040,876743,10327,236962
+type_probes,samples_age_integer,table,samples_age_integer,615,2519040,876743,10327,236962
+type_probes,sqlite_schema,internal,sqlite_schema,1,4096,1011,2953,5

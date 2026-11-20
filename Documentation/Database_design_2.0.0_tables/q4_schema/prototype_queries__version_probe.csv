@@ -1,0 +1,4 @@
+case,versions_in_insert_order,expected,returned,passed,l7_ref,l7_sha
+v1_table_rows_in_config_order,0.0.2 0.0.3 0.0.4 1.0.0 2.0.0,2.0.0,2.0.0,TRUE,OndrejMottl/issue76,74d7a8f9461277f940d9f198261afd1c1077e537
+extended_table_rows_in_config_order,0.0.2 0.0.3 0.0.4 1.0.0 2.0.0,2.0.0,2.0.0,TRUE,OndrejMottl/issue76,74d7a8f9461277f940d9f198261afd1c1077e537
+v1_table_new_row_written_first,2.0.0 0.0.2 0.0.3 0.0.4 1.0.0,2.0.0,1.0.0,FALSE,OndrejMottl/issue76,74d7a8f9461277f940d9f198261afd1c1077e537

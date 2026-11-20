@@ -1,0 +1,5 @@
+id,version,update_date,changelog
+1,0.0.2,2024-10-17,Beging the versioning of the database
+2,0.0.3,2024-11-18,Reworked the `References` and flagged `mandatory`
+3,0.0.4,2024-12-19,Update the version control and correct the Dataset References
+4,1.0.0,2025-01-20,First release of the database

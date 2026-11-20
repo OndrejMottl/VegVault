@@ -1,0 +1,2 @@
+run_box,run_global,run_writes,n_positions_v1,n_positions_v1_age0,n_positions_v1_other,n_batches_v1,n_links_v1,pairs_per_position_age0,pairs_per_position_other,pairs_fit_r_squared,n_pairs_v1,microseconds_per_pair
+run_20261119_153502,run_20261119_154626,run_20261119_155159,373225,284885,88340,747,2067445952,1017.8379571421794,1654.2471637213728,0.9998389435457101,436102960.86359584,34.116995358611824

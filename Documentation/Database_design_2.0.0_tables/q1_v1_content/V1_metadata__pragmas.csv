@@ -1,0 +1,10 @@
+pragma,value
+page_size,4096
+page_count,26864457
+freelist_count,0
+journal_mode,delete
+auto_vacuum,0
+encoding,UTF-8
+user_version,0
+application_id,0
+schema_version,87

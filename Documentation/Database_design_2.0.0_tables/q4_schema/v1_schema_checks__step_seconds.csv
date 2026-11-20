@@ -1,0 +1,13 @@
+step,seconds
+sample_positions,8.404957056045532
+positions,2.9199910163879395
+position_link_counts,35.20132493972778
+position_sizes,0.0896608829498291
+key_duplicates,58.86486601829529
+sample_taxa_duplicates_by_source,0.8135459423065186
+ages_by_dataset_type,9.060021162033081
+coordinates_out_of_range,0.05011105537414551
+mandatory_values,0.0032570362091064453
+gridpoint_references,0.5856070518493652
+gridpoint_columns,0.8714900016784668
+link_set_draw,8.749314069747925

@@ -1,0 +1,9 @@
+abiotic_variable_id,abiotic_variable_name,abiotic_variable_unit
+1,bio1,C (degree Celsius)
+2,bio4,C (degree Celsius)
+3,bio6,C (degree Celsius)
+4,bio12,kg m-2 year-1
+5,bio15,Unitless
+6,bio18,kg m-2 quarter-1
+7,bio19,kg m-2 quarter-1
+8,HWSD2,Unitless

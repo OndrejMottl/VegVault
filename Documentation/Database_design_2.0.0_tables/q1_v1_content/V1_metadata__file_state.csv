@@ -1,0 +1,3 @@
+stage,size_bytes,mtime,journal_exists,wal_exists,shm_exists,header_identical
+before,110036815872,2025-01-27 10:13:20.744,FALSE,FALSE,FALSE,TRUE
+after,110036815872,2025-01-27 10:13:20.744,FALSE,FALSE,FALSE,TRUE

@@ -1,0 +1,2 @@
+script,prototype_run,run_started,run_seconds,n_query_repetitions,n_box_plots,n_box_gridpoints,connection,r_version,rsqlite_version,files_unchanged
+14_query_schema_prototypes.R,run_20261119_203020,2026-11-19 20:59:50,176.3789939880371,5,326,1852,"RSQLite SQLITE_RO, default cache",4.6.2,3.53.3,TRUE
