@@ -127,6 +127,49 @@ default:
     cache_dir: "Producers"
     # Release files are fetched from the raw GitHub file at the tag
     release_url_template: "https://raw.githubusercontent.com/{repository}/{tag}/{directory}/{file_name}"
+    # How the `subset` profile cuts each artefact to its box: by the
+    #   coordinate columns, widened by the subset margins (`flag_margin`)
+    #   for the climate and soil grids around the box, or by the keys kept
+    #   in another artefact. Rows without coordinates are dropped, including
+    #   trait records without a location. Every artefact needs an entry.
+    subset_filter:
+      splot_plots:
+        col_lon: "longitude"
+        col_lat: "latitude"
+        flag_margin: false
+      bien_plots:
+        col_lon: "longitude"
+        col_lat: "latitude"
+        flag_margin: false
+      fossilpol_assembly:
+        col_lon: "long"
+        col_lat: "lat"
+        flag_margin: false
+      # Age uncertainty has no coordinates: keep the datasets of the
+      #   filtered assembly
+      fossilpol_age_uncertainty:
+        col_key: "dataset_id"
+        reference: "fossilpol_assembly"
+      try_traits:
+        col_lon: "longitude"
+        col_lat: "latitude"
+        flag_margin: false
+      bien_traits:
+        col_lon: "longitude"
+        col_lat: "latitude"
+        flag_margin: false
+      chelsa_neoclimate:
+        col_lon: "long"
+        col_lat: "lat"
+        flag_margin: true
+      chelsa_trace21k_palaeoclimate:
+        col_lon: "long"
+        col_lat: "lat"
+        flag_margin: true
+      wosis_soil:
+        col_lon: "long"
+        col_lat: "lat"
+        flag_margin: true
   # Regional rehearsal build; enabled only in the `subset` profile below
   subset:
     enabled: false
