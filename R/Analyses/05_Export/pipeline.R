@@ -11,10 +11,11 @@
 #
 #----------------------------------------------------------#
 # Defines the target graph of the export stage: every table of the built
-#   database as a CSV file, the column names and types of each table as a
-#   CSV file, and one Word document listing all columns. Settings are in
-#   the `export` section of `config.yml`; the stage needs the sqlite3
-#   command-line tool and Quarto (for its pandoc).
+#   database as a CSV file (views are left out), the column names and types
+#   of each table as a CSV file, and one Word document listing all columns
+#   and explaining how the position tables link samples to gridpoints.
+#   Settings are in the `export` section of `config.yml`; the stage needs
+#   the sqlite3 command-line tool and Quarto (for its pandoc).
 # Run with:
 #   R/Analyses/05_Export/00_run.R
 # Sourcing this script only declares targets; it does not execute them.
@@ -116,7 +117,8 @@ list(
     ),
     cue = targets::tar_cue(mode = "always")
   ),
-  # Tables of the database, the units of the export
+  # Tables of the database, the units of the export. Views are left out:
+  #   AbioticDataReference would repeat every position link once per sample
   targets::tar_target(
     name = "vec_table_names",
     command = load_database_table_names(
