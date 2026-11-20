@@ -292,7 +292,7 @@ The variants were then read in three ways, all read-only:
 
 `16_project_schema_sizes.R` projects the subset sizes to v1.0.0. For every table except the link tables, it takes the measured v1.0.0 size of the table with its indexes (question 1) times its size ratio between the variant and `v1` on the subset. For the link tables, it multiplies bytes per row on the subset by the v1.0.0 row counts. The per-row method gives 101.4 GB for the v1 link table with its indexes, against 104.1 GB measured: the v1 build wrote its indexes in random order, which leaves pages less full. The projections below therefore take the v1 layouts from the measured size by ratio, and the position tables per row. `gridpoint_tables` moves rows between tables, so it is not projected.
 
-The subset files fit in memory, while the v1.0.0 link indexes alone (56 GB) do not, so subset query times show the work a plan does, not the disk reads it would need at full size.
+The builds and benchmarks ran on the machine of question 2 (24 cores, 63.8 GB of RAM). The subset files fit in its memory, while the v1.0.0 link indexes alone (56 GB) do not, so subset query times show the work a plan does, not the disk reads it would need at full size.
 
 ### Results of the prototypes
 
