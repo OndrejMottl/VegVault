@@ -2,7 +2,7 @@
 
 This folder holds one machine-readable contract per artefact that VegVault reads from a producer repository, the synthetic fixtures that satisfy (or deliberately break) each contract, and this description of the format. The contracts make the interface between the producers and VegVault explicit: file names, partitioning, column names and classes, missing values, units, nesting, keys and plausible values. VegVault's import validates every artefact against its contract before anything is written to SQLite, and producers validate their export against the same contract before tagging.
 
-Status: proposed for gate G1 of the 2.0.0 release. The format, the plausible climate ranges and the consumption route below are agreed at G1; until then the contracts may change without a version bump.
+Status: proposed for gate G1 of the 2.0.0 release. How producers use the contracts is decided: each producer keeps a copy (see below). The format and the plausible climate ranges are agreed at G1; until then the contracts may change without a version bump.
 
 ## Contracts
 
@@ -19,6 +19,8 @@ Status: proposed for gate G1 of the 2.0.0 release. The format, the plausible cli
 | `wosis_soil` | VegVault-abiotic_data | `Outputs/Data/WoSIS/wosis_data_<date>__<hash>__.qs` | active; the soil source is still to be settled in the source inventory (VegVault issue 82) |
 
 FOSSILPOL has no references contract: VegVault takes references from the assembly's `doi` and `source_of_data` and does not read the producer's `Outputs/Meta_and_references/`.
+
+`source_manifest.csv` in this folder is not a contract. It lists the upstream sources of every producer (version, download dates, checksum, licence, citation) and is owned by the coordination lane (VegVault issue 82). The contract and pin tooling read only `.yml` files and never read it.
 
 ## Contract format
 
@@ -103,9 +105,9 @@ validate_producer_artefact(
 
 `validate_producer_artefact()` takes the contract (a path or a loaded contract) and either the paths of every file of the artefact (`path_artefact`) or the objects in memory (`data_artefact`: a data frame, or a list of data frames named by their file names). For contracts with variables, `vec_variables` limits the check to some variables, so a large artefact can be validated one variable at a time. It checks file names and partitions, object classes and row counts, columns, nested elements, values, variable checks, keys, rounded keys and dependencies, and reports every violation at once; an empty artefact is an error. On failure it aborts with an error of class `producer_contract_error` whose message names the contract, file, column and rule, and whose field `findings` holds the full table. On success it returns the artefact unchanged, invisibly. It never writes to a database or a file. `diagnose_producer_artefact()` returns the same findings table without aborting.
 
-Dependencies: `assertthat`, `cli`, `dplyr`, `purrr`, `qs2`, `rlang`, `stringr`, `tibble`, `vctrs` and `yaml` for the validator; `here` and `tidyr` for the fixture builders; `testthat` and `withr` for the tests.
+Dependencies: `assertthat`, `cli`, `dplyr`, `purrr`, `qs2`, `rlang`, `stringr`, `tibble`, `vctrs` and `yaml` for the validator and the copy check; `here` and `tidyr` for the fixture builders; `testthat` and `withr` for the tests. Every producer lockfile holds all of them. `save_contract_copy()` and the tests of the copy functions also call the `git` executable.
 
-Until the template layout adds `R/Tests/Run_tests.R`, run the tests from the repository root by sourcing every file in `R/Functions/` and calling `testthat::test_dir("R/Tests/testthat")`. The script `tests/test_contract_fixtures_integration.R` drives the v1 database writers with the fixtures in a temporary SQLite file.
+Run the tests with `Rscript R/Tests/Run_tests.R` from the repository root. The script `tests/test_contract_fixtures_integration.R` drives the v1 database writers with the fixtures in a temporary SQLite file.
 
 ## Fixtures
 
@@ -131,20 +133,75 @@ Rscript R/Contracts/build_contract_fixtures.R
 
 ## How producers use the contracts
 
-To be decided at gate G1. Two routes were considered.
+Each producer keeps its own copy of the validator and of its contracts, taken from one VegVault commit. A producer tag therefore holds everything needed to repeat its contract check, however the repositories are arranged on a machine. Reading the files from a sibling VegVault checkout instead was considered and rejected, because it depends on the folder layout of the machine.
 
-1. **Pinned copy.** A producer keeps a copy of `Data/Contracts/` (contracts and fixtures) and `R/Functions/Contracts/` taken from one VegVault commit, records that commit, and validates its export with the copied functions. A producer test compares the copy with the sibling VegVault checkout at the recorded commit when the sibling is present and skips otherwise.
-2. **Fetch at a pinned commit.** The producer reads the contracts and functions from the sibling checkout, or downloads them from GitHub, at a pinned commit, without keeping a copy.
+### What the copy holds
 
-| | Pinned copy | Fetch at a pinned commit |
-| --- | --- | --- |
-| Works offline and on machines without the sibling checkout | yes | only with the sibling checkout |
-| A producer tag records exactly which contract it was validated against | yes, in its own history | only if the commit is pinned and the source stays reachable |
-| Drift between producer and VegVault | caught by the drift test when the sibling is present | none while the pin is current |
-| Follows the sibling-checkout convention of `AGENTS.md` | yes, for the drift test | yes |
-| Risk | a stale copy if the drift test is skipped | running against whatever branch the sibling has checked out if the commit is not enforced |
+The copy uses the same paths in the producer as in VegVault:
 
-Recommendation: the pinned copy. It keeps every producer tag reproducible on its own, works offline, and the drift test catches a stale copy whenever the sibling checkout is available. The copied functions need only the packages listed under Validator.
+- every `.R` file of `R/Functions/Contracts/`: the validator, its helpers, the fixture builders and the functions that check the copy;
+- the producer's own contracts from `Data/Contracts/`: those whose `producer: repository` names the producer and whose `status` is not `retired`;
+- the record `Data/Contracts/contract_copy.yml`: the VegVault commit the copy came from, the producer repository, the version of every copied contract and the SHA-256 fingerprint of every copied file. Fingerprints are taken on the text with line endings converted to LF, so Windows and Linux checkouts agree.
+
+Fixtures, this README and the contracts of other producers are not copied. The copied functions are tested in VegVault; the producer does not test them again, apart from the copy check below. Its test setup must source `R/Functions/Contracts/`; a setup that sources everything under `R/Functions/` recursively already does.
+
+### Making or updating the copy
+
+In an R session at the root of a VegVault checkout that is on the shared release branch and up to date with GitHub:
+
+```r
+source(here::here("R/___setup_project___.R"))
+
+save_contract_copy(
+  path_producer = "../VegVault-Vegetation_data",
+  repository = "OndrejMottl/VegVault-Vegetation_data",
+  ref_base = "origin/2.0.0"
+)
+```
+
+`save_contract_copy()` (in `R/Functions/Producers/`) copies the files and writes the record. It writes nothing and stops when:
+
+- `R/Functions/Contracts/` or `Data/Contracts/` of the VegVault checkout has uncommitted changes or untracked files, because the record would cite a commit that does not hold the copied text;
+- the checked-out VegVault commit is not contained in `ref_base`, because a commit that exists only on a feature branch disappears after a squash merge;
+- a copied contract fails `load_producer_contract()`;
+- the producer already holds a copy for another repository, or holds a `.R` file in `R/Functions/Contracts/` or a `.yml` file in `Data/Contracts/` that no earlier copy wrote.
+
+An earlier copy is replaced, and files that VegVault no longer has are removed. The producer lane reviews the change and commits the copy and the record in its own repository.
+
+### Checking the copy
+
+Each producer has one test, `test-validate_contract_copy.R`, in its test folder:
+
+```r
+testthat::test_that("the VegVault contract copy is intact and current", {
+  testthat::expect_no_error(
+    validate_contract_copy(
+      path_producer = here::here(),
+      path_vegvault = here::here("..", "VegVault"),
+      verbose = FALSE
+    )
+  )
+})
+```
+
+`validate_contract_copy()` always checks that every copied file is unchanged and that the two folders hold nothing else. When a VegVault checkout exists at `path_vegvault`, it also checks that the copy equals what `save_contract_copy()` would copy from that checkout now, and names every file that differs; without that checkout this part is skipped. It reads the VegVault checkout as it is, whatever branch it is on, so a failure against a checkout on another branch is not a stale copy.
+
+### Validating an export
+
+The producer validates its export with its copy:
+
+```r
+validate_producer_artefact(
+  contract = here::here("Data", "Contracts", "splot_plots.yml"),
+  path_artefact = vec_paths_splot
+)
+```
+
+Before tagging, the producer runs the copy check against an up-to-date VegVault checkout on the release branch, validates the export, and states the VegVault commit (`vegvault_commit` in the record) and the contract versions in its quality record or release notes.
+
+### What VegVault checks again
+
+The import stage (`R/Analyses/01_Producer_import/`) validates every pinned artefact against VegVault's own contract before anything is written to SQLite. The pin manifest records the `contract_version` of every artefact, and the import refuses an entry whose version differs from the contract. An artefact validated with an outdated copy therefore cannot enter a build unnoticed.
 
 ## Changing a contract
 
@@ -153,4 +210,4 @@ Contracts change only through the VegVault pipeline lane (lane L6, VegVault issu
 1. Edit the contract and bump `contract_version`: major for a change that can reject an artefact that passed before (a new required column, a stricter class, range or key, a renamed or removed column); minor for a change that only accepts more (a new optional column, a relaxed check); patch for descriptions, evidence and notes.
 2. Update the fixture builder if needed, rebuild the fixtures with `R/Contracts/build_contract_fixtures.R` (`flag_rewrite <- TRUE`), and run the tests and `tests/test_contract_fixtures_integration.R`.
 3. Check every consumer: the VegVault import stage and, while they exist, the v1 import scripts listed under `consumers`; the database assembly that writes the imported rows; the website pages under `website/database_structure/`; and `vaultkeepr` if the change alters the SQLite schema or the meaning of stored values.
-4. After the merge, the maintainer announces the new version in the release umbrella issue (VegVault issue 86), and each affected producer updates its copy and revalidates.
+4. After the merge, the maintainer announces the new version in the release umbrella issue (VegVault issue 86). Each affected producer makes its copy again with `save_contract_copy()`, validates its export with the new copy and commits both. Until then its copy check fails against an up-to-date VegVault checkout.
