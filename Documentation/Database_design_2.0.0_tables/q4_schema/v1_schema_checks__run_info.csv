@@ -1,0 +1,2 @@
+script,run_started,run_seconds,connection_flags,seed,file_unchanged
+15_check_v1_schema_candidates.R,2026-11-19 21:03:38,125.94426202774048,RSQLite SQLITE_RO; temporary tables only,900723,TRUE

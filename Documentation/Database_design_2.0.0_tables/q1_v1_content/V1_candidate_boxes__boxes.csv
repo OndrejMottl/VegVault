@@ -1,0 +1,6 @@
+box_name,lon_min,lon_max,lat_min,lat_max
+fennoscandia,4,32,54,71.5
+scandinavian_mountains,5,20,60,70
+northern_europe,-25,45,50,72
+alaska_yukon,-170,-125,54,72
+western_north_america,-170,-110,40,72

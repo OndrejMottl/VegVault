@@ -1,0 +1,31 @@
+fn_name,step_order,n_calls,seconds_total,seconds_median,seconds_max,step_label
+get_gridpoints_link,1,6,0.0050847530364990234,7.464885711669922e-4,0.0014050006866455078,"assertthat::assert_that(inherits(data_source, ""tbl""), msg = ""data_s..."
+get_gridpoints_link,2,6,0.0034661293029785156,5.586147308349609e-4,6.821155548095703e-4,"assertthat::assert_that(inherits(data_source_gridpoints, ""tbl""), ms..."
+get_gridpoints_link,3,6,0.0036509037017822266,5.204677581787109e-4,0.0010809898376464844,"assertthat::assert_that(is.numeric(sel_distance_km), msg = ""sel_dis..."
+get_gridpoints_link,4,6,0.003676176071166992,5.155801773071289e-4,0.0010249614715576172,"assertthat::assert_that(length(sel_distance_km) == 1, msg = ""sel_di..."
+get_gridpoints_link,5,6,0.003490924835205078,5.120038986206055e-4,9.26971435546875e-4,"assertthat::assert_that(sel_distance_km > 0, msg = ""sel_distance_km..."
+get_gridpoints_link,6,6,0.0036821365356445313,4.980564117431641e-4,0.001232147216796875,"assertthat::assert_that(is.numeric(sel_grid_size_degree), msg = ""se..."
+get_gridpoints_link,7,6,0.0035719871520996094,4.900693893432617e-4,0.0010879039764404297,"assertthat::assert_that(length(sel_grid_size_degree) == 1, msg = ""s..."
+get_gridpoints_link,8,6,0.013035774230957031,5.214214324951172e-4,0.009792089462280273,"assertthat::assert_that(sel_grid_size_degree > 0, msg = ""sel_grid_s..."
+get_gridpoints_link,9,6,0.0038614273071289063,4.8410892486572266e-4,0.001383066177368164,"assertthat::assert_that(is.numeric(sel_distance_years), msg = ""sel_..."
+get_gridpoints_link,10,6,0.0038306713104248047,4.849433898925781e-4,0.0013730525970458984,"assertthat::assert_that(length(sel_distance_years) == 1, msg = ""sel..."
+get_gridpoints_link,11,6,0.003854990005493164,5.645751953125e-4,0.0011878013610839844,"assertthat::assert_that(sel_distance_years > 0, msg = ""sel_distance..."
+get_gridpoints_link,12,6,83.73680520057678,12.70558214187622,29.996422052383423,"vec_gridpoits_coarse_filtering <- c(""none"", ""NE"", ""SE"", ""SW"", ""NW"")..."
+get_valid_gridpoints_ids,1,30,0.01921701431274414,6.049871444702148e-4,0.00090694427490234375,"assertthat::assert_that(is.numeric(sel_grid_size_degree), msg = ""se..."
+get_valid_gridpoints_ids,2,30,0.017387866973876953,5.478858947753906e-4,9.169578552246094e-4,"assertthat::assert_that(length(sel_grid_size_degree) == 1, msg = ""s..."
+get_valid_gridpoints_ids,3,30,0.017490148544311523,5.379915237426758e-4,0.0010950565338134766,"assertthat::assert_that(sel_grid_size_degree > 0, msg = ""sel_grid_s..."
+get_valid_gridpoints_ids,4,30,0.017080307006835938,5.174875259399414e-4,0.0011169910430908203,offset <- match.arg(offset)
+get_valid_gridpoints_ids,5,30,0.01611328125,5.060434341430664e-4,8.111000061035156e-4,long_offset <- NULL
+get_valid_gridpoints_ids,6,30,0.016602754592895508,5.134344100952148e-4,9.49859619140625e-4,lat_offset <- NULL
+get_valid_gridpoints_ids,7,30,0.01614975929260254,5.02467155456543e-4,8.559226989746094e-4,"switch(offset, none = {"
+get_valid_gridpoints_ids,8,30,0.04976224899291992,0.00141143798828125,0.007895946502685547,data_source_coord <- data_source %>% bin_coord_data(sel_grid_size_d...
+get_valid_gridpoints_ids,9,30,19.159107446670532,0.26991450786590576,3.6685991287231445,data_source_gridpoints_coord <- data_source_gridpoints %>% dplyr::m...
+get_valid_gridpoints_ids,10,30,64.1965720653534,1.7422385215759277,8.131590843200684,vec_gridpoits_coarse_filtering <- dplyr::inner_join(data_source_coo...
+get_valid_gridpoints_ids,11,30,0.026255369186401367,8.538961410522461e-4,0.001332998275756836,return(vec_gridpoits_coarse_filtering)
+get_gridpoints_link,13,6,6.259287118911743,0.6309775114059448,2.4997220039367676,data_source_gridpoints_sub <- data_source_gridpoints %>% dplyr::fil...
+get_gridpoints_link,14,6,0.012834787368774414,0.0021049976348876953,0.0023789405822753906,data_vegetation_bounding_box <- data_source %>% dplyr::distinct(.da...
+get_gridpoints_link,15,6,11.086449146270752,2.1448999643325806,2.482140064239502,data_vegetation_grid_data <- data_vegetation_bounding_box %>% dplyr...
+get_gridpoints_link,16,6,0.11373567581176758,0.020624518394470215,0.029898881912231445,data_vegetation_grid_unnest <- data_vegetation_grid_data %>% dplyr:...
+get_gridpoints_link,17,6,125.98340892791748,23.213593006134033,34.46744394302368,data_vegetation_distance <- data_vegetation_grid_unnest %>% dplyr::...
+get_gridpoints_link,18,6,0.06586790084838867,0.01302194595336914,0.015182018280029297,data_vegetation_distance_filter <- data_vegetation_distance %>% dpl...
+get_gridpoints_link,19,6,0.0045223236083984375,7.575750350952148e-4,0.00086498260498046875,return(data_vegetation_distance_filter)

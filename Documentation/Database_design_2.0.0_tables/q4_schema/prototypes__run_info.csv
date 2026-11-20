@@ -1,0 +1,2 @@
+script,run_started,run_seconds,variants,n_build_repetitions,pragmas,r_version,rsqlite_version,sqlite_version,n_cores,subset_connection,subset_unchanged,all_schema_checks_passed
+13_build_schema_prototypes.R,2026-11-19 20:30:20,491.7007911205292,v1 no_pk_duplicates lean_indexes without_rowid tuple_links gridpoint_tables constraints,3,PRAGMA journal_mode = OFF; PRAGMA synchronous = OFF; PRAGMA foreign_keys = OFF; PRAGMA cache_size = -1048576,4.6.2,3.53.3,3.53.3,32,ATTACH mode=ro,TRUE,TRUE

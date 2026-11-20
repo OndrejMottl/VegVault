@@ -1,0 +1,2 @@
+script,box_name,run_started,n_gridpoint_cells,n_gridpoint_ages,n_gridpoint_candidates,seconds_data_raw,seconds_stage06,seconds_stage07_bio1,seconds_validation,n_trace_events,run_db_size_bytes,r_version,sqlite_version
+08_profile_v1_gridpoints.R,alaska_yukon,2026-11-19 15:35:02,20930,37,774410,1.2838900089263916,449.83329606056213,12.657521963119507,199.02375507354736,2247,2698321920,4.6.2,3.53.3

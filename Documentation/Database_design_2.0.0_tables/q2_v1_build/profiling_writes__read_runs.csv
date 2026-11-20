@@ -1,0 +1,19 @@
+read_name,table_name,v1_function,repetition,n_rows,seconds_read,seconds_unique_test
+samples_all_columns,Samples,add_to_db,1,236351,0.10495996475219727,0.019999999999999574
+samples_all_columns,Samples,add_to_db,2,236351,0.08400201797485352,0.02000000000000135
+samples_all_columns,Samples,add_to_db,3,236351,0.08561897277832031,0
+samples_distinct_names,Samples,add_samples_id,1,236351,0.12906193733215332,NA
+samples_distinct_names,Samples,add_samples_id,2,236351,0.13724017143249512,NA
+samples_distinct_names,Samples,add_samples_id,3,236351,0.14018607139587402,NA
+samples_id_name,Samples,"add_samples_id, add_abiotic_data_ref",1,236351,0.060095787048339844,NA
+samples_id_name,Samples,"add_samples_id, add_abiotic_data_ref",2,236351,0.06062006950378418,NA
+samples_id_name,Samples,"add_samples_id, add_abiotic_data_ref",3,236351,0.06182599067687988,NA
+datasets_all_columns,Datasets,add_to_db,1,7353,0.019729137420654297,0
+datasets_all_columns,Datasets,add_to_db,2,7353,0.0065021514892578125,0
+datasets_all_columns,Datasets,add_to_db,3,7353,0.006417989730834961,0
+dataset_sample_ids,DatasetSample,add_dataset_sample,1,236351,0.07836604118347168,NA
+dataset_sample_ids,DatasetSample,add_dataset_sample,2,236351,0.045172929763793945,NA
+dataset_sample_ids,DatasetSample,add_dataset_sample,3,236351,0.047429800033569336,NA
+abiotic_data_ids,AbioticData,add_sample_abiotic_value,1,577932,0.11896395683288574,NA
+abiotic_data_ids,AbioticData,add_sample_abiotic_value,2,577932,0.11553692817687988,NA
+abiotic_data_ids,AbioticData,add_sample_abiotic_value,3,577932,0.11448192596435547,NA

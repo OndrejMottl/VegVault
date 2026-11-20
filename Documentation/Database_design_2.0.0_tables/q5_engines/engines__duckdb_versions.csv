@@ -1,0 +1,4 @@
+extension_name,extension_version,install_mode
+spatial,a3dbcd1781,REPOSITORY
+sqlite_scanner,e223dc0149,REPOSITORY
+duckdb,v2.0.0,NA

@@ -1,0 +1,3 @@
+dataset_type_id,data_source_type_id,n_samples,n_coord_missing,n_age_missing,lat_min,lat_max,n_lat_above_60
+3,2,1109969,1109969,0,29.70229,66.3747,503
+3,4,401692,392809,0,-38.27,5659383125,8990

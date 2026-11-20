@@ -1,0 +1,2 @@
+script,sqlite_cli_version,subset_size_bytes,n_repetitions,cache_state
+05_calibrate_scan_rates.R,3.54.1 2026-10-16 14:45:20 555e07ef33f69a0957d24d8e555b702464a131d6f1607f4c3c1e4551e8e6ca76 (64-bit),2523095040,3,warm (subset written shortly before)

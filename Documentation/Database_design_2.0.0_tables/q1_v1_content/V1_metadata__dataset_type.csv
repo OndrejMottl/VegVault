@@ -1,0 +1,5 @@
+dataset_type_id,dataset_type
+1,vegetation_plot
+2,fossil_pollen_archive
+3,traits
+4,gridpoints

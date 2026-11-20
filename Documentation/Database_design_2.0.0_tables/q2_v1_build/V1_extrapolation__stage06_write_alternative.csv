@@ -1,0 +1,2 @@
+term,unit_cost_seconds,n_units_v1,seconds_v1,hours_v1,kind
+"link writes: append without indexes, then build both indexes",6.825355196415986e-7,2067445952,1411.1052971792394,0.39197369366089985,extrapolated lower bound

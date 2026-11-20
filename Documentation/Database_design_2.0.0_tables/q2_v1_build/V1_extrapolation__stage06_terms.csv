@@ -1,0 +1,9 @@
+term,method,unit_cost_seconds,n_units_v1,seconds_v1,hours_v1,share,kind
+ANALYZE of the link table after every batch,seconds per row of one full ANALYZE x rows analysed over all v1 batches,7.411507740327216e-8,773224786048,57307.614868076074,15.918781907798909,0.4756756285705441,extrapolated lower bound
+coarse filter (whole-globe candidates),mean seconds per batch of 3 batches against the 53.4 M candidates x v1 batches,27.076388041178387,747,20226.061866760254,5.618350518544515,0.16788422819769838,extrapolated lower bound
+whole-table reads of the writers,rows read per batch at mean v1 table size / measured read rates x v1 batches,21.38639391479355,747,15975.636254350782,4.437676737319662,0.13260403237155002,extrapolated lower bound
+distance (one distGeo call per pair),"seconds per pair (full box) x v1 pairs (pairs per position by age class, fitted on the 12 full-box batches)",3.411699535861183e-5,436102960.86359584,14878.522691660175,4.1329229699056045,0.12349756048736002,extrapolated lower bound
+link inserts into the indexed table,seconds per row at 36 to 48 M rows (copy_to without ANALYZE) x v1 links,4.95322147119359e-6,2067445952,10240.517679978673,2.8445882444385204,0.08500030398272898,extrapolated lower bound
+fine filter,seconds per position (full box) x v1 positions,0.002567805457882633,373225,958.3691920182457,0.2662136644495127,0.007954839315252557,extrapolated lower bound
+import filter on the whole-globe table,mean seconds per batch of 3 batches x v1 batches,1.0942386786142986,747,817.396292924881,0.22705452581246693,0.0067847090883705555,extrapolated lower bound
+one-off: build and deduplicate the whole-globe candidates,measured once at full size (09),72.12888693809509,1,72.12888693809509,0.020035801927248638,5.986979864954191e-4,extrapolated lower bound

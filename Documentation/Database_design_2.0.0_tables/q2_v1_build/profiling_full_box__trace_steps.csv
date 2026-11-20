@@ -1,0 +1,147 @@
+fn_name,step_order,step_label
+add_dataset_type,1,"assertthat::assert_that(assertthat::has_name(data_source, ""dataset_..."
+add_dataset_type,2,"dataset_type_db <- dplyr::tbl(con, ""DatasetTypeID"") %>% dplyr::dist..."
+add_dataset_type,3,dataset_type_id <- data_source %>% dplyr::distinct(dataset_type) %>...
+add_dataset_type,4,"add_to_db(conn = con, data = dataset_type_id, table_name = ""Dataset..."
+add_dataset_type,5,"dataset_type_id_db <- dplyr::tbl(con, ""DatasetTypeID"") %>% dplyr::c..."
+add_dataset_type,6,return(dataset_type_id_db)
+add_dataset_source_type,1,data_dataset_source_type_db <- add_dataset_source_type_id(data_sour...
+add_dataset_source_type,2,"add_dataset_source_type_reference(data_source = data_source, data_s..."
+add_dataset_source_type,3,return(data_dataset_source_type_db)
+add_data_source,1,"data_source_id_db <- add_data_source_id(data_source, con)"
+add_data_source,2,"add_data_source_reference(data_source = data_source, data_source_id..."
+add_data_source,3,return(data_source_id_db)
+add_gridpoints_with_links,1,`%>%` <- magrittr::`%>%`
+add_gridpoints_with_links,2,.data <- rlang::.data
+add_gridpoints_with_links,3,current_env <- environment()
+add_gridpoints_with_links,4,"data_gridpoints_raw <- data_source %>% dplyr::select(""dataset_name""..."
+add_gridpoints_with_links,5,"data_bd_vegetation_raw <- dplyr::tbl(sel_con, ""Datasets"") %>% dplyr..."
+add_gridpoints_with_links,6,gc(verbose = FALSE)
+add_gridpoints_with_links,7,vec_gridpoints_sample_id <- data_gridpoints_raw %>% dplyr::distinct...
+add_gridpoints_with_links,8,"vec_relevant_vegetation_sample_names <- dplyr::tbl(sel_con, ""Abioti..."
+add_gridpoints_with_links,9,"rm(vec_gridpoints_sample_id, envir = current_env)"
+add_gridpoints_with_links,10,data_bd_vegetation_sub <- data_bd_vegetation_raw %>% dplyr::filter(...
+add_gridpoints_with_links,11,"rm(data_bd_vegetation_raw, envir = current_env)"
+add_gridpoints_with_links,12,data_bd_vegetation_nest <- data_bd_vegetation_sub %>% dplyr::distin...
+add_gridpoints_with_links,13,data_bd_vegetation_nest_ref <- data_bd_vegetation_nest %>% dplyr::s...
+add_gridpoints_with_links,14,data_bd_vegetation_to_limit <- data_bd_vegetation_nest %>% dplyr::s...
+add_gridpoints_with_links,15,"rm(data_bd_vegetation_nest, envir = current_env)"
+add_gridpoints_with_links,16,data_gridpoints_to_limit <- data_gridpoints_raw %>% dplyr::distinct...
+add_gridpoints_with_links,17,"rm(data_gridpoints_raw, envir = current_env)"
+add_gridpoints_with_links,18,gc(verbose = FALSE)
+add_gridpoints_with_links,19,data_bd_vegetation_to_limit %>% dplyr::mutate(batch = 1 + (dplyr::r...
+get_gridpoints_link,1,"assertthat::assert_that(inherits(data_source, ""tbl""), msg = ""data_s..."
+get_gridpoints_link,2,"assertthat::assert_that(inherits(data_source_gridpoints, ""tbl""), ms..."
+get_gridpoints_link,3,"assertthat::assert_that(is.numeric(sel_distance_km), msg = ""sel_dis..."
+get_gridpoints_link,4,"assertthat::assert_that(length(sel_distance_km) == 1, msg = ""sel_di..."
+get_gridpoints_link,5,"assertthat::assert_that(sel_distance_km > 0, msg = ""sel_distance_km..."
+get_gridpoints_link,6,"assertthat::assert_that(is.numeric(sel_grid_size_degree), msg = ""se..."
+get_gridpoints_link,7,"assertthat::assert_that(length(sel_grid_size_degree) == 1, msg = ""s..."
+get_gridpoints_link,8,"assertthat::assert_that(sel_grid_size_degree > 0, msg = ""sel_grid_s..."
+get_gridpoints_link,9,"assertthat::assert_that(is.numeric(sel_distance_years), msg = ""sel_..."
+get_gridpoints_link,10,"assertthat::assert_that(length(sel_distance_years) == 1, msg = ""sel..."
+get_gridpoints_link,11,"assertthat::assert_that(sel_distance_years > 0, msg = ""sel_distance..."
+get_gridpoints_link,12,"vec_gridpoits_coarse_filtering <- c(""none"", ""NE"", ""SE"", ""SW"", ""NW"")..."
+get_gridpoints_link,13,data_source_gridpoints_sub <- data_source_gridpoints %>% dplyr::fil...
+get_gridpoints_link,14,data_vegetation_bounding_box <- data_source %>% dplyr::distinct(.da...
+get_gridpoints_link,15,data_vegetation_grid_data <- data_vegetation_bounding_box %>% dplyr...
+get_gridpoints_link,16,data_vegetation_grid_unnest <- data_vegetation_grid_data %>% dplyr:...
+get_gridpoints_link,17,data_vegetation_distance <- data_vegetation_grid_unnest %>% dplyr::...
+get_gridpoints_link,18,data_vegetation_distance_filter <- data_vegetation_distance %>% dpl...
+get_gridpoints_link,19,return(data_vegetation_distance_filter)
+get_valid_gridpoints_ids,1,"assertthat::assert_that(is.numeric(sel_grid_size_degree), msg = ""se..."
+get_valid_gridpoints_ids,2,"assertthat::assert_that(length(sel_grid_size_degree) == 1, msg = ""s..."
+get_valid_gridpoints_ids,3,"assertthat::assert_that(sel_grid_size_degree > 0, msg = ""sel_grid_s..."
+get_valid_gridpoints_ids,4,offset <- match.arg(offset)
+get_valid_gridpoints_ids,5,long_offset <- NULL
+get_valid_gridpoints_ids,6,lat_offset <- NULL
+get_valid_gridpoints_ids,7,"switch(offset, none = {"
+get_valid_gridpoints_ids,8,data_source_coord <- data_source %>% bin_coord_data(sel_grid_size_d...
+get_valid_gridpoints_ids,9,data_source_gridpoints_coord <- data_source_gridpoints %>% dplyr::m...
+get_valid_gridpoints_ids,10,vec_gridpoits_coarse_filtering <- dplyr::inner_join(data_source_coo...
+get_valid_gridpoints_ids,11,return(vec_gridpoits_coarse_filtering)
+add_datasets,1,"assertthat::assert_that(assertthat::has_name(data_source, c(""datase..."
+add_datasets,2,dataset <- data_source
+add_datasets,3,if (isFALSE(is.null(dataset_source))) {
+add_datasets,4,if (isFALSE(is.null(data_type))) {
+add_datasets,5,if (isFALSE(is.null(data_source_type))) {
+add_datasets,6,if (isFALSE(is.null(sampling_method))) {
+add_datasets,7,"dataset_id_db <- dplyr::tbl(con, ""Datasets"") %>% dplyr::distinct(da..."
+add_datasets,8,"dataset_unique <- dataset %>% dplyr::select(dplyr::all_of(c(""datase..."
+add_datasets,9,"add_to_db(conn = con, data = dataset_unique, table_name = ""Datasets"")"
+add_datasets,10,"dataset_id <- dplyr::tbl(con, ""Datasets"") %>% dplyr::select(dataset..."
+add_datasets,11,"add_dataset_reference(data_source = data_source, dataset_id = datas..."
+add_datasets,12,return(dataset_id)
+add_samples,1,data_sample_size_id_db <- add_sample_size_id(data_source = data_sou...
+add_samples,2,data_sample_reference_id_db <- add_sample_reference_id(data_source ...
+add_samples,3,"data_samples_id_db <- add_samples_id(data_source = data_source, sam..."
+add_samples,4,"add_samples_reference(data_source = data_source, samples_reference_..."
+add_samples,5,return(data_samples_id_db)
+add_samples_id,1,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_samples_id,2,"samples_db <- dplyr::tbl(con, ""Samples"") %>% dplyr::distinct(sample..."
+add_samples_id,3,"samples <- data_source %>% dplyr::distinct(sample_name, age, sample..."
+add_samples_id,4,samples_unique <- samples %>% dplyr::filter(!sample_name %in% sampl...
+add_samples_id,5,"add_to_db(conn = con, data = samples_unique, table_name = ""Samples"")"
+add_samples_id,6,"samples_id <- dplyr::tbl(con, ""Samples"") %>% dplyr::select(sample_i..."
+add_samples_id,7,return(samples_id)
+add_sample_size_id,1,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_sample_size_id,2,"sample_size <- data_source %>% dplyr::distinct(sample_size, descrip..."
+add_sample_size_id,3,samples_size_unique <- sample_size %>% dplyr::anti_join(dplyr::tbl(...
+add_sample_size_id,4,"add_to_db(conn = con, data = samples_size_unique, table_name = ""Sam..."
+add_sample_size_id,5,"sample_size_id_db <- dplyr::tbl(con, ""SampleSizeID"") %>% dplyr::col..."
+add_sample_size_id,6,return(sample_size_id_db)
+add_sample_reference_id,1,"assertthat::assert_that(assertthat::has_name(data_source, ""sample_r..."
+add_sample_reference_id,2,"reference_detail_db <- dplyr::tbl(con, ""References"") %>% dplyr::dis..."
+add_sample_reference_id,3,samples_reference <- data_source %>% dplyr::distinct(sample_referen...
+add_sample_reference_id,4,"add_to_db(conn = con, data = samples_reference, table_name = ""Refer..."
+add_sample_reference_id,5,"samples_reference_id <- dplyr::tbl(con, ""References"") %>% dplyr::se..."
+add_sample_reference_id,6,return(samples_reference_id)
+add_samples_reference,1,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_samples_reference,2,"sample_id_db <- dplyr::tbl(con, ""Samples"") %>% dplyr::distinct(samp..."
+add_samples_reference,3,samples_reference_lookup <- data_source %>% dplyr::distinct(sample_...
+add_samples_reference,4,samples_reference_unique <- samples_reference_lookup %>% dplyr::ant...
+add_samples_reference,5,"add_to_db(conn = con, data = samples_reference_unique, table_name =..."
+add_dataset_sample,1,"assertthat::assert_that(assertthat::has_name(data_source, c(""datase..."
+add_dataset_sample,2,"assertthat::assert_that(assertthat::has_name(dataset_id, ""dataset_i..."
+add_dataset_sample,3,"assertthat::assert_that(assertthat::has_name(sample_id, ""sample_id""..."
+add_dataset_sample,4,"dataset_sample <- data_source %>% dplyr::distinct(dataset_name, sam..."
+add_dataset_sample,5,dataset_sample_unique <- dataset_sample %>% dplyr::anti_join(dplyr:...
+add_dataset_sample,6,"add_to_db(conn = con, data = dataset_sample_unique, table_name = ""D..."
+add_abiotic_data_ref,1,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_abiotic_data_ref,2,"sample_id_db <- dplyr::tbl(con, ""Samples"") %>% dplyr::select(sample..."
+add_abiotic_data_ref,3,"dataset_sample <- data_source %>% dplyr::select(sample_name, sample..."
+add_abiotic_data_ref,4,vec_samples_present <- dataset_sample %>% dplyr::distinct(sample_id...
+add_abiotic_data_ref,5,vec_samples_ref_present <- dataset_sample %>% dplyr::distinct(sampl...
+add_abiotic_data_ref,6,dataset_sample_unique <- dataset_sample %>% dplyr::anti_join(dplyr:...
+add_abiotic_data_ref,7,"add_to_db(conn = con, data = dataset_sample_unique, table_name = ""A..."
+add_to_db,1,is_valid <- FALSE
+add_to_db,2,if (isTRUE(overwrite_test)) {
+add_to_db,3,if (isTRUE(is_valid)) {
+add_chelsa_neo_data,1,`%>%` <- magrittr::`%>%`
+add_chelsa_neo_data,2,.data <- rlang::.data
+add_chelsa_neo_data,3,current_env <- environment()
+add_chelsa_neo_data,4,data_climate <- dowload_and_load(sel_url) %>% dplyr::mutate(var_nam...
+add_chelsa_neo_data,5,"assertthat::assert_that(exists(""data_climate"", envir = current_env)..."
+add_chelsa_neo_data,6,data_climate_raw <- data_climate %>% dplyr::mutate(coord_long = as....
+add_chelsa_neo_data,7,"data_samples_db <- dplyr::tbl(sel_con, ""Samples"") %>% dplyr::distin..."
+add_chelsa_neo_data,8,data_climate_sub <- data_climate_raw %>% dplyr::filter(.data$sample...
+add_chelsa_neo_data,9,abiotic_variabe_id <- add_abiotic_variable(data_source = data_clima...
+add_chelsa_neo_data,10,"add_sample_abiotic_value(data_source = data_climate_sub, con = sel_..."
+dowload_and_load,1,"file_format <- ""rds"""
+dowload_and_load,2,"if (stringr::str_detect(sel_url, "".qs"")) {"
+dowload_and_load,3,"name_clean <- stringr::str_extract(sel_url, ""/([^/]+)$"") %>% string..."
+dowload_and_load,4,"file_full_path <- paste0(tempdir(), ""/"", name_clean, ""."", file_format)"
+dowload_and_load,5,"download.file(url = sel_url, destfile = file_full_path, method = ""c..."
+dowload_and_load,6,"if (file_format == ""qs"") {"
+dowload_and_load,7,return(data_load)
+add_abiotic_variable,1,"assertthat::assert_that(assertthat::has_name(data_source, c(""abioti..."
+add_abiotic_variable,2,data_abiotic_variable_id_db <- add_abiotic_variable_id(data_source ...
+add_abiotic_variable,3,data_reference_id_db <- add_abiotic_reference_id(data_source = data...
+add_abiotic_variable,4,"add_abiotic_reference(data_source = data_source, abiotic_reference_..."
+add_abiotic_variable,5,return(data_abiotic_variable_id_db)
+add_sample_abiotic_value,1,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_sample_abiotic_value,2,"assertthat::assert_that(assertthat::has_name(sample_id, c(""sample_n..."
+add_sample_abiotic_value,3,"assertthat::assert_that(assertthat::has_name(abiotic_variable_id, c..."
+add_sample_abiotic_value,4,"data_sample_value <- data_source %>% dplyr::left_join(sample_id, by..."
+add_sample_abiotic_value,5,data_sample_value_unique <- data_sample_value %>% dplyr::anti_join(...
+add_sample_abiotic_value,6,"add_to_db(conn = con, data = data_sample_value_unique, table_name =..."
