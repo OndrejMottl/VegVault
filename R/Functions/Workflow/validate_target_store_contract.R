@@ -1,7 +1,9 @@
 #' @title Validate a target-store contract
 #' @description
-#' Check that an upstream target store exists and contains every required
-#' public target as a completed target.
+#' Check that an upstream target store exists, contains every required
+#' public target as a completed target, and that its latest run finished:
+#' no target errored, was canceled or was left running, and every required
+#' public target was built or found up to date in that run.
 #' @param store
 #' Character scalar upstream target-store path.
 #' @param target_names
@@ -12,6 +14,14 @@
 #' @return
 #' Invisibly returns a tibble with the `name` and `data` (hash) metadata of
 #' the required targets.
+#' @details
+#' `{targets}` keeps the last good value of a target whose rebuild failed,
+#' and a run that stops early leaves the targets it did not reach at their
+#' old values. The run check reads `targets::tar_progress()` of the store,
+#' which covers only its latest run, so a downstream pipeline never imports
+#' values from a run that failed, was interrupted, or did not reach the
+#' public targets (for example a run of selected targets only). Each check
+#' aborts with a message that names `runner`.
 #' @examples
 #' \dontrun{
 #' validate_target_store_contract(
@@ -71,6 +81,52 @@ validate_target_store_contract <- function(store,
         "The upstream store is missing public targets:",
         "x" = "{.val {vec_missing_targets}}",
         "i" = "Run {.path {runner}} first."
+      )
+    )
+  }
+
+  # Progress of the latest run only; empty when the store has none
+  data_progress <-
+    targets::tar_progress(store = store)
+
+  vec_targets_unfinished <-
+    data_progress |>
+    dplyr::filter(
+      .data[["progress"]] %in% c("errored", "canceled", "dispatched")
+    ) |>
+    dplyr::pull("name")
+
+  if (
+    base::length(vec_targets_unfinished) > 0L
+  ) {
+    cli::cli_abort(
+      c(
+        "The latest run of the upstream store did not finish, so its values
+          may be stale:",
+        "x" = "Errored, canceled or left running: {.val
+          {vec_targets_unfinished}}",
+        "i" = "Fix the cause and run {.path {runner}} again."
+      )
+    )
+  }
+
+  vec_targets_not_run <-
+    base::setdiff(
+      target_names,
+      data_progress |>
+        dplyr::filter(.data[["progress"]] %in% c("completed", "skipped")) |>
+        dplyr::pull("name")
+    )
+
+  if (
+    base::length(vec_targets_not_run) > 0L
+  ) {
+    cli::cli_abort(
+      c(
+        "Public targets were not built or checked in the latest run of the
+          upstream store:",
+        "x" = "{.val {vec_targets_not_run}}",
+        "i" = "Run {.path {runner}} in full first."
       )
     )
   }

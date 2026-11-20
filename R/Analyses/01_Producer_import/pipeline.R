@@ -66,10 +66,12 @@ targets::tar_option_set(
 #   - `check_fossilpol_relations`: the relations between the FOSSILPOL
 #     artefacts hold
 #   - `list_producer_pins`: the pins for save_build_manifest()
+#   - `profile_build`: the profile of the latest run
 # In the `subset` profile every data target holds only the subset box.
-# Stages 02 and 03 must import from this store only after a run of this
-#   stage that finished without errors: {targets} keeps the last good
-#   value of a target that failed, and one store serves every profile.
+# validate_target_store_contract() refuses this store after a run that
+#   failed, was interrupted or did not reach the imported targets. One
+#   store serves every profile, so stage 03 compares `profile_build` with
+#   its own profile.
 
 
 #----------------------------------------------------------#
