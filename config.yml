@@ -84,8 +84,7 @@ default:
       image_width: 2450
       image_height: 1200
   # Database version record; the last entry is the version being built.
-  #   Copied from R/00_Config_file.R, which keeps its own copy for the
-  #   website and the legacy scripts until they read this file.
+  #   R/00_Config_file.R reads it for the website and the legacy scripts.
   database:
     versions:
       - version: "0.0.2"

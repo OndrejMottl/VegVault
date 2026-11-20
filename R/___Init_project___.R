@@ -55,11 +55,8 @@ path_project <-
 path_config <-
   file.path(path_project, "config.yml")
 
-# TODO: switch to the template's renv.lock once the website and the
-#   legacy scripts, which restore from renv/library_list.lock through
-#   R/00_Config_file.R, no longer depend on it
 path_lockfile <-
-  file.path(path_project, "renv", "library_list.lock")
+  file.path(path_project, "renv.lock")
 
 if (
   isFALSE(file.exists(path_config))

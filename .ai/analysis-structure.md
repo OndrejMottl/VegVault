@@ -112,7 +112,8 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Exp
 
 - Every stage runner, pipeline and test run starts with `library(here)` and `source(here::here("R/___setup_project___.R"))`.
 - The setup aborts if `R_CONFIG_ACTIVE` names an unknown profile or the data root does not exist, loads every file in `R/Functions/`, attaches `packages: attach` from `config.yml`, regenerates `R/package_dependencies.R`, sets the seed and the ggplot theme, and resolves `path_data_storage`.
-- The lockfile is still `renv/library_list.lock` (see `.ai/r-environment.md`); the switch to the template's `renv.lock` follows when the legacy entry points stop restoring from it.
+- The lockfile is the template's `renv.lock`, restored once per checkout with `Rscript R/___Init_project___.R` (see `.ai/r-environment.md`).
+- `R/00_Config_file.R` is a compatibility file for the legacy scripts and the website: it sources the setup and keeps the objects they use, `path_to_vegvault` (the v1 database, `database_v1_path` of `secrets.yaml`), `data_version_control` and `db_version` (from `database: versions` of `config.yml`). Remove it when they move to the new setup, after the 2.0.0 release.
 
 ## Tests
 

@@ -7,11 +7,11 @@ Apply this guide to SQLite schema files, database assembly code, import scripts,
 - `Data/SQL/make_tables.sql` is the executable schema. The database assembly stage (`R/Analyses/03_Database_assembly/`) builds the database from it, and so does the legacy `R/01_Data_processing/00_make_database.R` until that stage replaces it. Tests build it into a temporary file with `build_database_fixture()`.
 - `Data/SQL/database_structure.dbml` is the maintained conceptual diagram and must remain semantically aligned with the executable schema.
 - Website pages under `website/database_structure/` document the public schema and must be updated when released tables, columns, relationships, units, or meanings change.
-- The database version record is `database: versions` in `config.yml`; its last entry is the version being built. `R/00_Config_file.R` keeps its own copy for the legacy scripts and the website until they read `config.yml`. A released schema or semantic contract change requires an intentional version/changelog update in both.
+- The database version record is `database: versions` in `config.yml`; its last entry is the version being built. The compatibility `R/00_Config_file.R` reads it from there for the legacy scripts and the website. A released schema or semantic contract change requires an intentional version/changelog update.
 
 ## Live database safety
 
-The pipeline stages resolve the live database path with `resolve_database_path()` from the git-ignored `secrets.yaml` (`database_path`, and `database_v1_path` for the released v1 database). The legacy `R/00_Config_file.R` still resolves `path_to_vegvault` from `.secrets/path.yaml`. Treat either resolved file as live user data. The `subset` profile uses a disposable database under the data root instead (see `.ai/analysis-structure.md`).
+The pipeline stages resolve the live database path with `resolve_database_path()` from the git-ignored `secrets.yaml` (`database_path`, and `database_v1_path` for the released v1 database). The legacy scripts and the website get `path_to_vegvault` from the compatibility `R/00_Config_file.R`, which resolves `database_v1_path` the same way; `secrets.yaml` replaces the former `.secrets/path.yaml`. Treat every resolved file as live user data. The `subset` profile uses a disposable database under the data root instead (see `.ai/analysis-structure.md`).
 
 - Never display or commit `secrets.yaml`, `.secrets/` or a resolved private path.
 - Never run database creation, a stage that builds or writes the database, `R/Analyses/00_run_main.R` or the legacy master workflow against the live path without explicit user authorization naming that target.
