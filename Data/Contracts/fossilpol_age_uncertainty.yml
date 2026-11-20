@@ -20,18 +20,21 @@ file:
     R/01_Data_processing/07_Outputs/02_Save_assembly.R in the producer; v1
     files data_age_uncertainty_A_2023-12-12__3aa5658488292372af2b521ca6e48c14__.qs
     and data_age_uncertainty_B_2023-12-12__7781fda623c5da21cd6d4766e550985d__.qs
-    (tag v1.0.0), 700 and 693 datasets.
+    (tag v1.0.0), 700 and 693 datasets; 2.0.0 files data_age_uncertainty_A
+    to _D of 2026-11-20 (producer branch 2.0.0 at 180c79b), 527, 427, 449 and
+    148 datasets.
 partitioning:
   scheme: letter
   first: A
   contiguous: true
   evidence: >-
     v1 used a fixed split at rows 700 and 10000 that silently dropped records
-    beyond 10000 (FOSSILPOL issue 15). The producer branch age_uncertainty_parts
-    (in progress) names consecutive parts A, B, C, ... by estimated size, so the
-    number of parts depends on the data; the contract therefore fixes only
-    the lettering, the start at A and that no letter may be skipped or
-    repeated.
+    beyond 10000 (FOSSILPOL issue 15). Since FOSSILPOL pull request 18, merged
+    into the producer's 2.0.0 branch, the producer names consecutive parts A,
+    B, C, ... by estimated file size, with a limit of 50 MiB per part, so the
+    number of parts depends on the data (four in the 2.0.0 export); the
+    contract therefore fixes only the lettering, the start at A and that no
+    letter may be skipped or repeated.
 extra_columns: error
 columns:
   - name: dataset_id
@@ -41,7 +44,8 @@ columns:
       Neotoma dataset identifier, as in the assembly; unique over all parts.
     evidence: >-
       03_Import_fossilpol_data.R:236-245; v1: character, unique over both
-      parts (1393 rows).
+      parts (1393 rows); 2.0.0 export: character, unique over the four parts
+      (1551 rows).
     checks:
       not_empty: true
   - name: age_uncertainty
