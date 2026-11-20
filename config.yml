@@ -112,8 +112,21 @@ default:
   #   sizes and colours.
   #--------------------------------------------------#
 
-  # Pinned producer artefacts and their profiles
-  producers: {}
+  # Pinned producer artefacts (Data/Producers/producer_manifest.yml)
+  producers:
+    # The pin manifest, relative to the project root
+    manifest: "Data/Producers/producer_manifest.yml"
+    # `dev` reads the explicit local files of the manifest from the sibling
+    #   producer checkouts and never downloads; `release` fetches the tagged
+    #   files and checks their checksums (set by the release profile)
+    mode: "dev"
+    # Folder holding the sibling producer checkouts, relative to the
+    #   project root
+    dev_root: ".."
+    # Download cache of the release files, relative to the data root
+    cache_dir: "Producers"
+    # Release files are fetched from the raw GitHub file at the tag
+    release_url_template: "https://raw.githubusercontent.com/{repository}/{tag}/{directory}/{file_name}"
   # Regional rehearsal build; enabled only in the `subset` profile below
   subset:
     enabled: false
@@ -293,6 +306,9 @@ subset:
 #----------------------------------------------------------#
 
 # The published build. It refuses to run with the subset enabled
-#   (validate_build_profile()).
+#   (validate_build_profile()) and reads only tagged, checksum-verified
+#   producer artefacts.
 release:
   profile: "release"
+  producers:
+    mode: "release"

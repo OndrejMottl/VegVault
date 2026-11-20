@@ -42,7 +42,7 @@ vec_dirs_checked <-
     c(
       "Workflow", "Contracts", "Database", "Gridpoints", "Database_access",
       "Build_manifest", "Build_profile", "Export", "Figures", "Fixtures",
-      "Visualisation"
+      "Visualisation", "Producers"
     )
   )
 
