@@ -88,7 +88,7 @@ A column of class `list` (a list-column) needs an `element` entry describing eve
 
 `variables` is used where an artefact has one file (or one set of batches) per variable: `value_column` names the column holding the values and `table` lists every variable with `variable`, `file_token` (the `{variable}` text in the file name), `unit`, `description`, `evidence` and optional `checks` that apply to `value_column` in that variable's files. Every variable must have files. The units and descriptions equal the strings the v1 import scripts hard-code, so the import can read them from here.
 
-`relations` document links between columns of different artefacts or of different list-columns (for example every age-uncertainty dataset exists in the assembly, and the levels and counts of a dataset have the same samples). The contract validator does not evaluate them; the import stage, built in the pin-manifest task (VegVault issue 95), will check them once the artefacts are loaded together.
+`relations` document links between columns of different artefacts or of different list-columns (for example every age-uncertainty dataset exists in the assembly, and the levels and counts of a dataset have the same samples). The contract validator does not evaluate them; the producer import stage checks them once both artefacts are loaded (`validate_fossilpol_relations()`, the target `check_fossilpol_relations`). A new relation needs a check there too.
 
 ## Validator
 
