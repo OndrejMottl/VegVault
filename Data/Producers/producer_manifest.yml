@@ -1,0 +1,95 @@
+# Pin manifest of the producer artefacts VegVault reads.
+# Read and checked by load_producer_manifest(); resolved by
+#   resolve_producer_artefact() in the mode of `producers: mode` in
+#   config.yml (`dev` for the default and subset profiles, `release` for the
+#   release profile).
+# One entry per artefact; `artefact_id` and `contract_version` equal the
+#   contract in Data/Contracts/, which also gives the producer repository,
+#   the directory and the file-name templates.
+# - release: `tag` (v<major>.<minor>.<patch>) and every file with its
+#     `file_name`, `size` (bytes) and `sha256` (computed by VegVault with
+#     compute_file_sha256(), not the hash in the file name). A release build
+#     fetches each file from the raw GitHub URL at the tag and refuses a
+#     missing tag, a placeholder or a changed checksum. `tag: null` with no
+#     files is a placeholder: the producer has not tagged yet.
+# - dev: `files`, the explicit file names in the sibling producer checkout
+#     (<suite root>/<repository name>/<directory>/), for rehearsal builds;
+#     never the newest file by date. An empty list is a placeholder.
+# Change an entry only together with the producer release it pins.
+
+manifest_version: 1
+artefacts:
+  - artefact_id: splot_plots
+    contract_version: 1.0.0
+    note: Placeholder until VegVault-Vegetation_data tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
+  - artefact_id: bien_plots
+    contract_version: 1.0.0
+    note: Placeholder until VegVault-Vegetation_data tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
+  - artefact_id: fossilpol_assembly
+    contract_version: 1.0.0
+    note: Placeholder until VegVault-FOSSILPOL tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
+  - artefact_id: fossilpol_age_uncertainty
+    contract_version: 1.0.0
+    note: Placeholder until VegVault-FOSSILPOL tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
+  - artefact_id: try_traits
+    contract_version: 1.0.0
+    note: Placeholder until VegVault-Trait_data tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
+  - artefact_id: bien_traits
+    contract_version: 1.0.0
+    note: Placeholder until VegVault-Trait_data tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
+  - artefact_id: chelsa_neoclimate
+    contract_version: 1.0.0
+    note: Placeholder until VegVault-abiotic_data tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
+  - artefact_id: chelsa_trace21k_palaeoclimate
+    contract_version: 1.0.0
+    note: Placeholder until VegVault-abiotic_data tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
+  - artefact_id: wosis_soil
+    contract_version: 1.0.0
+    note: >-
+      Placeholder until VegVault-abiotic_data tags v2.0.0; the soil source
+      is still to be settled in the source inventory.
+    release:
+      tag: null
+      files: []
+    dev:
+      files: []
