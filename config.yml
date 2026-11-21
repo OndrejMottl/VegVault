@@ -173,11 +173,17 @@ default:
   # Regional rehearsal build; enabled only in the `subset` profile below
   subset:
     enabled: false
-  # Release checks of the built database
+  # Release checks of the built database (R/Analyses/04_Validation/)
   validation:
     # Print every check result, not only failures
-    #   (R/02_Main_analyses/11_Check_database.R)
+    #   (R/02_Main_analyses/11_Check_database.R, the v1 check)
     verbose: false
+    # Run SQLite's quick_check instead of the full integrity_check. For
+    #   development only: a build checked this way is not eligible for
+    #   release
+    quick_check: false
+    # Folder of the validation report, relative to the project root
+    output_dir: "Outputs/Tables"
   # Flat-file export
   export:
     # Replace flat files that already exist
@@ -339,6 +345,9 @@ subset:
   # A rehearsal export never overwrites the export of a full build
   export:
     output_dir: "Data/Temp/Subset/Flat_files"
+  # Nor do rehearsal validation reports mix with those of full builds
+  validation:
+    output_dir: "Data/Temp/Subset/Validation"
   # Nor do rehearsal figures replace the figures of a full build
   figures:
     output_dir: "Data/Temp/Subset/Figures"

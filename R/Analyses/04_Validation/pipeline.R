@@ -10,10 +10,14 @@
 #                           2026
 #
 #----------------------------------------------------------#
-# Defines the target graph of the validation stage:
-#   release checks of the built database.
-#   Placeholder: no targets yet; the VegVault pipeline lane builds this stage
-#   (see .ai/analysis-structure.md).
+# Defines the target graph of the validation stage: the release checks of
+#   the built database, read-only, and the validation report in
+#   `validation: output_dir`. A failed check stops the stage after the
+#   report is written; a flagged result is listed for review.
+# The schema enforces keys, NOT NULL, UNIQUE and the documented ranges
+#   (Documentation/Database_design_2.0.0.md, section 7); this stage
+#   confirms that the schema is in place, runs integrity_check and
+#   foreign_key_check once, and checks what no constraint can express.
 # Run with:
 #   R/Analyses/04_Validation/00_run.R
 # Sourcing this script only declares targets; it does not execute them.
@@ -38,11 +42,169 @@ targets::tar_option_set(
 # 1. Upstream contract -----
 #----------------------------------------------------------#
 
-# None yet: list the imported public targets of upstream stores here
+# No store is imported. The upstream contract is the database and its
+#   build manifest, which the last target of the database assembly
+#   (R/Analyses/03_Database_assembly/00_run.R) writes next to the database.
+#   Every check opens the database read-only and takes the manifest as an
+#   argument, so the checks run again when a new build writes a new
+#   manifest, and the database itself is never hashed.
 
 
 #----------------------------------------------------------#
 # 2. Define targets -----
 #----------------------------------------------------------#
 
-list()
+list(
+  # Database to check: from `secrets.yaml`, or the disposable database of
+  #   the `subset` profile. Resolved on every run, so a new path is noticed
+  targets::tar_target(
+    name = "path_database",
+    command = resolve_database_path(),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Active profile, which the build manifest must record
+  targets::tar_target(
+    name = "profile_active",
+    command = load_config_value(value = "profile"),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Folder that receives the report
+  targets::tar_target(
+    name = "dir_validation",
+    command = resolve_output_dir(
+      path_relative = load_config_value(value = c("validation", "output_dir")),
+      section_name = "validation"
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Whether the shorter quick_check replaces integrity_check (development
+  #   only; such a build is not eligible for release)
+  targets::tar_target(
+    name = "flag_quick_check",
+    command = load_config_value(value = c("validation", "quick_check")),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Version being built: the last entry of `database: versions`
+  targets::tar_target(
+    name = "list_version_config",
+    command = load_config_value(value = c("database", "versions")) |>
+      purrr::pluck(-1),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # The schema file and the pin manifest, tracked as files so that an edit
+  #   of either runs the checks that read them again
+  targets::tar_target(
+    name = "file_database_schema",
+    command = here::here("Data", "SQL", "make_tables.sql"),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "file_producer_manifest",
+    command = here::here(load_config_value(value = c("producers", "manifest"))),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Build manifest next to the database
+  targets::tar_target(
+    name = "path_build_manifest",
+    command = resolve_build_manifest_path(path_database = path_database)
+  ),
+  # Manifest content, read on every run and checked against the database
+  #   file and the active profile
+  targets::tar_target(
+    name = "list_build_manifest",
+    command = load_build_manifest(
+      path_manifest = path_build_manifest,
+      path_database = path_database,
+      profile_expected = profile_active
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Every table, view and index of the schema file, with its definition
+  targets::tar_target(
+    name = "data_check_schema",
+    command = diagnose_database_schema(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      path_schema = file_database_schema
+    )
+  ),
+  # The file structure, every index against its table, and the UNIQUE,
+  #   CHECK and NOT NULL constraints on every row
+  targets::tar_target(
+    name = "data_check_integrity",
+    command = diagnose_database_integrity(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      flag_quick_check = flag_quick_check
+    )
+  ),
+  # Every declared foreign key, which the bulk load does not enforce
+  targets::tar_target(
+    name = "data_check_foreign_keys",
+    command = diagnose_foreign_keys(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # The version row against config.yml, the manifest and the pin manifest
+  targets::tar_target(
+    name = "data_check_version_row",
+    command = diagnose_version_row(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      list_version = list_version_config,
+      path_producer_manifest = file_producer_manifest
+    )
+  ),
+  # The BuildProducers rows against the producer pins of the manifest
+  targets::tar_target(
+    name = "data_check_build_producers",
+    command = diagnose_build_producers(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  targets::tar_target(
+    name = "data_checks_database",
+    command = dplyr::bind_rows(
+      data_check_schema,
+      data_check_integrity,
+      data_check_foreign_keys,
+      data_check_version_row,
+      data_check_build_producers
+    )
+  ),
+  # Release eligibility: the release profile, a clean checkout, no failed
+  #   check and the full integrity_check
+  targets::tar_target(
+    name = "data_check_release",
+    command = diagnose_release_eligibility(
+      list_build_manifest = list_build_manifest,
+      data_checks = data_checks_database
+    )
+  ),
+  targets::tar_target(
+    name = "data_checks",
+    command = dplyr::bind_rows(data_checks_database, data_check_release)
+  ),
+  # The report: one row per check and scope, and a summary for review
+  targets::tar_target(
+    name = "file_validation_report",
+    command = save_validation_report(
+      data_checks = data_checks,
+      list_build_manifest = list_build_manifest,
+      dir_output = dir_validation
+    ),
+    format = "file"
+  ),
+  # Stops the stage when a check failed, after the report is written
+  targets::tar_target(
+    name = "check_validation",
+    command = validate_database_checks(
+      data_checks = data_checks,
+      vec_paths_report = file_validation_report
+    )
+  )
+)
