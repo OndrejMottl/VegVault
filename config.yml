@@ -235,6 +235,59 @@ default:
     links:
       # Positions drawn per stratum; a smaller stratum is checked whole
       n_positions_per_stratum: 200
+    # Comparison with v1.0.0: rows per table, datasets, samples,
+    #   positions, taxon links and trait values per source, and abiotic
+    #   values per variable, against the committed reference table (built
+    #   by R/Validation/build_v1_reference_counts.R; the stage never opens
+    #   v1.0.0). A change of more than `tolerance` in either direction, or
+    #   a count in one version only, is flagged for review, never failed
+    #   (decided by Ondrej Mottl on 2026-11-21). Subset builds are not
+    #   compared
+    v1_comparison:
+      reference: "Data/Validation/v1.0.0_reference_counts.csv"
+      tolerance: 0.05
+      # v1.0.0 counts that 2.0.0 counts differently
+      metric_map:
+        - v1_metric: table_rows
+          v1_scope: AbioticDataReference
+          metric: sample_links
+          scope: all
+          note: "A view over the position tables in 2.0.0 (G2 decision
+            1), counted as links per position times samples per position."
+      # Changes that decisions of the release expect; the reason is added
+      #   to the flag, which stays for review
+      expected_changes:
+        - metrics: [table_rows]
+          scopes: [BuildProducers, Positions, SamplePosition, PositionLink,
+            TraitUnitConversion, TraitDerivation]
+          reason: "New table of the 2.0.0 schema (VegVault issue 88)."
+        - metrics: [sample_links]
+          scopes: [all]
+          reason: "Links near the dateline and at high latitudes, which
+            v1.0.0 missed, are added (VegVault pull request 120)."
+        - metrics: [datasets, samples, positions, traits_value_rows]
+          scopes: ["traits / TRY"]
+          reason: "TRY values from StdValue of request 28498, with
+            duplicated measurements removed (VegVault-Trait_data issue
+            13); coordinates outside -180 to 180 and -90 to 90 set to
+            missing (G2 decision 4)."
+        - metrics: [datasets, samples, positions]
+          scopes: ["traits / BIEN"]
+          reason: "BIEN trait samples without a value are dropped; v1.0.0
+            has 238,777 (G2 decision 4)."
+        - metrics: [datasets, samples, positions, sample_taxa_rows]
+          scopes: ["fossil_pollen_archive / FOSSILPOL"]
+          reason: "FOSSILPOL rerun with a fresh Neotoma download: 1,551
+            records against 1,393 in v1.0.0 (VegVault-FOSSILPOL issue
+            16)."
+        - metrics: [abiotic_values]
+          scopes: [HWSD2]
+          reason: "HWSD v2.2 soil groups; cells without a soil group get
+            no row (contract hwsd_soil 2.0.0, VegVault issue 93)."
+        - metrics: [abiotic_values]
+          scopes: [bio12, bio18]
+          reason: "The inflated CHELSA-TraCE21k block of the southern
+            Amazon is masked (VegVault issue 93)."
   # Flat-file export
   export:
     # Replace flat files that already exist

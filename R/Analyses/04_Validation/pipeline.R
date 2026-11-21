@@ -11,9 +11,11 @@
 #
 #----------------------------------------------------------#
 # Defines the target graph of the validation stage: the release checks of
-#   the built database, read-only, and the validation report in
-#   `validation: output_dir`. A failed check stops the stage after the
-#   report is written; a flagged result is listed for review.
+#   the built database, read-only, the comparison of its counts with the
+#   committed v1.0.0 reference counts, and the validation report and the
+#   table of count changes in `validation: output_dir`. A failed check
+#   stops the stage after both are written; a flagged result is listed for
+#   review.
 # The schema enforces keys, NOT NULL, UNIQUE and the documented ranges
 #   (Documentation/Database_design_2.0.0.md, section 7); this stage
 #   confirms that the schema is in place, runs integrity_check and
@@ -145,6 +147,19 @@ list(
     command = load_config_value(
       value = c("validation", "links", "n_positions_per_stratum")
     ),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # The comparison with v1.0.0 (tolerance, mapped counts, expected
+  #   changes) and its committed reference table, tracked as a file
+  targets::tar_target(
+    name = "list_v1_comparison",
+    command = load_config_value(value = c("validation", "v1_comparison")),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "file_v1_reference",
+    command = here::here(purrr::chuck(list_v1_comparison, "reference")),
+    format = "file",
     cue = targets::tar_cue(mode = "always")
   ),
   # Build manifest next to the database
@@ -341,6 +356,36 @@ list(
       list_build_manifest = list_build_manifest
     )
   ),
+  # The v1.0.0 reference counts, the same counts of the build, and every
+  #   change, judged against the tolerance
+  targets::tar_target(
+    name = "data_v1_reference",
+    command = readr::read_csv(file_v1_reference, show_col_types = FALSE)
+  ),
+  targets::tar_target(
+    name = "data_database_counts",
+    command = compute_database_counts(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  targets::tar_target(
+    name = "data_v1_deltas",
+    command = compute_v1_count_deltas(
+      data_counts = data_database_counts,
+      data_reference = data_v1_reference,
+      list_comparison = list_v1_comparison
+    )
+  ),
+  # One report row per metric; the full table goes to its own file
+  targets::tar_target(
+    name = "data_check_v1_counts",
+    command = diagnose_v1_counts(
+      data_deltas = data_v1_deltas,
+      list_build_manifest = list_build_manifest,
+      tolerance = purrr::chuck(list_v1_comparison, "tolerance")
+    )
+  ),
   targets::tar_target(
     name = "data_checks_database",
     command = dplyr::bind_rows(
@@ -358,7 +403,8 @@ list(
       data_check_abiotic_zero_shares,
       data_check_sample_ages,
       data_check_link_distances,
-      data_check_sample_positions
+      data_check_sample_positions,
+      data_check_v1_counts
     )
   ),
   # Release eligibility: the release profile, a clean checkout, no failed
@@ -384,12 +430,23 @@ list(
     ),
     format = "file"
   ),
-  # Stops the stage when a check failed, after the report is written
+  # The table of count changes against v1.0.0, next to the report
+  targets::tar_target(
+    name = "file_v1_deltas",
+    command = save_v1_count_deltas(
+      data_deltas = data_v1_deltas,
+      list_build_manifest = list_build_manifest,
+      dir_output = dir_validation
+    ),
+    format = "file"
+  ),
+  # Stops the stage when a check failed, after the report and the table of
+  #   changes are written
   targets::tar_target(
     name = "check_validation",
     command = validate_database_checks(
       data_checks = data_checks,
-      vec_paths_report = file_validation_report
+      vec_paths_report = c(file_validation_report, file_v1_deltas)
     )
   )
 )
