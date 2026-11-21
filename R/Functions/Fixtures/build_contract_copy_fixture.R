@@ -8,7 +8,7 @@
 #' Character scalar. Path of an existing, empty folder.
 #' @param path_contracts
 #' Character scalar. Folder holding the real contract files
-#' `splot_plots.yml`, `bien_plots.yml` and `wosis_soil.yml`. Defaults to
+#' `splot_plots.yml`, `bien_plots.yml` and `hwsd_soil.yml`. Defaults to
 #' the project's `Data/Contracts`.
 #' @return
 #' A list with `path_vegvault` and `path_producer`, the paths of the two
@@ -20,7 +20,7 @@
 #'   trivial function;
 #' - `Data/Contracts/splot_plots.yml` and `Data/Contracts/bien_plots.yml`
 #'   (producer `OndrejMottl/VegVault-Vegetation_data`) and
-#'   `Data/Contracts/wosis_soil.yml` (`OndrejMottl/VegVault-abiotic_data`),
+#'   `Data/Contracts/hwsd_soil.yml` (`OndrejMottl/VegVault-abiotic_data`),
 #'   with the text of the real contracts;
 #' - `Data/Contracts/old_plots.yml`, a retired copy of `splot_plots` for
 #'   the vegetation producer;
@@ -64,7 +64,7 @@ build_contract_copy_fixture <- function(
   )
 
   vec_contracts_real <-
-    c("splot_plots", "bien_plots", "wosis_soil")
+    c("splot_plots", "bien_plots", "hwsd_soil")
 
   vec_paths_real <-
     base::file.path(
@@ -129,9 +129,9 @@ build_contract_copy_fixture <- function(
         list_text_real,
         "bien_plots"
       ),
-      "Data/Contracts/wosis_soil.yml" = purrr::chuck(
+      "Data/Contracts/hwsd_soil.yml" = purrr::chuck(
         list_text_real,
-        "wosis_soil"
+        "hwsd_soil"
       ),
       "Data/Contracts/old_plots.yml" = text_contract_retired,
       "Data/Contracts/README.md" = "# Example contracts",

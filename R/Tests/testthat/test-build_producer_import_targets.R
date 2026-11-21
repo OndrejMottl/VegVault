@@ -30,7 +30,7 @@ testthat::test_that("build_producer_import_targets() declares the stage", {
     c(
       "data_splot_plots", "data_bien_plots", "data_fossilpol_assembly",
       "data_fossilpol_age_uncertainty", "data_try_traits",
-      "data_bien_traits", "data_wosis_soil",
+      "data_bien_traits", "data_hwsd_soil",
       stringr::str_c("data_chelsa_neoclimate_", vec_variables),
       stringr::str_c("data_chelsa_trace21k_palaeoclimate_", vec_variables)
     )
@@ -181,7 +181,7 @@ testthat::test_that("build_producer_import_targets() wires the inputs", {
 
   testthat::expect_true(
     base::all(
-      stringr::str_c("data_files_", c("splot_plots", "wosis_soil")) %in%
+      stringr::str_c("data_files_", c("splot_plots", "hwsd_soil")) %in%
         purrr::pluck(list_targets, "list_producer_pins", "deps")
     )
   )
@@ -468,7 +468,7 @@ testthat::test_that("build_producer_import_targets() runs on fixtures", {
   base::saveRDS(
     object = purrr::modify_in(
       .x = list_subset_filters,
-      .where = list("wosis_soil", "flag_margin"),
+      .where = list("hwsd_soil", "flag_margin"),
       .f = ~ !.x
     ),
     file = path_filters
@@ -491,7 +491,7 @@ testthat::test_that("build_producer_import_targets() runs on fixtures", {
       vec_built_rule,
       stringr::str_c("data_files_", vec_contract_ids)
     ),
-    "data_wosis_soil"
+    "data_hwsd_soil"
   )
 })
 

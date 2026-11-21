@@ -17,7 +17,7 @@ testthat::test_that(
 
     testthat::expect_type(res, "list")
 
-    testthat::expect_length(res, 21L)
+    testthat::expect_length(res, 28L)
 
     testthat::expect_true(
       base::all(purrr::map_lgl(.x = res, .f = base::is.data.frame))
@@ -154,10 +154,22 @@ testthat::test_that(
       list_fixture[vec_names_bio1] |>
       purrr::map(.f = ~ base::unique(dplyr::pull(.x, time_id)))
 
+    testthat::expect_type(base::unlist(list_time_ids), "integer")
+
     testthat::expect_setequal(
       base::unlist(list_time_ids),
-      c("20", "15", "-40", "-160")
+      c(20L, 15L, -40L, -160L)
     )
+
+    # Four batches, the first time slice in batches 1 and 2
+    vec_rows_bio1 <-
+      purrr::map_int(
+        .x = list_fixture[vec_names_bio1],
+        .f = base::nrow
+      ) |>
+      base::unname()
+
+    testthat::expect_equal(vec_rows_bio1, c(5L, 7L, 6L, 6L))
 
     testthat::expect_true(
       base::length(

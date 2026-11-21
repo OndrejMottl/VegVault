@@ -244,9 +244,9 @@ testthat::test_that("load_contract_copy_record() checks every file entry", {
           contract_version = "1.0.0"
         ),
         base::list(
-          path = "Data/Contracts/wosis_soil.yml",
+          path = "Data/Contracts/hwsd_soil.yml",
           sha256 = base::strrep("f", 64L),
-          contract_id = "wosis_soil"
+          contract_id = "hwsd_soil"
         ),
         base::list(
           path = "R/Functions/Contracts/load_example_contract.R",

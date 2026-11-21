@@ -121,7 +121,7 @@ testthat::test_that("select_contract_copy_files() keeps other producers out", {
   testthat::expect_equal(
     dplyr::pull(res, path),
     c(
-      "Data/Contracts/wosis_soil.yml",
+      "Data/Contracts/hwsd_soil.yml",
       "R/Functions/Contracts/load_example_contract.R",
       "R/Functions/Contracts/validate_example_artefact.R"
     )

@@ -33,13 +33,13 @@ testthat::test_that("filter_producer_files() keeps the files of a variable", {
 
   testthat::expect_named(res, c("artefact_id", "file_name", "path", "format"))
 
-  # Three batches of bio12, in the order of `data_files`
+  # The four batches of bio12, in the order of `data_files`
   testthat::expect_equal(
     dplyr::pull(res, file_name),
     stringr::str_subset(dplyr::pull(data_files, file_name), "^bio12_batch_")
   )
 
-  testthat::expect_equal(base::nrow(res), 3L)
+  testthat::expect_equal(base::nrow(res), 4L)
 })
 
 
@@ -76,7 +76,7 @@ testthat::test_that("filter_producer_files() checks the variable", {
   testthat::expect_error(
     filter_producer_files(
       data_files = data_files,
-      path_contract = here::here("Data", "Contracts", "wosis_soil.yml"),
+      path_contract = here::here("Data", "Contracts", "hwsd_soil.yml"),
       variable = "bio1"
     ),
     regexp = "no\\s+variables"
