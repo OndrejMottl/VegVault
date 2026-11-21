@@ -114,7 +114,7 @@ update_db_version <- FALSE
 if (
   nrow(db_version_control) == 0
 ) {
-  add_to_db(
+  save_table_rows(
     conn = con,
     data = data_version_control,
     table_name = "version_control"
@@ -150,7 +150,7 @@ if (
 }
 
 # general reference of the database
-add_to_db(
+save_table_rows(
   conn = con,
   data = tibble::tibble(
     reference_detail = paste(

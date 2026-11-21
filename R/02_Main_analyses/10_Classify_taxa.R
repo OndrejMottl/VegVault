@@ -279,7 +279,7 @@ data_classified_up_to_family %>%
   dplyr::mutate(
     taxon_reference = "taxospace"
   ) %>%
-  add_taxa(con = con)
+  save_taxa(con = con)
 
 
 #----------------------------------------------------------#
@@ -314,7 +314,7 @@ data_classified_up_to_family %>%
   ) %>%
   dplyr::select(-sel_name) %>%
   dplyr::relocate(taxon_id) %>%
-  add_taxa_classification(con = con)
+  save_taxa_classification(con = con)
 
 #----------------------------------------------------------#
 # 6. Solve unclassified -----
@@ -408,7 +408,7 @@ data_classified_up_to_family %>%
   dplyr::mutate(
     taxon_reference = "taxospace",
   ) %>%
-  add_taxa(con = con)
+  save_taxa(con = con)
 
 # update the taxa list
 taxa_db <-
@@ -439,7 +439,7 @@ data_classified_up_to_family %>%
   ) %>%
   dplyr::select(-sel_name) %>%
   dplyr::relocate(taxon_id) %>%
-  add_taxa_classification(con = con)
+  save_taxa_classification(con = con)
 
 #----------------------------------------------------------#
 # 7. Disconect DB -----

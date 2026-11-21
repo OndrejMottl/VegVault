@@ -8,10 +8,10 @@ library(tibble)
 library(here)
 
 source(here::here("R", "Functions", "validate_unique_rows.R"))
-source(here::here("R", "Functions", "add_to_db.R"))
-source(here::here("R", "Functions", "Traits", "add_trait_rules.R"))
+source(here::here("R", "Functions", "save_table_rows.R"))
+source(here::here("R", "Functions", "Traits", "save_trait_rules.R"))
 source(here::here("R", "Functions", "Traits", "validate_trait_import.R"))
-source(here::here("R", "Functions", "Traits", "add_trait_value.R"))
+source(here::here("R", "Functions", "Traits", "save_trait_value.R"))
 
 path_database <- tempfile(fileext = ".sqlite")
 con <- DBI::dbConnect(RSQLite::SQLite(), path_database)
@@ -31,7 +31,7 @@ invisible(
   )
 )
 
-rules <- add_trait_rules(con)
+rules <- save_trait_rules(con)
 stopifnot(nrow(rules$conversions) > 0L, nrow(rules$derivations) == 1L)
 
 DBI::dbExecute(con, "INSERT INTO TraitsDomain VALUES (1, 'Leaf Area', 'mm2', NULL)")
@@ -61,7 +61,7 @@ data_source <-
   )
 
 audit <-
-  add_trait_value(
+  save_trait_value(
     data_source = data_source,
     dataset_id = tibble::tibble(dataset_id = 1L, dataset_name = "d1"),
     samples_id = tibble::tibble(sample_id = 1L, sample_name = "s1"),
@@ -79,7 +79,7 @@ stopifnot(
 duplicate_error <-
   tryCatch(
     {
-      add_trait_value(
+      save_trait_value(
         data_source = data_source,
         dataset_id = tibble::tibble(dataset_id = 1L, dataset_name = "d1"),
         samples_id = tibble::tibble(sample_id = 1L, sample_name = "s1"),

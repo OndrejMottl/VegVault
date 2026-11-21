@@ -18,7 +18,7 @@
 #   with the existing writers into an empty schema built from
 #   Data/SQL/make_tables.sql in a temporary SQLite file. The live database
 #   is never touched. The trait writers read the unit-conversion registry
-#   from the sibling VegVault-Trait_data checkout (add_trait_rules()), as
+#   from the sibling VegVault-Trait_data checkout (save_trait_rules()), as
 #   the trait import scripts do.
 # Also checks that the unit and detail strings of the climate and soil
 #   contracts equal the strings hard-coded in scripts 07, 08 and 09.
@@ -144,15 +144,15 @@ data_splot_datasets <-
   )
 
 data_splot_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = data_splot_datasets,
     con = con,
-    data_type = add_dataset_type(data_source = data_splot_datasets, con = con),
-    data_source_type = add_dataset_source_type(
+    data_type = save_dataset_type(data_source = data_splot_datasets, con = con),
+    data_source_type = save_dataset_source_type(
       data_source = data_splot_datasets,
       con = con
     ),
-    dataset_source = add_data_source(
+    dataset_source = save_data_source(
       data_source = data_splot_datasets,
       con = con
     )
@@ -169,9 +169,9 @@ data_splot_samples <-
   )
 
 data_splot_samples_id <-
-  add_samples(data_source = data_splot_samples, con = con)
+  save_samples(data_source = data_splot_samples, con = con)
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = data_splot_samples,
   con = con,
   dataset_id = data_splot_dataset_id,
@@ -190,7 +190,7 @@ data_splot_taxa <-
   dplyr::mutate(taxon_reference = "sPlotOpen")
 
 data_splot_taxa_id <-
-  add_taxa(data_source = data_splot_taxa, con = con)
+  save_taxa(data_source = data_splot_taxa, con = con)
 
 data_splot_sample_taxa <-
   data_splot_samples |>
@@ -199,7 +199,7 @@ data_splot_sample_taxa <-
   dplyr::rename(taxon_name = Species, value = Original_abundance) |>
   dplyr::select(sample_name, taxon_name, value)
 
-add_sample_taxa(
+save_sample_taxa(
   data_source = data_splot_sample_taxa,
   con = con,
   samples_id = data_splot_samples_id,
@@ -234,19 +234,19 @@ data_bien_datasets <-
   )
 
 data_bien_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = data_bien_datasets,
     con = con,
-    data_type = add_dataset_type(data_source = data_bien_datasets, con = con),
-    data_source_type = add_dataset_source_type(
+    data_type = save_dataset_type(data_source = data_bien_datasets, con = con),
+    data_source_type = save_dataset_source_type(
       data_source = data_bien_datasets,
       con = con
     ),
-    dataset_source = add_data_source(
+    dataset_source = save_data_source(
       data_source = data_bien_datasets,
       con = con
     ),
-    sampling_method = add_sampling_method(
+    sampling_method = save_sampling_method(
       data_source = data_bien_datasets,
       con = con
     )
@@ -263,9 +263,9 @@ data_bien_samples <-
   )
 
 data_bien_samples_id <-
-  add_samples(data_source = data_bien_samples, con = con)
+  save_samples(data_source = data_bien_samples, con = con)
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = data_bien_samples,
   con = con,
   dataset_id = data_bien_dataset_id,
@@ -285,7 +285,7 @@ data_bien_taxa <-
   dplyr::mutate(taxon_reference = "BIEN")
 
 data_bien_taxa_id <-
-  add_taxa(data_source = data_bien_taxa, con = con)
+  save_taxa(data_source = data_bien_taxa, con = con)
 
 data_bien_sample_taxa <-
   data_bien_samples |>
@@ -294,7 +294,7 @@ data_bien_sample_taxa <-
   dplyr::rename(taxon_name = name_matched, value = individual_count) |>
   dplyr::select(sample_name, taxon_name, value)
 
-add_sample_taxa(
+save_sample_taxa(
   data_source = data_bien_sample_taxa,
   con = con,
   samples_id = data_bien_samples_id,
@@ -327,23 +327,23 @@ data_fossilpol_datasets <-
   dplyr::select(-dataset_id)
 
 data_fossilpol_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = data_fossilpol_datasets,
     con = con,
-    data_type = add_dataset_type(
+    data_type = save_dataset_type(
       data_source = data_fossilpol_datasets,
       con = con
     ),
-    data_source_type = add_dataset_source_type(
+    data_source_type = save_dataset_source_type(
       data_source = data_fossilpol_datasets,
       con = con
     ),
-    dataset_source = add_data_source(
+    dataset_source = save_data_source(
       data_source = data_fossilpol_datasets,
       con = con,
       mandatory = TRUE
     ),
-    sampling_method = add_sampling_method(
+    sampling_method = save_sampling_method(
       data_source = data_fossilpol_datasets,
       con = con
     )
@@ -377,7 +377,7 @@ data_fossilpol_levels <-
   )
 
 data_fossilpol_samples_id <-
-  add_samples(
+  save_samples(
     data_source = dplyr::select(
       data_fossilpol_levels,
       dataset_name, sample_name, age, sample_size, description,
@@ -386,7 +386,7 @@ data_fossilpol_samples_id <-
     con = con
   )
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = dplyr::select(
     data_fossilpol_levels,
     dataset_name, sample_name
@@ -415,7 +415,7 @@ data_fossilpol_uncertainty <-
   dplyr::select(-c(dataset_id, age_uncertainty)) |>
   tidyr::unnest(age_uncertainty_nested)
 
-add_sample_age_uncertainty(
+save_sample_age_uncertainty(
   data_source = data_fossilpol_uncertainty,
   dataset_id = data_fossilpol_dataset_id,
   samples_id = data_fossilpol_samples_id,
@@ -436,7 +436,7 @@ vec_fossilpol_taxa <-
   base::names()
 
 data_fossilpol_taxa_id <-
-  add_taxa(
+  save_taxa(
     data_source = tibble::tibble(
       taxon_name = base::sort(vec_fossilpol_taxa),
       taxon_reference = "Neotoma"
@@ -454,7 +454,7 @@ data_fossilpol_sample_taxa <-
   ) |>
   dplyr::filter(value > 0)
 
-add_sample_taxa(
+save_sample_taxa(
   data_source = data_fossilpol_sample_taxa,
   taxa_id = data_fossilpol_taxa_id,
   samples_id = data_fossilpol_samples_id,
@@ -480,7 +480,7 @@ vec_trace_time_ids <-
   base::unique() |>
   base::as.numeric()
 
-# Age in years before 1950, as add_chelsa_trace_data.R:39 computes it
+# Age in years before 1950, as save_chelsa_trace_data.R:39 computes it
 vec_grid_ages <-
   base::sort(base::unique(c(0, -vec_trace_time_ids * 100 + 2000)))
 
@@ -516,24 +516,24 @@ data_grid_datasets <-
   )
 
 data_grid_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = data_grid_datasets,
     con = con,
-    data_type = add_dataset_type(data_source = data_grid_datasets, con = con),
-    data_source_type = add_dataset_source_type(
+    data_type = save_dataset_type(data_source = data_grid_datasets, con = con),
+    data_source_type = save_dataset_source_type(
       data_source = data_grid_datasets,
       con = con
     ),
-    dataset_source = add_data_source(
+    dataset_source = save_data_source(
       data_source = data_grid_datasets,
       con = con
     )
   )
 
 data_grid_samples_id <-
-  add_samples(data_source = data_grid_samples, con = con)
+  save_samples(data_source = data_grid_samples, con = con)
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = data_grid_samples,
   con = con,
   dataset_id = data_grid_dataset_id,
@@ -594,7 +594,7 @@ data_climate_values <-
   tidyr::unnest(data_file) |>
   dplyr::mutate(
     # Present-day values sit at age 0; palaeoclimate age 0 is skipped as
-    #   add_chelsa_trace_data.R:44 does
+    #   save_chelsa_trace_data.R:44 does
     age = dplyr::if_else(
       contract_id == "chelsa_neoclimate",
       0,
@@ -634,9 +634,9 @@ data_abiotic_values <-
   dplyr::filter(sample_name %in% dplyr::pull(data_samples_db, sample_name))
 
 data_abiotic_variable_id <-
-  add_abiotic_variable(data_source = data_abiotic_values, con = con)
+  save_abiotic_variable(data_source = data_abiotic_values, con = con)
 
-add_sample_abiotic_value(
+save_sample_abiotic_value(
   data_source = data_abiotic_values,
   con = con,
   sample_id = data_samples_db,
@@ -680,15 +680,15 @@ data_try_datasets <-
   dplyr::mutate(dataset_name = stringr::str_c("try_", dplyr::row_number()))
 
 data_try_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = data_try_datasets,
     con = con,
-    data_type = add_dataset_type(data_source = data_try_datasets, con = con),
-    data_source_type = add_dataset_source_type(
+    data_type = save_dataset_type(data_source = data_try_datasets, con = con),
+    data_source_type = save_dataset_source_type(
       data_source = data_try_datasets,
       con = con
     ),
-    dataset_source = add_data_source(
+    dataset_source = save_data_source(
       data_source = data_try_datasets,
       con = con
     )
@@ -712,9 +712,9 @@ data_try_samples <-
   )
 
 data_try_samples_id <-
-  add_samples(data_source = data_try_samples, con = con)
+  save_samples(data_source = data_try_samples, con = con)
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = data_try_samples,
   dataset_id = data_try_dataset_id,
   sample_id = data_try_samples_id,
@@ -722,7 +722,7 @@ add_dataset_sample(
 )
 
 data_try_taxa_id <-
-  add_taxa(
+  save_taxa(
     data_source = data_try_samples |>
       dplyr::rename(taxon_name = acc_species_name) |>
       dplyr::mutate(taxon_reference = "TRY"),
@@ -735,10 +735,10 @@ data_try_traits <-
   dplyr::mutate(trait_reference = "TRY")
 
 data_trait_rules <-
-  add_trait_rules(con = con)
+  save_trait_rules(con = con)
 
 data_try_traits_id <-
-  add_traits(data_source = data_try_traits, con = con)
+  save_traits(data_source = data_try_traits, con = con)
 
 data_try_trait_audit <-
   data_try_traits |>
@@ -751,7 +751,7 @@ data_try_trait_audit <-
     taxon_name = acc_species_name,
     trait_value
   ) |>
-  add_trait_value(
+  save_trait_value(
     dataset_id = data_try_dataset_id,
     samples_id = data_try_samples_id,
     traits_id = data_try_traits_id,
@@ -792,18 +792,18 @@ data_bien_trait_datasets <-
   )
 
 data_bien_trait_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = data_bien_trait_datasets,
     con = con,
-    data_type = add_dataset_type(
+    data_type = save_dataset_type(
       data_source = data_bien_trait_datasets,
       con = con
     ),
-    data_source_type = add_dataset_source_type(
+    data_source_type = save_dataset_source_type(
       data_source = data_bien_trait_datasets,
       con = con
     ),
-    dataset_source = add_data_source(
+    dataset_source = save_data_source(
       data_source = data_bien_trait_datasets,
       con = con
     )
@@ -828,9 +828,9 @@ data_bien_trait_samples <-
   )
 
 data_bien_trait_samples_id <-
-  add_samples(data_source = data_bien_trait_samples, con = con)
+  save_samples(data_source = data_bien_trait_samples, con = con)
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = data_bien_trait_samples,
   dataset_id = data_bien_trait_dataset_id,
   sample_id = data_bien_trait_samples_id,
@@ -843,7 +843,7 @@ data_bien_trait_taxa <-
   dplyr::mutate(taxon_reference = "BIEN")
 
 data_bien_trait_taxa_id <-
-  add_taxa(data_source = data_bien_trait_taxa, con = con)
+  save_taxa(data_source = data_bien_trait_taxa, con = con)
 
 data_bien_trait_traits <-
   data_bien_trait_taxa |>
@@ -851,7 +851,7 @@ data_bien_trait_traits <-
   dplyr::mutate(trait_reference = "BIEN")
 
 data_bien_trait_traits_id <-
-  add_traits(data_source = data_bien_trait_traits, con = con)
+  save_traits(data_source = data_bien_trait_traits, con = con)
 
 data_bien_trait_audit <-
   data_bien_trait_traits |>
@@ -864,7 +864,7 @@ data_bien_trait_audit <-
     taxon_name,
     trait_value
   ) |>
-  add_trait_value(
+  save_trait_value(
     dataset_id = data_bien_trait_dataset_id,
     samples_id = data_bien_trait_samples_id,
     traits_id = data_bien_trait_traits_id,
@@ -877,7 +877,7 @@ data_bien_trait_audit <-
 # 8. Unit strings equal the v1 import scripts -----
 #----------------------------------------------------------#
 
-# Each call of add_chelsa_neo_data() or add_chelsa_trace_data() in the v1
+# Each call of save_chelsa_neo_data() or save_chelsa_trace_data() in the v1
 #   scripts passes sel_var_name, sel_var_unit and sel_var_detail; they are
 #   read per call and compared with the contracts
 data_script_calls <-
@@ -896,7 +896,7 @@ data_script_calls <-
       .x = path_script,
       .f = ~ base::readLines(.x) |>
         stringr::str_c(collapse = "\n") |>
-        stringr::str_split_1(pattern = "add_chelsa_(neo|trace)_data\\(") |>
+        stringr::str_split_1(pattern = "save_chelsa_(neo|trace)_data\\(") |>
         utils::tail(-1)
     )
   ) |>

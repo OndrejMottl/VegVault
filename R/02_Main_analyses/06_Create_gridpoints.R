@@ -165,27 +165,27 @@ data_raw <-
 
 # dataset type -----
 data_dataset_type_db <-
-  add_dataset_type(
+  save_dataset_type(
     data_source = data_raw,
     con = con
   )
 
 # dataset source type -----
 data_dataset_source_type_db <-
-  add_dataset_source_type(
+  save_dataset_source_type(
     data_source = data_raw,
     con = con
   )
 
 # dataset source -----
 data_data_source_id_db <-
-  add_data_source(
+  save_data_source(
     data_source = data_raw,
     con = con
   )
 
 # Add gridpoints -----
-add_gridpoints_with_links(
+save_gridpoints_with_links(
   data_source = data_raw,
   sel_con = con,
   dataset_type_db = data_dataset_type_db,

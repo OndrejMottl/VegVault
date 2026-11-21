@@ -103,28 +103,28 @@ bien_traits_dataset_raw_distinct <-
 
 # - 3.1 dataset type -----
 data_bien_traits_dataset_type_id_db <-
-  add_dataset_type(
+  save_dataset_type(
     data_source = bien_traits_dataset_raw_distinct,
     con = con
   )
 
 # - 3.2 dataset source type -----
 data_bien_traits_dataset_source_type_db <-
-  add_dataset_source_type(
+  save_dataset_source_type(
     data_source = bien_traits_dataset_raw_distinct,
     con = con
   )
 
 # - 3.3 dataset source -----
 data_bien_traits_data_source_id_db <-
-  add_data_source(
+  save_data_source(
     data_source = bien_traits_dataset_raw_distinct,
     con = con
   )
 
 # 3.4 datasets -----
 bien_traits_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = bien_traits_dataset_raw_distinct,
     con = con,
     data_type = data_bien_traits_dataset_type_id_db,
@@ -167,7 +167,7 @@ bien_traits_samples_raw <-
 
 # 4.1 samples -----
 bien_traits_samples_id <-
-  add_samples(
+  save_samples(
     data_source = bien_traits_samples_raw,
     con = con
   )
@@ -177,7 +177,7 @@ bien_traits_samples_id <-
 # 5. Dataset - Sample -----
 #----------------------------------------------------------#
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = bien_traits_samples_raw,
   dataset_id = bien_traits_dataset_id,
   sample_id = bien_traits_samples_id,
@@ -197,7 +197,7 @@ bien_traits_taxa_raw <-
   )
 
 bien_traits_taxa_id <-
-  add_taxa(
+  save_taxa(
     data_source = bien_traits_taxa_raw,
     con = con
   )
@@ -212,12 +212,12 @@ bien_traits_traits_raw <-
     dplyr::rename(trait_domain_name = trait_domain) %>%
     dplyr::mutate(trait_reference = "BIEN")
 data_bien_trait_rules <-
-  add_trait_rules(con = con)
+  save_trait_rules(con = con)
 
 
 # 7.1 Traits -----
 bien_traits_traits_id <-
-  add_traits(
+  save_traits(
     data_source = bien_traits_traits_raw,
     con = con
   )
@@ -235,7 +235,7 @@ data_bien_trait_audit <-
       taxon_name,
       trait_value
     ) %>%
-    add_trait_value(
+    save_trait_value(
       con = con,
       dataset_id = bien_traits_dataset_id,
       samples_id = bien_traits_samples_id,

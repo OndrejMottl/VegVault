@@ -118,21 +118,21 @@ fossilpol_dataset_raw <-
 
 # - 3.1 dataset type -----
 data_fossilpol_dataset_type_id_db <-
-  add_dataset_type(
+  save_dataset_type(
     data_source = fossilpol_dataset_raw,
     con = con
   )
 
 # - 3.2 dataset source type -----
 data_fossilpol_dataset_source_type_db <-
-  add_dataset_source_type(
+  save_dataset_source_type(
     data_source = fossilpol_dataset_raw,
     con = con
   )
 
 # - 3.3 dataset source -----
 data_fossilpol_data_source_id_db <-
-  add_data_source(
+  save_data_source(
     data_source = fossilpol_dataset_raw,
     con = con,
     mandatory = TRUE
@@ -140,14 +140,14 @@ data_fossilpol_data_source_id_db <-
 
 # - 3.5 datasets sampling ------
 data_fossilpol_sampling_method_db <-
-  add_sampling_method(
+  save_sampling_method(
     data_source = fossilpol_dataset_raw,
     con = con
   )
 
 # - 3.7 datasets -----
 fossilpol_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = fossilpol_dataset_raw,
     con = con,
     data_type = data_fossilpol_dataset_type_id_db,
@@ -206,7 +206,7 @@ fossilpol_samples_raw <-
   dplyr::select(-c(dataset_id, sample_id))
 
 fossilpol_samples_id <-
-  add_samples(
+  save_samples(
     data_source = fossilpol_samples_raw,
     con = con
   )
@@ -221,7 +221,7 @@ data_fossilpol_dataset_sample <-
   fossilpol_samples_raw %>%
   dplyr::select(dataset_name, sample_name)
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = data_fossilpol_dataset_sample,
   dataset_id = fossilpol_dataset_id,
   sample_id = fossilpol_samples_id,
@@ -258,7 +258,7 @@ data_fossilpol_uncertainty_raw <-
   dplyr::select(-age_uncertainty) %>%
   tidyr::unnest(age_uncertainty_nested)
 
-add_sample_age_uncertainty(
+save_sample_age_uncertainty(
   data_source = data_fossilpol_uncertainty_raw,
   dataset_id = fossilpol_dataset_id,
   samples_id = fossilpol_samples_id,
@@ -290,7 +290,7 @@ data_fossilpol_taxa_raw <-
   )
 
 data_fossilpol_taxa_id <-
-  add_taxa(
+  save_taxa(
     data_source = data_fossilpol_taxa_raw,
     con = con
   )
@@ -313,7 +313,7 @@ data_fossilpol_sample_taxa_raw <-
     sample_name, taxon_name, value
   )
 
-add_sample_taxa(
+save_sample_taxa(
   data_source = data_fossilpol_sample_taxa_raw,
   taxa_id = data_fossilpol_taxa_id,
   samples_id = fossilpol_samples_id,

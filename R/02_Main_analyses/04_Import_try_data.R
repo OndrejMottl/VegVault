@@ -89,28 +89,28 @@ try_dataset_raw_distinct <-
 
 # - 3.1 dataset type -----
 data_try_dataset_type_id_db <-
-  add_dataset_type(
+  save_dataset_type(
     data_source = try_dataset_raw_distinct,
     con = con
   )
 
 # - 3.2 dataset source type -----
 data_try_dataset_source_type_db <-
-  add_dataset_source_type(
+  save_dataset_source_type(
     data_source = try_dataset_raw_distinct,
     con = con
   )
 
 # - 3.3 dataset source -----
 data_try_data_source_id_db <-
-  add_data_source(
+  save_data_source(
     data_source = try_dataset_raw_distinct,
     con = con
   )
 
 # 3.4 datasets -----
 try_dataset_id <-
-  add_datasets(
+  save_datasets(
     data_source = try_dataset_raw_distinct,
     con = con,
     data_type = data_try_dataset_type_id_db,
@@ -151,7 +151,7 @@ try_samples_raw <-
 
 # 4.1 samples -----
 try_samples_id <-
-  add_samples(
+  save_samples(
     data_source = try_samples_raw,
     con = con
   )
@@ -160,7 +160,7 @@ try_samples_id <-
 # 5. Dataset - Sample -----
 #----------------------------------------------------------#
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = try_samples_raw,
   dataset_id = try_dataset_id,
   sample_id = try_samples_id,
@@ -179,7 +179,7 @@ try_taxa_raw <-
   )
 
 try_taxa_id <-
-  add_taxa(
+  save_taxa(
     data_source = try_taxa_raw,
     con = con
   )
@@ -197,11 +197,11 @@ try_traits_raw <-
   )
 
 data_try_trait_rules <-
-  add_trait_rules(con = con)
+  save_trait_rules(con = con)
 
 # 7.1 Traits -----
 try_traits_id <-
-  add_traits(
+  save_traits(
     data_source = try_traits_raw,
     con = con
   )
@@ -220,7 +220,7 @@ data_try_trait_audit <-
       taxon_name = acc_species_name,
       trait_value
     ) %>%
-    add_trait_value(
+    save_trait_value(
       dataset_id = try_dataset_id,
       samples_id = try_samples_id,
       traits_id = try_traits_id,
