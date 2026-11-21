@@ -105,6 +105,34 @@ list(
     format = "file",
     cue = targets::tar_cue(mode = "always")
   ),
+  # The contracts of the climate and soil artefacts, which give the
+  #   variable labels, plausible ranges and forbidden values
+  targets::tar_target(
+    name = "file_contract_neoclimate",
+    command = here::here("Data", "Contracts", "chelsa_neoclimate.yml"),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "file_contract_palaeoclimate",
+    command = here::here(
+      "Data", "Contracts", "chelsa_trace21k_palaeoclimate.yml"
+    ),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "file_contract_soil",
+    command = here::here("Data", "Contracts", "hwsd_soil.yml"),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Storage caps, zero-share thresholds and their exceptions
+  targets::tar_target(
+    name = "list_abiotic_config",
+    command = load_config_value(value = c("validation", "abiotic_values")),
+    cue = targets::tar_cue(mode = "always")
+  ),
   # Build manifest next to the database
   targets::tar_target(
     name = "path_build_manifest",
@@ -201,6 +229,71 @@ list(
       list_build_manifest = list_build_manifest
     )
   ),
+  # One value rule per artefact and variable, from the contracts: age 0
+  #   from the present day, older time steps from CHELSA-TraCE21k
+  targets::tar_target(
+    name = "data_abiotic_rules",
+    command = build_abiotic_value_rules(
+      path_contract_present = file_contract_neoclimate,
+      path_contract_past = file_contract_palaeoclimate,
+      path_contract_soil = file_contract_soil
+    )
+  ),
+  # The ages at which gridpoints exist
+  targets::tar_target(
+    name = "vec_gridpoint_ages",
+    command = build_gridpoint_ages(path_contract = file_contract_palaeoclimate)
+  ),
+  # Units and descriptions of the abiotic variables against the contracts
+  targets::tar_target(
+    name = "data_check_abiotic_variables",
+    command = diagnose_abiotic_variables(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      data_rules = data_abiotic_rules
+    )
+  ),
+  # Abiotic values outside their range or equal to a forbidden value fail;
+  #   values at a storage cap are flagged
+  targets::tar_target(
+    name = "data_check_abiotic_values",
+    command = diagnose_abiotic_values(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      data_rules = data_abiotic_rules,
+      list_capped_values = purrr::pluck(
+        list_abiotic_config, "capped_values",
+        .default = base::list()
+      )
+    )
+  ),
+  # Shares of zeros per variable, age and latitude band, flagged for review
+  targets::tar_target(
+    name = "data_check_abiotic_zero_shares",
+    command = diagnose_abiotic_zero_shares(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      data_rules = data_abiotic_rules,
+      list_thresholds = purrr::chuck(list_abiotic_config, "zero_share"),
+      list_exceptions = purrr::pluck(
+        list_abiotic_config, "zero_share_exceptions",
+        .default = base::list()
+      ),
+      min_values_per_band = purrr::chuck(
+        list_abiotic_config, "min_values_per_band"
+      )
+    )
+  ),
+  # Missing ages, ages after the build and gridpoint ages off the time
+  #   steps, flagged for review
+  targets::tar_target(
+    name = "data_check_sample_ages",
+    command = diagnose_sample_ages(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      vec_gridpoint_ages = vec_gridpoint_ages
+    )
+  ),
   targets::tar_target(
     name = "data_checks_database",
     command = dplyr::bind_rows(
@@ -212,7 +305,11 @@ list(
       data_check_sample_taxa_pairs,
       data_check_names,
       data_check_orphans,
-      data_check_missing_coordinates
+      data_check_missing_coordinates,
+      data_check_abiotic_variables,
+      data_check_abiotic_values,
+      data_check_abiotic_zero_shares,
+      data_check_sample_ages
     )
   ),
   # Release eligibility: the release profile, a clean checkout, no failed
