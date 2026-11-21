@@ -146,7 +146,7 @@ testthat::test_that("load_producer_import() rejects each broken fixture", {
       ~artefact_id, ~variable, ~pattern,
       "bien_plots", NA, "plot_data\\[\\]\\.individual_count",
       "bien_traits", NA, "file_duplicate",
-      "chelsa_neoclimate", "bio12", "value\\s+\\[bio12\\]",
+      "chelsa_neoclimate", "bio18", "value\\s+\\[bio18\\]",
       "chelsa_trace21k_palaeoclimate", "bio1", "value\\s+\\[bio1\\]",
       "fossilpol_age_uncertainty", NA, "partition_gap",
       "fossilpol_assembly", NA, "levels\\[\\]\\.age",
