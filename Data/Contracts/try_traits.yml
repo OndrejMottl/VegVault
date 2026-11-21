@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: try_traits
-contract_version: 1.0.0
+contract_version: 2.0.0
 status: active
 title: TRY plant traits under the unit contract
 description: >-
@@ -14,7 +14,7 @@ consumers:
   - R/02_Main_analyses/04_Import_try_data.R
   - R/Functions/Traits/load_local_trait_artifacts.R
   - R/Functions/Traits/validate_trait_import.R
-  - R/Functions/Traits/add_trait_domain.R
+  - R/Functions/Traits/save_trait_domain.R
 file:
   name_templates:
     - 'data_trait_try_{date}__{hash}__.qs'
@@ -182,6 +182,19 @@ columns:
     evidence: >-
       04_Import_try_data.R:69; not in the v1.1.0 file, so it is new in the
       unit-contract export.
+  - name: record_reference
+    class: character
+    nullable: true
+    description: >-
+      Citation of the publication behind the record (TRY column Reference);
+      missing when TRY gives none.
+    evidence: >-
+      New in 2.0.0 (VegVault-Trait_data issue 16, merged as its pull request
+      18). On the full TRY request 28498 it is filled for all 897726
+      published records, with 392 distinct values: mostly one per dataset
+      (23 of 436 datasets have 2 to 8) and always one per observation. The
+      v1 import does not read it; the database assembly decides where it is
+      stored.
   - name: longitude
     class: numeric
     nullable: true
@@ -249,6 +262,7 @@ dependencies:
       - latitude
       - reference_source
       - dataset_reference_citation
+      - record_reference
 notes:
   - >-
     TRY is kept as a source (decision of 2026-11-19 in

@@ -17,7 +17,8 @@
 #' @details
 #' Four published records of two traits (leaf area in mm2, plant height in
 #' m) for two observations; one record was converted from cm2, one
-#' observation has no coordinates and no dataset key. The rule keys exist in
+#' observation has no coordinates, no dataset key and no record reference
+#' (`record_reference`). The rule keys exist in
 #' the producer's registry `config/trait_units/unit_conversions.csv`. The
 #' result is identical on every call. Aborts when `contract` is not the
 #' `try_traits` contract.
@@ -70,6 +71,9 @@ build_try_traits_fixture <- function(
       ),
       dataset_reference_citation = c(
         "Synthetic citation A", "Synthetic citation A", NA, NA
+      ),
+      record_reference = c(
+        "Synthetic publication A", "Synthetic publication A", NA, NA
       ),
       longitude = c(10.05, 10.05, NA, NA),
       latitude = c(50.05, 50.05, NA, NA),
