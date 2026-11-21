@@ -11,6 +11,16 @@ Apply this guide to SQLite schema files, database assembly code, import scripts,
 - Website pages under `website/database_structure/` document the public schema and must be updated when released tables, columns, relationships, units, or meanings change.
 - The database version record is `database: versions` in `config.yml`; its last entry is the version being built. The compatibility `R/00_Config_file.R` reads it from there for the legacy scripts and the website. A released schema or semantic contract change requires an intentional version/changelog update.
 
+## Bulk load
+
+The assembly stage builds every table in memory and writes the file once, with the writers of `R/Functions/Database/` (design note, section 6, and G2 decision 8):
+
+- Ids are assigned in memory by `prepare_table_ids()`: rows sorted by their natural key (text in the C locale) and numbered from 1, so the same inputs give the same ids in every build. Foreign keys are resolved in memory by `prepare_table_foreign_key()`, which stops on a key without a parent. No writer reads a table back from the database.
+- `save_vegvault_database()` loads the rows into `<name>_work.sqlite` next to the database (`resolve_database_build_paths()`) with `run_database_load()`: the tables and the view, the `build: pragmas_load` settings of `config.yml`, every table in schema order and in key order (`save_database_table()`, one transaction per `build: chunk_size` rows), the indexes, `ANALYZE`, the `build: pragmas_final` settings (checked by `validate_database_pragmas()`), and `VACUUM INTO` `<name>_new.sqlite`. Only then does the new file become the database, and the work file is removed.
+- The load keeps the journal in memory (`journal_mode = MEMORY`) rather than off: with `journal_mode = OFF` SQLite cannot roll back, and a failed batch must leave no rows. Foreign keys are off during the load; the validation stage runs `foreign_key_check` and `integrity_check` once on the release file (G2 decision 9).
+- Writes are plain `INSERT` statements through `DBI::dbAppendTable()`, so the keys, `UNIQUE`, `NOT NULL` and `CHECK` constraints of the schema reject a bad row and the error names the table and the batch. Never use `INSERT OR IGNORE`, `INSERT OR REPLACE` or a `try()` around a write; the tests of the writers scan their source for them.
+- A build always starts from a new work file and never resumes; files left by a failed build are removed at the start of the next one. An existing database stops the build, unless `flag_replace_existing` is set, which is meant only for the disposable database of the `subset` profile. Code never deletes another database.
+
 ## Live database safety
 
 The pipeline stages resolve the live database path with `resolve_database_path()` from the git-ignored `secrets.yaml` (`database_path`, and `database_v1_path` for the released v1 database). The legacy scripts and the website get `path_to_vegvault` from the compatibility `R/00_Config_file.R`, which resolves `database_v1_path` the same way; `secrets.yaml` replaces the former `.secrets/path.yaml`. Treat every resolved file as live user data. The `subset` profile uses a disposable database under the data root instead (see `.ai/analysis-structure.md`).

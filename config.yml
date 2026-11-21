@@ -307,7 +307,7 @@ default:
 
   #--------------------------------------------------#
   # Sections of the database-core stages: gridpoint links and database
-  #   assembly. `build` is empty until the assembly stage is built.
+  #   assembly
   #--------------------------------------------------#
 
   # Gridpoint links between samples and climate gridpoints (stage
@@ -330,8 +330,28 @@ default:
     age_margin_years: 1
     # Positions per branch of the link computation
     chunk_size: 5000
-  # Database assembly
-  build: {}
+
+  # Database assembly (stage 03_Database_assembly): one bulk load into a
+  #   work file next to the database, finished with ANALYZE and VACUUM
+  #   INTO (save_vegvault_database()), with the settings measured in
+  #   Documentation/Database_design_2.0.0.md, section 6.
+  build:
+    # Rows written per transaction
+    chunk_size: 100000
+    # Connection settings while the rows are loaded. The journal is kept in
+    #   memory, not switched off, so that a failed batch can roll back;
+    #   foreign keys are checked once by the validation stage.
+    #   cache_size is in KiB when negative (1 GiB).
+    pragmas_load:
+      journal_mode: "MEMORY"
+      synchronous: "OFF"
+      foreign_keys: "OFF"
+      cache_size: -1048576
+    # Safe settings restored and checked before VACUUM INTO
+    pragmas_final:
+      journal_mode: "DELETE"
+      synchronous: "FULL"
+      foreign_keys: "ON"
 
 
 #----------------------------------------------------------#
