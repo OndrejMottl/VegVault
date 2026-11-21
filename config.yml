@@ -184,6 +184,50 @@ default:
     quick_check: false
     # Folder of the validation report, relative to the project root
     output_dir: "Outputs/Tables"
+    # Abiotic values. The ranges, forbidden and allowed values come from
+    #   the producer contracts in Data/Contracts/; these settings cover
+    #   what the contracts do not.
+    abiotic_values:
+      # Storage caps of a source, kept as lower bounds: values at a cap are
+      #   flagged by share, not failed. CHELSA V2.1 stores bio12 as
+      #   unsigned 16-bit integers scaled by 0.1 (decided 2026-11-21)
+      capped_values:
+        chelsa_neoclimate:
+          bio12: 6553.5
+      # A latitude band (1 degree) with fewer values is not evaluated
+      min_values_per_band: 30
+      # Zero-share thresholds by artefact, rule and variable: `max` (share
+      #   of values exactly 0), `step` (change from the band to the north)
+      #   and `age_deviation` (share minus the median of the other ages).
+      #   Copied from the raster quality check of VegVault-abiotic_data
+      #   (config.yml, quality_checks: thresholds, commit 19de9d1, issue
+      #   16), derived on raster cells on 2026-11-21; gridpoints sample the
+      #   rasters unevenly, so a result is a flag for review
+      zero_share:
+        chelsa_neoclimate:
+          max: {bio1: 0.05, bio4: 0.05, bio6: 0.05, bio12: 0.05,
+            bio15: 0.05, bio18: 0.131, bio19: 0.140}
+          step: {bio1: 0.05, bio4: 0.05, bio6: 0.05, bio12: 0.05,
+            bio15: 0.05, bio18: 0.076, bio19: 0.096}
+        chelsa_trace21k_palaeoclimate:
+          max: {bio1: 0.051, bio4: 0.05, bio6: 0.05, bio12: 0.115,
+            bio15: 0.093, bio18: 0.318, bio19: 0.313}
+          step: {bio1: 0.051, bio4: 0.05, bio6: 0.05, bio12: 0.101,
+            bio15: 0.085, bio18: 0.141, bio19: 0.153}
+          age_deviation: {bio1: 0.05, bio4: 0.05, bio6: 0.05,
+            bio12: 0.314, bio15: 0.095, bio18: 0.35, bio19: 0.277}
+      # Accepted exceptions of the same check (allow-list, accepted by
+      #   Ondrej Mottl on 2026-11-21); a band within the latitude limits
+      #   is not flagged by the listed rules
+      zero_share_exceptions:
+        - artefact_id: chelsa_trace21k_palaeoclimate
+          variables: [bio12, bio18, bio19]
+          rules: [max, step]
+          lat_min: -91
+          lat_max: -74
+          reason: "Antarctic interior: CHELSA-TraCE21k has no downscaled
+            precipitation south of 74 S, so zero shares up to 1 occur in
+            every age."
   # Flat-file export
   export:
     # Replace flat files that already exist
