@@ -15,8 +15,8 @@ Status: proposed for gate G1 of the 2.0.0 release. How producers use the contrac
 | `try_traits` | VegVault-Trait_data | `Outputs/Data/data_trait_try_<date>__<hash>__.qs` | active; TRY kept (VegVault-Trait_data issue 13) |
 | `bien_traits` | VegVault-Trait_data | `Outputs/Data/data_traits_bien_<0, 1, ...>_<date>__<hash>__.qs` | active |
 | `chelsa_neoclimate` | VegVault-abiotic_data | `Outputs/Data/Neoclimate/CHELSA_bio_<NN>_<date>__<hash>__.qs`, one per variable | active |
-| `chelsa_trace21k_palaeoclimate` | VegVault-abiotic_data | `Outputs/Data/Palaoclimate/bio<NN>_batch_<1, 2, ...>_<date>__<hash>__.qs` | active |
-| `wosis_soil` | VegVault-abiotic_data | `Outputs/Data/WoSIS/wosis_data_<date>__<hash>__.qs` | active; the soil source is still to be settled in the source inventory (VegVault issue 82) |
+| `chelsa_trace21k_palaeoclimate` | VegVault-abiotic_data | `Outputs/Data/Palaoclimate/bio<NN>_batch_<1, 2, 3, 4>_<date>__<hash>__.qs`, four batches per variable | active |
+| `hwsd_soil` | VegVault-abiotic_data | `Outputs/Data/HWSD/hwsd_data_<date>__<hash>__.qs` | active; HWSD v2.2, renamed from `wosis_soil` (VegVault issue 82) |
 
 FOSSILPOL has no references contract: VegVault takes references from the assembly's `doi` and `source_of_data` and does not read the producer's `Outputs/Meta_and_references/`.
 
@@ -123,7 +123,7 @@ Run the tests with `Rscript R/Tests/Run_tests.R` from the repository root. The s
 | `bien_traits` | Part 1 is present twice, from two runs. |
 | `chelsa_neoclimate` | One bio12 value is the storage limit 6553.5. |
 | `chelsa_trace21k_palaeoclimate` | One bio1 value is 99 degrees. |
-| `wosis_soil` | Soil-class codes are stored as text. |
+| `hwsd_soil` | Soil-group codes are stored as text. |
 
 The fixtures are built by the `build_<contract_id>_fixture()` functions and written by `R/Contracts/build_contract_fixtures.R`, which checks every valid fixture passes and every broken one fails before writing. The output is deterministic: rebuilding gives byte-identical files, and the tests of each builder check that the shipped files equal what the builder produces. Existing fixtures are kept unless `flag_rewrite` is set to `TRUE` in the script, which deletes and rewrites them (a changed fixture gets a new hash in its file name).
 

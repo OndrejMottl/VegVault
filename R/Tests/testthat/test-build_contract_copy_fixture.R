@@ -82,7 +82,7 @@ testthat::test_that("build_contract_copy_fixture() builds both folders", {
         "Data/Contracts/fixtures/valid/splot_plots/example.txt",
         "Data/Contracts/old_plots.yml",
         "Data/Contracts/splot_plots.yml",
-        "Data/Contracts/wosis_soil.yml",
+        "Data/Contracts/hwsd_soil.yml",
         "R/Functions/Contracts/load_example_contract.R",
         "R/Functions/Contracts/validate_example_artefact.R"
       )
@@ -141,7 +141,7 @@ testthat::test_that("build_contract_copy_fixture() writes valid contracts", {
 
   list_contracts <-
     purrr::map(
-      .x = c("splot_plots", "bien_plots", "wosis_soil", "old_plots"),
+      .x = c("splot_plots", "bien_plots", "hwsd_soil", "old_plots"),
       .f = ~ load_producer_contract(
         path_contract = base::file.path(
           path_contracts,

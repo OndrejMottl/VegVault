@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: chelsa_trace21k_palaeoclimate
-contract_version: 1.0.0
+contract_version: 2.0.0
 status: active
 title: CHELSA-TraCE21k palaeoclimate bioclimatic variables
 description: >-
@@ -20,23 +20,25 @@ file:
     - 'bio{variable}_batch_{partition}_{date}__{hash}__.qs'
   evidence: >-
     R/02_Main_analyses/02_Merge_palaeoclimate_to_qs.R in the producer binds
-    every time slice of a variable and saves it with save_in_batches(n_batches
-    = 3); v1 files bio01_batch_1_2024-08-06__f674adeb38401a05236e0b5e0ad7cc53__.qs
-    and 20 more (tag v1.1.0). The folder is spelled Palaoclimate in the
-    producer.
+    every time slice of a variable and saves it with save_in_batches(); v1
+    files bio01_batch_1_2024-08-06__f674adeb38401a05236e0b5e0ad7cc53__.qs
+    and 20 more (tag v1.1.0). The folder keeps its spelling Palaoclimate in
+    2.0.0 (VegVault issue 93).
 partitioning:
   scheme: integer
   first: 1
-  count: 3
+  count: 4
   contiguous: true
   evidence: >-
-    save_in_batches(n_batches = 3) numbers batches from 1 and slices rows in
-    order, so a variable always has three batches and a missing last batch
-    would otherwise go unnoticed. One time slice can span two batches
-    (time_id -150 is in batches 1 and 2 of bio01, on disjoint cells). Batches
-    1 to 5 dated 2024-01-02 remain in the producer folder from an earlier
-    run; selecting them with the 2024-08-06 batches is reported as duplicate
-    batches and as a wrong number of batches.
+    save_in_batches() numbers batches from 1 and slices rows in order, so a
+    variable always has the same number of batches and a missing last batch
+    would otherwise go unnoticed. v1 had three; in qs2 three batches of
+    bio04 are 56 to 57 MiB, above the 50 MiB at which Git warns, so 2.0.0
+    writes four of about 42 MiB (abiotic lane, VegVault issue 93). One time
+    slice can span two batches (time_id -150 is in batches 1 and 2 of bio01
+    in v1, on disjoint cells). Batches left from an earlier run in the
+    producer folder are reported as duplicate batches and as a wrong number
+    of batches when selected.
 extra_columns: error
 columns:
   - name: long
@@ -63,7 +65,7 @@ columns:
         min: -90
         max: 90
   - name: time_id
-    class: character
+    class: integer
     nullable: false
     description: >-
       CHELSA-TraCE21k time slice. VegVault converts it to age in years before
@@ -74,49 +76,20 @@ columns:
       add_chelsa_trace_data.R:44 skips it, while 06_Create_gridpoints.R:73-81
       uses it to build the age-0 gridpoints.
     evidence: >-
-      01_download_and_downscale_paleoclimate.R:46-54 and save_tif_as_rds.R in
-      the producer extract it from file names with stringr, so it is text;
-      add_chelsa_trace_data.R:39 converts it with as.numeric(); v1:
-      character, 37 distinct values over the three batches.
+      v1 extracted it from file names as text (character, 37 distinct values
+      over the three batches). From 2.0.0 the producer takes the slices from
+      its configuration and exports them as integers with the same values
+      (abiotic lane, VegVault issue 93). add_chelsa_trace_data.R:39 and
+      06_Create_gridpoints.R:78 convert with as.numeric(), and
+      prepare_chelsa_trace21k_ages() accepts integers, so no consumer
+      changes.
     checks:
-      allowed_values:
-        - '20'
-        - '15'
-        - '10'
-        - '5'
-        - '0'
-        - '-5'
-        - '-10'
-        - '-15'
-        - '-20'
-        - '-25'
-        - '-30'
-        - '-35'
-        - '-40'
-        - '-45'
-        - '-50'
-        - '-55'
-        - '-60'
-        - '-65'
-        - '-70'
-        - '-75'
-        - '-80'
-        - '-85'
-        - '-90'
-        - '-95'
-        - '-100'
-        - '-105'
-        - '-110'
-        - '-115'
-        - '-120'
-        - '-125'
-        - '-130'
-        - '-135'
-        - '-140'
-        - '-145'
-        - '-150'
-        - '-155'
-        - '-160'
+      whole_number: true
+      allowed_values: [
+        20, 15, 10, 5, 0, -5, -10, -15, -20, -25, -30, -35, -40, -45, -50,
+        -55, -60, -65, -70, -75, -80, -85, -90, -95, -100, -105, -110, -115,
+        -120, -125, -130, -135, -140, -145, -150, -155, -160
+      ]
   - name: value
     class: numeric
     nullable: false
@@ -147,11 +120,15 @@ variables:
           max: 45
     - variable: bio4
       file_token: '04'
-      unit: C (degree Celsius)
-      description: temperature seasonality
+      unit: C/100 (hundredths of a degree Celsius)
+      description: >-
+        temperature seasonality: standard deviation of the monthly mean
+        temperatures times 100
       evidence: >-
-        08_Import_chelsa_trace21k_climate_data.R:108-111; v1: 4.77 to 2620.9
-        with no zeros. The same unit doubt applies as in chelsa_neoclimate.
+        08_Import_chelsa_trace21k_climate_data.R:108-111 stored the unit
+        "C (degree Celsius)" and the detail "temperature seasonality"; v1:
+        4.77 to 2620.9 with no zeros, the same scale as the present day.
+        Unit and detail corrected as in chelsa_neoclimate.
       checks:
         range:
           min: 0
@@ -174,6 +151,12 @@ variables:
       evidence: >-
         08_Import_chelsa_trace21k_climate_data.R:150-153; v1: 0 to 50415,
         far above any recorded annual precipitation, so v1 fails this range.
+        All 1028 cells above 15000 lie in one block of the southern Amazon
+        (7.1 to 11.3 degrees S, 50.9 to 64.1 degrees W) in seven slices from
+        12000 to 17000 years, and the raw CHELSA-TraCE21k files hold them
+        (abiotic lane, VegVault issue 93). Decided for 2.0.0: the producer
+        masks the block, so those cells get no row, and the release notes
+        say so.
       checks:
         range:
           min: 0
@@ -193,10 +176,14 @@ variables:
     - variable: bio18
       file_token: '18'
       unit: kg m-2 quarter-1
-      description: mean monthly precipitation amount of the warmest quarter
+      description: precipitation amount of the warmest quarter
       evidence: >-
-        08_Import_chelsa_trace21k_climate_data.R:192-195; v1: 0 to 83910,
-        far above any recorded value, so v1 fails this range.
+        08_Import_chelsa_trace21k_climate_data.R:192-195 stored the detail
+        "mean monthly precipitation amount of the warmest quarter"; quarterly
+        totals, corrected as in chelsa_neoclimate. v1: 0 to 83910, far above
+        any recorded value, so v1 fails this range; the 1241 cells above
+        12000 lie in the same Amazon block as the bio12 values and are
+        masked with it.
       checks:
         range:
           min: 0
@@ -204,21 +191,29 @@ variables:
     - variable: bio19
       file_token: '19'
       unit: kg m-2 quarter-1
-      description: mean monthly precipitation amount of the coldest quarter
+      description: precipitation amount of the coldest quarter
       evidence: >-
-        08_Import_chelsa_trace21k_climate_data.R:213-216.
+        08_Import_chelsa_trace21k_climate_data.R:213-216 stored the detail
+        "mean monthly precipitation amount of the coldest quarter"; quarterly
+        totals, corrected as in chelsa_neoclimate.
       checks:
         range:
           min: 0
           max: 12000
 notes:
   - >-
-    Unit and description strings equal the ones hard-coded in
-    08_Import_chelsa_trace21k_climate_data.R.
+    Unit and description strings are the ones the import writes to the
+    database. They equal the strings hard-coded in
+    08_Import_chelsa_trace21k_climate_data.R except the corrections of
+    2.0.0: the unit and detail of bio4 and the detail of bio18 and bio19.
   - >-
-    The values are means after downscaling, so the storage-type limits of the
-    source rasters cannot be read from them and no forbidden values are set;
-    the abiotic lane is asked for them.
+    The raw CHELSA-TraCE21k files are 32-bit floats without scale, offset or
+    declared NoData, so they have no storage-type limit and no forbidden
+    values are set (abiotic lane, VegVault issue 93).
   - >-
-    Plausible ranges are the same proposals as for chelsa_neoclimate; the
-    abiotic lane confirms them.
+    The abiotic lane confirmed the plausible ranges, the same as for
+    chelsa_neoclimate; its raster quality checks read them from its copy of
+    this contract.
+  - >-
+    A masked or missing cell has no row, so a variable can have fewer rows
+    than bio1 (v1 bio15 already had fewer).

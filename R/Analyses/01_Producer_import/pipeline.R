@@ -56,7 +56,7 @@ targets::tar_option_set(
 # Proposed for the gridpoint and database assembly stages; the names are
 #   agreed with the database-core lane before those stages import them.
 #   - `data_<artefact id>` for splot_plots, bien_plots, fossilpol_assembly,
-#     fossilpol_age_uncertainty, try_traits, bien_traits and wosis_soil:
+#     fossilpol_age_uncertainty, try_traits, bien_traits and hwsd_soil:
 #     the validated artefact as a named list of tables, one per file
 #   - `data_chelsa_neoclimate_<variable>` and
 #     `data_chelsa_trace21k_palaeoclimate_<variable>` for bio1, bio4,

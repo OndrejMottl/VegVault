@@ -4,8 +4,9 @@
 #' ages, in years before 1950, at which the gridpoint stage creates
 #' gridpoints.
 #' @param list_data
-#' Named list of data frames with the column `time_id` (text holding a
-#' whole number), as returned by `load_producer_import()`.
+#' Named list of data frames with the column `time_id`, an integer from
+#' 2.0.0 on or text holding a whole number as in v1, as returned by
+#' `load_producer_import()`.
 #' @return
 #' Numeric vector of the distinct ages, sorted in increasing order.
 #' @details

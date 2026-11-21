@@ -93,7 +93,7 @@ vec_contract_ids <-
   c(
     "splot_plots", "bien_plots", "fossilpol_assembly",
     "fossilpol_age_uncertainty", "try_traits", "bien_traits",
-    "chelsa_neoclimate", "chelsa_trace21k_palaeoclimate", "wosis_soil"
+    "chelsa_neoclimate", "chelsa_trace21k_palaeoclimate", "hwsd_soil"
   )
 
 list_contracts <-
@@ -608,12 +608,12 @@ data_climate_values <-
   )
 
 data_soil_values <-
-  purrr::chuck(list_artefacts, "wosis_soil", 1) |>
+  purrr::chuck(list_artefacts, "hwsd_soil", 1) |>
   dplyr::mutate(
     age = 0,
     abiotic_variable_name = var_name,
     var_unit = "Unitless",
-    var_detail = "SoilGrids-soil_class"
+    var_detail = "HWSD-soil_group"
   ) |>
   dplyr::select(
     long, lat, value, age, abiotic_variable_name, var_unit, var_detail
@@ -874,12 +874,19 @@ data_bien_trait_audit <-
 
 
 #----------------------------------------------------------#
-# 8. Unit strings equal the v1 import scripts -----
+# 8. Unit strings against the v1 import scripts -----
 #----------------------------------------------------------#
 
 # Each call of save_chelsa_neo_data() or save_chelsa_trace_data() in the v1
 #   scripts passes sel_var_name, sel_var_unit and sel_var_detail; they are
-#   read per call and compared with the contracts
+#   read per call and compared with the contracts. The 2.0.0 contracts
+#   correct some of them on purpose: bio4 is in hundredths of a degree with
+#   an exact detail, and bio18 and bio19 are quarterly totals, not monthly
+#   means. Those must differ from v1; every other string must be equal.
+vec_variables_unit_corrected <- "bio4"
+
+vec_variables_detail_corrected <- c("bio4", "bio18", "bio19")
+
 data_script_calls <-
   tibble::tibble(
     contract_id = c("chelsa_neoclimate", "chelsa_trace21k_palaeoclimate"),
@@ -925,11 +932,21 @@ data_unit_checks <-
   ) |>
   dplyr::mutate(
     is_unit_equal = var_unit == unit_script,
-    is_detail_equal = var_detail == detail_script
+    is_detail_equal = var_detail == detail_script,
+    is_unit_ok = dplyr::if_else(
+      variable %in% vec_variables_unit_corrected,
+      !is_unit_equal,
+      is_unit_equal
+    ),
+    is_detail_ok = dplyr::if_else(
+      variable %in% vec_variables_detail_corrected,
+      !is_detail_equal,
+      is_detail_equal
+    )
   )
 
 value_soil_unit <-
-  purrr::chuck(list_contracts, "wosis_soil", "columns") |>
+  purrr::chuck(list_contracts, "hwsd_soil", "columns") |>
   purrr::keep(.p = ~ purrr::chuck(.x, "name") == "value") |>
   purrr::chuck(1, "unit")
 
@@ -1023,7 +1040,8 @@ base::print(data_expected)
 base::print(
   dplyr::select(
     data_unit_checks,
-    contract_id, variable, is_unit_equal, is_detail_equal
+    contract_id, variable, is_unit_equal, is_detail_equal, is_unit_ok,
+    is_detail_ok
   ),
   n = 20
 )
@@ -1043,8 +1061,8 @@ flag_counts_ok <-
   )
 
 flag_units_ok <-
-  base::all(dplyr::pull(data_unit_checks, is_unit_equal) %in% TRUE) &&
-  base::all(dplyr::pull(data_unit_checks, is_detail_equal) %in% TRUE)
+  base::all(dplyr::pull(data_unit_checks, is_unit_ok) %in% TRUE) &&
+  base::all(dplyr::pull(data_unit_checks, is_detail_ok) %in% TRUE)
 
 if (
   !flag_counts_ok ||

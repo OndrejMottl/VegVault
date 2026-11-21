@@ -16,6 +16,19 @@ testthat::test_that("prepare_chelsa_trace21k_ages() converts time slices", {
   testthat::expect_equal(res, c(0, 500, 18000))
 })
 
+testthat::test_that("prepare_chelsa_trace21k_ages() accepts integer slices", {
+  list_data <-
+    list(
+      a.qs = tibble::tibble(time_id = c(20L, -160L, 15L)),
+      b.qs = tibble::tibble(time_id = c(20L, NA_integer_))
+    )
+
+  res <-
+    prepare_chelsa_trace21k_ages(list_data = list_data)
+
+  testthat::expect_equal(res, c(0, 500, 18000))
+})
+
 
 #----------------------------------------------------------#
 # Inputs -----

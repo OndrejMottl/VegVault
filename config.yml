@@ -166,7 +166,7 @@ default:
         col_lon: "long"
         col_lat: "lat"
         flag_margin: true
-      wosis_soil:
+      hwsd_soil:
         col_lon: "long"
         col_lat: "lat"
         flag_margin: true

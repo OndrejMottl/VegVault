@@ -152,7 +152,7 @@ testthat::test_that("load_producer_import() rejects each broken fixture", {
       "fossilpol_assembly", NA, "levels\\[\\]\\.age",
       "splot_plots", NA, "plot_observation_id",
       "try_traits", NA, "disposition",
-      "wosis_soil", NA, "value"
+      "hwsd_soil", NA, "value"
     )
 
   testthat::expect_setequal(
@@ -270,8 +270,8 @@ testthat::test_that("load_producer_import() checks the variable", {
   # A contract without variables has none to choose
   testthat::expect_error(
     load_producer_import(
-      data_files = dplyr::mutate(data_files, artefact_id = "wosis_soil"),
-      path_contract = here::here("Data", "Contracts", "wosis_soil.yml"),
+      data_files = dplyr::mutate(data_files, artefact_id = "hwsd_soil"),
+      path_contract = here::here("Data", "Contracts", "hwsd_soil.yml"),
       variable = "bio1",
       list_subset = list(enabled = FALSE),
       list_subset_filter = list_filter

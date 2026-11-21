@@ -19,11 +19,12 @@
 #' `rlang::hash()` of the tibble.
 #' @details
 #' For every variable of the contract: the six grid cells of
-#' `build_chelsa_neoclimate_fixture()` at four time slices, time_id 20, 15,
-#' -40 and -160 (ages 0, 500, 6000 and 18000), ordered by time slice and
-#' split by row order into three batches of eight rows, so that one time
-#' slice spans two batches as in the producer. Values shift with age by a
-#' fixed amount per variable. The result is identical on every call.
+#' `build_chelsa_neoclimate_fixture()` at four time slices, integer
+#' `time_id` 20, 15, -40 and -160 (ages 0, 500, 6000 and 18000), ordered by
+#' time slice and split by row order into four batches of 5, 7, 6 and 6
+#' rows, so that the first time slice spans batches 1 and 2 as slices do in
+#' the producer. Values shift with age by a fixed amount per variable. The
+#' result is identical on every call.
 #' Aborts when `contract` is not the `chelsa_trace21k_palaeoclimate`
 #' contract or lists a variable this fixture has no values for.
 build_chelsa_trace21k_palaeoclimate_fixture <- function(
@@ -50,7 +51,7 @@ build_chelsa_trace21k_palaeoclimate_fixture <- function(
     msg = "'flag_broken' must be TRUE or FALSE."
   )
 
-  vec_time_ids <- c("20", "15", "-40", "-160")
+  vec_time_ids <- c(20L, 15L, -40L, -160L)
 
   # Grid cells of the present-day fixture, repeated for every time slice
   data_grid <-
@@ -140,11 +141,15 @@ build_chelsa_trace21k_palaeoclimate_fixture <- function(
       list_variables_valid
     }
 
-  # Batches of eight rows: the second time slice spans batches 1 and 2
+  # Batches of 5, 7, 6 and 6 rows: the first time slice (rows 1 to 6)
+  #   spans batches 1 and 2
+  list_batch_rows <-
+    base::list(1:5, 6:12, 13:18, 19:24)
+
   data_batches <-
     tidyr::expand_grid(
       index_variable = base::seq_along(vec_variables),
-      batch = 1:3
+      batch = base::seq_along(list_batch_rows)
     )
 
   list_files <-
@@ -153,7 +158,7 @@ build_chelsa_trace21k_palaeoclimate_fixture <- function(
       .y = dplyr::pull(data_batches, "batch"),
       .f = ~ dplyr::slice(
         list_variables[[.x]],
-        ((.y - 1L) * 8L + 1L):(.y * 8L)
+        list_batch_rows[[.y]]
       )
     )
 
