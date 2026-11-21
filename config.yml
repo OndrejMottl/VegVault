@@ -307,11 +307,29 @@ default:
 
   #--------------------------------------------------#
   # Sections of the database-core stages: gridpoint links and database
-  #   assembly. Empty until those stages are built.
+  #   assembly. `build` is empty until the assembly stage is built.
   #--------------------------------------------------#
 
-  # Gridpoint links between samples and climate gridpoints
-  link: {}
+  # Gridpoint links between samples and climate gridpoints (stage
+  #   02_Gridpoints). A sample position and a gridpoint are linked when
+  #   they are at most `distance_km` apart (geodesic on WGS84) and at most
+  #   `distance_years` apart in age, the rule of v1.0.0.
+  link:
+    distance_km: 50
+    distance_years: 5000
+    # Decimals of the gridpoint coordinates, as in v1.0.0
+    coordinate_digits: 2
+    # Search windows before the exact distance test. A radius no larger
+    #   than the smallest radius of curvature of WGS84 (6335.44 km) makes
+    #   the windows hold every point within `distance_km`; the margin, in
+    #   degrees, widens them further.
+    radius_min_km: 6335.4
+    window_margin_deg: 0.01
+    # Years added to `distance_years` in the age join; the exact age test
+    #   then decides
+    age_margin_years: 1
+    # Positions per branch of the link computation
+    chunk_size: 5000
   # Database assembly
   build: {}
 
