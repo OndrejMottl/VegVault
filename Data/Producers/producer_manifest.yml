@@ -78,7 +78,7 @@ artefacts:
     dev:
       files: []
   - artefact_id: chelsa_neoclimate
-    contract_version: 1.0.1
+    contract_version: 1.1.0
     note: Placeholder until VegVault-abiotic_data tags v2.0.0.
     release:
       tag: null

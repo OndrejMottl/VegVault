@@ -136,7 +136,7 @@ testthat::test_that(
 
     testthat::expect_equal(
       dplyr::pull(data_findings, column),
-      "value [bio12]"
+      "value [bio18]"
     )
   }
 )

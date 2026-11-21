@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: chelsa_neoclimate
-contract_version: 1.0.1
+contract_version: 1.1.0
 status: active
 title: CHELSA present-day bioclimatic variables
 description: >-
@@ -132,15 +132,18 @@ variables:
         1172 cells exactly 6553.5, the largest value of an unsigned 16-bit
         integer scaled by 0.1 (VegVault issue 78); the 2.0.0 download is
         stored the same way and declares no usable NoData value, so capped
-        cells read as 6553.5. Decided for 2.0.0: the producer masks them,
-        so a capped cell gets no row, and the release notes say so. The upper
+        cells read as 6553.5. The cap is in the source product: the raw
+        CHELSA V2.1 file holds 773582 cells at 6553.5, its maximum, in the
+        wettest regions (VegVault-abiotic_data issue 16). Decided for 2.0.0
+        (Ondrej Mottl, 2026-11-21): the capped values are kept and documented
+        as lower bounds, so 6553.5 means at least 6553.5 mm; until 1.1.0 they
+        were forbidden. The validation stage flags their share. The upper
         bound of 15000 is above the wettest recorded places (about 12000 to
         13500 mm).
       checks:
         range:
           min: 0
           max: 15000
-        forbidden_values: [6553.5]
     - variable: bio15
       file_token: '15'
       unit: Unitless
@@ -202,6 +205,10 @@ notes:
     variable is stored as unsigned 16-bit integers scaled by 0.1, with an
     offset of -273.15 for bio1 and bio6. Its raster quality checks read
     them from its copy of this contract.
+  - >-
+    Version 1.1.0 removes the forbidden value 6553.5 of bio12, because the
+    capped cells are kept (see bio12). bio18 and bio19 keep it as a guard,
+    although their files declare that stored value as NoData.
   - >-
     A masked or missing cell has no row, so a variable can have fewer rows
     than bio1; the import attaches each value to an existing gridpoint

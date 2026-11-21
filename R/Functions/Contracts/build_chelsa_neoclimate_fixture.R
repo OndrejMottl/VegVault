@@ -10,7 +10,7 @@
 #' Character scalar `YYYY-MM-DD` used for the date in the file names.
 #' @param flag_broken
 #' Logical. If `TRUE`, the fixture breaks exactly one rule of the contract:
-#' one bio12 value equals the storage limit 6553.5 (`value_forbidden`).
+#' one bio18 value equals the storage limit 6553.5 (`value_forbidden`).
 #' @return
 #' A named list with one tibble per variable of the contract, named by the
 #' file name it is saved under: the contract's file-name template filled
@@ -111,8 +111,8 @@ build_chelsa_neoclimate_fixture <- function(
     ) {
       purrr::assign_in(
         list_files_valid,
-        where = base::list("bio12", "value"),
-        value = c(420.5, 415, 6553.5, 702.8, 2210.4, 480.1)
+        where = base::list("bio18", "value"),
+        value = c(160.4, 158.2, 6553.5, 230.1, 380.2, 170.9)
       )
     } else {
       list_files_valid

@@ -121,7 +121,7 @@ Run the tests with `Rscript R/Tests/Run_tests.R` from the repository root. The s
 | `fossilpol_age_uncertainty` | Parts A and C, no B. |
 | `try_traits` | One record is not published. |
 | `bien_traits` | Part 1 is present twice, from two runs. |
-| `chelsa_neoclimate` | One bio12 value is the storage limit 6553.5. |
+| `chelsa_neoclimate` | One bio18 value is the storage limit 6553.5. |
 | `chelsa_trace21k_palaeoclimate` | One bio1 value is 99 degrees. |
 | `hwsd_soil` | Soil-group codes are stored as text. |
 
