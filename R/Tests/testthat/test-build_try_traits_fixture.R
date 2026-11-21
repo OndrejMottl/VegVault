@@ -156,6 +156,29 @@ testthat::test_that(
   }
 )
 
+testthat::test_that(
+  "build_try_traits_fixture() gives one record reference per observation",
+  {
+    data_references <-
+      build_try_traits_fixture() |>
+      purrr::chuck(1) |>
+      dplyr::distinct(observation_id, record_reference)
+
+    testthat::expect_type(
+      dplyr::pull(data_references, record_reference),
+      "character"
+    )
+
+    # One reference per observation, and one observation without one
+    testthat::expect_equal(base::nrow(data_references), 2L)
+
+    testthat::expect_equal(
+      base::sum(base::is.na(dplyr::pull(data_references, record_reference))),
+      1L
+    )
+  }
+)
+
 
 #----------------------------------------------------------#
 # Inputs -----

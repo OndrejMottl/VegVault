@@ -62,7 +62,7 @@ artefacts:
         - data_age_uncertainty_C_2026-11-20__cc57dfde08adb1c3f14e02fd1550644b__.qs
         - data_age_uncertainty_D_2026-11-20__f07eb9ae814666b400489a9e2845bc4f__.qs
   - artefact_id: try_traits
-    contract_version: 1.0.0
+    contract_version: 2.0.0
     note: Placeholder until VegVault-Trait_data tags v2.0.0.
     release:
       tag: null
