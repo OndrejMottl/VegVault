@@ -352,6 +352,85 @@ default:
       journal_mode: "DELETE"
       synchronous: "FULL"
       foreign_keys: "ON"
+    # Fixed values and references of each source, with the texts of
+    #   v1.0.0. A reference has a role: the source type, or every data
+    #   source, sampling method, taxon or trait of the source. References
+    #   taken from the producer data are not mandatory. The order of the
+    #   sources gives the order of their ids.
+    sources:
+      splot:
+        dataset_type: "vegetation_plot"
+        dataset_source_type: "sPlotOpen"
+        sample_size_description: "square meters"
+        references:
+          - role: "source_type"
+            mandatory: true
+            detail: "Sabatini FM, Lenoir J, Hattab T, et al. sPlotOpen – An environmentally balanced, open-access, global dataset of vegetation plots. Global Ecol Biogeogr. 2021; 30: 1740–1764. https://doi.org/10.1111/geb.13346"
+          - role: "taxon"
+            mandatory: false
+            detail: "sPlotOpen"
+      bien_plots:
+        dataset_type: "vegetation_plot"
+        dataset_source_type: "BIEN"
+        sample_size_description: "square meters"
+        references:
+          - role: "source_type"
+            mandatory: true
+            detail: "Enquist, B J, B Sandel, B Boyle, J-C Svenning, B J McGill, J C Donoghue, C E Hinchliff, et al. ‘Botanical Big Data Shows That Plant Diversity in the New World Is Driven by Climatic-Linked Differences in Evolutionary Rates and Biotic Exclusion’, n.d."
+          - role: "source_type"
+            mandatory: true
+            detail: "S, Maitner Brian, Boyle Brad, Casler Nathan, Condit Rick, Donoghue John, Duran Sandra M, Guaderrama Daniel, et al. ‘The Bien r Package: A Tool to Access the Botanical Information and Ecology Network (BIEN) Database’. Methods in Ecology and Evolution 9, no. 2 (n.d.): 373–79. https://doi.org/10.1111/2041-210X.12861."
+          - role: "sampling_method"
+            mandatory: false
+            detail: "BIEN"
+          - role: "taxon"
+            mandatory: false
+            detail: "BIEN"
+      fossilpol:
+        dataset_type: "fossil_pollen_archive"
+        dataset_source_type: "FOSSILPOL"
+        references:
+          - role: "source_type"
+            mandatory: true
+            detail: "Flantua, S. G. A., Mottl, O., Felde, V. A., Bhatta, K. P., Birks, H. H., Grytnes, J.-A., Seddon, A. W. R., & Birks, H. J. B. (2023). A guide to the processing and standardization of global palaeoecological data for large-scale syntheses using fossil pollen. Global Ecology and Biogeography, 32, 1377–1394. https://doi.org/10.1111/geb.13693"
+          - role: "data_source"
+            mandatory: true
+            detail: "Grimm, E.C., 2008. Neotoma: an ecosystem database for the Pliocene, Pleistocene, and Holocene. Illinois State Museum Scientific Papers E Series, 1."
+          - role: "sampling_method"
+            mandatory: false
+            detail: "Neotoma"
+          - role: "taxon"
+            mandatory: false
+            detail: "Neotoma"
+      try:
+        dataset_type: "traits"
+        dataset_source_type: "TRY"
+        references:
+          - role: "source_type"
+            mandatory: true
+            detail: "Kattge J, Bönisch G, Díaz S, et al. TRY plant trait database – enhanced coverage and open access. Glob Change Biol. 2020; 26: 119–188. https://doi.org/10.1111/gcb.14904"
+          - role: "taxon"
+            mandatory: false
+            detail: "TRY"
+          - role: "trait"
+            mandatory: false
+            detail: "TRY"
+      bien_traits:
+        dataset_type: "traits"
+        dataset_source_type: "BIEN"
+        references:
+          - role: "source_type"
+            mandatory: true
+            detail: "Enquist, B J, B Sandel, B Boyle, J-C Svenning, B J McGill, J C Donoghue, C E Hinchliff, et al. ‘Botanical Big Data Shows That Plant Diversity in the New World Is Driven by Climatic-Linked Differences in Evolutionary Rates and Biotic Exclusion’, n.d."
+          - role: "source_type"
+            mandatory: true
+            detail: "S, Maitner Brian, Boyle Brad, Casler Nathan, Condit Rick, Donoghue John, Duran Sandra M, Guaderrama Daniel, et al. ‘The Bien r Package: A Tool to Access the Botanical Information and Ecology Network (BIEN) Database’. Methods in Ecology and Evolution 9, no. 2 (n.d.): 373–79. https://doi.org/10.1111/2041-210X.12861."
+          - role: "taxon"
+            mandatory: false
+            detail: "BIEN"
+          - role: "trait"
+            mandatory: false
+            detail: "BIEN"
 
 
 #----------------------------------------------------------#
