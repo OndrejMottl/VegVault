@@ -110,35 +110,35 @@ bien_dataset_raw <-
 
 # - 3.1 dataset type -----
 data_bien_dataset_type_db <-
-  add_dataset_type(
+  save_dataset_type(
     data_source = bien_dataset_raw,
     con = con
   )
 
 # - 3.2 dataset source type -----
 data_bien_dataset_source_type_db <-
-  add_dataset_source_type(
+  save_dataset_source_type(
     data_source = bien_dataset_raw,
     con = con
   )
 
 # - 3.3 dataset source -----
 data_bien_data_source_id_db <-
-  add_data_source(
+  save_data_source(
     data_source = bien_dataset_raw,
     con = con
   )
 
 # - 3.4 datasets sampling -----
 data_bien_sampling_method_db <-
-  add_sampling_method(
+  save_sampling_method(
     data_source = bien_dataset_raw,
     con = con
   )
 
 # - 3.5 datasets -----
 bien_dataset_id_db <-
-  add_datasets(
+  save_datasets(
     data_source = bien_dataset_raw,
     con = con,
     data_type = data_bien_dataset_type_db,
@@ -166,7 +166,7 @@ bien_samples_raw <-
   )
 
 bien_samples_id_db <-
-  add_samples(
+  save_samples(
     data_source = bien_samples_raw,
     con = con
   )
@@ -176,7 +176,7 @@ bien_samples_id_db <-
 # 5. Dataset - Sample -----
 #----------------------------------------------------------#
 
-add_dataset_sample(
+save_dataset_sample(
   data_source = bien_samples_raw,
   con = con,
   dataset_id = bien_dataset_id_db,
@@ -215,7 +215,7 @@ data_bien_taxa_raw <-
 
 # 6.1 taxa id -----
 data_bien_taxa_id_db <-
-  add_taxa(
+  save_taxa(
     data_source = data_bien_taxa_raw,
     con = con
   )
@@ -232,7 +232,7 @@ data_bien_sample_taxa_raw <-
   ) %>%
   dplyr::select(sample_name, taxon_name, value)
 
-add_sample_taxa(
+save_sample_taxa(
   data_source = data_bien_sample_taxa_raw,
   con = con,
   samples_id = bien_samples_id_db,

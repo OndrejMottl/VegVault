@@ -32,33 +32,9 @@ source(
 # 1. Validate function files -----
 #----------------------------------------------------------#
 
-# TODO: validate the whole of R/Functions/ once the legacy functions are
-#   renamed to approved verbs during the template conversion. Until then
-#   only the folders written to the template rules are checked; a folder
-#   without function files yet is skipped
-vec_dirs_checked <-
-  here::here(
-    "R", "Functions",
-    c(
-      "Workflow", "Contracts", "Database", "Gridpoints", "Database_access",
-      "Build_manifest", "Build_profile", "Export", "Figures", "Fixtures",
-      "Visualisation", "Producers"
-    )
-  )
-
-vec_dirs_with_files <-
-  vec_dirs_checked[
-    purrr::map_lgl(
-      .x = vec_dirs_checked,
-      .f = ~ base::length(
-        base::list.files(path = .x, pattern = "[.]R$", recursive = TRUE)
-      ) > 0L
-    )
-  ]
-
-purrr::walk(
-  .x = vec_dirs_with_files,
-  .f = ~ validate_function_names(function_dir = .x)
+# Every function file of R/Functions/, in all folders
+validate_function_names(
+  function_dir = here::here("R", "Functions")
 )
 
 

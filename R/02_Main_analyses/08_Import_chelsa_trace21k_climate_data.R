@@ -80,7 +80,7 @@ bio1_hash <-
     "bio01_batch_3_2024-08-06__e6997e401e83f216ecf697e2ce3aefe0__.qs"
   )
 
-add_chelsa_trace_data(
+save_chelsa_trace_data(
   sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio1_hash,
@@ -101,7 +101,7 @@ bio4_hash <-
     "bio04_batch_3_2024-08-06__c1ec1e4a50f1f5bf870cf89a3cc8e9b6__.qs"
   )
 
-add_chelsa_trace_data(
+save_chelsa_trace_data(
   sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio4_hash,
@@ -122,7 +122,7 @@ bio6_hash <-
     "bio06_batch_3_2024-08-06__3bcc0894f7a5c69aca9b6cd5493f9206__.qs"
   )
 
-add_chelsa_trace_data(
+save_chelsa_trace_data(
   sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio6_hash,
@@ -143,7 +143,7 @@ bio12_hash <-
     "bio12_batch_3_2024-08-06__ceb6c89f684320e1ec10eb82ba0216bf__.qs"
   )
 
-add_chelsa_trace_data(
+save_chelsa_trace_data(
   sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio12_hash,
@@ -164,7 +164,7 @@ bio15_hash <-
     "bio15_batch_3_2024-08-06__1ed1fa8354631ac7cff01e358b7b4b19__.qs"
   )
 
-add_chelsa_trace_data(
+save_chelsa_trace_data(
   sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio15_hash,
@@ -185,7 +185,7 @@ bio18_hash <-
     "bio18_batch_3_2024-08-06__7e89dae901e03f2a6f25fead30d31c7f__.qs"
   )
 
-add_chelsa_trace_data(
+save_chelsa_trace_data(
   sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio18_hash,
@@ -206,7 +206,7 @@ bio19_hash <-
     "bio19_batch_3_2024-08-06__9444836f269f8eb06032d0540391c662__.qs"
   )
 
-add_chelsa_trace_data(
+save_chelsa_trace_data(
   sel_con = con,
   sel_url = url_gh_abiotic,
   sel_hash = bio19_hash,

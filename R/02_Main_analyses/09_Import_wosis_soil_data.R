@@ -130,12 +130,12 @@ data_wosis_sub <-
 
 # Abiotic varibale
 abiotic_variabe_id <-
-  add_abiotic_variable(
+  save_abiotic_variable(
     data_source = data_wosis_sub,
     con = con
   )
 
-add_sample_abiotic_value(
+save_sample_abiotic_value(
   data_source = data_wosis_sub,
   con = con,
   sample_id = data_samples_db,

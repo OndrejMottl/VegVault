@@ -75,7 +75,7 @@ url_gh_abiotic <-
 # bio 1 -----
 #----------------------------------------------------------#
 
-add_chelsa_neo_data(
+save_chelsa_neo_data(
   sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
@@ -92,7 +92,7 @@ add_chelsa_neo_data(
 # bio 4 -----
 #----------------------------------------------------------#
 
-add_chelsa_neo_data(
+save_chelsa_neo_data(
   sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
@@ -109,7 +109,7 @@ add_chelsa_neo_data(
 # bio 6 -----
 #----------------------------------------------------------#
 
-add_chelsa_neo_data(
+save_chelsa_neo_data(
   sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
@@ -126,7 +126,7 @@ add_chelsa_neo_data(
 # bio 12 -----
 #----------------------------------------------------------#
 
-add_chelsa_neo_data(
+save_chelsa_neo_data(
   sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
@@ -143,7 +143,7 @@ add_chelsa_neo_data(
 # bio 15 -----
 #----------------------------------------------------------#
 
-add_chelsa_neo_data(
+save_chelsa_neo_data(
   sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
@@ -160,7 +160,7 @@ add_chelsa_neo_data(
 # bio 18 -----
 #----------------------------------------------------------#
 
-add_chelsa_neo_data(
+save_chelsa_neo_data(
   sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
@@ -177,7 +177,7 @@ add_chelsa_neo_data(
 # bio 19 -----
 #----------------------------------------------------------#
 
-add_chelsa_neo_data(
+save_chelsa_neo_data(
   sel_con = con,
   sel_url = paste0(
     url_gh_abiotic,
