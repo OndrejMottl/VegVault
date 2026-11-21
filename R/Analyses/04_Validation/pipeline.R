@@ -166,6 +166,41 @@ list(
       list_build_manifest = list_build_manifest
     )
   ),
+  # Repeated (sample, taxon) pairs, flagged until the vegetation producers
+  #   resolve them; SampleTaxa has no key yet
+  targets::tar_target(
+    name = "data_check_sample_taxa_pairs",
+    command = diagnose_sample_taxa_pairs(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # Repeated or missing names in the name columns the schema does not keep
+  #   unique
+  targets::tar_target(
+    name = "data_check_names",
+    command = diagnose_duplicate_names(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # Rows left without the rows that give them meaning, and links to the
+  #   wrong kind of sample
+  targets::tar_target(
+    name = "data_check_orphans",
+    command = diagnose_orphan_rows(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # Datasets without coordinates, which get no climate link
+  targets::tar_target(
+    name = "data_check_missing_coordinates",
+    command = diagnose_missing_coordinates(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
   targets::tar_target(
     name = "data_checks_database",
     command = dplyr::bind_rows(
@@ -173,7 +208,11 @@ list(
       data_check_integrity,
       data_check_foreign_keys,
       data_check_version_row,
-      data_check_build_producers
+      data_check_build_producers,
+      data_check_sample_taxa_pairs,
+      data_check_names,
+      data_check_orphans,
+      data_check_missing_coordinates
     )
   ),
   # Release eligibility: the release profile, a clean checkout, no failed
