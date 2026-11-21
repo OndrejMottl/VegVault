@@ -228,6 +228,13 @@ default:
           reason: "Antarctic interior: CHELSA-TraCE21k has no downscaled
             precipitation south of 74 S, so zero shares up to 1 occur in
             every age."
+    # Links between positions and gridpoints, checked against the rule of
+    #   the `link` section on a stratified random sample of positions
+    #   (near the dateline, at high latitudes, elsewhere), drawn with
+    #   `seed`
+    links:
+      # Positions drawn per stratum; a smaller stratum is checked whole
+      n_positions_per_stratum: 200
   # Flat-file export
   export:
     # Replace flat files that already exist

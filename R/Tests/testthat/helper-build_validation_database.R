@@ -1,7 +1,11 @@
 # Build a small 2.0.0 database that passes the validation checks: the
 #   tables of build_database_fixture(), the version rows of 1.0.0 and of the
 #   build, one producer row, a pin manifest and a build manifest written
-#   after the last change to the database.
+#   after the last change to the database. As the link step would, it
+#   stores the truncated geodesic distances of the two fixture links
+#   (13 and 13 km, not the fixture's 10 and 12) and gives positions 101 to
+#   105, without links, to the plot and fossil samples that have
+#   coordinates and an age.
 # Returns a list with `path_database`, `list_build_manifest`,
 #   `list_version` and `path_producer_manifest`.
 build_validation_database <- function(
@@ -72,6 +76,42 @@ build_validation_database <- function(
         .x,
         "INSERT INTO BuildProducers VALUES (2, 'splot_plots', ?, ?)",
         params = base::list(tag_stored, commit_sha)
+      )
+
+      # The distances the link step stores for the fixture links
+      DBI::dbExecute(
+        .x,
+        base::paste(
+          "UPDATE PositionLink SET distance_in_km = ?",
+          "WHERE position_id = ? AND sample_ref_id = ?"
+        ),
+        params = base::list(
+          base::as.integer(
+            geosphere::distGeo(
+              p1 = base::rbind(c(14, 50), c(16, 49.5)),
+              p2 = base::rbind(c(14.1, 50.1), c(16.1, 49.6))
+            ) / 1e3
+          ),
+          c(1L, 2L),
+          c(3L, 4L)
+        )
+      )
+
+      DBI::dbExecute(
+        .x,
+        base::paste(
+          "INSERT INTO Positions VALUES (101, -100, 45, 0),",
+          "(102, -90, 50, 1000), (103, -90, 50, 6000),",
+          "(104, -70, -20, 7000), (105, -70, -20, 11000)"
+        )
+      )
+
+      DBI::dbExecute(
+        .x,
+        base::paste(
+          "INSERT INTO SamplePosition VALUES (6, 101), (7, 102), (8, 103),",
+          "(9, 104), (10, 105)"
+        )
       )
     }
   )
