@@ -133,6 +133,20 @@ list(
     command = load_config_value(value = c("validation", "abiotic_values")),
     cue = targets::tar_cue(mode = "always")
   ),
+  # The link rule (distance in km and age difference in years) and the
+  #   number of positions drawn per stratum for the link check
+  targets::tar_target(
+    name = "list_link_rule",
+    command = load_config_value(value = "link"),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "n_link_positions",
+    command = load_config_value(
+      value = c("validation", "links", "n_positions_per_stratum")
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
   # Build manifest next to the database
   targets::tar_target(
     name = "path_build_manifest",
@@ -294,6 +308,39 @@ list(
       vec_gridpoint_ages = vec_gridpoint_ages
     )
   ),
+  # A reproducible sample of positions near the dateline, at high
+  #   latitudes and elsewhere
+  targets::tar_target(
+    name = "data_link_positions",
+    command = select_link_positions(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      distance_km = purrr::chuck(list_link_rule, "distance_km"),
+      n_per_stratum = n_link_positions,
+      seed = config_seed
+    )
+  ),
+  # The stored links of the sampled positions recomputed, and the links
+  #   the rule asks for but the database lacks
+  targets::tar_target(
+    name = "data_check_link_distances",
+    command = diagnose_link_distances(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      data_positions = data_link_positions,
+      distance_km = purrr::chuck(list_link_rule, "distance_km"),
+      distance_years = purrr::chuck(list_link_rule, "distance_years")
+    )
+  ),
+  # Every placeable sample at the position of its coordinates and age;
+  #   positions without a link are flagged
+  targets::tar_target(
+    name = "data_check_sample_positions",
+    command = diagnose_sample_positions(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
   targets::tar_target(
     name = "data_checks_database",
     command = dplyr::bind_rows(
@@ -309,7 +356,9 @@ list(
       data_check_abiotic_variables,
       data_check_abiotic_values,
       data_check_abiotic_zero_shares,
-      data_check_sample_ages
+      data_check_sample_ages,
+      data_check_link_distances,
+      data_check_sample_positions
     )
   ),
   # Release eligibility: the release profile, a clean checkout, no failed
