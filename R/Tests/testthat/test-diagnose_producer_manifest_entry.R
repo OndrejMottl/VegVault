@@ -1,4 +1,17 @@
 #----------------------------------------------------------#
+# Setup -----
+#----------------------------------------------------------#
+
+# The current version of the sPlot contract, so that the tests follow a
+#   new contract version
+version_splot <-
+  load_producer_contract(
+    path_contract = here::here("Data", "Contracts", "splot_plots.yml")
+  ) |>
+  purrr::chuck("contract_version")
+
+
+#----------------------------------------------------------#
 # Outputs -----
 #----------------------------------------------------------#
 
@@ -9,7 +22,7 @@ testthat::test_that("diagnose_producer_manifest_entry() passes valid ones", {
   list_pinned <-
     list(
       artefact_id = "splot_plots",
-      contract_version = "1.0.0",
+      contract_version = version_splot,
       note = "Pinned for a test.",
       release = list(
         tag = "v2.0.0",
@@ -35,7 +48,7 @@ testthat::test_that("diagnose_producer_manifest_entry() passes valid ones", {
   list_placeholder <-
     list(
       artefact_id = "splot_plots",
-      contract_version = "1.0.0",
+      contract_version = version_splot,
       release = list(tag = NULL, files = list()),
       dev = list(files = list())
     )
@@ -58,7 +71,7 @@ testthat::test_that("diagnose_producer_manifest_entry() lists problems", {
   list_entry <-
     list(
       artefact_id = "splot_plots",
-      contract_version = "1.1.0",
+      contract_version = "0.0.1",
       owner = "someone",
       release = list(
         tag = "main",
@@ -82,7 +95,10 @@ testthat::test_that("diagnose_producer_manifest_entry() lists problems", {
   vec_expected <-
     c(
       "unknown field 'owner'.",
-      "contract_version '1.1.0' differs from the contract (1.0.0).",
+      stringr::str_c(
+        "contract_version '0.0.1' differs from the contract (",
+        version_splot, ")."
+      ),
       "release.tag 'main' is not a release tag such as v2.0.0.",
       "release.files: 'data_splot.qs' does not match a file-name template",
       "release.files[1]: size must be a positive whole number.",

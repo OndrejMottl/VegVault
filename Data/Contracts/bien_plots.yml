@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: bien_plots
-contract_version: 1.0.0
+contract_version: 2.0.0
 status: active
 title: BIEN vegetation plots
 description: >-
@@ -24,6 +24,20 @@ partitioning:
   scheme: none
 extra_columns: allow
 columns:
+  - name: plot_id
+    class: character
+    nullable: false
+    description: >-
+      Stable plot identifier, <datasource>__<plot_name> (for example
+      CTFS__Plot 31); unique, and independent of row order and of BIEN's
+      internal identifiers, so the import can name datasets and samples
+      after it.
+    evidence: >-
+      New in 2.0.0 (VegVault-Vegetation_data issues 24 and 26): the first
+      column of the 2.0.0 export, character, unique and never missing in
+      24161 plots. v1 has no plot identifier.
+    checks:
+      not_empty: true
   - name: datasource_id
     class: numeric
     nullable: false
@@ -146,12 +160,23 @@ columns:
             whole_number: true
             range:
               min: 0
+      keys:
+        - [name_matched]
 keys:
+  - [plot_id]
   - [datasource_id, plot_name, longitude, latitude]
 notes:
   - >-
     v1 has no plot identifier: the import names datasets and samples
     bien_<row number> (02_Import_bien_data.R:96,160), which changes whenever
-    rows are added or reordered. The key above is unique in v1 (24233 of
-    24233 rows) and is the natural key until the producer exports a stable
-    plot identifier, which has been requested from the vegetation lane.
+    rows are added or reordered. From 2.0.0 the producer exports plot_id,
+    a key, so the import can name them after it instead. The natural key
+    [datasource_id, plot_name, longitude, latitude] still holds (24233 of
+    24233 rows in v1).
+  - >-
+    Version 2.0.0 adds plot_id and the key within each plot_data element:
+    one record per name_matched in a plot. The producer merges repeated
+    records with the rules approved for VegVault-Vegetation_data issue 21
+    (individual_count summed); v1.0.0 repeated 179742 (sample, taxon) pairs
+    from BIEN plots, and three TEAM plots were split over 75 rows, so v1
+    has 24233 rows for 24161 plots.

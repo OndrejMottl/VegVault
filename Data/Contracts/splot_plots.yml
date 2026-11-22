@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: splot_plots
-contract_version: 1.0.0
+contract_version: 2.0.0
 status: active
 title: sPlotOpen vegetation plots
 description: >-
@@ -133,15 +133,25 @@ columns:
             finite: true
             range:
               min: 0
+      keys:
+        - [Species]
 keys:
   - [plot_observation_id]
 notes:
   - >-
     The producer exports 48 columns; only those listed here are read.
   - >-
-    v1 fails this contract on the 1677 records without a species name; the
-    producer is asked to drop them before export.
+    v1 fails this contract on the 1677 records without a species name; from
+    2.0.0 the producer drops them before export (no Species is missing or
+    empty in the 2.0.0 export, VegVault-Vegetation_data issue 21).
   - >-
     The v1 import reads the taxon name as the first column of each taxa
     element, which the contract does not check; the import stage that
     replaces it reads Species by name.
+  - >-
+    Version 2.0.0 adds the key within each taxa element: one record per
+    Species in a plot. The producer merges repeated records with the rules
+    approved for VegVault-Vegetation_data issue 21; a merged record's
+    Original_species can hold several names joined with " | ". v1.0.0
+    repeated 9897 (sample, taxon) pairs from sPlotOpen plots; the 2.0.0
+    export has none in 1508470 records.
