@@ -157,6 +157,85 @@ testthat::test_that(
   }
 )
 
+testthat::test_that(
+  "bien_plots rejects a taxon repeated within a plot",
+  {
+    contract <-
+      load_producer_contract(
+        path_contract = here::here("Data", "Contracts", "bien_plots.yml")
+      )
+
+    # Two records of one name in the first plot (contract 2.0.0)
+    list_artefact <-
+      purrr::assign_in(
+        build_bien_plots_fixture(contract = contract),
+        where = base::list(1L, "plot_data", 1L),
+        value = tibble::tibble(
+          name_matched = c("Synthetica alpha", "Synthetica alpha"),
+          individual_count = c(12L, 3L)
+        )
+      )
+
+    data_findings <-
+      diagnose_producer_artefact(
+        data_artefact = list_artefact,
+        contract = contract
+      )
+
+    testthat::expect_equal(dplyr::pull(data_findings, check), "key_duplicate")
+
+    testthat::expect_match(dplyr::pull(data_findings, column), "plot_data")
+  }
+)
+
+testthat::test_that(
+  "bien_plots requires the plot identifier",
+  {
+    contract <-
+      load_producer_contract(
+        path_contract = here::here("Data", "Contracts", "bien_plots.yml")
+      )
+
+    list_fixture <-
+      build_bien_plots_fixture(contract = contract)
+
+    list_artefact <-
+      purrr::map(
+        .x = list_fixture,
+        .f = ~ dplyr::select(.x, -plot_id)
+      )
+
+    data_findings <-
+      diagnose_producer_artefact(
+        data_artefact = list_artefact,
+        contract = contract
+      )
+
+    testthat::expect_equal(dplyr::pull(data_findings, check), "column_missing")
+
+    testthat::expect_equal(dplyr::pull(data_findings, column), "plot_id")
+
+    # The identifier is a key: two plots with one identifier are refused
+    list_repeated <-
+      purrr::assign_in(
+        list_fixture,
+        where = base::list(1L, "plot_id"),
+        value = c("SYNTH-A__P1", "SYNTH-A__P1", "SYNTH-B__P1")
+      )
+
+    data_findings_repeated <-
+      diagnose_producer_artefact(
+        data_artefact = list_repeated,
+        contract = contract
+      )
+
+    testthat::expect_equal(
+      dplyr::pull(data_findings_repeated, check),
+      "key_duplicate"
+    )
+  }
+)
+
 
 #----------------------------------------------------------#
 # Inputs -----

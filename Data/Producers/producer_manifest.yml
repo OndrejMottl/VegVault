@@ -20,21 +20,31 @@
 manifest_version: 1
 artefacts:
   - artefact_id: splot_plots
-    contract_version: 1.0.0
-    note: Placeholder until VegVault-Vegetation_data tags v2.0.0.
+    contract_version: 2.0.0
+    note: >-
+      dev: the 2.0.0 release build on the VegVault-Vegetation_data branch
+      2.0.0 at bf6e973, committed in Outputs/Data (16853422 bytes, SHA-256
+      1ebbd2583c2172f5fbbbb165c399efdba5753e84781941d2e33f6c8ba8cc3c54).
+      release: placeholder until VegVault-Vegetation_data tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      files:
+        - data_splot_2026-11-21__2ed4d1fa3dba6301a6f45852b0781369__.qs
   - artefact_id: bien_plots
-    contract_version: 1.0.0
-    note: Placeholder until VegVault-Vegetation_data tags v2.0.0.
+    contract_version: 2.0.0
+    note: >-
+      dev: the 2.0.0 release build on the VegVault-Vegetation_data branch
+      2.0.0 at bf6e973, committed in Outputs/Data (10680584 bytes, SHA-256
+      b5120e771246b92fc6a93d23aa91eb99175969fe74782fef3f9e4600ef163d69).
+      release: placeholder until VegVault-Vegetation_data tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      files:
+        - data_bien_2026-11-21__0ed9a8257a90bd3577866baafc97f156__.qs
   - artefact_id: fossilpol_assembly
     contract_version: 1.0.0
     note: >-

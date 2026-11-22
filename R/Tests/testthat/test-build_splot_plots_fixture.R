@@ -158,6 +158,40 @@ testthat::test_that(
   }
 )
 
+testthat::test_that(
+  "splot_plots rejects a taxon repeated within a plot",
+  {
+    contract <-
+      load_producer_contract(
+        path_contract = here::here("Data", "Contracts", "splot_plots.yml")
+      )
+
+    list_fixture <-
+      build_splot_plots_fixture(contract = contract)
+
+    # The first plot's first taxon recorded twice (contract 2.0.0)
+    data_taxa <-
+      purrr::chuck(list_fixture, 1L, "taxa", 1L)
+
+    list_artefact <-
+      purrr::assign_in(
+        list_fixture,
+        where = base::list(1L, "taxa", 1L),
+        value = dplyr::bind_rows(data_taxa, dplyr::slice(data_taxa, 1L))
+      )
+
+    data_findings <-
+      diagnose_producer_artefact(
+        data_artefact = list_artefact,
+        contract = contract
+      )
+
+    testthat::expect_equal(dplyr::pull(data_findings, check), "key_duplicate")
+
+    testthat::expect_match(dplyr::pull(data_findings, column), "taxa")
+  }
+)
+
 
 #----------------------------------------------------------#
 # Inputs -----

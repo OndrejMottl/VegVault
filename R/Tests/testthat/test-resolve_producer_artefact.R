@@ -133,7 +133,10 @@ testthat::test_that("resolve_producer_artefact() refuses placeholders", {
       artefacts = list(
         list(
           artefact_id = "splot_plots",
-          contract_version = "1.0.0",
+          contract_version = load_producer_contract(
+            path_contract = here::here("Data", "Contracts", "splot_plots.yml")
+          ) |>
+            purrr::chuck("contract_version"),
           release = list(tag = NULL, files = list()),
           dev = list(files = list())
         )

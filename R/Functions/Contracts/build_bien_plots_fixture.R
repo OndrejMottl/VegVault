@@ -44,6 +44,7 @@ build_bien_plots_fixture <- function(
 
   data_plots <-
     tibble::tibble(
+      plot_id = c("SYNTH-A__P1", "SYNTH-A__P2", "SYNTH-B__P1"),
       datasource_id = c(1, 1, 2),
       datasource = c("SYNTH-A", "SYNTH-A", "SYNTH-B"),
       plot_name = c("P1", "P2", "P1"),
