@@ -14,7 +14,8 @@ testthat::test_that("build_source_table_template() lists the tables", {
       "sampling_method_references", "dataset_references", "samples",
       "sample_references", "dataset_samples", "sample_uncertainty", "taxa",
       "taxon_references", "sample_taxa", "trait_domains", "traits",
-      "trait_references", "trait_values"
+      "trait_references", "trait_values", "abiotic_variables",
+      "abiotic_variable_references", "abiotic_values"
     )
   )
 
@@ -51,12 +52,26 @@ testthat::test_that("build_source_table_template() gives columns and types", {
     )
   )
 
+  testthat::expect_named(
+    purrr::chuck(res, "abiotic_values"),
+    c("sample_name", "abiotic_variable_name", "abiotic_value")
+  )
+  testthat::expect_named(
+    purrr::chuck(res, "abiotic_variables"),
+    c("abiotic_variable_name", "abiotic_variable_unit", "measure_details")
+  )
+  testthat::expect_type(
+    dplyr::pull(purrr::chuck(res, "abiotic_values"), abiotic_value),
+    "double"
+  )
+
   # Every reference table has the text and the mandatory flag
   vec_reference_tables <-
     c(
       "source_type_references", "data_source_references",
       "sampling_method_references", "dataset_references",
-      "sample_references", "taxon_references", "trait_references"
+      "sample_references", "taxon_references", "trait_references",
+      "abiotic_variable_references"
     )
 
   purrr::walk(

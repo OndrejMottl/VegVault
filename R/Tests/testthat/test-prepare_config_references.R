@@ -68,20 +68,52 @@ testthat::test_that("prepare_config_references() returns several or none", {
 })
 
 
+testthat::test_that("prepare_config_references() knows every role", {
+  vec_roles <-
+    c(
+      "source_type", "data_source", "sampling_method", "dataset",
+      "sample", "taxon", "trait", "abiotic_variable", "general"
+    )
+
+  list_source <-
+    base::list(
+      references = purrr::map(
+        .x = vec_roles,
+        .f = ~ base::list(
+          role = .x,
+          mandatory = TRUE,
+          detail = stringr::str_c("Reference of ", .x)
+        )
+      )
+    )
+
+  vec_details <-
+    vec_roles |>
+    purrr::map_chr(
+      .f = ~ prepare_config_references(
+        list_source = list_source,
+        sel_role = .x
+      ) |>
+        dplyr::pull(reference_detail)
+    )
+
+  testthat::expect_equal(
+    vec_details,
+    stringr::str_c("Reference of ", vec_roles)
+  )
+})
+
+
 #----------------------------------------------------------#
 # Errors -----
 #----------------------------------------------------------#
 
 testthat::test_that("prepare_config_references() refuses bad records", {
-  # A short local helper: a source entry with one reference record, used by
-  #   four of the cases below
-  build_list <- function(record) {
-    base::list(references = base::list(record))
-  }
-
   testthat::expect_error(
     prepare_config_references(
-      list_source = build_list(base::list(role = "taxon", mandatory = TRUE)),
+      list_source = base::list(
+        references = base::list(base::list(role = "taxon", mandatory = TRUE))
+      ),
       sel_role = "taxon"
     ),
     regexp = "detail"
@@ -89,8 +121,10 @@ testthat::test_that("prepare_config_references() refuses bad records", {
 
   testthat::expect_error(
     prepare_config_references(
-      list_source = build_list(
-        base::list(role = "taxon", mandatory = "yes", detail = "A")
+      list_source = base::list(
+        references = base::list(
+          base::list(role = "taxon", mandatory = "yes", detail = "A")
+        )
       ),
       sel_role = "taxon"
     ),
@@ -99,18 +133,22 @@ testthat::test_that("prepare_config_references() refuses bad records", {
 
   testthat::expect_error(
     prepare_config_references(
-      list_source = build_list(
-        base::list(role = "dataset", mandatory = TRUE, detail = "A")
+      list_source = base::list(
+        references = base::list(
+          base::list(role = "unknown_role", mandatory = TRUE, detail = "A")
+        )
       ),
       sel_role = "taxon"
     ),
-    regexp = "dataset"
+    regexp = "unknown_role"
   )
 
   testthat::expect_error(
     prepare_config_references(
-      list_source = build_list(
-        base::list(role = "taxon", mandatory = TRUE, detail = "")
+      list_source = base::list(
+        references = base::list(
+          base::list(role = "taxon", mandatory = TRUE, detail = "")
+        )
       ),
       sel_role = "taxon"
     ),

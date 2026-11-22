@@ -34,11 +34,18 @@
 #'     `mandatory`;
 #'   \item `trait_values`: `dataset_name`, `sample_name`, `trait_name`,
 #'     `taxon_name`, `trait_value`, `trait_unit`, `conversion_rule_key`,
-#'     `derivation_rule_key`.
+#'     `derivation_rule_key`;
+#'   \item `abiotic_variables`: `abiotic_variable_name`,
+#'     `abiotic_variable_unit`, `measure_details`;
+#'   \item `abiotic_variable_references`: `abiotic_variable_name`,
+#'     `reference_detail`, `mandatory`;
+#'   \item `abiotic_values`: `sample_name`, `abiotic_variable_name`,
+#'     `abiotic_value`.
 #' }
 #' @details
 #' Names, texts and keys are character columns; `coord_long`, `coord_lat`,
-#' `age`, `sample_size`, `value` and `trait_value` are doubles;
+#' `age`, `sample_size`, `value`, `trait_value` and `abiotic_value` are
+#' doubles;
 #' `iteration` is an integer; `mandatory` is logical. The template is the
 #' contract between the functions that prepare one source and
 #' `build_database_tables()`, which checks every source against it.
@@ -138,6 +145,21 @@ build_source_table_template <- function() {
         trait_unit = vec_chr,
         conversion_rule_key = vec_chr,
         derivation_rule_key = vec_chr
+      ),
+      abiotic_variables = tibble::tibble(
+        abiotic_variable_name = vec_chr,
+        abiotic_variable_unit = vec_chr,
+        measure_details = vec_chr
+      ),
+      abiotic_variable_references = tibble::tibble(
+        abiotic_variable_name = vec_chr,
+        reference_detail = vec_chr,
+        mandatory = vec_lgl
+      ),
+      abiotic_values = tibble::tibble(
+        sample_name = vec_chr,
+        abiotic_variable_name = vec_chr,
+        abiotic_value = vec_dbl
       )
     )
 
