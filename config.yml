@@ -482,6 +482,71 @@ default:
           - role: "trait"
             mandatory: false
             detail: "BIEN"
+      # Gridpoints: one dataset per grid cell, one sample per cell and age
+      gridpoints:
+        dataset_type: "gridpoints"
+        dataset_source_type: "gridpoints"
+        data_source_desc: "gridpoints"
+        references:
+          - role: "source_type"
+            mandatory: true
+            detail: "gridpoints - artificially created by O. Mottl"
+          - role: "data_source"
+            mandatory: true
+            detail: "gridpoints - artificially created by O. Mottl"
+          - role: "dataset"
+            mandatory: true
+            detail: "gridpoints - artificially created by O. Mottl"
+          - role: "sample"
+            mandatory: true
+            detail: "gridpoints - artificially created by O. Mottl"
+      # Abiotic artefacts: the references of every variable they give.
+      #   The unit and details of a climate variable come from the
+      #   `variables` table of its producer contract.
+      chelsa_neoclimate:
+        references:
+          - role: "abiotic_variable"
+            mandatory: true
+            detail: "Karger, Dirk Nikolaus, Olaf Conrad, Jürgen Böhner, Tobias Kawohl, Holger Kreft, Rodrigo Wilber Soria-Auza, Niklaus E. Zimmermann, H. Peter Linder, and Michael Kessler. Climatologies at high resolution for the earth’s land surface areas. Scientific data 4, no. 1 (2017): 1-20. https://doi.org/10.1038/sdata.2017.122"
+          - role: "abiotic_variable"
+            mandatory: true
+            detail: "Karger D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E, Linder, H.P., Kessler, M. (2018): Data from: Climatologies at high resolution for the earth’s land surface areas. EnviDat. https://doi.org/10.16904/envidat.228.v2.1"
+      chelsa_trace21k_palaeoclimate:
+        references:
+          - role: "abiotic_variable"
+            mandatory: true
+            detail: "Karger, D. N., M. P. Nobis, S. Normand, C. H. Graham, and N. E. Zimmermann. 'CHELSA-TraCE21k: downscaled transient temperature and precipitation data since the last glacial maximum. EnviDat. 2020. https://www.doi.org/10.16904/envidat.211"
+          - role: "abiotic_variable"
+            mandatory: true
+            detail: "Karger, Dirk Nikolaus, Michael P. Nobis, Signe Normand, Catherine H. Graham, and Niklaus E. Zimmermann. 'CHELSA-TraCE21k–high-resolution (1 km) downscaled transient temperature and precipitation data since the Last Glacial Maximum. Climate of the Past 19, no. 2 (2023): 439-456. https://doi.org/10.5194/cp-19-439-2023"
+      # The soil contract has no variables table: the label is the one
+      #   its value column documents. The references are the HWSD 2.2
+      #   database and the HWSD 2.0 methodology, chosen by Ondrej (the
+      #   v1.0.0 texts cite WoSIS, which was not the source).
+      hwsd_soil:
+        variable:
+          name: "HWSD2"
+          unit: "Unitless"
+          details: "HWSD-soil_group"
+        references:
+          - role: "abiotic_variable"
+            mandatory: true
+            detail: "FAO & IIASA. Harmonized World Soil Database version 2.2. https://data.apps.fao.org/catalog/iso/ff5c613c-75bb-46a9-a162-bc728059b465. Licence: CC BY 4.0"
+          - role: "abiotic_variable"
+            mandatory: true
+            detail: "FAO & IIASA. 2023. Harmonized World Soil Database version 2.0. Rome and Laxenburg. https://doi.org/10.4060/cc3823en"
+    # References of the database itself, linked to nothing; the first
+    #   gets id 1
+    general:
+      references:
+        - role: "general"
+          mandatory: true
+          detail: "VegVault: an interdisciplinary database linking paleo-, and neo-vegetation data with functional traits and abiotic drivers"
+    # Authors of the database, in the order of their ids
+    authors:
+      - fullname: "Ondřej Mottl"
+        email: "ondrej.mottl@gmail.com"
+        orcid: "0000-0002-9796-5081"
 
 
 #----------------------------------------------------------#

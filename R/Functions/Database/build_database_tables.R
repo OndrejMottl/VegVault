@@ -14,6 +14,10 @@
 #' @param data_trait_derivations
 #' A data frame of the trait derivation rules, with the columns of
 #' `TraitDerivation` except its id.
+#' @param data_general_references
+#' A data frame with `reference_detail` and `mandatory`: references of the
+#' database itself, linked to nothing (the VegVault reference). Default:
+#' none.
 #' @return
 #' A named list of tibbles named by schema table, with the columns of the
 #' schema: `DatasetTypeID`, `DatasetSourceTypeID`, `DatasetSourcesID`,
@@ -22,20 +26,27 @@
 #' `DatasetReferences`, `SampleSizeID`, `Samples`, `SampleReference`,
 #' `DatasetSample`, `SampleUncertainty`, `Taxa`, `TaxonReference`,
 #' `SampleTaxa`, `TraitsDomain`, `Traits`, `TraitsReference`,
-#' `TraitUnitConversion`, `TraitDerivation` and `TraitsValue`.
+#' `TraitUnitConversion`, `TraitDerivation`, `TraitsValue`,
+#' `AbioticVariable`, `AbioticVariableReference` and `AbioticData`.
 #' @details
 #' Ids of lookup tables and references follow the first source that uses a
 #' value, then the value (`prepare_lookup_ids()`); ids of datasets and
 #' samples follow the source, then the name. So the same inputs give the
-#' same ids in every build. A reference is mandatory when any of its uses
-#' is mandatory. The same text in two sources (a taxon, a data source, a
-#' reference) is one row, as in v1.0.0. Rule ids follow their rule keys.
+#' same ids in every build. The general references come before every
+#' source, so the VegVault reference gets id 1 as in v1.0.0. A reference is
+#' mandatory when any of its uses is mandatory. The same text in two
+#' sources (a taxon, a data source, a reference) is one row, as in v1.0.0.
+#' Rule ids follow their rule keys.
 #' Every foreign key is resolved with `prepare_table_foreign_key()`, so a
 #' key without a parent aborts and names the table.
 #' Every trait value must have its unit-conversion rule and, when it has a
 #' derivation key, its derivation rule, and its unit must equal the unit
 #' the rule produces (the derivation's output unit, or else the
 #' conversion's standardised unit); otherwise the function aborts.
+#' An abiotic variable used by several sources (present-day and
+#' palaeoclimate) is one row and must have the same unit and details in
+#' each; a sample has at most one value per variable. Either conflict
+#' aborts.
 #' Aborts when `list_source_tables` is not a named list of source tables,
 #' or when a table has other columns than the template.
 #' @seealso [build_source_table_template()], [save_vegvault_database()]
@@ -54,7 +65,11 @@
 build_database_tables <- function(
   list_source_tables,
   data_unit_conversions,
-  data_trait_derivations
+  data_trait_derivations,
+  data_general_references = tibble::tibble(
+    reference_detail = base::character(0),
+    mandatory = base::logical(0)
+  )
 ) {
   list_template <-
     build_source_table_template()
@@ -96,6 +111,19 @@ build_database_tables <- function(
     base::is.data.frame(data_trait_derivations),
     base::all(vec_derivation_columns %in% base::names(data_trait_derivations)),
     msg = "`data_trait_derivations` must hold the TraitDerivation columns."
+  )
+
+  assertthat::assert_that(
+    base::is.data.frame(data_general_references),
+    base::all(
+      c("reference_detail", "mandatory") %in%
+        base::names(data_general_references)
+    ),
+    base::is.logical(dplyr::pull(data_general_references, mandatory)),
+    msg = stringr::str_c(
+      "`data_general_references` must hold `reference_detail` and a ",
+      "logical `mandatory`."
+    )
   )
 
   # Every table of every source must match the template exactly
@@ -195,10 +223,11 @@ build_database_tables <- function(
     c(
       "source_type_references", "data_source_references",
       "sampling_method_references", "dataset_references",
-      "sample_references", "taxon_references", "trait_references"
+      "sample_references", "taxon_references", "trait_references",
+      "abiotic_variable_references"
     )
 
-  data_reference_uses <-
+  data_reference_uses_sources <-
     vec_reference_elements |>
     purrr::map(
       .f = ~ dplyr::select(
@@ -207,6 +236,15 @@ build_database_tables <- function(
       )
     ) |>
     purrr::list_rbind()
+
+  # The general references come before every source (position 0)
+  data_reference_uses <-
+    dplyr::bind_rows(
+      data_general_references |>
+        dplyr::select(reference_detail, mandatory) |>
+        dplyr::mutate(source_order = 0L),
+      data_reference_uses_sources
+    )
 
   data_reference_flags <-
     data_reference_uses |>
@@ -411,6 +449,50 @@ build_database_tables <- function(
       name_table = "TraitDerivation"
     )
 
+  # An abiotic variable has one unit and one description over its sources
+  data_variable_labels <-
+    purrr::chuck(list_bound, "abiotic_variables") |>
+    dplyr::distinct(
+      abiotic_variable_name, abiotic_variable_unit, measure_details
+    )
+
+  vec_variables_conflicting <-
+    data_variable_labels |>
+    dplyr::count(abiotic_variable_name) |>
+    dplyr::filter(n > 1L) |>
+    dplyr::pull(abiotic_variable_name)
+
+  if (
+    base::length(vec_variables_conflicting) > 0L
+  ) {
+    cli::cli_abort(
+      "Abiotic variable{?s} with conflicting unit or details over the
+      sources: {.val {vec_variables_conflicting}}."
+    )
+  }
+
+  data_abiotic_variables <-
+    prepare_lookup_ids(
+      data_values = c(
+        "abiotic_variables", "abiotic_variable_references", "abiotic_values"
+      ) |>
+        purrr::map(
+          .f = ~ dplyr::select(
+            purrr::chuck(list_bound, .x),
+            source_order, abiotic_variable_name
+          )
+        ) |>
+        purrr::list_rbind(),
+      vec_key_columns = "abiotic_variable_name",
+      name_id = "abiotic_variable_id",
+      name_table = "AbioticVariable"
+    ) |>
+    dplyr::left_join(
+      data_variable_labels,
+      by = dplyr::join_by(abiotic_variable_name),
+      relationship = "one-to-one"
+    )
+
   #--------------------------------------------------#
   # Datasets and samples -----
   #--------------------------------------------------#
@@ -548,6 +630,40 @@ build_database_tables <- function(
       name_table = "TraitsValue",
       flag_allow_missing = TRUE
     )
+
+  data_abiotic_values <-
+    purrr::chuck(list_bound, "abiotic_values") |>
+    prepare_table_foreign_key(
+      data_parent = data_sample_ids,
+      vec_key_columns = "sample_name",
+      name_id = "sample_id",
+      name_table = "AbioticData"
+    ) |>
+    prepare_table_foreign_key(
+      data_parent = dplyr::select(
+        data_abiotic_variables,
+        abiotic_variable_id, abiotic_variable_name
+      ),
+      vec_key_columns = "abiotic_variable_name",
+      name_id = "abiotic_variable_id",
+      name_table = "AbioticData"
+    ) |>
+    dplyr::select(sample_id, abiotic_variable_id, abiotic_value)
+
+  n_values_repeated <-
+    data_abiotic_values |>
+    dplyr::count(sample_id, abiotic_variable_id) |>
+    dplyr::filter(n > 1L) |>
+    base::nrow()
+
+  if (
+    n_values_repeated > 0L
+  ) {
+    cli::cli_abort(
+      "AbioticData: {n_values_repeated} pair{?s} of sample and variable
+      {?has/have} more than one value."
+    )
+  }
 
   # The unit of a value is the unit its rule produces
   data_rule_units <-
@@ -717,6 +833,26 @@ build_database_tables <- function(
         data_trait_values,
         trait_id, dataset_id, sample_id, taxon_id, trait_value,
         trait_unit_conversion_id, trait_derivation_id
+      ),
+      AbioticVariable = dplyr::select(
+        data_abiotic_variables,
+        abiotic_variable_id, abiotic_variable_name, abiotic_variable_unit,
+        measure_details
+      ),
+      AbioticVariableReference = prepare_reference_links(
+        data_links = purrr::chuck(list_bound, "abiotic_variable_references"),
+        data_entity_ids = dplyr::select(
+          data_abiotic_variables,
+          abiotic_variable_id, abiotic_variable_name
+        ),
+        data_reference_ids = data_references,
+        vec_entity_keys = "abiotic_variable_name",
+        name_entity_id = "abiotic_variable_id",
+        name_table = "AbioticVariableReference"
+      ),
+      AbioticData = dplyr::arrange(
+        data_abiotic_values,
+        sample_id, abiotic_variable_id
       )
     )
 

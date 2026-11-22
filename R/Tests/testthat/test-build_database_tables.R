@@ -102,7 +102,8 @@ testthat::test_that("build_database_tables() returns the schema tables", {
       "DatasetReferences", "SampleSizeID", "Samples", "SampleReference",
       "DatasetSample", "SampleUncertainty", "Taxa", "TaxonReference",
       "SampleTaxa", "TraitsDomain", "Traits", "TraitsReference",
-      "TraitUnitConversion", "TraitDerivation", "TraitsValue"
+      "TraitUnitConversion", "TraitDerivation", "TraitsValue",
+      "AbioticVariable", "AbioticVariableReference", "AbioticData"
     )
 
   testthat::expect_named(res, vec_tables)
@@ -348,6 +349,175 @@ testthat::test_that("build_database_tables() makes a reference mandatory", {
 #----------------------------------------------------------#
 # Errors -----
 #----------------------------------------------------------#
+
+testthat::test_that("build_database_tables() puts general references first", {
+  list_inputs <-
+    build_test_database_sources()
+
+  res <-
+    build_database_tables(
+      list_source_tables = purrr::chuck(list_inputs, "list_source_tables"),
+      data_unit_conversions = purrr::chuck(
+        list_inputs,
+        "data_unit_conversions"
+      ),
+      data_trait_derivations = purrr::chuck(
+        list_inputs,
+        "data_trait_derivations"
+      ),
+      data_general_references = tibble::tibble(
+        reference_detail = "VegVault reference",
+        mandatory = TRUE
+      )
+    )
+
+  data_first <-
+    purrr::chuck(res, "References") |>
+    dplyr::slice(1L)
+
+  testthat::expect_equal(dplyr::pull(data_first, reference_id), 1L)
+  testthat::expect_equal(
+    dplyr::pull(data_first, reference_detail),
+    "VegVault reference"
+  )
+  testthat::expect_true(dplyr::pull(data_first, mandatory))
+})
+
+testthat::test_that("build_database_tables() builds the abiotic tables", {
+  list_inputs <-
+    build_test_database_sources()
+
+  list_with_abiotic <-
+    c(
+      purrr::chuck(list_inputs, "list_source_tables"),
+      base::list(
+        climate_bio4 = build_test_abiotic_source(
+          name_variable = "bio4",
+          vec_sample_names = c("splot_101", "splot_102"),
+          vec_values = c(10, 20)
+        ),
+        climate_bio1 = build_test_abiotic_source(
+          name_variable = "bio1",
+          vec_sample_names = "splot_101",
+          vec_values = 5
+        ),
+        palaeo_bio4 = build_test_abiotic_source(
+          name_variable = "bio4",
+          vec_sample_names = "splot_103",
+          vec_values = 30,
+          reference = "Palaeoclimate citation"
+        )
+      )
+    )
+
+  res <-
+    build_database_tables(
+      list_source_tables = list_with_abiotic,
+      data_unit_conversions = purrr::chuck(
+        list_inputs,
+        "data_unit_conversions"
+      ),
+      data_trait_derivations = purrr::chuck(
+        list_inputs,
+        "data_trait_derivations"
+      )
+    )
+
+  # Variable ids follow the order of the sources, not the names
+  data_variables <-
+    purrr::chuck(res, "AbioticVariable")
+
+  testthat::expect_equal(
+    dplyr::pull(data_variables, abiotic_variable_name),
+    c("bio4", "bio1")
+  )
+  testthat::expect_equal(
+    dplyr::pull(data_variables, abiotic_variable_id),
+    c(1L, 2L)
+  )
+
+  data_values <-
+    purrr::chuck(res, "AbioticData")
+
+  testthat::expect_named(
+    data_values,
+    c("sample_id", "abiotic_variable_id", "abiotic_value")
+  )
+  testthat::expect_equal(base::nrow(data_values), 4L)
+
+  # bio4 has the citations of both of its sources
+  testthat::expect_equal(
+    purrr::chuck(res, "AbioticVariableReference") |>
+      dplyr::filter(abiotic_variable_id == 1L) |>
+      base::nrow(),
+    2L
+  )
+})
+
+testthat::test_that("build_database_tables() refuses abiotic conflicts", {
+  list_inputs <-
+    build_test_database_sources()
+
+  list_unit_conflict <-
+    c(
+      purrr::chuck(list_inputs, "list_source_tables"),
+      base::list(
+        climate_bio4 = build_test_abiotic_source(
+          name_variable = "bio4",
+          vec_sample_names = "splot_101",
+          vec_values = 10
+        ),
+        palaeo_bio4 = build_test_abiotic_source(
+          name_variable = "bio4",
+          vec_sample_names = "splot_102",
+          vec_values = 20,
+          unit = "another unit"
+        )
+      )
+    )
+
+  testthat::expect_error(
+    build_database_tables(
+      list_source_tables = list_unit_conflict,
+      data_unit_conversions = purrr::chuck(
+        list_inputs,
+        "data_unit_conversions"
+      ),
+      data_trait_derivations = purrr::chuck(
+        list_inputs,
+        "data_trait_derivations"
+      )
+    ),
+    regexp = "conflicting"
+  )
+
+  list_value_twice <-
+    c(
+      purrr::chuck(list_inputs, "list_source_tables"),
+      base::list(
+        climate_bio4 = build_test_abiotic_source(
+          name_variable = "bio4",
+          vec_sample_names = c("splot_101", "splot_101"),
+          vec_values = c(10, 11)
+        )
+      )
+    )
+
+  testthat::expect_error(
+    build_database_tables(
+      list_source_tables = list_value_twice,
+      data_unit_conversions = purrr::chuck(
+        list_inputs,
+        "data_unit_conversions"
+      ),
+      data_trait_derivations = purrr::chuck(
+        list_inputs,
+        "data_trait_derivations"
+      )
+    ),
+    regexp = "AbioticData"
+  )
+})
 
 testthat::test_that("build_database_tables() checks the trait rules", {
   list_inputs <-

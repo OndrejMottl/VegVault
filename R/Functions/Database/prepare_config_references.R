@@ -1,21 +1,23 @@
 #' @title Prepare the fixed references of one source and role
 #' @description
 #' Return the references that `config.yml` gives a source for one role,
-#' for example the citation of the source type or the reference of every
-#' taxon of the source.
+#' for example the citation of the source type, the reference of every
+#' taxon of the source, or a general reference of the database.
 #' @param list_source
 #' Named list. One entry of `build: sources` in `config.yml`, with the
 #' element `references`: a list of records, each with `role` (text),
 #' `mandatory` (logical) and `detail` (the reference text).
 #' @param sel_role
-#' Character scalar. The role: `"source_type"`, `"data_source"`,
-#' `"sampling_method"`, `"taxon"` or `"trait"`.
+#' Character scalar. The role: `"source_type"`, or every `"data_source"`,
+#' `"sampling_method"`, `"dataset"`, `"sample"`, `"taxon"`, `"trait"` or
+#' `"abiotic_variable"` of the source, or `"general"` (a reference of the
+#' database itself, linked to nothing).
 #' @return
 #' A tibble with the columns `reference_detail` (text) and `mandatory`
 #' (logical), one row per reference of the role, possibly none.
 #' @details
 #' Aborts when `list_source` has no `references` element, when a record
-#' lacks one of its three fields, has a role outside the five above, a
+#' lacks one of its three fields, has a role outside the nine above, a
 #' `mandatory` that is not `TRUE` or `FALSE`, or an empty `detail`, or when
 #' a role repeats a reference text.
 #' @seealso [prepare_splot_tables()]
@@ -32,7 +34,10 @@ prepare_config_references <- function(
   sel_role
 ) {
   vec_roles <-
-    c("source_type", "data_source", "sampling_method", "taxon", "trait")
+    c(
+      "source_type", "data_source", "sampling_method", "dataset", "sample",
+      "taxon", "trait", "abiotic_variable", "general"
+    )
 
   assertthat::assert_that(
     base::is.character(sel_role),
