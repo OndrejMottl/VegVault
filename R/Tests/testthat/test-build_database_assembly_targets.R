@@ -24,6 +24,14 @@ testthat::test_that("build_database_assembly_targets() validates arguments", {
   )
 })
 
+testthat::test_that("build_database_assembly_targets() scans quietly", {
+  # targets reads every function a pipeline loads; a ..1 in a purrr
+  #   lambda made it warn '..1 may be used in an incorrect context'
+  testthat::expect_no_warning(
+    targets::tar_deps_raw(build_database_assembly_targets)
+  )
+})
+
 
 #----------------------------------------------------------#
 # Outputs -----

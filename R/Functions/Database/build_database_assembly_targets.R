@@ -608,32 +608,48 @@ build_database_assembly_targets <- function(
 
   # One target per climate variable, so the palaeoclimate values are never
   #   in memory at once and a changed variable rebuilds only its tables.
-  #   Built outside dplyr verbs, which would take the `!!` themselves.
+  #   Built outside dplyr verbs, which would take the `!!` themselves, and
+  #   over row positions, because `..1` in a lambda makes the dependency
+  #   scan of {targets} warn
+  vec_climate_sources <-
+    dplyr::pull(data_climate_targets, source_id)
+
+  vec_climate_variables <-
+    dplyr::pull(data_climate_targets, variable)
+
+  vec_climate_imports <-
+    dplyr::pull(data_climate_targets, name_import)
+
+  vec_climate_tables <-
+    dplyr::pull(data_climate_targets, name_tables)
+
   list_targets_climate <-
-    purrr::pmap(
-      .l = dplyr::select(
-        data_climate_targets,
-        source_id, variable, name_import, name_tables
-      ),
+    purrr::map(
+      .x = base::seq_along(vec_climate_tables),
       .f = ~ targets::tar_target_raw(
-        name = ..4,
+        name = vec_climate_tables[.x],
         command = rlang::expr({
           fingerprint_producer_import
           profile_producer_import
 
           prepare_abiotic_tables(
             data_values = dplyr::bind_rows(
-              !!purrr::chuck(list_load_producer_import, ..3)
+              !!purrr::chuck(list_load_producer_import, vec_climate_imports[.x])
             ),
             data_gridpoints = data_gridpoint_samples,
             list_variable = purrr::chuck(
-              !!rlang::sym(stringr::str_c("list_variables_", ..1)),
-              !!..2
+              !!rlang::sym(
+                stringr::str_c("list_variables_", vec_climate_sources[.x])
+              ),
+              !!vec_climate_variables[.x]
             ),
             data_references = !!rlang::sym(
-              stringr::str_c("data_references_", ..1)
+              stringr::str_c("data_references_", vec_climate_sources[.x])
             ),
-            sel_age_rule = !!purrr::chuck(list_age_rules, ..1),
+            sel_age_rule = !!purrr::chuck(
+              list_age_rules,
+              vec_climate_sources[.x]
+            ),
             n_coordinate_digits = n_link_coordinate_digits,
             verbose = FALSE
           )

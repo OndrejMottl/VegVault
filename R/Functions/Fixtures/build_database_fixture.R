@@ -39,8 +39,11 @@
 #'     `Quercus robur`, 5 `Quercus`, 6 `Fagaceae` and 7 `Indet.`; all but
 #'     taxon 7 are classified.
 #'   \item Abiotic variables 1 `bio1` and 2 `bio12` on gridpoints; trait
-#'     domains 1 `Plant heigh` and 2 `Leaf Area`, with values for taxa 1
-#'     and 4 in sample 11.
+#'     domains 1 `Plant heigh` (unit `m`) and 2 `Leaf Area` (unit `mm2`),
+#'     with values for taxa 1 and 4 in sample 11. Each value uses the
+#'     identity conversion rule of its unit, 1 `fixture_identity` (`m`) or
+#'     2 `fixture_identity_mm2` (`mm2`), so every value is in the unit its
+#'     rule produces.
 #' }
 #' Reference tables are left empty. The schema, its indexes included, is
 #' created with `build_database_schema()` before the rows are written.
@@ -238,14 +241,16 @@ build_database_fixture <- function(
         ~standardized_unit, ~trait_dimension, ~operation, ~multiplier,
         ~evidence,
         1L, "fixture_identity", "1", "fixture", "fixture", "m", "m",
-        "length", "identity", 1, "Test fixture"
+        "length", "identity", 1, "Test fixture",
+        2L, "fixture_identity_mm2", "1", "fixture", "fixture", "mm2", "mm2",
+        "area", "identity", 1, "Test fixture"
       ),
       TraitsValue = tibble::tribble(
         ~trait_id, ~dataset_id, ~sample_id, ~taxon_id, ~trait_value,
         ~trait_unit_conversion_id,
         1L, 9L, 11L, 1L, 30, 1L,
         1L, 9L, 11L, 4L, 20, 1L,
-        2L, 9L, 11L, 4L, 5000, 1L
+        2L, 9L, 11L, 4L, 5000, 2L
       )
     )
 
