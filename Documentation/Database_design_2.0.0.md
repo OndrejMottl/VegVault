@@ -330,7 +330,7 @@ The bio1 values of the linked gridpoints take 0.020 s through the new tables, th
 
 ### `WITHOUT ROWID` tables and composite primary keys
 
-On v1.0.0, every candidate key holds except one. No duplicate and no missing value exists in the keys of `DatasetSample`, `SampleReference`, `SampleUncertainty`, `AbioticData`, `TraitsValue`, `TaxonClassification` and the eight reference junction tables (`15_check_v1_schema_candidates.R`, exact). `AbioticDataReference` was not grouped (2.07 G rows), but its key is the key of `PositionLink` in the per-position layout. The exception is `SampleTaxa`, with 189,639 repeated (sample, taxon) pairs and 1,678 rows with a missing id (section 1, content gaps); it stays a rowid table until the import resolves them.
+On v1.0.0, every candidate key holds except one. No duplicate and no missing value exists in the keys of `DatasetSample`, `SampleReference`, `SampleUncertainty`, `AbioticData`, `TraitsValue`, `TaxonClassification` and the eight reference junction tables (`15_check_v1_schema_candidates.R`, exact). `AbioticDataReference` was not grouped (2.07 G rows), but its key is the key of `PositionLink` in the per-position layout. The exception is `SampleTaxa`, with 189,639 repeated (sample, taxon) pairs and 1,678 rows with a missing id (section 1, content gaps). It stayed a rowid table until the vegetation producers merged the repeated pairs; since 2026-11-23 it has the primary key `(sample_id, taxon_id)` (decision 2).
 
 - **Size.** On top of `lean_indexes`, the file shrinks from 1,830 to 1,078 MB on the subset (−41 %), and the projection from 79.5 to 47.1 GB. Without the per-position layout, the link table alone would still take 43.8 GB.
 - **Build.** About the same (15.4 against 14.6 s): loading is slower (13.2 against 5.2 s; the link table alone 12.2 against 4.8 s), because the key is built while the rows arrive, but almost no index is left to build.
@@ -577,7 +577,7 @@ The full-size times come from the first baseline run of question 6, the subset t
 | link distance correct, not only within range | — | P4: geodesic distance recomputed for a stratified sample, including dateline and polar positions (question 5 shows how) | schema (a `CHECK` cannot recompute a distance) |
 | every child row has its parent | schema declares the foreign keys; the load runs with `foreign_keys = OFF` (question 6) | P4: one `foreign_key_check` of the release file, blocking | the assembly stage |
 | file and index structure | — | P4: one `integrity_check` of the release file, blocking | the assembly stage |
-| `SampleTaxa` (sample, taxon) unique | not yet possible: v1.0.0 repeats 189,639 pairs | P4: flag until the vegetation producers resolve them; then a primary key in the schema | |
+| `SampleTaxa` (sample, taxon) unique | schema: primary key `(sample_id, taxon_id)` (`WITHOUT ROWID`), since 2026-11-23, once the vegetation producers merged the 189,639 repeated pairs of v1.0.0 | `integrity_check` | P4 (its pair check was removed with the key) |
 | taxon names and trait names unique | not decided: their duplicates were not measured | P4 first; a `UNIQUE` constraint once a build shows none | |
 | semantic orphans (for example positions without samples, gridpoints without links or values, datasets without samples) | — | P4 | |
 | ages plausible | — | P4: flag only; no document fixes a range | schema |
