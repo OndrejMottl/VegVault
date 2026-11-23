@@ -67,7 +67,8 @@ testthat::test_that("build_database_assembly_targets() declares the stage", {
       stringr::str_c("list_source_", vec_sources),
       "list_general", "list_versions", "list_authors",
       "n_link_coordinate_digits", "n_taxon_batches", "name_check_taxon",
-      "sel_taxon_db_name", "sel_taxon_db_class", "n_build_chunk_size",
+      "sel_taxon_db_name", "sel_taxon_db_class",
+      "flag_taxon_only_exact_match", "sel_taxon_kingdom", "n_build_chunk_size",
       "list_pragmas_load", "list_pragmas_final", "file_producer_manifest",
       "file_contract_chelsa_neoclimate",
       "file_contract_chelsa_trace21k_palaeoclimate",
@@ -238,7 +239,8 @@ testthat::test_that("build_database_assembly_targets() wires the inputs", {
       ),
       data_classification = c(
         "data_taxon_batches", "name_check_taxon", "sel_taxon_db_name",
-        "sel_taxon_db_class"
+        "sel_taxon_db_class", "flag_taxon_only_exact_match",
+        "sel_taxon_kingdom"
       ),
       list_tables_taxospace = c(
         "data_classification", "list_source_taxospace"

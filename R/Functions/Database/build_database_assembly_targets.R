@@ -287,6 +287,22 @@ build_database_assembly_targets <- function(
         cue = cue_always
       ),
       targets::tar_target_raw(
+        name = "flag_taxon_only_exact_match",
+        command = quote(
+          load_config_value(
+            value = c("build", "classification", "only_exact_match")
+          )
+        ),
+        cue = cue_always
+      ),
+      targets::tar_target_raw(
+        name = "sel_taxon_kingdom",
+        command = quote(
+          load_config_value(value = c("build", "classification", "kingdom"))
+        ),
+        cue = cue_always
+      ),
+      targets::tar_target_raw(
         name = "n_build_chunk_size",
         command = quote(load_config_value(value = c("build", "chunk_size"))),
         cue = cue_always
@@ -718,6 +734,8 @@ build_database_assembly_targets <- function(
             name_check_taxon = name_check_taxon,
             sel_db_name = sel_taxon_db_name,
             sel_db_class = sel_taxon_db_class,
+            flag_only_exact_match = flag_taxon_only_exact_match,
+            sel_kingdom = sel_taxon_kingdom,
             verbose = FALSE
           )
         ),

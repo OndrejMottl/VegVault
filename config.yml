@@ -483,6 +483,17 @@ default:
       check_taxon: "Quercus robur"
       db_name: "gnr"
       db_class: "gbif"
+      # Not only the accepted GBIF taxa of a matched name: the taxon with
+      #   the highest confidence is taken (use_only_exact_match = FALSE of
+      #   taxospace), so that, for example, "Ledum Type" is classified in
+      #   Rhododendron and "Lagotis minor" in Lagotis, not in a fungus and a
+      #   ciliate
+      only_exact_match: false
+      # Only the taxa of this kingdom count: a name matched only to animals
+      #   or fungi (for example "Coniferae Undiff" to the animal genus
+      #   Coniferina) stays unclassified, and "Dryas sp" is the plant genus,
+      #   not the butterfly genus of the same name
+      kingdom: "Plantae"
     # Fixed values and references of each source, with the texts of
     #   v1.0.0. A reference has a role: the source type, or every data
     #   source, sampling method, taxon or trait of the source. References
