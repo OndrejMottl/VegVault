@@ -114,6 +114,8 @@ testthat::test_that("build_metadata_tables() marks the version being built", {
           orcid = "0000-0000-0000-0000"
         )
       ),
+      # A commit in a pin is not stored: the pins hold none (the checksums
+      #   of the files tie a build to its producer files)
       list_producer_pins = base::list(
         base::list(artefact_id = "splot_plots", tag = NULL),
         base::list(
@@ -157,7 +159,7 @@ testthat::test_that("build_metadata_tables() marks the version being built", {
 
   testthat::expect_named(
     data_producers,
-    c("version_id", "producer", "tag", "commit_sha")
+    c("version_id", "producer", "tag")
   )
   testthat::expect_equal(
     dplyr::pull(data_producers, producer),
@@ -167,10 +169,6 @@ testthat::test_that("build_metadata_tables() marks the version being built", {
   testthat::expect_equal(
     dplyr::pull(data_producers, tag),
     c("v2.0.0", NA_character_)
-  )
-  testthat::expect_equal(
-    dplyr::pull(data_producers, commit_sha),
-    c(base::strrep("c", 40L), NA_character_)
   )
 
   testthat::expect_named(

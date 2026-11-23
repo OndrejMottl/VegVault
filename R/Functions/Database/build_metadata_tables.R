@@ -12,8 +12,8 @@
 #' List of author records, each with `fullname`, `email` and `orcid`.
 #' @param list_producer_pins
 #' List of producer pins as built by `build_producer_pins()`, each with
-#' `artefact_id` and `tag` (`NULL` in a development build), and optionally
-#' `commit_sha`.
+#' `artefact_id` and `tag` (`NULL` in a development build). Other fields
+#' are not stored.
 #' @param build_profile
 #' Character scalar. The configuration profile of the build.
 #' @param git_commit
@@ -27,8 +27,7 @@
 #' \itemize{
 #'   \item `version_control`: `id`, `version`, `update_date`, `changelog`,
 #'     `build_profile`, `git_commit`, `manifest_sha256`;
-#'   \item `BuildProducers`: `version_id`, `producer`, `tag`,
-#'     `commit_sha`;
+#'   \item `BuildProducers`: `version_id`, `producer`, `tag`;
 #'   \item `Authors`: `author_id`, `author_fullname`, `author_email`,
 #'     `author_orcid`.
 #' }
@@ -37,7 +36,9 @@
 #' built has the highest id; only its row gets the build profile, the
 #' commit and the manifest checksum, as the validation stage expects. Every
 #' producer pin is a `BuildProducers` row of that version, sorted by
-#' producer; a missing tag or commit is stored as missing. Author ids
+#' producer; a missing tag is stored as missing. No commit of a producer
+#' tag is stored: the pin manifest records the size and SHA-256 of every
+#' file, which tie a build to its files. Author ids
 #' follow the order of `list_authors`. Aborts when there is no version, a
 #' version repeats, a record lacks a field, a producer repeats, the commit
 #' is not 40 hexadecimal characters, or the checksum not 64.
@@ -209,12 +210,6 @@ build_metadata_tables <- function(
         .x = list_producer_pins,
         .f = ~ base::as.character(
           purrr::pluck(.x, "tag", .default = NA_character_)
-        )
-      ),
-      commit_sha = purrr::map_chr(
-        .x = list_producer_pins,
-        .f = ~ base::as.character(
-          purrr::pluck(.x, "commit_sha", .default = NA_character_)
         )
       )
     ) |>

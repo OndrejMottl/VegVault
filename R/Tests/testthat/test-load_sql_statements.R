@@ -182,7 +182,7 @@ testthat::test_that("load_sql_statements() reads the project schema", {
 
   testthat::expect_equal(
     base::as.integer(base::table(dplyr::pull(res, object_type))),
-    c(30L, 34L, 1L)
+    c(29L, 34L, 1L)
   )
 
   testthat::expect_equal(

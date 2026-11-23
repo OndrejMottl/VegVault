@@ -218,7 +218,7 @@ testthat::test_that("build_database_schema() builds the project schema", {
       fn = build_database_schema
     )
 
-  testthat::expect_equal(base::nrow(res), 65L)
+  testthat::expect_equal(base::nrow(res), 64L)
 
   data_objects <-
     run_with_database(
@@ -262,7 +262,6 @@ testthat::test_that("build_database_schema() builds the project schema", {
       "idx_samplereference_reference_id",
       "idx_samples_sample_id",
       "idx_samples_sample_size_id",
-      "idx_sampletaxa_sample_id_taxon_id",
       "idx_sampletaxa_taxon_id",
       "idx_samplingmethodreference_reference_id",
       "idx_taxonclassification_taxon_family",
@@ -332,6 +331,7 @@ testthat::test_that("build_database_schema() sets the project keys", {
       SamplePosition = "sample_id",
       SampleReference = c("sample_id", "reference_id"),
       SampleSizeID = "sample_size_id",
+      SampleTaxa = c("sample_id", "taxon_id"),
       SampleUncertainty = c("sample_id", "iteration"),
       Samples = "sample_id",
       SamplingMethodID = "sampling_method_id",
@@ -353,7 +353,8 @@ testthat::test_that("build_database_schema() sets the project keys", {
       "AbioticData", "AbioticVariableReference", "BuildProducers",
       "DatasetReferences", "DatasetSample", "DatasetSourceTypeReference",
       "DatasetSourcesReference", "PositionLink", "SampleReference",
-      "SampleUncertainty", "SamplingMethodReference", "TaxonReference",
+      "SampleTaxa", "SampleUncertainty", "SamplingMethodReference",
+      "TaxonReference",
       "TraitsReference", "TraitsValue"
     )
 
@@ -461,9 +462,12 @@ testthat::test_that("build_database_schema() rejects repeated keys", {
       "INSERT INTO version_control (id, version) VALUES (1, '2.0.0')",
       "INSERT INTO version_control (id, version) VALUES (2, '2.0.0')",
       "UNIQUE.*version_control.version",
-      "INSERT INTO BuildProducers VALUES (1, 'splot_plots', NULL, NULL)",
-      "INSERT INTO BuildProducers VALUES (1, 'splot_plots', 'v2.0.0', 'a')",
-      "UNIQUE.*BuildProducers"
+      "INSERT INTO BuildProducers VALUES (1, 'splot_plots', NULL)",
+      "INSERT INTO BuildProducers VALUES (1, 'splot_plots', 'v2.0.0')",
+      "UNIQUE.*BuildProducers",
+      "INSERT INTO SampleTaxa VALUES (1, 1, 2)",
+      "INSERT INTO SampleTaxa VALUES (1, 1, 3)",
+      "UNIQUE.*SampleTaxa"
     )
 
   run_with_database(
@@ -505,7 +509,9 @@ testthat::test_that("build_database_schema() rejects missing keys", {
       "INSERT INTO Positions VALUES (1, 14, 50, NULL)",
       "NOT NULL.*Positions.age",
       "INSERT INTO DatasetSample VALUES (1, NULL)",
-      "NOT NULL.*DatasetSample.sample_id"
+      "NOT NULL.*DatasetSample.sample_id",
+      "INSERT INTO SampleTaxa VALUES (1, NULL, 2)",
+      "NOT NULL.*SampleTaxa.taxon_id"
     )
 
   run_with_database(

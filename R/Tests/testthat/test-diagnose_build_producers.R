@@ -31,8 +31,7 @@ testthat::test_that("diagnose_build_producers() passes a release build", {
     build_validation_database(
       dir = withr::local_tempdir(),
       profile = "release",
-      tag = "v2.0.0",
-      commit_sha = base::strrep("a", 40L)
+      tag = "v2.0.0"
     )
 
   res <-
@@ -49,12 +48,11 @@ testthat::test_that("diagnose_build_producers() passes a release build", {
 # Functionality -----
 #----------------------------------------------------------#
 
-testthat::test_that("diagnose_build_producers() needs a commit to release", {
+testthat::test_that("diagnose_build_producers() needs a tag to release", {
   list_build <-
     build_validation_database(
       dir = withr::local_tempdir(),
-      profile = "release",
-      tag = "v2.0.0"
+      profile = "release"
     )
 
   res <-
@@ -67,7 +65,7 @@ testthat::test_that("diagnose_build_producers() needs a commit to release", {
 
   testthat::expect_equal(dplyr::pull(res, status), "fail")
 
-  testthat::expect_match(dplyr::pull(res, message), "commit")
+  testthat::expect_match(dplyr::pull(res, message), "tag")
 })
 
 testthat::test_that("diagnose_build_producers() fails rows unlike the pins", {
@@ -82,11 +80,11 @@ testthat::test_that("diagnose_build_producers() fails rows unlike the pins", {
       DBI::dbExecute(.x, "UPDATE BuildProducers SET tag = 'v9.9.9'")
       DBI::dbExecute(
         .x,
-        "INSERT INTO BuildProducers VALUES (2, 'bien_plots', NULL, NULL)"
+        "INSERT INTO BuildProducers VALUES (2, 'bien_plots', NULL)"
       )
       DBI::dbExecute(
         .x,
-        "INSERT INTO BuildProducers VALUES (1, 'wosis_soil', NULL, NULL)"
+        "INSERT INTO BuildProducers VALUES (1, 'wosis_soil', NULL)"
       )
     }
   )

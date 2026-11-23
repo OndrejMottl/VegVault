@@ -12,15 +12,16 @@
 #' `build_producers`: one `pass` row with scope `BuildProducers` when the
 #' rows match the pins, otherwise one `fail` row per artefact that is
 #' missing, not pinned, or recorded with another tag, or that lacks a tag
-#' or commit in a release build.
+#' in a release build.
 #' @details
 #' The rows checked are those whose `version_id` is the highest `id` of
 #' `version_control`. Each pin needs exactly one row with `producer` equal
 #' to its `artefact_id` and the same `tag`; a `dev` pin has no tag, which
 #' is stored as missing. In a build with the `release` profile every row
-#' also needs a tag and a 40-character commit hash in `commit_sha`. Opens
-#' the database read-only. Aborts only when the database is not the one of
-#' the manifest.
+#' also needs a tag. The producer files are identified by the size and
+#' SHA-256 the pins record, so no commit is stored. Opens the database
+#' read-only. Aborts only when the database is not the one of the
+#' manifest.
 #' @examples
 #' \dontrun{
 #' diagnose_build_producers(
@@ -57,15 +58,16 @@ diagnose_build_producers <- function(
     run_with_database(
       path_database = path_database,
       fn = DBI::dbGetQuery,
-      statement = base::paste(
-        "SELECT producer, tag, commit_sha FROM BuildProducers",
-        "WHERE version_id = (SELECT MAX(id) FROM version_control)"
+      statement = stringr::str_c(
+        "SELECT producer, tag FROM BuildProducers",
+        "WHERE version_id = (SELECT MAX(id) FROM version_control)",
+        sep = " "
       ),
       flag_read_only = TRUE
     ) |>
     tibble::as_tibble() |>
     dplyr::mutate(
-      dplyr::across(.cols = c(tag, commit_sha), .fns = base::as.character)
+      tag = base::as.character(tag)
     )
 
   flag_release <-
@@ -83,13 +85,7 @@ diagnose_build_producers <- function(
       is_tag_equal = (base::is.na(tag) & base::is.na(tag_pinned)) |
         dplyr::coalesce(tag == tag_pinned, FALSE),
       is_release_complete = !flag_release |
-        (
-          !base::is.na(tag) & tag != "" &
-            stringr::str_detect(
-              dplyr::coalesce(commit_sha, ""),
-              "^[0-9a-f]{40}$"
-            )
-        ),
+        (!base::is.na(tag) & tag != ""),
       message = dplyr::case_when(
         !is_recorded ~ stringr::str_c(
           "The pinned artefact ", producer, " has no BuildProducers row."
@@ -104,8 +100,8 @@ diagnose_build_producers <- function(
           dplyr::coalesce(tag_pinned, "(none)"), "."
         ),
         !is_release_complete ~ stringr::str_c(
-          "A release build records the tag and the 40-character commit of ",
-          "every producer; ", producer, " lacks one."
+          "A release build records the tag of every producer; ", producer,
+          " lacks one."
         ),
         .default = NA_character_
       )
