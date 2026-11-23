@@ -294,6 +294,42 @@ testthat::test_that("save_vegvault_database() keeps an existing database", {
   )
 })
 
+testthat::test_that("save_vegvault_database() needs the folder to exist", {
+  dir_test <-
+    withr::local_tempdir("private_folder")
+
+  path_schema <-
+    build_writer_test_schema(dir = dir_test)
+
+  path_database <-
+    base::file.path(dir_test, "missing_folder", "Vault.sqlite")
+
+  res_error <-
+    testthat::expect_error(
+      save_vegvault_database(
+        path_database = path_database,
+        list_tables = build_writer_test_tables(),
+        list_pragmas_load = base::list(foreign_keys = "OFF"),
+        list_pragmas_final = base::list(foreign_keys = "ON"),
+        n_chunk_size = 10L,
+        path_schema = path_schema,
+        verbose = FALSE
+      ),
+      regexp = "folder"
+    )
+
+  # The message names no path, and no folder or file is created
+  testthat::expect_false(
+    stringr::str_detect(
+      string = base::conditionMessage(res_error),
+      pattern = "private_folder"
+    )
+  )
+  testthat::expect_false(
+    base::dir.exists(base::file.path(dir_test, "missing_folder"))
+  )
+})
+
 testthat::test_that("save_vegvault_database() replaces only when asked", {
   dir_test <-
     withr::local_tempdir()

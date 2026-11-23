@@ -37,8 +37,10 @@
 #' a failure the work file is left for inspection and `path_database` is
 #' untouched. After success the work file is removed. `path_database` is
 #' deleted only when `flag_replace_existing` is `TRUE`, and only after the
-#' new file is complete. Messages and errors name the roles of the files,
-#' never their paths. The build manifest is written afterwards by
+#' new file is complete. The folder of `path_database` must exist: it is
+#' never created, so that a mistyped database path stops the build instead
+#' of receiving a new database. Messages and errors name the roles of the
+#' files, never their paths. The build manifest is written afterwards by
 #' `save_build_manifest()`.
 #' @seealso [run_database_load()], [resolve_database_build_paths()],
 #' [save_build_manifest()]
@@ -94,6 +96,21 @@ save_vegvault_database <- function(
     !base::is.na(verbose),
     msg = "`verbose` must be TRUE or FALSE."
   )
+
+  # A missing folder stops the build, rather than being created: with the
+  #   path of secrets.yaml, a mistyped folder would otherwise receive a new
+  #   database. The message omits the path, because database paths are
+  #   private
+  if (
+    !base::dir.exists(base::dirname(path_database))
+  ) {
+    cli::cli_abort(
+      c(
+        "The folder of the database does not exist, so nothing was built.",
+        "i" = "Create the folder first, or correct the database path."
+      )
+    )
+  }
 
   list_paths <-
     resolve_database_build_paths(path_database = path_database)

@@ -294,3 +294,141 @@ note_tables:
     engines: "Engines/run_20261120_090633"
     full_links_v1: "Full_links/run_20261120_092514_v1"
     bulk_load: "Bulk_load/run_20261120_094152"
+
+# Comparison of the regional build with the v1.0.0 subset of the same box
+#   (script 23; decided on VegVault issue 90).
+comparison:
+  # Kinds of rows compared, as load_comparison_rows() names them
+  units:
+    - datasets
+    - samples
+    - sample_taxa
+    - sample_uncertainty
+    - trait_values
+    - traits
+    - abiotic_variables
+    - abiotic_values
+    - sample_links
+    - taxa
+    - taxon_classification
+    - references
+  # Decimals to which every double is rounded before the comparison
+  n_digits: 6
+  # Differing rows saved per kind of row, scope and direction, for
+  #   inspection
+  n_rows_per_scope: 1000
+  # Expected differences, each with `units`, optional `scopes`,
+  #   `directions` (only_v1, only_v2) and a `reason`. Written against the
+  #   differing rows of the first run (2026-11-23), for Ondrej's review.
+  expected_differences:
+    - units: [datasets, samples, sample_taxa, sample_uncertainty, sample_links]
+      scopes: ["fossil_pollen_archive / FOSSILPOL"]
+      directions: [only_v1, only_v2]
+      reason: "FOSSILPOL was run again on a fresh Neotoma download with new
+        age-depth models (VegVault-FOSSILPOL issue 16): some sites have new
+        coordinates, one site is new, and the levels have new ages, so their
+        samples, pollen counts, age uncertainty and links differ."
+    - units: [datasets, samples, trait_values, sample_links]
+      scopes: ["traits / TRY"]
+      directions: [only_v1, only_v2]
+      reason: "TRY values come from the standardised values (StdValue) of
+        TRY request 28498, with duplicated measurements removed and
+        coordinates outside -180 to 180 and -90 to 90 set to missing
+        (VegVault-Trait_data issue 13), so TRY datasets, records, values and
+        their links differ."
+    - units: [samples, trait_values, sample_links]
+      scopes: ["traits / BIEN"]
+      directions: [only_v1]
+      reason: "BIEN trait records without a value are dropped, and BIEN
+        records that duplicate TRY measurements are removed
+        (VegVault-Trait_data issue 13), together with their links."
+    - units: [sample_links]
+      scopes: ["vegetation_plot / BIEN", "vegetation_plot / sPlotOpen",
+        "traits / BIEN"]
+      directions: [only_v2]
+      reason: "2.0.0 also finds the links that v1.0.0 missed above about 63.3
+        degrees latitude, where its 1-degree longitude window is narrower
+        than 50 km (VegVault pull request 120, which keeps every v1.0.0
+        link)."
+    - units: [datasets, samples]
+      scopes: ["gridpoints / gridpoints"]
+      directions: [only_v1, only_v2]
+      reason: "The gridpoints follow the samples: the v1.0.0 subset keeps
+        every linked gridpoint within 50 km of the box
+        (04_extract_v1_subset.R), the regional build only those its own
+        samples link to; 2.0.0 adds the gridpoints of the high-latitude
+        links and of the new FOSSILPOL ages, and loses those linked only to
+        removed records."
+    - units: [abiotic_values]
+      scopes: [bio1, bio4, bio6, bio12, bio15, bio18, bio19]
+      directions: [only_v1, only_v2]
+      reason: "The climate values follow the gridpoints (see the gridpoint
+        datasets and samples); on the gridpoints both versions have, the
+        values are equal except for bio4."
+    - units: [abiotic_values]
+      scopes: [bio4]
+      directions: [only_v1, only_v2]
+      reason: "v1.0.0 stored bio4 in the wrong unit, with most cells as 0
+        (VegVault issue 78); 2.0.0 stores the standard deviation of the
+        monthly mean temperatures times 100, as CHELSA documents (VegVault
+        issue 93)."
+    - units: [abiotic_values]
+      scopes: [HWSD2]
+      directions: [only_v1, only_v2]
+      reason: "The soil values are the soil groups of HWSD 2.2 instead of the
+        WoSIS and SoilGrids soil classes of v1.0.0 (data format hwsd_soil
+        2.0.0, VegVault issue 93)."
+    - units: [abiotic_variables]
+      scopes: [all]
+      directions: [only_v1, only_v2]
+      reason: "Corrected labels: the bio4 unit and description (VegVault
+        issue 93), the bio18 and bio19 descriptions (precipitation of the
+        quarter, not a monthly mean) and the soil details
+        HWSD-soil_group."
+    - units: [sample_taxa]
+      scopes: ["vegetation_plot / sPlotOpen"]
+      directions: [only_v1, only_v2]
+      reason: "The vegetation data merge repeated records of one taxon in a
+        plot into one record with the combined cover
+        (VegVault-Vegetation_data issue 21), so repeated rows of v1.0.0
+        become one row."
+    - units: [traits]
+      scopes: ["Diaspore mass", "Leaf Area", "Stem specific density"]
+      directions: [only_v1]
+      reason: "No record of these trait names remains in the box: the BIEN
+        records of seed mass, leaf area and stem wood density there were
+        removed as duplicates of TRY measurements, and the TRY leaf area
+        records changed with the TRY rework (VegVault-Trait_data issue 13).
+        The names remain in the full 2.0.0 trait data."
+    - units: [taxa, taxon_classification]
+      scopes: [all]
+      directions: [only_v1, only_v2]
+      reason: "The taxa follow the source data (new FOSSILPOL pollen types,
+        removed trait records), and the classification changed in four
+        ways. (1) 2.0.0 keeps only taxa of the kingdom Plantae (setting
+        build: classification: kingdom of config.yml), while v1.0.0 placed
+        some names in animals, fungi
+        or algae (for example 'Alnus Viridis' in the leafhopper Atanus
+        viridis, 'Salix' in a tunicate family, 'Stellaria' in a diatom) and
+        the lichen 'Bilimbia lobulata' in its family; such names are now
+        placed in plants or stay unclassified. (2) v1.0.0 accepted wrong
+        near spellings ('Ledum decumbens' as Linum decumbens, 'Carex
+        misandra' as Carex diandra). (3) The GBIF Backbone Taxonomy has
+        changed since the v1.0.0 classification of 2024 (for example
+        'Pinus Picea' is now a synonym of Abies alba). (4) 2.0.0 places the
+        species, genus and family names it adds by the hierarchy (decided
+        on VegVault issue 90). Names in capitals or with a capitalised
+        second word are sent in sentence case, as the v1.0.0 service
+        ignored letter case, so they reach the same rank as in v1.0.0."
+    - units: [references]
+      scopes: [all]
+      directions: [only_v1]
+      reason: "The v1.0.0 subset copies the whole References table of v1.0.0
+        (04_extract_v1_subset.R), the regional build only the references its
+        rows use."
+    - units: [references]
+      scopes: [all]
+      directions: [only_v2]
+      reason: "New reference texts: BIEN data DOIs and trait source
+        citations of the reworked trait data (VegVault-Trait_data issues 13
+        and 16) and the two HWSD references of the soil data."
