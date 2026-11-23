@@ -96,13 +96,18 @@ diagnose_producer_table_rules <- function(
       )
     )
 
+  # Indexed rather than pmap() with ..1: targets warns on ..1 when it scans
+  #   the functions a pipeline uses. The rule is read before the inner
+  #   lambda, which has its own .x.
   data_findings_keys <-
-    purrr::pmap(
-      .l = data_key_rules,
+    purrr::map(
+      .x = base::seq_len(base::nrow(data_key_rules)),
       .f = ~ {
-        vec_key <- ..1
+        vec_key <- dplyr::pull(data_key_rules, "columns")[[.x]]
 
-        value_digits <- ..2
+        value_digits <- dplyr::pull(data_key_rules, "digits")[.x]
+
+        sel_check <- dplyr::pull(data_key_rules, "check")[.x]
 
         n_duplicated <-
           if (
@@ -129,7 +134,7 @@ diagnose_producer_table_rules <- function(
 
         build_producer_findings(
           contract_id = contract_id,
-          check = base::rep(..3, n_duplicated > 0L),
+          check = base::rep(sel_check, n_duplicated > 0L),
           message = base::rep(
             stringr::str_c(
               n_duplicated, " row(s) share their key (",

@@ -186,3 +186,11 @@ testthat::test_that(
     )
   }
 )
+
+testthat::test_that("gives no warning in the targets dependency scan", {
+  # targets reads every function a pipeline uses; a ..1 in a purrr
+  #   lambda made it warn '..1 may be used in an incorrect context'
+  testthat::expect_no_warning(
+    targets::tar_deps_raw(build_bien_traits_fixture)
+  )
+})

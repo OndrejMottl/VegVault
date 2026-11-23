@@ -174,3 +174,11 @@ testthat::test_that("diagnose_producer_table_rules() checks rounded keys", {
 
   testthat::expect_equal(base::nrow(res_fine), 0L)
 })
+
+testthat::test_that("gives no warning in the targets dependency scan", {
+  # targets reads every function a pipeline uses; a ..1 in a purrr
+  #   lambda made it warn '..1 may be used in an incorrect context'
+  testthat::expect_no_warning(
+    targets::tar_deps_raw(diagnose_producer_table_rules)
+  )
+})

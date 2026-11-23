@@ -137,14 +137,16 @@ build_bien_traits_fixture <- function(
   name_template <-
     purrr::chuck(contract, "file", "name_templates")[1]
 
+  # Indexed rather than pmap() with ..1: targets warns on ..1 when it scans
+  #   the functions a pipeline uses
   vec_names <-
-    purrr::pmap_chr(
-      .l = base::list(list_parts, vec_partitions, vec_dates),
+    purrr::map_chr(
+      .x = base::seq_along(list_parts),
       .f = ~ build_producer_file_name(
         name_template = name_template,
-        date = ..3,
-        hash = rlang::hash(..1),
-        partition = ..2
+        date = vec_dates[.x],
+        hash = rlang::hash(list_parts[[.x]]),
+        partition = vec_partitions[.x]
       )
     )
 
