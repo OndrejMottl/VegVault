@@ -113,6 +113,38 @@ artefacts:
         - data_traits_bien_1_2026-11-21__e0a063079e89367a45eea6c8db65c136__.qs
         - data_traits_bien_2_2026-11-21__4c067146b45629e869b3d4c3902db429__.qs
         - data_traits_bien_3_2026-11-21__f93b0aa95da0d39ced316a9fdeb0cc2b__.qs
+  - artefact_id: trait_unit_conversions
+    contract_version: 1.0.0
+    note: >-
+      dev: the trait unit registry in config/trait_units of the
+      VegVault-Trait_data branch 2.0.0 at 5ab2904, 65 rules; the committed
+      file has 7203 bytes and SHA-256
+      f1cd8e9f6a4464d8a6fa03e3f82f935c18ead90b8afde60bfef7e682fefaa0f5. A
+      Windows checkout may hold it with CRLF line ends, which changes its
+      size and checksum but not its content. release: placeholder until
+      VegVault-Trait_data tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files:
+        - unit_conversions.csv
+  - artefact_id: trait_derivations
+    contract_version: 1.0.0
+    note: >-
+      dev: the trait unit registry in config/trait_units of the
+      VegVault-Trait_data branch 2.0.0 at 5ab2904, 1 rule; the committed
+      file has 216 bytes and SHA-256
+      d44d3746839a2b769e9b79dadfc42e89f04853826fb8cc822b3330c658ec050c. A
+      Windows checkout may hold it with CRLF line ends, which changes its
+      size and checksum but not its content. release: placeholder until
+      VegVault-Trait_data tags v2.0.0.
+    release:
+      tag: null
+      files: []
+    dev:
+      files:
+        - trait_derivations.csv
   - artefact_id: chelsa_neoclimate
     contract_version: 1.1.0
     note: Placeholder until VegVault-abiotic_data tags v2.0.0.

@@ -30,7 +30,8 @@ testthat::test_that("build_producer_import_targets() declares the stage", {
     c(
       "data_splot_plots", "data_bien_plots", "data_fossilpol_assembly",
       "data_fossilpol_age_uncertainty", "data_try_traits",
-      "data_bien_traits", "data_hwsd_soil",
+      "data_bien_traits", "data_hwsd_soil", "data_trait_unit_conversions",
+      "data_trait_derivations",
       stringr::str_c("data_chelsa_neoclimate_", vec_variables),
       stringr::str_c("data_chelsa_trace21k_palaeoclimate_", vec_variables)
     )
@@ -39,7 +40,8 @@ testthat::test_that("build_producer_import_targets() declares the stage", {
     c(
       "check_fossilpol_relations", "data_chelsa_trace21k_coordinates",
       "vec_chelsa_trace21k_ages", "data_chelsa_neoclimate_coordinates",
-      "list_producer_pins", "vec_keys_fossilpol_assembly_dataset_id"
+      "list_producer_pins", "vec_keys_fossilpol_assembly_dataset_id",
+      "data_trait_unit_rules", "check_trait_rule_keys"
     )
 
   testthat::expect_true(
@@ -185,6 +187,32 @@ testthat::test_that("build_producer_import_targets() wires the inputs", {
         purrr::pluck(list_targets, "list_producer_pins", "deps")
     )
   )
+
+  # The unit rules come from the registry; the check reads both trait
+  #   artefacts and the rules
+  testthat::expect_true(
+    base::all(
+      c("data_trait_unit_conversions", "data_trait_derivations") %in%
+        purrr::pluck(list_targets, "data_trait_unit_rules", "deps")
+    )
+  )
+
+  testthat::expect_true(
+    base::all(
+      c("data_try_traits", "data_bien_traits", "data_trait_unit_rules") %in%
+        purrr::pluck(list_targets, "check_trait_rule_keys", "deps")
+    )
+  )
+
+  # A rule registry has no place, so the subset keeps all of it
+  vec_command_rules <-
+    purrr::pluck(
+      list_targets, "data_trait_unit_conversions", "command", "expr"
+    ) |>
+    base::deparse() |>
+    stringr::str_flatten()
+
+  testthat::expect_match(vec_command_rules, "flag_keep_all = TRUE")
 })
 
 testthat::test_that("build_producer_import_targets() runs on fixtures", {
@@ -302,6 +330,21 @@ testthat::test_that("build_producer_import_targets() runs on fixtures", {
       n_datasets
     ),
     c(2L, 2L, 2L)
+  )
+
+  list_rules <-
+    targets::tar_read(data_trait_unit_rules, store = path_store)
+
+  testthat::expect_named(list_rules, c("unit_conversions", "trait_derivations"))
+
+  testthat::expect_equal(
+    purrr::map_int(.x = list_rules, .f = base::nrow),
+    c(unit_conversions = 6L, trait_derivations = 2L)
+  )
+
+  testthat::expect_equal(
+    base::nrow(targets::tar_read(check_trait_rule_keys, store = path_store)),
+    4L
   )
 
   # A second run builds only the targets that run every time

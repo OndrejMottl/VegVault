@@ -56,8 +56,9 @@ targets::tar_option_set(
 # Proposed for the gridpoint and database assembly stages; the names are
 #   agreed with the database-core lane before those stages import them.
 #   - `data_<artefact id>` for splot_plots, bien_plots, fossilpol_assembly,
-#     fossilpol_age_uncertainty, try_traits, bien_traits and hwsd_soil:
-#     the validated artefact as a named list of tables, one per file
+#     fossilpol_age_uncertainty, try_traits, bien_traits, hwsd_soil,
+#     trait_unit_conversions and trait_derivations: the validated artefact
+#     as a named list of tables, one per file
 #   - `data_chelsa_neoclimate_<variable>` and
 #     `data_chelsa_trace21k_palaeoclimate_<variable>` for bio1, bio4,
 #     bio6, bio12, bio15, bio18 and bio19: the same, per variable
@@ -65,6 +66,11 @@ targets::tar_option_set(
 #     `data_chelsa_neoclimate_coordinates`: the grid of the gridpoints
 #   - `check_fossilpol_relations`: the relations between the FOSSILPOL
 #     artefacts hold
+#   - `data_trait_unit_rules`: the trait unit rules of the trait producer
+#     (`unit_conversions` and `trait_derivations`, with the columns of
+#     TraitUnitConversion and TraitDerivation without the id), and
+#     `check_trait_rule_keys`: every rule key of `try_traits` and
+#     `bien_traits` is in them
 #   - `list_producer_pins`: the pins for save_build_manifest()
 #   - `profile_build`: the profile of the latest run
 # In the `subset` profile every data target holds only the subset box.

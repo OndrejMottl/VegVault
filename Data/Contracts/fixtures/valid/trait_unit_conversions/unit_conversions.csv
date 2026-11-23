@@ -1,0 +1,7 @@
+"conversion_rule_key","rule_version","source_provider","source_trait_id","source_dataset_key","normalized_original_unit","standardized_unit","trait_dimension","operation","multiplier","evidence"
+"try_height_m","1.0.0","TRY","3106",,"m","m","length","identity",1,"Synthetic rule"
+"try_height_cm_dataset_90","1.0.0","TRY","3106","90","cm","m","length","multiply",0.01,"Synthetic rule"
+"try_leaf_area_3114_mm2","1.0.0","TRY","3114",,"mm2","mm2","area","identity",1,"Synthetic rule"
+"try_leaf_area_3114_cm2","1.0.0","TRY","3114",,"cm2","mm2","area","multiply",100,"Synthetic rule"
+"bien_height","1.0.0","BIEN","whole plant height",,"m","m","length","identity",1,"Synthetic rule"
+"bien_leaf_area","1.0.0","BIEN","leaf area",,"mm2","mm2","area","identity",1,"Synthetic rule"

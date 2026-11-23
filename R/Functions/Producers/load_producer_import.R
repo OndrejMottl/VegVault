@@ -120,7 +120,10 @@ load_producer_import <- function(
   #--------------------------------------------------#
 
   list_artefact <-
-    load_producer_artefact(data_files = data_files_selected)
+    load_producer_artefact(
+      data_files = data_files_selected,
+      contract = contract
+    )
 
   validate_producer_artefact(
     contract = contract,
