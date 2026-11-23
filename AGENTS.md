@@ -13,7 +13,7 @@ This file is the universal entry point for assistants working on the VegVault da
 | VegVault project layout, `{targets}` stages, `config.yml`, `secrets.yaml`, stage ownership | `.ai/analysis-structure.md` |
 | SQLite schema, imports, database assembly, or database validation | `.ai/database.md` |
 | Quarto, website, README, styles, or rendered documentation | `.ai/quarto.md` |
-| Git, branches, worktrees, commits, or pull requests | `.ai/git-workflow.md` |
+| Git, branches, worktrees, commits, pull requests, or writing issues, PRs, and GitHub comments | `.ai/git-workflow.md` |
 | Suggesting, writing, or reviewing a commit message | `.ai/git-workflow.md`, then `.ai/commit-messages.md` |
 | Debugging or bug fixes | `.ai/debugging.md` |
 | Reviewing changed files | `.ai/review-checklist.md` |
