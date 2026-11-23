@@ -1,8 +1,9 @@
 #' @title Build the template of the tables of one source
 #' @description
 #' Return the empty tables that every source of the database (sPlotOpen,
-#' BIEN plots, FOSSILPOL, TRY, BIEN traits) is prepared into before ids are
-#' assigned. The tables hold natural keys (names and texts) only, so the
+#' BIEN plots, FOSSILPOL, TRY, BIEN traits, the gridpoints, the climate and
+#' soil variables and the taxon classification) is prepared into before
+#' ids are assigned. The tables hold natural keys (names and texts) only, so the
 #' sources can be combined and given ids in one step.
 #' @return
 #' A named list of zero-row tibbles, in this order:
@@ -27,6 +28,8 @@
 #'   \item `taxa`: `taxon_name`;
 #'   \item `taxon_references`: `taxon_name`, `reference_detail`,
 #'     `mandatory`;
+#'   \item `taxon_classification`: `taxon_name`, `species_name`,
+#'     `genus_name`, `family_name`;
 #'   \item `sample_taxa`: `sample_name`, `taxon_name`, `value`;
 #'   \item `trait_domains`: `trait_domain_name`, `trait_unit`;
 #'   \item `traits`: `trait_name`, `trait_domain_name`;
@@ -117,6 +120,12 @@ build_source_table_template <- function() {
         taxon_name = vec_chr,
         reference_detail = vec_chr,
         mandatory = vec_lgl
+      ),
+      taxon_classification = tibble::tibble(
+        taxon_name = vec_chr,
+        species_name = vec_chr,
+        genus_name = vec_chr,
+        family_name = vec_chr
       ),
       sample_taxa = tibble::tibble(
         sample_name = vec_chr,

@@ -24,10 +24,11 @@
 #' `SamplingMethodID`, `References`, `DatasetSourceTypeReference`,
 #' `DatasetSourcesReference`, `SamplingMethodReference`, `Datasets`,
 #' `DatasetReferences`, `SampleSizeID`, `Samples`, `SampleReference`,
-#' `DatasetSample`, `SampleUncertainty`, `Taxa`, `TaxonReference`,
-#' `SampleTaxa`, `TraitsDomain`, `Traits`, `TraitsReference`,
-#' `TraitUnitConversion`, `TraitDerivation`, `TraitsValue`,
-#' `AbioticVariable`, `AbioticVariableReference` and `AbioticData`.
+#' `DatasetSample`, `SampleUncertainty`, `Taxa`, `TaxonClassification`,
+#' `TaxonReference`, `SampleTaxa`, `TraitsDomain`, `Traits`,
+#' `TraitsReference`, `TraitUnitConversion`, `TraitDerivation`,
+#' `TraitsValue`, `AbioticVariable`, `AbioticVariableReference` and
+#' `AbioticData`.
 #' @details
 #' Ids of lookup tables and references follow the first source that uses a
 #' value, then the value (`prepare_lookup_ids()`); ids of datasets and
@@ -46,7 +47,11 @@
 #' An abiotic variable used by several sources (present-day and
 #' palaeoclimate) is one row and must have the same unit and details in
 #' each; a sample has at most one value per variable. Either conflict
-#' aborts.
+#' aborts. A taxon has at most one classification, and the taxon and its
+#' species, genus and family must be taxa of the sources (the
+#' classification source of `prepare_classification_tables()` adds its
+#' rank names; it comes last, so they get ids after the taxa of the
+#' sources). A repeated or unknown name aborts.
 #' Aborts when `list_source_tables` is not a named list of source tables,
 #' or when a table has other columns than the template.
 #' @seealso [build_source_table_template()], [save_vegvault_database()]
@@ -581,6 +586,72 @@ build_database_tables <- function(
   data_taxon_ids <-
     dplyr::select(data_taxa, taxon_id, taxon_name)
 
+  # A taxon has at most one classification; its ranks are taxa as well
+  data_classification_bound <-
+    purrr::chuck(list_bound, "taxon_classification")
+
+  vec_classified_names <-
+    dplyr::pull(data_classification_bound, taxon_name)
+
+  vec_classified_repeated <-
+    base::unique(
+      vec_classified_names[base::duplicated(vec_classified_names)]
+    )
+
+  if (
+    base::length(vec_classified_repeated) > 0L
+  ) {
+    cli::cli_abort(
+      "TaxonClassification: {base::length(vec_classified_repeated)}
+      tax{?on has/a have} more than one classification:
+      {.val {utils::head(vec_classified_repeated, 5L)}}."
+    )
+  }
+
+  data_taxon_classification <-
+    data_classification_bound |>
+    prepare_table_foreign_key(
+      data_parent = data_taxon_ids,
+      vec_key_columns = "taxon_name",
+      name_id = "taxon_id",
+      name_table = "TaxonClassification"
+    ) |>
+    prepare_table_foreign_key(
+      data_parent = dplyr::select(
+        data_taxon_ids,
+        taxon_species = taxon_id,
+        species_name = taxon_name
+      ),
+      vec_key_columns = "species_name",
+      name_id = "taxon_species",
+      name_table = "TaxonClassification",
+      flag_allow_missing = TRUE
+    ) |>
+    prepare_table_foreign_key(
+      data_parent = dplyr::select(
+        data_taxon_ids,
+        taxon_genus = taxon_id,
+        genus_name = taxon_name
+      ),
+      vec_key_columns = "genus_name",
+      name_id = "taxon_genus",
+      name_table = "TaxonClassification",
+      flag_allow_missing = TRUE
+    ) |>
+    prepare_table_foreign_key(
+      data_parent = dplyr::select(
+        data_taxon_ids,
+        taxon_family = taxon_id,
+        family_name = taxon_name
+      ),
+      vec_key_columns = "family_name",
+      name_id = "taxon_family",
+      name_table = "TaxonClassification",
+      flag_allow_missing = TRUE
+    ) |>
+    dplyr::select(taxon_id, taxon_species, taxon_genus, taxon_family) |>
+    dplyr::arrange(taxon_id)
+
   #--------------------------------------------------#
   # Links, values and trait values -----
   #--------------------------------------------------#
@@ -787,6 +858,7 @@ build_database_tables <- function(
         ) |>
         dplyr::select(sample_id, iteration, age),
       Taxa = data_taxon_ids,
+      TaxonClassification = data_taxon_classification,
       TaxonReference = prepare_reference_links(
         data_links = purrr::chuck(list_bound, "taxon_references"),
         data_entity_ids = data_taxon_ids,
