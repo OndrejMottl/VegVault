@@ -78,25 +78,24 @@ artefacts:
   - artefact_id: try_traits
     contract_version: 2.0.0
     note: >-
-      dev: the converted pipeline in its dev profile (VegVault-Trait_data
-      issue 15) on TRY request 28498, 897726 records; git-ignored in
-      Outputs/Data_temp (36408403 bytes, SHA-256
-      7b13da4f4e833e3222bfc5ec1179435036e87ae270bfa3572bbc0a8f1a8b8002).
+      dev: the 2.0.0 release build on the VegVault-Trait_data branch 2.0.0
+      at 5ab2904, committed in Outputs/Data; TRY request 28498, 897183
+      records (36346241 bytes, SHA-256
+      f86bd39190c6a4b3b09f47b51e8bcdd94c1cfe1af288289dd529ea5e525ec654).
       release: placeholder until VegVault-Trait_data tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      directory: Outputs/Data_temp
       files:
-        - data_trait_try_2026-11-21__d0efb27990209449b88846ad2f64e3f0__.qs
+        - data_trait_try_2026-11-21__34ea0a08bac7af8869832f1a6456a315__.qs
   - artefact_id: bien_traits
     contract_version: 1.0.0
     note: >-
-      dev: the converted pipeline in its dev profile (VegVault-Trait_data
-      issue 15) on the BIEN download of 2026-11-19, 10023769 records in
-      parts 0 to 3; git-ignored in Outputs/Data_temp. Bytes and SHA-256 by
-      part: 0, 41311322,
+      dev: the 2.0.0 release build on the VegVault-Trait_data branch 2.0.0
+      at 5ab2904, committed in Outputs/Data; BIEN download of 2026-11-19,
+      10023769 records in parts 0 to 3. Bytes and SHA-256 by part: 0,
+      41311322,
       9f670fc6fc9069e47c123cbb552dd3d39d7be4f3d634f4ddd38b2c79f10e7153; 1,
       47116914,
       9e8b7d40572b0a716daca02145e1daf7c94bea6c0f246f9e6cbecfdb91475118; 2,
@@ -109,7 +108,6 @@ artefacts:
       tag: null
       files: []
     dev:
-      directory: Outputs/Data_temp
       files:
         - data_traits_bien_0_2026-11-21__cd2de89218090bc15cd4d291015867ff__.qs
         - data_traits_bien_1_2026-11-21__e0a063079e89367a45eea6c8db65c136__.qs
