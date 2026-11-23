@@ -23,7 +23,8 @@ testthat::test_that("diagnose_build_producers() passes a default build", {
 
   testthat::expect_equal(dplyr::pull(res, status), "pass")
 
-  testthat::expect_equal(dplyr::pull(res, observed), "1")
+  # The rows of the sPlot, TRY and BIEN trait pins
+  testthat::expect_equal(dplyr::pull(res, observed), "3")
 })
 
 testthat::test_that("diagnose_build_producers() passes a release build", {
@@ -61,11 +62,17 @@ testthat::test_that("diagnose_build_producers() needs a tag to release", {
       list_build_manifest = purrr::chuck(list_build, "list_build_manifest")
     )
 
-  testthat::expect_equal(dplyr::pull(res, scope), "splot_plots")
+  # Every producer of the release lacks its tag
+  testthat::expect_equal(
+    dplyr::pull(res, scope),
+    c("bien_traits", "splot_plots", "try_traits")
+  )
 
-  testthat::expect_equal(dplyr::pull(res, status), "fail")
+  testthat::expect_true(base::all(dplyr::pull(res, status) == "fail"))
 
-  testthat::expect_match(dplyr::pull(res, message), "tag")
+  testthat::expect_true(
+    base::all(stringr::str_detect(dplyr::pull(res, message), "tag"))
+  )
 })
 
 testthat::test_that("diagnose_build_producers() fails rows unlike the pins", {
@@ -77,7 +84,14 @@ testthat::test_that("diagnose_build_producers() fails rows unlike the pins", {
   run_with_database(
     path_database = purrr::chuck(list_build, "path_database"),
     fn = ~ {
-      DBI::dbExecute(.x, "UPDATE BuildProducers SET tag = 'v9.9.9'")
+      DBI::dbExecute(
+        .x,
+        stringr::str_c(
+          "UPDATE BuildProducers SET tag = 'v9.9.9'",
+          "WHERE producer = 'splot_plots'",
+          sep = " "
+        )
+      )
       DBI::dbExecute(
         .x,
         "INSERT INTO BuildProducers VALUES (2, 'bien_plots', NULL)"
@@ -110,7 +124,7 @@ testthat::test_that("diagnose_build_producers() fails a missing row", {
   run_with_database(
     path_database = purrr::chuck(list_build, "path_database"),
     fn = DBI::dbExecute,
-    statement = "DELETE FROM BuildProducers"
+    statement = "DELETE FROM BuildProducers WHERE producer = 'splot_plots'"
   )
 
   res <-
