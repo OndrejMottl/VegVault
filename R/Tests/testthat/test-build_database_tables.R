@@ -100,8 +100,9 @@ testthat::test_that("build_database_tables() returns the schema tables", {
       "SamplingMethodID", "References", "DatasetSourceTypeReference",
       "DatasetSourcesReference", "SamplingMethodReference", "Datasets",
       "DatasetReferences", "SampleSizeID", "Samples", "SampleReference",
-      "DatasetSample", "SampleUncertainty", "Taxa", "TaxonReference",
-      "SampleTaxa", "TraitsDomain", "Traits", "TraitsReference",
+      "DatasetSample", "SampleUncertainty", "Taxa", "TaxonClassification",
+      "TaxonReference", "SampleTaxa", "TraitsDomain", "Traits",
+      "TraitsReference",
       "TraitUnitConversion", "TraitDerivation", "TraitsValue",
       "AbioticVariable", "AbioticVariableReference", "AbioticData"
     )
@@ -516,6 +517,222 @@ testthat::test_that("build_database_tables() refuses abiotic conflicts", {
       )
     ),
     regexp = "AbioticData"
+  )
+})
+
+testthat::test_that("build_database_tables() builds the classification", {
+  list_inputs <-
+    build_test_database_sources()
+
+  list_sources <-
+    purrr::chuck(list_inputs, "list_source_tables")
+
+  vec_source_taxa <-
+    purrr::chuck(list_sources, "splot", "sample_taxa") |>
+    dplyr::pull(taxon_name) |>
+    base::unique() |>
+    base::sort(method = "radix") |>
+    utils::head(2L)
+
+  list_classification <-
+    prepare_classification_tables(
+      data_classification = tibble::tibble(
+        taxon_name = vec_source_taxa,
+        species_name = c("Derived species", NA),
+        genus_name = "Derived genus",
+        family_name = "Derived family"
+      ),
+      list_source = base::list(
+        references = base::list(
+          base::list(
+            role = "taxon",
+            mandatory = FALSE,
+            detail = "taxospace"
+          )
+        )
+      ),
+      verbose = FALSE
+    )
+
+  res_without <-
+    build_database_tables(
+      list_source_tables = list_sources,
+      data_unit_conversions = purrr::chuck(
+        list_inputs,
+        "data_unit_conversions"
+      ),
+      data_trait_derivations = purrr::chuck(
+        list_inputs,
+        "data_trait_derivations"
+      )
+    )
+
+  res <-
+    build_database_tables(
+      list_source_tables = c(
+        list_sources,
+        base::list(taxospace = list_classification)
+      ),
+      data_unit_conversions = purrr::chuck(
+        list_inputs,
+        "data_unit_conversions"
+      ),
+      data_trait_derivations = purrr::chuck(
+        list_inputs,
+        "data_trait_derivations"
+      )
+    )
+
+  data_taxa_without <-
+    dplyr::arrange(purrr::chuck(res_without, "Taxa"), taxon_id)
+
+  data_taxa <-
+    dplyr::arrange(purrr::chuck(res, "Taxa"), taxon_id)
+
+  n_source_taxa <-
+    base::nrow(data_taxa_without)
+
+  # The source taxa keep their ids, and the rank names come after them
+  testthat::expect_equal(base::nrow(data_taxa), n_source_taxa + 3L)
+  testthat::expect_equal(
+    dplyr::filter(data_taxa, taxon_id <= n_source_taxa),
+    data_taxa_without
+  )
+  data_rank_taxa <-
+    dplyr::filter(data_taxa, taxon_id > n_source_taxa)
+
+  testthat::expect_equal(
+    dplyr::pull(data_rank_taxa, taxon_name),
+    c("Derived family", "Derived genus", "Derived species")
+  )
+
+  vec_taxon_ids <-
+    rlang::set_names(
+      dplyr::pull(data_taxa, taxon_id),
+      dplyr::pull(data_taxa, taxon_name)
+    )
+
+  data_classification <-
+    purrr::chuck(res, "TaxonClassification")
+
+  testthat::expect_named(
+    data_classification,
+    c("taxon_id", "taxon_species", "taxon_genus", "taxon_family")
+  )
+  testthat::expect_equal(base::nrow(data_classification), 5L)
+
+  data_first <-
+    data_classification |>
+    dplyr::filter(taxon_id == vec_taxon_ids[[vec_source_taxa[1]]])
+
+  testthat::expect_equal(
+    dplyr::pull(data_first, taxon_species),
+    vec_taxon_ids[["Derived species"]]
+  )
+  testthat::expect_equal(
+    dplyr::pull(data_first, taxon_genus),
+    vec_taxon_ids[["Derived genus"]]
+  )
+  testthat::expect_equal(
+    dplyr::pull(data_first, taxon_family),
+    vec_taxon_ids[["Derived family"]]
+  )
+
+  data_second <-
+    data_classification |>
+    dplyr::filter(taxon_id == vec_taxon_ids[[vec_source_taxa[2]]])
+
+  testthat::expect_equal(dplyr::pull(data_second, taxon_species), NA_integer_)
+
+  # The classification reference is on the three rank names
+  id_taxospace <-
+    purrr::chuck(res, "References") |>
+    dplyr::filter(reference_detail == "taxospace") |>
+    dplyr::pull(reference_id)
+
+  testthat::expect_equal(
+    purrr::chuck(res, "TaxonReference") |>
+      dplyr::filter(reference_id == id_taxospace) |>
+      dplyr::pull(taxon_id) |>
+      base::sort(),
+    base::unname(
+      vec_taxon_ids[c("Derived family", "Derived genus", "Derived species")]
+    )
+  )
+})
+
+testthat::test_that("build_database_tables() checks the classification", {
+  list_inputs <-
+    build_test_database_sources()
+
+  list_sources <-
+    purrr::chuck(list_inputs, "list_source_tables")
+
+  name_source_taxon <-
+    purrr::chuck(list_sources, "splot", "sample_taxa") |>
+    dplyr::pull(taxon_name) |>
+    utils::head(1L)
+
+  list_once <-
+    prepare_classification_tables(
+      data_classification = tibble::tibble(
+        taxon_name = name_source_taxon,
+        species_name = NA_character_,
+        genus_name = "Derived genus",
+        family_name = "Derived family"
+      ),
+      list_source = build_test_source_config(),
+      verbose = FALSE
+    )
+
+  # Two sources classify the same taxon
+  testthat::expect_error(
+    build_database_tables(
+      list_source_tables = c(
+        list_sources,
+        base::list(class_a = list_once, class_b = list_once)
+      ),
+      data_unit_conversions = purrr::chuck(
+        list_inputs,
+        "data_unit_conversions"
+      ),
+      data_trait_derivations = purrr::chuck(
+        list_inputs,
+        "data_trait_derivations"
+      )
+    ),
+    regexp = "TaxonClassification"
+  )
+
+  list_unknown <-
+    purrr::list_modify(
+      build_source_table_template(),
+      taxa = tibble::tibble(taxon_name = "Derived family"),
+      taxon_classification = tibble::tibble(
+        taxon_name = "Not a taxon",
+        species_name = NA_character_,
+        genus_name = NA_character_,
+        family_name = "Derived family"
+      )
+    )
+
+  # A classified name that is no taxon
+  testthat::expect_error(
+    build_database_tables(
+      list_source_tables = c(
+        list_sources,
+        base::list(class_c = list_unknown)
+      ),
+      data_unit_conversions = purrr::chuck(
+        list_inputs,
+        "data_unit_conversions"
+      ),
+      data_trait_derivations = purrr::chuck(
+        list_inputs,
+        "data_trait_derivations"
+      )
+    ),
+    regexp = "TaxonClassification"
   )
 })
 

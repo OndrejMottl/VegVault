@@ -13,9 +13,9 @@ testthat::test_that("build_source_table_template() lists the tables", {
       "datasets", "source_type_references", "data_source_references",
       "sampling_method_references", "dataset_references", "samples",
       "sample_references", "dataset_samples", "sample_uncertainty", "taxa",
-      "taxon_references", "sample_taxa", "trait_domains", "traits",
-      "trait_references", "trait_values", "abiotic_variables",
-      "abiotic_variable_references", "abiotic_values"
+      "taxon_references", "taxon_classification", "sample_taxa",
+      "trait_domains", "traits", "trait_references", "trait_values",
+      "abiotic_variables", "abiotic_variable_references", "abiotic_values"
     )
   )
 
@@ -63,6 +63,19 @@ testthat::test_that("build_source_table_template() gives columns and types", {
   testthat::expect_type(
     dplyr::pull(purrr::chuck(res, "abiotic_values"), abiotic_value),
     "double"
+  )
+
+  testthat::expect_named(
+    purrr::chuck(res, "taxon_classification"),
+    c("taxon_name", "species_name", "genus_name", "family_name")
+  )
+  testthat::expect_true(
+    base::all(
+      purrr::map_lgl(
+        .x = purrr::chuck(res, "taxon_classification"),
+        .f = base::is.character
+      )
+    )
   )
 
   # Every reference table has the text and the mandatory flag

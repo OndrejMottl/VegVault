@@ -456,6 +456,18 @@ default:
       journal_mode: "DELETE"
       synchronous: "FULL"
       foreign_keys: "ON"
+    # Taxon classification as in v1.0.0 (classify_taxa()): names matched
+    #   by the Global Names Verifier ("gnr") and classified in the GBIF
+    #   Backbone Taxonomy ("gbif") with {taxospace}
+    classification:
+      # Batches of names, each cached by {targets}; a new number
+      #   classifies every name again
+      n_batches: 1024
+      # Classified with every batch; a batch in which it gets no family
+      #   stops, so that no result of a service failure is kept
+      check_taxon: "Quercus robur"
+      db_name: "gnr"
+      db_class: "gbif"
     # Fixed values and references of each source, with the texts of
     #   v1.0.0. A reference has a role: the source type, or every data
     #   source, sampling method, taxon or trait of the source. References
@@ -588,6 +600,14 @@ default:
           - role: "abiotic_variable"
             mandatory: true
             detail: "FAO & IIASA. 2023. Harmonized World Soil Database version 2.0. Rome and Laxenburg. https://doi.org/10.4060/cc3823en"
+      # Taxon classification: the v1.0.0 reference of every species,
+      #   genus and family name it gives. It comes last, as in v1.0.0, so
+      #   its names and its reference get the last ids.
+      taxospace:
+        references:
+          - role: "taxon"
+            mandatory: false
+            detail: "taxospace"
     # References of the database itself, linked to nothing; the first
     #   gets id 1
     general:
