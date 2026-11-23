@@ -62,6 +62,37 @@ testthat::test_that("load_producer_artefact() reads RDS files", {
   testthat::expect_equal(res, list(example.rds = data_example))
 })
 
+testthat::test_that("load_producer_artefact() reads csv files", {
+  path_csv <-
+    here::here(
+      "Data", "Contracts", "fixtures", "valid", "trait_unit_conversions",
+      "unit_conversions.csv"
+    )
+
+  contract <-
+    load_producer_contract(
+      path_contract = here::here(
+        "Data", "Contracts", "trait_unit_conversions.yml"
+      )
+    )
+
+  res <-
+    load_producer_artefact(
+      data_files = tibble::tibble(
+        file_name = "unit_conversions.csv",
+        path = path_csv,
+        format = "csv"
+      ),
+      contract = contract
+    )
+
+  # With the contract's classes, the file reads back as it was built
+  testthat::expect_identical(
+    res,
+    build_trait_unit_conversions_fixture(contract = contract)
+  )
+})
+
 
 #----------------------------------------------------------#
 # Inputs -----
@@ -71,12 +102,24 @@ testthat::test_that("load_producer_artefact() validates its input", {
   testthat::expect_error(
     load_producer_artefact(
       data_files = tibble::tibble(
+        file_name = "example.txt",
+        path = "example.txt",
+        format = "txt"
+      )
+    ),
+    regexp = "txt"
+  )
+
+  # A csv file needs the column classes of its contract
+  testthat::expect_error(
+    load_producer_artefact(
+      data_files = tibble::tibble(
         file_name = "example.csv",
         path = "example.csv",
         format = "csv"
       )
     ),
-    regexp = "csv"
+    regexp = "contract"
   )
 
   testthat::expect_error(

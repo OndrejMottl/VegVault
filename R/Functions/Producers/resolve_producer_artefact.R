@@ -24,7 +24,7 @@
 #' A tibble with one row per file of the artefact and the columns
 #' `artefact_id`, `mode`, `tag` (`NA` in `dev` mode), `file_name`, `path`,
 #' `size` (bytes), `sha256` and `format` (`"qs2"` for `.qs`, `"rds"` for
-#' `.rds`).
+#' `.rds`, `"csv"` for `.csv`).
 #' @details
 #' In `dev` mode the files listed under `dev` are read from
 #' `<dir_dev_root>/<repository name>/<dev_directory>/`, the entry's own
@@ -35,7 +35,7 @@
 #' `save_release_file()`. Aborts, naming the artefact, for an unknown
 #' artefact, a placeholder (no dev files, or no release tag), a missing
 #' local file, a failed download, a checksum or size mismatch, or a file
-#' type other than `.qs` and `.rds`.
+#' type other than `.qs`, `.rds` and `.csv`.
 #' @examples
 #' \dontrun{
 #' data_files_splot <-
@@ -269,9 +269,12 @@ resolve_producer_artefact <- function(
       "[.][A-Za-z0-9]+$"
     )
 
+  vec_formats_known <-
+    c(".qs" = "qs2", ".rds" = "rds", ".csv" = "csv")
+
   vec_unsupported <-
     dplyr::pull(data_files_found, file_name)[
-      !vec_extensions %in% c(".qs", ".rds")
+      !vec_extensions %in% base::names(vec_formats_known)
     ]
 
   if (
@@ -279,8 +282,8 @@ resolve_producer_artefact <- function(
   ) {
     cli::cli_abort(
       c(
-        "Files of {.val {artefact_id}} are neither {.val .qs} nor
-        {.val .rds}:",
+        "Files of {.val {artefact_id}} are not {.val .qs}, {.val .rds} or
+        {.val .csv}:",
         rlang::set_names(vec_unsupported, "x")
       )
     )
@@ -289,7 +292,7 @@ resolve_producer_artefact <- function(
   res <-
     data_files_found |>
     dplyr::mutate(
-      format = dplyr::if_else(vec_extensions == ".qs", "qs2", "rds")
+      format = base::unname(vec_formats_known[vec_extensions])
     )
 
   return(res)

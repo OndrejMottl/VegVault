@@ -17,6 +17,8 @@ Status: proposed for gate G1 of the 2.0.0 release. How producers use the contrac
 | `chelsa_neoclimate` | VegVault-abiotic_data | `Outputs/Data/Neoclimate/CHELSA_bio_<NN>_<date>__<hash>__.qs`, one per variable | active |
 | `chelsa_trace21k_palaeoclimate` | VegVault-abiotic_data | `Outputs/Data/Palaoclimate/bio<NN>_batch_<1, 2, 3, 4>_<date>__<hash>__.qs`, four batches per variable | active |
 | `hwsd_soil` | VegVault-abiotic_data | `Outputs/Data/HWSD/hwsd_data_<date>__<hash>__.qs` | active; HWSD v2.2, renamed from `wosis_soil` (VegVault issue 82) |
+| `trait_unit_conversions` | VegVault-Trait_data | `config/trait_units/unit_conversions.csv` | active; the trait unit registry, stored as `TraitUnitConversion` (VegVault issue 95) |
+| `trait_derivations` | VegVault-Trait_data | `config/trait_units/trait_derivations.csv` | active; the trait derivation rules, stored as `TraitDerivation` (VegVault issue 95) |
 
 FOSSILPOL has no references contract: VegVault takes references from the assembly's `doi` and `source_of_data` and does not read the producer's `Outputs/Meta_and_references/`.
 
@@ -52,6 +54,10 @@ A contract is a YAML file named `<contract_id>.yml`. `load_producer_contract()` 
 ### File names
 
 `RUtilpol::save_latest_file()` names files `<name>_<date>__<hash>__.<extension>`. A template writes the name with placeholders: `{date}` (`YYYY-MM-DD`), `{hash}` (32 lower-case hexadecimal characters), `{partition}` and `{variable}`; every other character is literal. The hash is `rlang::hash()` of the saved R object, not a checksum of the file, so file integrity is checked separately by the pin manifest. Files ending in `.qs` hold `qs2` content (written by `qs2::qs_save()`, read with `qs2::qs_read()`); files ending in `.rds` are read with `readRDS()`.
+
+A file kept in the producer repository rather than saved by `save_latest_file()`, such as the trait unit registry, has a fixed name: a template with neither `{date}` nor `{hash}` (`'unit_conversions.csv'`). A template with only one of the two is an error.
+
+Files ending in `.csv` are text tables, read with `load_producer_csv()`, which gives each column the `class` of its contract (other columns are read as text, and empty fields are missing values). A `.csv` column can only have an atomic class (`character`, `numeric`, `double`, `integer`, `logical` or `Date`). A value that cannot be read as its class makes the file unreadable (`file_unreadable`).
 
 Quote templates and tokens in YAML (`'data_splot_{date}__{hash}__.qs'`, `file_token: '01'`), and write any text that contains a colon followed by a space as a folded block (`evidence: >-`), because YAML would otherwise read it as a nested field.
 
@@ -105,7 +111,7 @@ validate_producer_artefact(
 
 `validate_producer_artefact()` takes the contract (a path or a loaded contract) and either the paths of every file of the artefact (`path_artefact`) or the objects in memory (`data_artefact`: a data frame, or a list of data frames named by their file names). For contracts with variables, `vec_variables` limits the check to some variables, so a large artefact can be validated one variable at a time. It checks file names and partitions, object classes and row counts, columns, nested elements, values, variable checks, keys, rounded keys and dependencies, and reports every violation at once; an empty artefact is an error. On failure it aborts with an error of class `producer_contract_error` whose message names the contract, file, column and rule, and whose field `findings` holds the full table. On success it returns the artefact unchanged, invisibly. It never writes to a database or a file. `diagnose_producer_artefact()` returns the same findings table without aborting.
 
-Dependencies: `assertthat`, `cli`, `dplyr`, `purrr`, `qs2`, `rlang`, `stringr`, `tibble`, `vctrs` and `yaml` for the validator and the copy check; `here` and `tidyr` for the fixture builders; `testthat` and `withr` for the tests. Every producer lockfile holds all of them. `save_contract_copy()` and the tests of the copy functions also call the `git` executable.
+Dependencies: `assertthat`, `cli`, `dplyr`, `purrr`, `qs2`, `readr`, `rlang`, `stringr`, `tibble`, `vctrs` and `yaml` for the validator and the copy check; `here` and `tidyr` for the fixture builders; `testthat` and `withr` for the tests. Every producer lockfile holds all of them. `save_contract_copy()` and the tests of the copy functions also call the `git` executable.
 
 Run the tests with `Rscript R/Tests/Run_tests.R` from the repository root. The script `tests/test_contract_fixtures_integration.R` drives the v1 database writers with the fixtures in a temporary SQLite file.
 
@@ -124,8 +130,10 @@ Run the tests with `Rscript R/Tests/Run_tests.R` from the repository root. The s
 | `chelsa_neoclimate` | One bio18 value is the storage limit 6553.5. |
 | `chelsa_trace21k_palaeoclimate` | One bio1 value is 99 degrees. |
 | `hwsd_soil` | Soil-group codes are stored as text. |
+| `trait_unit_conversions` | Two rules share `conversion_rule_key`. |
+| `trait_derivations` | One rule derives by `multiply`, an operation the producer cannot apply. |
 
-The fixtures are built by the `build_<contract_id>_fixture()` functions and written by `R/Contracts/build_contract_fixtures.R`, which checks every valid fixture passes and every broken one fails before writing. The output is deterministic: rebuilding gives byte-identical files, and the tests of each builder check that the shipped files equal what the builder produces. Existing fixtures are kept unless `flag_rewrite` is set to `TRUE` in the script, which deletes and rewrites them (a changed fixture gets a new hash in its file name).
+The fixtures are built by the `build_<contract_id>_fixture()` functions and written by `R/Contracts/build_contract_fixtures.R`, which checks every valid fixture passes and every broken one fails before writing. `.csv` fixtures are written by `save_producer_fixture()` with LF line ends on every system. The output is deterministic: rebuilding gives byte-identical files, and the tests of each builder check that the shipped files equal what the builder produces. Existing fixtures are kept unless `flag_rewrite` is set to `TRUE` in the script, which deletes and rewrites them (a changed fixture gets a new hash in its file name).
 
 ```sh
 Rscript R/Contracts/build_contract_fixtures.R
