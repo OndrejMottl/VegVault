@@ -55,7 +55,7 @@ testthat::test_that("build_database_fixture() fills the documented rows", {
 
   testthat::expect_equal(
     vec_n_rows,
-    c(9L, 11L, 11L, 10L, 2L, 7L, 6L, 10L, 2L, 5L, 2L, 2L, 2L, 3L, 1L,
+    c(9L, 11L, 11L, 10L, 2L, 7L, 6L, 10L, 2L, 5L, 2L, 2L, 2L, 3L, 2L,
       4L, 5L, 0L, 2L, 2L, 2L)
   )
 })
@@ -154,6 +154,44 @@ testthat::test_that("build_database_fixture() numbers gridpoints as 4", {
   testthat::expect_equal(
     dplyr::pull(data_names, dataset_name),
     "fossilpol_1001"
+  )
+})
+
+testthat::test_that("build_database_fixture() gives values their unit", {
+  path_database <-
+    build_database_fixture(
+      path_database = base::file.path(withr::local_tempdir(), "f.sqlite")
+    )
+
+  # Each trait value must be in the unit its rule produces, as the
+  #   validation stage checks: the trait unit of its domain equals the
+  #   standardized unit of its conversion rule (no derivation here)
+  data_units <-
+    run_with_database(
+      path_database = path_database,
+      fn = DBI::dbGetQuery,
+      statement = stringr::str_c(
+        "SELECT tv.trait_id, td.trait_unit, uc.conversion_rule_key, ",
+        "uc.standardized_unit FROM TraitsValue AS tv ",
+        "JOIN Traits AS tr ON tr.trait_id = tv.trait_id ",
+        "JOIN TraitsDomain AS td ON td.trait_domain_id = tr.trait_domain_id ",
+        "JOIN TraitUnitConversion AS uc ",
+        "ON uc.trait_unit_conversion_id = tv.trait_unit_conversion_id ",
+        "ORDER BY tv.trait_id, tv.taxon_id"
+      ),
+      flag_read_only = TRUE
+    )
+
+  testthat::expect_equal(base::nrow(data_units), 3L)
+
+  testthat::expect_equal(
+    dplyr::pull(data_units, trait_unit),
+    dplyr::pull(data_units, standardized_unit)
+  )
+
+  testthat::expect_equal(
+    dplyr::pull(data_units, conversion_rule_key),
+    c("fixture_identity", "fixture_identity", "fixture_identity_mm2")
   )
 })
 
