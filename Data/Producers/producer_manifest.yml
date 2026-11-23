@@ -76,7 +76,7 @@ artefacts:
         - data_age_uncertainty_C_2026-11-20__cc57dfde08adb1c3f14e02fd1550644b__.qs
         - data_age_uncertainty_D_2026-11-20__f07eb9ae814666b400489a9e2845bc4f__.qs
   - artefact_id: try_traits
-    contract_version: 2.0.0
+    contract_version: 2.0.1
     note: >-
       dev: the 2.0.0 release build on the VegVault-Trait_data branch 2.0.0
       at 5ab2904, committed in Outputs/Data; TRY request 28498, 897183
@@ -90,7 +90,7 @@ artefacts:
       files:
         - data_trait_try_2026-11-21__34ea0a08bac7af8869832f1a6456a315__.qs
   - artefact_id: bien_traits
-    contract_version: 1.0.0
+    contract_version: 1.0.1
     note: >-
       dev: the 2.0.0 release build on the VegVault-Trait_data branch 2.0.0
       at 5ab2904, committed in Outputs/Data; BIEN download of 2026-11-19,

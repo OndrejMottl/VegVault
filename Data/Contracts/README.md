@@ -168,6 +168,8 @@ save_contract_copy(
 
 An earlier copy is replaced, and files that VegVault no longer has are removed. The producer lane reviews the change and commits the copy and the record in its own repository.
 
+On Windows, `save_contract_copy()` can stop with "Could not read the git status of the project" when the repository folders are owned by another Windows account. R sets `HOME` to the Documents folder, so the `git` it starts does not read the user's global configuration and misses its `safe.directory` entries. Set `HOME` to the user profile for that R process, for example with `$env:HOME = $env:USERPROFILE` in PowerShell before starting `Rscript`.
+
 ### Checking the copy
 
 Each producer has one test, `test-validate_contract_copy.R`, in its test folder:
