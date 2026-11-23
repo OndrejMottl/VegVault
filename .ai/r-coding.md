@@ -11,7 +11,7 @@ The main areas of the VegVault repository are (`.ai/analysis-structure.md` descr
 - `R/___setup_project___.R`, `config.yml` and the git-ignored `secrets.yaml`: shared setup, settings, and machine-local paths
 - `R/Analyses/`: the `{targets}` stages, each run through its `00_run.R` (all of them through `00_run_main.R`); never run a stage that builds or writes the database without explicit authorization
 - `R/Functions/`: reusable project functions, with tests in `R/Tests/testthat/`
-- `R/00_Config_file.R`, `R/01_Master.R`, `R/01_Data_processing/`, `R/02_Main_analyses/` and `R/03_Visualisation/`: the legacy entry points, kept until the stages replace them; the website still sources `R/00_Config_file.R`, and `R/01_Master.R` is never run without explicit authorization
+- `R/00_Config_file.R`, `R/02_Main_analyses/12_Export_db_flat.R` and `R/03_Visualisation/`: the remaining legacy entry points, kept until the stages replace them; the website still sources `R/00_Config_file.R`. The v1.0.0 database build (`R/01_Master.R`, `R/01_Data_processing/`, import scripts `01` to `10`) is deleted
 - `R/04_Webiste/`: website-support code, retaining the repository's historical directory spelling
 
 ## Project setup and clean execution
@@ -230,4 +230,4 @@ Profile before optimizing. Prefer reducing downloads, repeated parsing, raster r
 - Do not use environment variables as hidden switches for normal analysis logic; prefer explicit arguments or configuration values.
 - Start validation with parsing/sourcing the smallest affected component in a clean session.
 - Broaden to focused functions, representative subsets, disposable schema checks, and downstream contracts as risk increases.
-- Do not run a full producer pipeline, `R/01_Master.R`, a stage that builds the database, or database assembly solely to validate formatting or documentation.
+- Do not run a full producer pipeline, a stage that builds the database, or database assembly solely to validate formatting or documentation.

@@ -10,9 +10,9 @@
 #                         2023
 #
 #----------------------------------------------------------#
-# Compatibility entry point for the legacy scripts (R/01_Master.R,
-#   R/01_Data_processing/, R/02_Main_analyses/, R/03_Visualisation/) and
-#   the website, which source this file. It sources the project setup and
+# Compatibility entry point for the legacy scripts
+#   (R/02_Main_analyses/12_Export_db_flat.R, R/03_Visualisation/) and the
+#   website, which source this file. It sources the project setup and
 #   keeps the objects these scripts use. New code sources
 #   R/___setup_project___.R directly. Remove this file when the website and
 #   the legacy scripts move to the new setup, after the 2.0.0 release.

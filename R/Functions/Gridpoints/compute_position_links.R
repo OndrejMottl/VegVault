@@ -40,11 +40,10 @@
 #' are linked when
 #' `geosphere::distGeo(p1, p2) / 1e3 <= distance_km` and
 #' `abs(age - grid_age) <= distance_years`, both applied verbatim as in
-#' v1.0.0 (`compute_binned_gridpoint_links()`), with `p1` the position
-#' and `p2` the rounded cell coordinates in that order; the distance is the
-#' geodesic on the WGS84 ellipsoid. The distance and the age difference
-#' are truncated with `base::as.integer()`, as `save_abiotic_data_ref()`
-#' did.
+#' the gridpoint links of v1.0.0, with `p1` the position and `p2` the
+#' rounded cell coordinates in that order; the distance is the geodesic on
+#' the WGS84 ellipsoid. The distance and the age difference are truncated
+#' with `base::as.integer()`, as the v1.0.0 writer did.
 #' Only the cells inside a window of the position are tested, and only the
 #' ages within `distance_years + age_margin_years` of the position age.
 #' Because the windows of `build_link_windows()` contain every point

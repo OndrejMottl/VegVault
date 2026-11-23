@@ -21,10 +21,11 @@ default:
   # Packages for renv to record. Packages called only as `pkg::fun()` are
   #   detected automatically.
   packages:
-    # Attached by `R/___setup_project___.R`. The legacy database writers
-    #   call `%>%` and some functions without a namespace, so the packages
-    #   R/00_Config_file.R attached for them stay attached. Do not attach
-    #   packages that mask base functions (e.g. renv, config).
+    # Attached by `R/___setup_project___.R`. The legacy scripts (the
+    #   flat-file export and the manuscript figures) and the website pages
+    #   call `%>%`, so the packages R/00_Config_file.R attached for them
+    #   stay attached. Do not attach packages that mask base functions
+    #   (e.g. renv, config).
     attach:
       - assertthat
       - cli
