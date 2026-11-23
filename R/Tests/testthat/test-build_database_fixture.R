@@ -98,7 +98,7 @@ testthat::test_that("build_database_fixture() has the project schema", {
       flag_read_only = TRUE
     )
 
-  testthat::expect_equal(base::nrow(res), 65L)
+  testthat::expect_equal(base::nrow(res), 64L)
 
   list_checks <-
     run_with_database(

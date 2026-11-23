@@ -11,8 +11,7 @@
 build_validation_database <- function(
   dir,
   profile = "default",
-  tag = NULL,
-  commit_sha = NA_character_
+  tag = NULL
 ) {
   path_database <-
     base::file.path(dir, "VegVault.sqlite")
@@ -51,21 +50,23 @@ build_validation_database <- function(
     fn = ~ {
       DBI::dbExecute(
         .x,
-        base::paste(
+        stringr::str_c(
           "INSERT INTO version_control (id, version, update_date, changelog)",
-          "VALUES (1, '1.0.0', '2025-01-20', 'First release of the database')"
+          "VALUES (1, '1.0.0', '2025-01-20', 'First release of the database')",
+          sep = " "
         )
       )
 
       DBI::dbExecute(
         .x,
-        base::paste(
+        stringr::str_c(
           "INSERT INTO version_control (id, version, update_date, changelog,",
           "build_profile, git_commit, manifest_sha256)",
-          "VALUES (2, '2.0.0', '2026-08-28', ?, ?, ?, ?)"
+          "VALUES (2, '2.0.0', '2026-08-28', ?, ?, ?, ?)",
+          sep = " "
         ),
         params = base::list(
-          list_version$changelog,
+          purrr::chuck(list_version, "changelog"),
           profile,
           git_commit,
           compute_text_file_sha256(path_file = path_producer_manifest)
@@ -74,16 +75,17 @@ build_validation_database <- function(
 
       DBI::dbExecute(
         .x,
-        "INSERT INTO BuildProducers VALUES (2, 'splot_plots', ?, ?)",
-        params = base::list(tag_stored, commit_sha)
+        "INSERT INTO BuildProducers VALUES (2, 'splot_plots', ?)",
+        params = base::list(tag_stored)
       )
 
       # The distances the link step stores for the fixture links
       DBI::dbExecute(
         .x,
-        base::paste(
+        stringr::str_c(
           "UPDATE PositionLink SET distance_in_km = ?",
-          "WHERE position_id = ? AND sample_ref_id = ?"
+          "WHERE position_id = ? AND sample_ref_id = ?",
+          sep = " "
         ),
         params = base::list(
           base::as.integer(
@@ -99,18 +101,20 @@ build_validation_database <- function(
 
       DBI::dbExecute(
         .x,
-        base::paste(
+        stringr::str_c(
           "INSERT INTO Positions VALUES (101, -100, 45, 0),",
           "(102, -90, 50, 1000), (103, -90, 50, 6000),",
-          "(104, -70, -20, 7000), (105, -70, -20, 11000)"
+          "(104, -70, -20, 7000), (105, -70, -20, 11000)",
+          sep = " "
         )
       )
 
       DBI::dbExecute(
         .x,
-        base::paste(
+        stringr::str_c(
           "INSERT INTO SamplePosition VALUES (6, 101), (7, 102), (8, 103),",
-          "(9, 104), (10, 105)"
+          "(9, 104), (10, 105)",
+          sep = " "
         )
       )
     }
