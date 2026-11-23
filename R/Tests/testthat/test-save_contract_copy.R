@@ -493,3 +493,11 @@ testthat::test_that("save_contract_copy() refuses another producer's copy", {
     regexp = "OndrejMottl/VegVault-Vegetation_data"
   )
 })
+
+testthat::test_that("save_contract_copy() gives no dependency-scan warning", {
+  # targets reads every function a pipeline loads; a ..1 in a purrr
+  #   lambda made it warn '..1 may be used in an incorrect context'
+  testthat::expect_no_warning(
+    targets::tar_deps_raw(save_contract_copy)
+  )
+})
