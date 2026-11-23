@@ -9,7 +9,7 @@ Apply this guide to SQLite schema files, database assembly code, import scripts,
 - Links between samples and gridpoint samples are stored once per position (`Positions`, `SamplePosition`, `PositionLink`). The gridpoint stage computes them as targets (see `.ai/analysis-structure.md`); the assembly stage writes them. `AbioticDataReference` is a view that returns them once per sample with the v1.0.0 columns; nothing can be written to it, and `DBI::dbListTables()` lists it with the tables.
 - `Data/SQL/database_structure.dbml` is the maintained conceptual diagram and must remain semantically aligned with the executable schema. The test of `build_database_schema()` compares the tables, columns, types, primary keys, `NOT NULL` and references of both files (read with `load_dbml_structure()`), so change them together.
 - Website pages under `website/database_structure/` document the public schema and must be updated when released tables, columns, relationships, units, or meanings change.
-- The database version record is `database: versions` in `config.yml`; its last entry is the version being built. The compatibility `R/00_Config_file.R` reads it from there for the legacy scripts and the website. A released schema or semantic contract change requires an intentional version/changelog update.
+- The database version record is `database: versions` in `config.yml`; its last entry is the version being built. The compatibility `R/00_Config_file.R` reads it from there for the website. A released schema or semantic contract change requires an intentional version/changelog update.
 
 ## Bulk load
 
@@ -27,7 +27,7 @@ The assembly stage builds every table in memory and writes the file once, with t
 
 ## Live database safety
 
-The pipeline stages resolve the live database path with `resolve_database_path()` from the git-ignored `secrets.yaml` (`database_path`, and `database_v1_path` for the released v1 database). The legacy scripts and the website get `path_to_vegvault` from the compatibility `R/00_Config_file.R`, which resolves `database_v1_path` the same way; `secrets.yaml` replaces the former `.secrets/path.yaml`. Treat every resolved file as live user data. The `subset` profile uses a disposable database under the data root instead (see `.ai/analysis-structure.md`).
+The pipeline stages resolve the live database path with `resolve_database_path()` from the git-ignored `secrets.yaml` (`database_path`, and `database_v1_path` for the released v1 database). The website gets `path_to_vegvault` from the compatibility `R/00_Config_file.R`, which resolves `database_v1_path` the same way; `secrets.yaml` replaces the former `.secrets/path.yaml`. Treat every resolved file as live user data. The `subset` profile uses a disposable database under the data root instead (see `.ai/analysis-structure.md`).
 
 - Never display or commit `secrets.yaml`, `.secrets/` or a resolved private path.
 - Never run database creation, a stage that builds or writes the database or `R/Analyses/00_run_main.R` against the live path without explicit user authorization naming that target.

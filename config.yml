@@ -21,10 +21,9 @@ default:
   # Packages for renv to record. Packages called only as `pkg::fun()` are
   #   detected automatically.
   packages:
-    # Attached by `R/___setup_project___.R`. The legacy scripts (the
-    #   flat-file export and the manuscript figures) and the website pages
-    #   call `%>%`, so the packages R/00_Config_file.R attached for them
-    #   stay attached. Do not attach packages that mask base functions
+    # Attached by `R/___setup_project___.R`. The website pages call
+    #   `%>%`, so the packages R/00_Config_file.R attached for them stay
+    #   attached. Do not attach packages that mask base functions
     #   (e.g. renv, config).
     attach:
       - assertthat
@@ -57,9 +56,10 @@ default:
     bg: "white"
     text_size: 10
     line_size: 0.1
-    # Manuscript figures, from R/03_Visualisation/01_manuscript/
-    #   00_Config_mns.R. Palette colours stay in `colors.json`; the three
-    #   colours below are the ones that script sets directly.
+    # Manuscript figures, from the v1.0.0 figure setup 00_Config_mns.R
+    #   (R/03_Visualisation/01_manuscript/, deleted for 2.0.0). Palette
+    #   colours stay in `colors.json`; the three colours below are the ones
+    #   that script set directly.
     manuscript:
       text_size: 14
       line_size: 0.1
@@ -75,7 +75,7 @@ default:
         brown_neutral: "#5F634F"
         grey: "#999999"
         red: "red"
-    # Website figures, from R/03_Visualisation/00_Config_quarto.R. Colours
+    # Website figures, from R/Website/00_Config_quarto.R. Colours
     #   and the font stay in `colors.json` and `fonts.json`.
     website:
       text_size: 32
@@ -85,7 +85,7 @@ default:
       image_width: 2450
       image_height: 1200
   # Database version record; the last entry is the version being built.
-  #   R/00_Config_file.R reads it for the website and the legacy scripts.
+  #   R/00_Config_file.R reads it for the website.
   database:
     versions:
       - version: "0.0.2"
@@ -307,13 +307,12 @@ default:
   # Flat-file export
   export:
     # Replace flat files that already exist
-    #   (R/02_Main_analyses/12_Export_db_flat.R)
     rewrite: false
     # Folder of the CSV files, relative to the project root (git-ignored)
     output_dir: "Outputs/Data/VegVault/Flat_files"
-  # Manuscript figures, from the scripts in R/03_Visualisation/01_manuscript/.
-  #   In the `subset` profile every example region is replaced by the
-  #   subset box.
+  # Manuscript figures, converted from the v1.0.0 figure scripts named
+  #   below (R/03_Visualisation/01_manuscript/, deleted for 2.0.0). In the
+  #   `subset` profile every example region is replaced by the subset box.
   figures:
     # Folder of the figure files, relative to the project root
     output_dir: "Outputs/Figures/mns"

@@ -28,7 +28,7 @@ R/
     testthat/test-<function_name>.R
 ```
 
-The stages replaced the v1.0.0 database build (`R/01_Master.R`, `R/01_Data_processing/` and the import scripts `01` to `10` of `R/02_Main_analyses/`, with their writer functions); it was deleted after the regional trial build matched v1.0.0 (VegVault issue 90). The remaining legacy entry points stay in place until the stages replace them: `R/00_Config_file.R` (sourced by the website and the legacy scripts), the flat-file export `R/02_Main_analyses/12_Export_db_flat.R`, `R/03_Visualisation/` and `R/04_Webiste/`.
+The stages replaced the v1.0.0 scripts: the database build (`R/01_Master.R`, `R/01_Data_processing/` and the import scripts `01` to `10` of `R/02_Main_analyses/`, with their writer functions), the flat-file export (`R/02_Main_analyses/12_Export_db_flat.R`, now `05_Export`) and the manuscript figures (`R/03_Visualisation/01_manuscript/`, now `06_Visualisation`). They were deleted after the regional trial build matched v1.0.0 (VegVault issue 90); the commit `0a530f9` still has them, for the rehearsal of VegVault issue 97. Only the website support stays outside the stage layout until the website moves to the new setup: `R/00_Config_file.R` and `R/Website/` (`00_Config_quarto.R`, the setup every website page sources; `generate_theme.R`, run by Quarto before each render; `render_dots.R`).
 
 ## Stages and owners
 
@@ -144,7 +144,7 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Exp
 - Every stage runner, pipeline and test run starts with `library(here)` and `source(here::here("R/___setup_project___.R"))`.
 - The setup aborts if `R_CONFIG_ACTIVE` names an unknown profile or the data root does not exist, loads every file in `R/Functions/`, attaches `packages: attach` from `config.yml`, regenerates `R/package_dependencies.R`, sets the seed and the ggplot theme, and resolves `path_data_storage`.
 - The lockfile is the template's `renv.lock`, restored once per checkout with `Rscript R/___Init_project___.R` (see `.ai/r-environment.md`).
-- `R/00_Config_file.R` is a compatibility file for the legacy scripts and the website: it sources the setup and keeps the objects they use, `path_to_vegvault` (the v1 database, `database_v1_path` of `secrets.yaml`), `data_version_control` and `db_version` (from `database: versions` of `config.yml`). Remove it when they move to the new setup, after the 2.0.0 release.
+- `R/00_Config_file.R` is a compatibility file for the website: it sources the setup and keeps the objects the website uses, `path_to_vegvault` (the v1 database, `database_v1_path` of `secrets.yaml`), `data_version_control` and `db_version` (from `database: versions` of `config.yml`). Remove it when the website moves to the new setup, after the 2.0.0 release.
 
 ## Tests
 
