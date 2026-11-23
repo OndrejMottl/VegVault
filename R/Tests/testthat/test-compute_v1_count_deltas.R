@@ -153,6 +153,67 @@ testthat::test_that("compute_v1_count_deltas() flags a count of one side", {
 })
 
 
+testthat::test_that("compute_v1_count_deltas() explains the BIEN records", {
+  # The project's reference and settings, with the plot counts of the
+  #   2.0.0 vegetation exports (VegVault-Vegetation_data pull request 26)
+  data_reference <-
+    readr::read_csv(
+      file = here::here("Data", "Validation", "v1.0.0_reference_counts.csv"),
+      show_col_types = FALSE,
+      progress = FALSE
+    ) |>
+    dplyr::filter(
+      scope %in% c("vegetation_plot / BIEN", "vegetation_plot / sPlotOpen"),
+      metric %in% c("datasets", "samples", "sample_taxa_rows")
+    )
+
+  data_counts <-
+    tibble::tribble(
+      ~metric, ~scope, ~n_v2,
+      "datasets", "vegetation_plot / BIEN", 24161,
+      "samples", "vegetation_plot / BIEN", 24161,
+      "sample_taxa_rows", "vegetation_plot / BIEN", 524439,
+      "datasets", "vegetation_plot / sPlotOpen", 67022,
+      "samples", "vegetation_plot / sPlotOpen", 67022,
+      "sample_taxa_rows", "vegetation_plot / sPlotOpen", 1508470
+    )
+
+  res <-
+    compute_v1_count_deltas(
+      data_counts = data_counts,
+      data_reference = data_reference,
+      list_comparison = load_config_value(
+        value = c("validation", "v1_comparison")
+      )
+    )
+
+  data_bien_taxa <-
+    dplyr::filter(
+      res,
+      metric == "sample_taxa_rows",
+      scope == "vegetation_plot / BIEN"
+    )
+
+  # About 46% fewer records: flagged for review, with its reason
+  testthat::expect_equal(dplyr::pull(data_bien_taxa, status), "flag")
+
+  testthat::expect_match(
+    dplyr::pull(data_bien_taxa, expected_reason),
+    "record per taxon in each plot"
+  )
+
+  # Every other plot count stays within the tolerance
+  vec_status_other <-
+    res |>
+    dplyr::filter(
+      !(metric == "sample_taxa_rows" & scope == "vegetation_plot / BIEN")
+    ) |>
+    dplyr::pull(status)
+
+  testthat::expect_equal(vec_status_other, base::rep("pass", 5L))
+})
+
+
 #----------------------------------------------------------#
 # Inputs -----
 #----------------------------------------------------------#
