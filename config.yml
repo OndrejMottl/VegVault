@@ -170,6 +170,11 @@ default:
         col_lon: "long"
         col_lat: "lat"
         flag_margin: true
+      # The trait unit rules have no place: every rule is kept
+      trait_unit_conversions:
+        flag_keep_all: true
+      trait_derivations:
+        flag_keep_all: true
   # Regional rehearsal build; enabled only in the `subset` profile below
   subset:
     enabled: false

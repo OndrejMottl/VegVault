@@ -251,3 +251,47 @@ testthat::test_that("filter_producer_artefact() validates its data", {
     regexp = "enabled"
   )
 })
+
+testthat::test_that("filter_producer_artefact() keeps every row on request", {
+  # A rule table has no coordinates and holds for every region
+  list_artefact <-
+    list(
+      unit_conversions.csv = tibble::tibble(
+        conversion_rule_key = c("rule_a", "rule_b"),
+        multiplier = c(1, 100)
+      )
+    )
+
+  res <-
+    filter_producer_artefact(
+      list_artefact = list_artefact,
+      list_subset = list(
+        enabled = TRUE,
+        lon_min = 0,
+        lon_max = 10,
+        lat_min = 40,
+        lat_max = 50
+      ),
+      list_subset_filter = list(flag_keep_all = TRUE)
+    )
+
+  testthat::expect_identical(res, list_artefact)
+
+  testthat::expect_error(
+    filter_producer_artefact(
+      list_artefact = list_artefact,
+      list_subset = list(enabled = FALSE),
+      list_subset_filter = list(flag_keep_all = FALSE)
+    ),
+    regexp = "list_subset_filter"
+  )
+
+  testthat::expect_error(
+    filter_producer_artefact(
+      list_artefact = list_artefact,
+      list_subset = list(enabled = FALSE),
+      list_subset_filter = list(flag_keep_all = TRUE, col_key = "id")
+    ),
+    regexp = "list_subset_filter"
+  )
+})

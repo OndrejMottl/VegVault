@@ -16,14 +16,17 @@
 #' `producers: subset_filter` of `config.yml`: either `col_lon`, `col_lat`
 #' and `flag_margin` (logical scalar: widen the box by the subset margins,
 #' for gridded data around the box), or `col_key` and `reference` (the id of
-#' the artefact whose kept rows decide).
+#' the artefact whose kept rows decide), or `flag_keep_all` set to `TRUE`
+#' (every row is kept: for tables without a place, such as rule
+#' registries).
 #' @param vec_keys_kept
 #' Vector or `NULL` (default). The keys kept in the reference artefact named
 #' in `list_subset_filter` (see `prepare_producer_keys()`); required for a
 #' filter by `col_key` when the subset is enabled.
 #' @return
 #' `list_artefact` with only the rows inside the box, or with a key in
-#' `vec_keys_kept`, in every table. Names, columns and row order are kept.
+#' `vec_keys_kept`, in every table, or unchanged for `flag_keep_all`.
+#' Names, columns and row order are kept.
 #' @details
 #' `list_subset_filter` is checked also when the subset is disabled, so a
 #' broken setting is noticed in every build. Coordinates are filtered with
@@ -92,12 +95,17 @@ filter_producer_artefact <- function(
     base::all(vec_values_scalar) &&
     base::all(purrr::map_lgl(.x = list_subset_filter, .f = base::is.character))
 
+  flag_keep_all <-
+    base::identical(vec_rule_fields, "flag_keep_all") &&
+    base::isTRUE(purrr::chuck(list_subset_filter, "flag_keep_all"))
+
   assertthat::assert_that(
     base::is.list(list_subset_filter),
-    flag_by_coordinates || flag_by_key,
+    flag_by_coordinates || flag_by_key || flag_keep_all,
     msg = stringr::str_c(
       "`list_subset_filter` must have either `col_lon`, `col_lat` and ",
-      "`flag_margin`, or `col_key` and `reference`."
+      "`flag_margin`, or `col_key` and `reference`, or `flag_keep_all` ",
+      "set to TRUE."
     )
   )
 
@@ -162,7 +170,7 @@ filter_producer_artefact <- function(
 
   res <-
     if (
-      !flag_enabled
+      !flag_enabled || flag_keep_all
     ) {
       list_artefact
     } else if (

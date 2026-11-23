@@ -224,3 +224,31 @@ testthat::test_that("build_producer_file_regex() rejects bad templates", {
     regexp = "partition_scheme"
   )
 })
+
+testthat::test_that("build_producer_file_regex() takes a fixed file name", {
+  # A file kept in the producer repository, such as a rule registry, has a
+  #   fixed name with neither a date nor a hash
+  res <-
+    build_producer_file_regex(
+      name_template = "unit_conversions.csv",
+      partition_scheme = "none"
+    )
+
+  testthat::expect_true(
+    stringr::str_detect("unit_conversions.csv", res)
+  )
+
+  testthat::expect_false(
+    base::any(
+      stringr::str_detect(
+        c(
+          "unit_conversionsXcsv",
+          "old_unit_conversions.csv",
+          "unit_conversions.csv.bak",
+          "unit_conversions_2000-01-01__7781fda623c5da21cd6d4766e550985d__.csv"
+        ),
+        res
+      )
+    )
+  )
+})

@@ -4,7 +4,8 @@
 #' settings: per producer artefact its contract file, its resolved files
 #' and its validated data (one data target per variable for artefacts with
 #' variables), then the FOSSILPOL relation check, the grid inputs of the
-#' gridpoint stage and the producer pins of the build manifest.
+#' gridpoint stage, the trait unit rules with their check and the producer
+#' pins of the build manifest.
 #' @param list_subset_filters
 #' Named list, by artefact id: how each artefact is cut to the subset box,
 #' as in `producers: subset_filter` of `config.yml` (see
@@ -15,11 +16,12 @@
 #' The artefacts are the contracts in `Data/Contracts` whose status is not
 #' `retired`. Each needs an entry in `list_subset_filters`, and no other
 #' entry is allowed. A filter by key must name a reference artefact without
-#' variables. The FOSSILPOL artefacts and the CHELSA variable `bio1` must
-#' exist. The targets read six settings targets that the pipeline
-#' declares: `data_producer_manifest`, `mode_producers`,
-#' `dir_producer_dev_root`, `dir_producer_cache`, `url_template_release`
-#' and `list_subset_box` (the box of the `subset` section).
+#' variables. The FOSSILPOL artefacts, the trait artefacts, the two trait
+#' unit registries and the CHELSA variable `bio1` must exist. The targets
+#' read six settings targets that the pipeline declares:
+#' `data_producer_manifest`, `mode_producers`, `dir_producer_dev_root`,
+#' `dir_producer_cache`, `url_template_release` and `list_subset_box` (the
+#' box of the `subset` section).
 #' Per artefact `<id>`: `file_contract_<id>` (`format = "file"`, so a
 #' changed contract validates the artefact again); `data_files_<id>`
 #' (`resolve_producer_artefact()`, run every time, so every checksum is
@@ -33,8 +35,10 @@
 #' subset filter of an artefact is written into its data target's command,
 #' so a changed filter rebuilds that target only. Then
 #' `check_fossilpol_relations`, `data_chelsa_trace21k_coordinates`,
-#' `vec_chelsa_trace21k_ages`, `data_chelsa_neoclimate_coordinates` and
-#' `list_producer_pins`.
+#' `vec_chelsa_trace21k_ages`, `data_chelsa_neoclimate_coordinates`,
+#' `data_trait_unit_rules` (`build_trait_unit_rules()`),
+#' `check_trait_rule_keys` (`validate_trait_rule_keys()` on `try_traits` and
+#' `bien_traits`) and `list_producer_pins`.
 #' @examples
 #' \dontrun{
 #' build_producer_import_targets(
@@ -124,7 +128,10 @@ build_producer_import_targets <- function(list_subset_filters) {
 
   flag_required <-
     base::all(
-      c("fossilpol_assembly", "fossilpol_age_uncertainty") %in%
+      c(
+        "fossilpol_assembly", "fossilpol_age_uncertainty", "try_traits",
+        "bien_traits", "trait_unit_conversions", "trait_derivations"
+      ) %in%
         vec_ids_single
     ) &&
     "bio1" %in% purrr::pluck(list_variables, "chelsa_neoclimate") &&
@@ -135,7 +142,9 @@ build_producer_import_targets <- function(list_subset_filters) {
   ) {
     cli::cli_abort(
       "The stage needs the contracts {.val fossilpol_assembly},
-        {.val fossilpol_age_uncertainty}, and {.val chelsa_neoclimate} and
+        {.val fossilpol_age_uncertainty}, {.val try_traits},
+        {.val bien_traits}, {.val trait_unit_conversions},
+        {.val trait_derivations}, and {.val chelsa_neoclimate} and
         {.val chelsa_trace21k_palaeoclimate} with the variable
         {.val bio1}."
     )
@@ -341,6 +350,25 @@ build_producer_import_targets <- function(list_subset_filters) {
         name = "data_chelsa_neoclimate_coordinates",
         command = prepare_climate_coordinates(
           list_data = data_chelsa_neoclimate_bio1
+        )
+      ),
+      # The trait unit rules in the form of the database tables, and the
+      #   check that every trait record cites rules that exist
+      targets::tar_target(
+        name = "data_trait_unit_rules",
+        command = build_trait_unit_rules(
+          list_conversions = data_trait_unit_conversions,
+          list_derivations = data_trait_derivations
+        )
+      ),
+      targets::tar_target(
+        name = "check_trait_rule_keys",
+        command = validate_trait_rule_keys(
+          list_trait_artefacts = list(
+            try_traits = data_try_traits,
+            bien_traits = data_bien_traits
+          ),
+          list_rules = data_trait_unit_rules
         )
       ),
       targets::tar_target_raw(

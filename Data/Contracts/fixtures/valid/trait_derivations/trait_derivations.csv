@@ -1,0 +1,3 @@
+"derivation_rule_key","rule_version","input_unit","output_unit","trait_dimension","operation","multiplier","evidence"
+"sla_to_lma","1.0.0","mm2 mg-1","mg/mm2","mass_per_area","reciprocal",1,"Synthetic rule"
+"synthetic_to_inverse","1.0.0","m","m-1","inverse_length","reciprocal",1,"Synthetic rule"

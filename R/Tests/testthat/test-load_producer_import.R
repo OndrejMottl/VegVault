@@ -152,7 +152,9 @@ testthat::test_that("load_producer_import() rejects each broken fixture", {
       "fossilpol_assembly", NA, "levels\\[\\]\\.age",
       "splot_plots", NA, "plot_observation_id",
       "try_traits", NA, "disposition",
-      "hwsd_soil", NA, "value"
+      "hwsd_soil", NA, "value",
+      "trait_unit_conversions", NA, "conversion_rule_key",
+      "trait_derivations", NA, "operation"
     )
 
   testthat::expect_setequal(
@@ -173,12 +175,17 @@ testthat::test_that("load_producer_import() rejects each broken fixture", {
           full.names = TRUE
         )
 
+      # The rule registries are csv files kept in the producer repository
       data_files <-
         tibble::tibble(
           artefact_id = sel_artefact_id,
           file_name = base::basename(vec_paths),
           path = vec_paths,
-          format = "qs2"
+          format = dplyr::if_else(
+            stringr::str_detect(vec_paths, "[.]csv$"),
+            "csv",
+            "qs2"
+          )
         )
 
       res_error <-

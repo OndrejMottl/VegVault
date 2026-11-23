@@ -5,7 +5,9 @@
 #' @param name_template
 #' Character scalar. File-name template with the placeholders `{date}` and
 #' `{hash}` and, depending on the contract, `{partition}` and `{variable}`,
-#' for example `"bio{variable}_batch_{partition}_{date}__{hash}__.qs"`.
+#' for example `"bio{variable}_batch_{partition}_{date}__{hash}__.qs"`; or
+#' a fixed name without `{date}` and `{hash}`, for a file kept in the
+#' producer repository, for example `"unit_conversions.csv"`.
 #' @param partition_scheme
 #' Character scalar. `"none"`, `"integer"` or `"letter"`.
 #' @param vec_variable_tokens
@@ -20,8 +22,9 @@
 #' a named group of the same name; every other character is literal.
 #' @details
 #' The pattern describes names written by `RUtilpol::save_latest_file()`:
-#' `<name>_<date>__<hash>__.<extension>`. Aborts when the template lacks
-#' `{date}` or `{hash}`, contains an unknown placeholder, contains
+#' `<name>_<date>__<hash>__.<extension>`, or a fixed name. Aborts when the
+#' template has only one of `{date}` and `{hash}`, contains an unknown
+#' placeholder, contains
 #' `{partition}` while the scheme is `"none"` (or lacks it while the scheme
 #' is not `"none"`), or when `{variable}` and `vec_variable_tokens` are not
 #' both present or both absent.
@@ -87,14 +90,19 @@ build_producer_file_regex <- function(
     )
   }
 
+  # A saved artefact has both a date and a hash; a fixed name has neither
+  flag_has_date <- "date" %in% vec_placeholders
+
+  flag_has_hash <- "hash" %in% vec_placeholders
+
   if (
-    !"date" %in% vec_placeholders
+    flag_has_hash && !flag_has_date
   ) {
     cli::cli_abort("Template {.val {name_template}} lacks {{date}}.")
   }
 
   if (
-    !"hash" %in% vec_placeholders
+    flag_has_date && !flag_has_hash
   ) {
     cli::cli_abort("Template {.val {name_template}} lacks {{hash}}.")
   }

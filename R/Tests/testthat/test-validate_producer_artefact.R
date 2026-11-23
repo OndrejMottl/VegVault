@@ -631,3 +631,45 @@ testthat::test_that("validate_producer_artefact() checks vec_variables", {
     regexp = "vec_variables"
   )
 })
+
+testthat::test_that("validate_producer_artefact() reports an unreadable csv", {
+  dir_test <-
+    withr::local_tempdir()
+
+  vec_lines <-
+    base::readLines(
+      here::here(
+        "Data", "Contracts", "fixtures", "valid", "trait_unit_conversions",
+        "unit_conversions.csv"
+      )
+    )
+
+  # A multiplier that is not a number
+  vec_lines[2] <-
+    stringr::str_replace(vec_lines[2], ",1,\"Synthetic rule\"$", ",one,\"x\"")
+
+  path_file <-
+    save_test_lines(vec_lines = vec_lines, dir_test = dir_test)
+
+  res_error <-
+    testthat::expect_error(
+      validate_producer_artefact(
+        contract = here::here(
+          "Data", "Contracts", "trait_unit_conversions.yml"
+        ),
+        path_artefact = path_file,
+        verbose = FALSE
+      ),
+      class = "producer_contract_error"
+    )
+
+  testthat::expect_equal(
+    dplyr::pull(purrr::chuck(res_error, "findings"), check),
+    "file_unreadable"
+  )
+
+  testthat::expect_match(
+    base::conditionMessage(res_error),
+    "multiplier"
+  )
+})

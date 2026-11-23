@@ -77,6 +77,52 @@ testthat::test_that("save_producer_fixture() returns paths invisibly", {
 })
 
 
+testthat::test_that("save_producer_fixture() writes csv with LF line ends", {
+  path_dir <-
+    withr::local_tempdir()
+
+  data_rules <-
+    tibble::tibble(
+      rule_key = c("rule_a", "rule_b"),
+      multiplier = c(1.5, 100),
+      note = c("first, quoted", NA)
+    )
+
+  res <-
+    save_producer_fixture(
+      list_fixture = base::list("rules.csv" = data_rules),
+      dir_output = path_dir
+    )
+
+  # LF on every system, so a rebuilt fixture is byte-identical
+  vec_bytes <-
+    base::readBin(con = res, what = "raw", n = 10000L)
+
+  testthat::expect_false(base::as.raw(13L) %in% vec_bytes)
+
+  data_read <-
+    utils::read.csv(file = res, na.strings = "") |>
+    tibble::as_tibble()
+
+  testthat::expect_equal(data_read, data_rules)
+})
+
+testthat::test_that("save_producer_fixture() needs flat tables for csv", {
+  path_dir <-
+    withr::local_tempdir()
+
+  testthat::expect_error(
+    save_producer_fixture(
+      list_fixture = base::list(
+        "nested.csv" = purrr::chuck(list_fixture_test, 1)
+      ),
+      dir_output = path_dir
+    ),
+    regexp = "csv"
+  )
+})
+
+
 #----------------------------------------------------------#
 # Functionality -----
 #----------------------------------------------------------#
@@ -143,7 +189,7 @@ testthat::test_that("save_producer_fixture() validates arguments", {
 
   testthat::expect_error(
     save_producer_fixture(
-      list_fixture = rlang::set_names(list_fixture_test, c("a.csv", "b.qs")),
+      list_fixture = rlang::set_names(list_fixture_test, c("a.txt", "b.qs")),
       dir_output = path_dir
     ),
     regexp = "list_fixture"

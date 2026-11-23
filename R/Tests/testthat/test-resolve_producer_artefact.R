@@ -445,3 +445,45 @@ testthat::test_that("resolve_producer_artefact() validates its arguments", {
     regexp = "mode"
   )
 })
+
+testthat::test_that("resolve_producer_artefact() marks csv files", {
+  # A rule registry is a csv file in the producer repository
+  list_fixture <-
+    build_producer_manifest_fixture(
+      dir_root = withr::local_tempdir(),
+      vec_contract_ids = "trait_unit_conversions"
+    )
+
+  data_manifest <-
+    load_producer_manifest(
+      path_manifest = purrr::chuck(list_fixture, "path_manifest"),
+      flag_require_all_contracts = FALSE
+    )
+
+  dir_cache <-
+    withr::local_tempdir()
+
+  list_res <-
+    purrr::map(
+      .x = c("dev", "release"),
+      .f = ~ resolve_producer_artefact(
+        data_manifest = data_manifest,
+        artefact_id = "trait_unit_conversions",
+        mode = .x,
+        dir_dev_root = purrr::chuck(list_fixture, "dir_dev_root"),
+        dir_cache = dir_cache,
+        url_template = purrr::chuck(list_fixture, "url_template")
+      )
+    )
+
+  purrr::walk(
+    .x = list_res,
+    .f = ~ {
+      testthat::expect_equal(dplyr::pull(.x, file_name), "unit_conversions.csv")
+
+      testthat::expect_equal(dplyr::pull(.x, format), "csv")
+
+      testthat::expect_true(base::file.exists(dplyr::pull(.x, path)))
+    }
+  )
+})

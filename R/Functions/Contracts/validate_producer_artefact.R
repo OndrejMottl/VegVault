@@ -14,7 +14,9 @@
 #' Character vector of paths to every file of the artefact (every
 #' partition and, for contracts with variables, every variable or every
 #' variable in `vec_variables`). Files ending in `.qs` are read with
-#' `qs2::qs_read()` and files ending in `.rds` with `readRDS()`.
+#' `qs2::qs_read()`, files ending in `.rds` with `readRDS()` and files
+#' ending in `.csv` with `load_producer_csv()`, which gives each column the
+#' class of the contract.
 #' @param vec_variables
 #' Character vector of the variables to validate, for contracts with
 #' `variables` that are validated one or some variables at a time; `NULL`
@@ -135,13 +137,17 @@ validate_producer_artefact <- function(
           expr = base::list(
             object = base::switch(
               base::ifelse(
-                extension_file %in% c("qs", "rds"),
+                extension_file %in% c("qs", "rds", "csv"),
                 extension_file,
                 "other"
               ),
               "qs" = qs2::qs_read(file = path_file, validate_checksum = TRUE),
               "rds" = base::readRDS(file = path_file),
-              "other" = cli::cli_abort("Extension is not .qs or .rds.")
+              "csv" = load_producer_csv(
+                path_file = path_file,
+                contract = contract_loaded
+              ),
+              "other" = cli::cli_abort("Extension is not .qs, .rds or .csv.")
             ),
             problem = NA_character_
           ),
