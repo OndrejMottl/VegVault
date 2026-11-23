@@ -27,7 +27,8 @@
 #' `.rds`).
 #' @details
 #' In `dev` mode the files listed under `dev` are read from
-#' `<dir_dev_root>/<repository name>/<directory>/`; nothing is downloaded,
+#' `<dir_dev_root>/<repository name>/<dev_directory>/`, the entry's own
+#' `dev: directory` or else the contract's folder; nothing is downloaded,
 #' and their size and checksum are recorded as found, so that a dev build
 #' documents what it used. In `release` mode a file already in the cache
 #' with the pinned checksum is reused; otherwise it is downloaded by
@@ -61,7 +62,7 @@ resolve_producer_artefact <- function(
     data_source = data_manifest,
     vec_columns_required = c(
       "artefact_id", "repository", "directory", "release_tag",
-      "release_files", "dev_files"
+      "release_files", "dev_files", "dev_directory"
     ),
     name_argument = "data_manifest"
   )
@@ -128,7 +129,7 @@ resolve_producer_artefact <- function(
         base::file.path(
           dir_dev_root,
           base::basename(repository),
-          directory,
+          dplyr::pull(data_entry, dev_directory),
           vec_file_names
         )
 

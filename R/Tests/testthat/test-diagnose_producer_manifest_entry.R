@@ -119,6 +119,52 @@ testthat::test_that("diagnose_producer_manifest_entry() lists problems", {
   )
 })
 
+testthat::test_that("diagnose_producer_manifest_entry() checks a dev folder", {
+  list_entry <-
+    list(
+      artefact_id = "splot_plots",
+      contract_version = version_splot,
+      release = list(tag = NULL, files = list()),
+      dev = list(directory = "Outputs/Data_temp", files = list())
+    )
+
+  testthat::expect_equal(
+    diagnose_producer_manifest_entry(
+      list_entry = list_entry,
+      dir_contracts = here::here("Data", "Contracts")
+    ),
+    base::character(0)
+  )
+
+  # Outside the checkout, absolute, empty, with backslashes, or not one
+  #   piece of text
+  list_bad <-
+    list(
+      "../Outputs", "Outputs/../..", "/Outputs/Data", "C:/Outputs", "",
+      "Outputs\\Data", c("Outputs", "Data"), 5
+    )
+
+  purrr::walk(
+    .x = list_bad,
+    .f = ~ testthat::expect_true(
+      base::any(
+        stringr::str_detect(
+          diagnose_producer_manifest_entry(
+            list_entry = purrr::assign_in(
+              list_entry,
+              where = list("dev", "directory"),
+              value = .x
+            ),
+            dir_contracts = here::here("Data", "Contracts")
+          ),
+          stringr::fixed("dev.directory: must be a relative folder")
+        )
+      ),
+      label = stringr::str_c(.x, collapse = ", ")
+    )
+  )
+})
+
 testthat::test_that("diagnose_producer_manifest_entry() reports shapes", {
   file_splot <-
     "data_splot_2000-01-01__000608b7c919d261ab30308e780dc9aa__.qs"
