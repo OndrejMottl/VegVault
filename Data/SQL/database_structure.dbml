@@ -42,7 +42,6 @@ Table BuildProducers {
   version_id INTEGER [not null]
   producer TEXT [not null, note: 'artefact id of the producer pin manifest']
   tag TEXT [note: 'empty in a development build']
-  commit_sha TEXT [note: 'empty in a development build']
 
   indexes {
     (version_id, producer) [pk]
@@ -180,10 +179,14 @@ Table SampleSizeID {
 }
 
 Table SampleTaxa {
-  sample_id INTEGER
-  taxon_id INTEGER
+  sample_id INTEGER [not null]
+  taxon_id INTEGER [not null]
   value REAL
-  Note: 'No primary key: v1.0.0 repeats some (sample_id, taxon_id) pairs'
+
+  indexes {
+    (sample_id, taxon_id) [pk]
+  }
+  Note: 'One row per taxon of a sample. WITHOUT ROWID'
 }
 
 // Taxa

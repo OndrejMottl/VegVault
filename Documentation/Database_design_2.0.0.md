@@ -664,6 +664,7 @@ Each decision gives the recommended option, then what it means for the schema ta
    - **Vegetation lane:** resolves the duplicates.
    - **L7:** none.
    - **Decided by Ondřej on 2026-11-20: as recommended.** For the 189,639 repeated (sample, taxon) pairs, the vegetation lane finds out whether the sources or the import's matching of taxon names repeat them, and proposes a merge rule per source for Ondřej's approval. If they are not resolved before the build, 2.0.0 keeps `SampleTaxa` as a rowid table and #96 flags the pairs.
+   - **Resolved on 2026-11-23.** The vegetation producers merge repeated taxa into one record per taxon, and the assembly's source preparers, run on the development files, give no repeated pair (sPlotOpen 1,508,470 rows, BIEN 524,439, FOSSILPOL 1,365,322). Ondřej decided that `SampleTaxa` gets the primary key `(sample_id, taxon_id)` as a `WITHOUT ROWID` table, and `idx_sampletaxa_sample_id_taxon_id`, which the key makes redundant, is dropped (#90).
 3. **Index set.** Recommended: as in question 4. Drop 28 indexes and keep the two primary-key duplicates that vaultkeepr's reference check uses. Add no index on `PositionLink.gridpoint_id`.
    - **#88:** writes the index list.
    - **#90:** creates the indexes after loading.
@@ -698,6 +699,7 @@ Each decision gives the recommended option, then what it means for the schema ta
    - **#96:** compares it with the build manifest.
    - **L7:** orders the version reader by `id`.
    - **Decided by Ondřej on 2026-11-20: as recommended.**
+   - **Changed on 2026-11-23.** Ondřej decided that the pin manifest records no commit of a producer tag, because it already records the size and SHA-256 of every file (#95). `BuildProducers.commit_sha` would therefore always be empty, and he decided to drop it: `BuildProducers` holds `version_id`, `producer` and `tag` (#90).
 8. **Build engine and load settings.** Recommended: R in memory with `{targets}` branches of 2,000 to 10,000 positions, one bulk load with the settings of section 6, and `VACUUM INTO` the release file.
    - **#89:** implements the link step.
    - **#90:** implements the assembly.
