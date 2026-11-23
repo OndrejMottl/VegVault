@@ -58,3 +58,11 @@ Do not change only the package fixture or only the conceptual DBML file and clai
 ## Proportional validation
 
 Prefer a disposable empty-schema build and small representative import. Check expected tables, primary/foreign keys, indexes, row uniqueness, mandatory references, and the package's critical query chain. Run the full database assembly only when explicitly requested and justified by the change.
+
+## Comparison with v1.0.0
+
+The regional build of the `subset` profile is compared with the v1.0.0 subset of the same box that the database research extracted (`R/Analyses/90_Database_research/04_extract_v1_subset.R`), not by running the v1.0.0 writers again (decision on the assembly task, VegVault issue 90):
+
+- `load_comparison_rows()` reads one kind of row (datasets, samples, sample taxa, age uncertainty, trait values, traits, abiotic variables and values, links, taxa, classification, references) by natural keys, read-only, from a file of either schema: the tables both schemas share have the same columns, and `AbioticDataReference` is a table in v1.0.0 and a view with the same columns in 2.0.0. Datasets and samples are identified by coordinates and ages, not by the names that 2.0.0 changes on purpose.
+- `compute_comparison_summary()` counts, per kind of row and scope (dataset type and source, or variable), the rows of each side, of both and of one side only, and a checksum of each side; `compute_comparison_differences()` lists the rows that differ.
+- `diagnose_comparison_summary()` marks every scope as equal, explained or unexplained against a list of expected differences, each with its direction (rows only in v1.0.0, only in 2.0.0, or both) and its reason. An unexplained difference fails the comparison.
