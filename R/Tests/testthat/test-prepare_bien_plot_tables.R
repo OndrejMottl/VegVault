@@ -5,7 +5,8 @@
 testthat::test_that("prepare_bien_plot_tables() needs the stable plot id", {
   testthat::expect_error(
     prepare_bien_plot_tables(
-      data_bien = load_valid_fixture(id_artefact = "bien_plots"),
+      data_bien = load_valid_fixture(id_artefact = "bien_plots") |>
+        dplyr::select(-dplyr::any_of("plot_id")),
       list_source = build_test_source_config(),
       verbose = FALSE
     ),
