@@ -180,9 +180,6 @@ default:
     enabled: false
   # Release checks of the built database (R/Analyses/04_Validation/)
   validation:
-    # Print every check result, not only failures
-    #   (R/02_Main_analyses/11_Check_database.R, the v1 check)
-    verbose: false
     # Run SQLite's quick_check instead of the full integrity_check. For
     #   development only: a build checked this way is not eligible for
     #   release

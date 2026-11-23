@@ -41,7 +41,7 @@ For any table, column, relationship, index, unit, or stored-value semantic chang
 
 1. Update the executable SQL and DBML mirror.
 2. Update affected `R/Functions/` writers and the imports (`R/Analyses/01_Producer_import/` and `R/Analyses/03_Database_assembly/`, and the legacy `R/02_Main_analyses/` scripts while they are in use).
-3. Add or update focused validation in `R/Analyses/04_Validation/` (the legacy checks are in `R/02_Main_analyses/11_Check_database.R`) or an appropriate disposable-schema check.
+3. Add or update focused validation in `R/Analyses/04_Validation/` or an appropriate disposable-schema check.
 4. Update database version metadata and public website documentation.
 5. Coordinate the independent `vaultkeepr` checkout, especially its `tests/testthat/helper_make_database.R` and `vignettes/helper_make_example_db.R` schema fixtures. Discover that checkout from the active workspace or user context; never assume a machine-specific location.
 6. Test backward compatibility or document the minimum supported database version when compatibility cannot be retained.
