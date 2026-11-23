@@ -19,7 +19,7 @@
 #' Character scalar. The plot title.
 #' @param col_background
 #' Colour of the panel background. Default: the global `col_brown_light`,
-#' which the website setup (R/03_Visualisation/00_Config_quarto.R) defines;
+#' which the website setup (R/Website/00_Config_quarto.R) defines;
 #' R looks it up where the function was sourced, not in the caller.
 #' @param col_lines
 #' Colour of the square borders. Default: the global `col_black`, defined

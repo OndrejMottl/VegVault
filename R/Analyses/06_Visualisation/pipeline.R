@@ -11,8 +11,9 @@
 #
 #----------------------------------------------------------#
 # Defines the target graph of the visualisation stage: the ten manuscript
-#   figures of R/03_Visualisation/01_manuscript/, drawn from the built
-#   database. Settings are in the `figures` and `graphical: manuscript`
+#   figures of v1.0.0 (formerly the scripts of
+#   R/03_Visualisation/01_manuscript/), drawn from the built database.
+#   Settings are in the `figures` and `graphical: manuscript`
 #   sections of `config.yml`; colours in `colors.json`. The stage needs
 #   the `maps` package (country outlines), internet access for the GADM
 #   country border, and `vaultkeepr` for the five vaultkeepr figures.

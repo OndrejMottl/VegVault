@@ -11,8 +11,8 @@ The main areas of the VegVault repository are (`.ai/analysis-structure.md` descr
 - `R/___setup_project___.R`, `config.yml` and the git-ignored `secrets.yaml`: shared setup, settings, and machine-local paths
 - `R/Analyses/`: the `{targets}` stages, each run through its `00_run.R` (all of them through `00_run_main.R`); never run a stage that builds or writes the database without explicit authorization
 - `R/Functions/`: reusable project functions, with tests in `R/Tests/testthat/`
-- `R/00_Config_file.R`, `R/01_Master.R`, `R/01_Data_processing/`, `R/02_Main_analyses/` and `R/03_Visualisation/`: the legacy entry points, kept until the stages replace them; the website still sources `R/00_Config_file.R`, and `R/01_Master.R` is never run without explicit authorization
-- `R/04_Webiste/`: website-support code, retaining the repository's historical directory spelling
+- `R/00_Config_file.R`: the legacy entry point that the website still sources (directly and through `R/Website/00_Config_quarto.R`), kept until the website moves to the new setup. The v1.0.0 scripts (`R/01_Master.R`, `R/01_Data_processing/`, `R/02_Main_analyses/`, `R/03_Visualisation/`) are deleted
+- `R/Website/`: website-support code (formerly `R/04_Webiste/`): the setup every website page sources (`00_Config_quarto.R`), the Quarto pre-render step (`generate_theme.R`) and `render_dots.R`
 
 ## Project setup and clean execution
 
@@ -26,7 +26,7 @@ source(
 )
 ```
 
-The legacy VegVault scripts, the website and the producer repositories source their `R/00_Config_file.R` the same way.
+The VegVault website and the producer repositories source their `R/00_Config_file.R` the same way.
 
 Do not rely on objects, options, packages, connections, or environment variables left by an interactive session. A reusable function must not source setup files or attach packages.
 
@@ -230,4 +230,4 @@ Profile before optimizing. Prefer reducing downloads, repeated parsing, raster r
 - Do not use environment variables as hidden switches for normal analysis logic; prefer explicit arguments or configuration values.
 - Start validation with parsing/sourcing the smallest affected component in a clean session.
 - Broaden to focused functions, representative subsets, disposable schema checks, and downstream contracts as risk increases.
-- Do not run a full producer pipeline, `R/01_Master.R`, a stage that builds the database, or database assembly solely to validate formatting or documentation.
+- Do not run a full producer pipeline, a stage that builds the database, or database assembly solely to validate formatting or documentation.

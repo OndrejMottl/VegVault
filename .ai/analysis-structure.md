@@ -1,6 +1,6 @@
 # Analysis structure
 
-VegVault is moving from a script cascade (`R/01_Master.R`) to the layout of the project template (`OndrejMottl/Project_template`, `.ai/analysis-structure.md`): numbered `{targets}` stages, configuration in `config.yml`, machine-local values in `secrets.yaml`, and one tested function per file. The layout is a contract. Change it deliberately, update this file in the same change, and check every caller.
+VegVault has moved from a script cascade (the v1.0.0 build, `R/01_Master.R`, retired for 2.0.0) to the layout of the project template (`OndrejMottl/Project_template`, `.ai/analysis-structure.md`): numbered `{targets}` stages, configuration in `config.yml`, machine-local values in `secrets.yaml`, and one tested function per file. The layout is a contract. Change it deliberately, update this file in the same change, and check every caller.
 
 ## Layout
 
@@ -28,7 +28,7 @@ R/
     testthat/test-<function_name>.R
 ```
 
-The legacy entry points stay in place until the stages replace them: `R/00_Config_file.R` (sourced by the website and the legacy scripts), `R/01_Master.R`, `R/01_Data_processing/`, `R/02_Main_analyses/`, `R/03_Visualisation/` and `R/04_Webiste/`.
+The stages replaced the v1.0.0 scripts: the database build (`R/01_Master.R`, `R/01_Data_processing/` and the import scripts `01` to `10` of `R/02_Main_analyses/`, with their writer functions), the flat-file export (`R/02_Main_analyses/12_Export_db_flat.R`, now `05_Export`) and the manuscript figures (`R/03_Visualisation/01_manuscript/`, now `06_Visualisation`). They were deleted after the regional trial build matched v1.0.0 (VegVault issue 90); the commit `0a530f9` still has them, for the rehearsal of VegVault issue 97. Only the website support stays outside the stage layout until the website moves to the new setup: `R/00_Config_file.R` and `R/Website/` (`00_Config_quarto.R`, the setup every website page sources; `generate_theme.R`, run by Quarto before each render; `render_dots.R`).
 
 ## Stages and owners
 
@@ -144,7 +144,7 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Exp
 - Every stage runner, pipeline and test run starts with `library(here)` and `source(here::here("R/___setup_project___.R"))`.
 - The setup aborts if `R_CONFIG_ACTIVE` names an unknown profile or the data root does not exist, loads every file in `R/Functions/`, attaches `packages: attach` from `config.yml`, regenerates `R/package_dependencies.R`, sets the seed and the ggplot theme, and resolves `path_data_storage`.
 - The lockfile is the template's `renv.lock`, restored once per checkout with `Rscript R/___Init_project___.R` (see `.ai/r-environment.md`).
-- `R/00_Config_file.R` is a compatibility file for the legacy scripts and the website: it sources the setup and keeps the objects they use, `path_to_vegvault` (the v1 database, `database_v1_path` of `secrets.yaml`), `data_version_control` and `db_version` (from `database: versions` of `config.yml`). Remove it when they move to the new setup, after the 2.0.0 release.
+- `R/00_Config_file.R` is a compatibility file for the website: it sources the setup and keeps the objects the website uses, `path_to_vegvault` (the v1 database, `database_v1_path` of `secrets.yaml`), `data_version_control` and `db_version` (from `database: versions` of `config.yml`). Remove it when the website moves to the new setup, after the 2.0.0 release.
 
 ## Tests
 
@@ -153,6 +153,6 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Exp
 - `setup-graphics_device.R` sends the drawing of figure tests to a temporary PDF, so no `Rplots.pdf` is left in the test folder.
 - Producer pins are tested on `build_producer_manifest_fixture()`, which copies the valid contract fixtures into local stand-ins for the releases and the sibling checkouts and pins them with `file://` URLs. No test downloads from the network. The test of `build_producer_import_targets()` runs the stage's targets with `tar_make(callr_function = NULL)` on a fixture manifest of every contract, in a temporary store; in that mode the script runs in the test's environment, so no local object may be named like a target.
 - `Rscript R/Tests/Run_tests.R` validates every function file of `R/Functions/` (`validate_function_names()`) and runs the suite in a clean subprocess (`run_project_tests()`).
-- The legacy database writers carry `save_*()` names (formerly `add_*()`; `add_to_db()` is `save_table_rows()`), and the v1 gridpoint helpers are `prepare_coordinate_bins()`, `compute_binned_gridpoint_links()` and `select_binned_gridpoint_ids()`. They have no roxygen and no tests yet: the database assembly stage replaces them with bulk writers, or documents and tests the ones it keeps. The scripts in `R/Analyses/90_Database_research/` and the design note keep the old names, because they record what ran for the 2.0.0 database research.
+- The v1.0.0 database writers (`add_*()`, renamed `save_*()` before their removal; `add_to_db()` became `save_table_rows()`) and the v1 gridpoint helpers (`prepare_coordinate_bins()`, `compute_binned_gridpoint_links()`, `select_binned_gridpoint_ids()`) are deleted; the database assembly stage writes with its own tested functions. The scripts in `R/Analyses/90_Database_research/` and the design note keep the old names, because they record what ran for the 2.0.0 database research; the scripts that ran the v1.0.0 writers no longer run.
 - Focused run: source the setup, then `run_test_file(test_file = ...)`.
-- Script-level integration checks that are not function tests, such as `tests/test_trait_v2_integration.R`, run directly with `Rscript` and use a temporary database.
+- Script-level integration checks that are not function tests run directly with `Rscript` and use a temporary database. The two checks of the v1.0.0 writers in `tests/` were deleted with those writers.

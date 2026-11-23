@@ -10,12 +10,11 @@
 #                         2023
 #
 #----------------------------------------------------------#
-# Compatibility entry point for the legacy scripts (R/01_Master.R,
-#   R/01_Data_processing/, R/02_Main_analyses/, R/03_Visualisation/) and
-#   the website, which source this file. It sources the project setup and
-#   keeps the objects these scripts use. New code sources
-#   R/___setup_project___.R directly. Remove this file when the website and
-#   the legacy scripts move to the new setup, after the 2.0.0 release.
+# Compatibility entry point for the website, which sources this file
+#   (directly and through R/Website/00_Config_quarto.R). It sources
+#   the project setup and keeps the objects the website uses. New code
+#   sources R/___setup_project___.R directly. Remove this file when the
+#   website moves to the new setup, after the 2.0.0 release.
 
 
 #----------------------------------------------------------#
@@ -26,13 +25,12 @@ library(here)
 
 # Loads the functions, attaches `packages: attach` of config.yml and
 #   resolves the data root. Packages are restored from renv.lock by
-#   R/___Init_project___.R, no longer here. The legacy scripts call every
-#   other package with its namespace, so none is attached here
+#   R/___Init_project___.R, no longer here
 source(
   here::here("R/___setup_project___.R")
 )
 
-# The seed of the legacy scripts; the setup sets `seed` of config.yml
+# The seed of the website; the setup sets `seed` of config.yml
 set.seed(1234)
 
 
@@ -40,11 +38,9 @@ set.seed(1234)
 # 1. Database path -----
 #----------------------------------------------------------#
 
-# The database the legacy scripts and the website read and write: the
-#   released v1 database, `database_v1_path` in the git-ignored
-#   secrets.yaml, which replaces .secrets/path.yaml. The 2.0.0 build writes
-#   `database_path` instead. Never run a legacy script that writes the
-#   database without explicit authorization
+# The database the website reads: the released v1 database,
+#   `database_v1_path` in the git-ignored secrets.yaml, which replaces
+#   .secrets/path.yaml. The 2.0.0 build writes `database_path` instead
 path_to_vegvault <-
   resolve_database_path(key = "database_v1_path")
 

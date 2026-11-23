@@ -1,5 +1,5 @@
 ---
-applyTo: ["Data/SQL/**", "R/01_Data_processing/**", "R/02_Main_analyses/**"]
+applyTo: ["Data/SQL/**", "R/Functions/Database/**", "R/Analyses/02_Gridpoints/**", "R/Analyses/03_Database_assembly/**"]
 description: Compatibility adapter for VegVault SQLite schema, imports, and assembly.
 ---
 

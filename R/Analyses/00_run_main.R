@@ -15,8 +15,7 @@
 #   project setup itself. Add every new stage runner to the list below.
 # Run with:
 #   Rscript R/Analyses/00_run_main.R
-# The legacy script cascade R/01_Master.R stays until the stages replace
-#   it; never run either against the live database without approval.
+# Never run it against the live database without approval.
 
 
 #----------------------------------------------------------#

@@ -29,8 +29,9 @@
 #'     `Neotoma - FOSSILPOL`, `TRY`, `gridpoints`), the colours of v1.
 #' }
 #' @details
-#' The theme keeps the look of the v1 manuscript figures
-#' (R/03_Visualisation/01_manuscript/00_Config_mns.R) instead of the
+#' The theme keeps the look of the v1 manuscript figures (their setup
+#' script R/03_Visualisation/01_manuscript/00_Config_mns.R, deleted for
+#' 2.0.0) instead of the
 #' project default `theme_classic()`. Aborts when a required setting or
 #' colour is missing.
 #' @examples
@@ -159,8 +160,8 @@ build_figure_style <- function(
   col_grey <-
     purrr::chuck(list_colors_all, "grey")
 
-  # The theme of the v1 manuscript figures
-  #   (R/03_Visualisation/01_manuscript/00_Config_mns.R)
+  # The theme of the v1 manuscript figures (the deleted v1.0.0 script
+  #   R/03_Visualisation/01_manuscript/00_Config_mns.R)
   theme_manuscript <-
     ggplot2::theme_minimal() +
     ggplot2::theme(

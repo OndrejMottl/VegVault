@@ -6,7 +6,7 @@ Reproduce and understand a problem before changing production code or data. Use 
 
 1. Create a self-contained script in an ignored temporary location such as `Data/Temp/debug_<topic>.R` or the system temporary directory.
 2. Run it with `Rscript` from the correct repository root in a clean session.
-3. Load the project setup only when the problem requires full project context: `R/___setup_project___.R` in VegVault, `R/00_Config_file.R` in the producer repositories and the legacy VegVault scripts. Remember that it sources functions, attaches packages and resolves private storage, and that `R/00_Config_file.R` may also restore packages.
+3. Load the project setup only when the problem requires full project context: `R/___setup_project___.R` in VegVault, `R/00_Config_file.R` in the producer repositories and the VegVault website. Remember that it sources functions, attaches packages and resolves private storage, and that `R/00_Config_file.R` may also restore packages.
 4. Use a small fixture, temporary SQLite database, or representative raster/data subset rather than live data.
 5. Apply the smallest source change that fixes the confirmed cause.
 6. Remove temporary files and run the narrowest reliable validation before broadening.
