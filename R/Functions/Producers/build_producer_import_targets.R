@@ -30,6 +30,9 @@
 #' `load_producer_import()`). An artefact with variables has instead, per
 #' variable, `data_files_<id>_<variable>` (`filter_producer_files()`) and
 #' `data_<id>_<variable>`, so a changed file rebuilds only its variable.
+#' Each data target has a row count, `n_rows_<id>` or
+#' `n_rows_<id>_<variable>` (`compute_artefact_rows()`), so that no
+#' artefact is loaded whole to be counted.
 #' A filter by key reads `vec_keys_<reference>_<key column>`
 #' (`prepare_producer_keys()`), not the reference artefact itself. The
 #' subset filter of an artefact is written into its data target's command,
@@ -38,7 +41,8 @@
 #' `vec_chelsa_trace21k_ages`, `data_chelsa_neoclimate_coordinates`,
 #' `data_trait_unit_rules` (`build_trait_unit_rules()`),
 #' `check_trait_rule_keys` (`validate_trait_rule_keys()` on `try_traits` and
-#' `bien_traits`) and `list_producer_pins`.
+#' `bien_traits`) and `list_producer_pins`, whose `n_rows` per artefact is
+#' its row count, summed over its variables.
 #' @examples
 #' \dontrun{
 #' build_producer_import_targets(
@@ -249,7 +253,27 @@ build_producer_import_targets <- function(list_subset_filters) {
                   )
                 }
 
-              purrr::compact(list(target_files_variable, target_data))
+              # The rows handed on, counted from this data target only
+              target_n_rows <-
+                targets::tar_target_raw(
+                  name = stringr::str_c(
+                    c("n_rows", artefact_id, variable),
+                    collapse = "_"
+                  ),
+                  command = rlang::call2(
+                    "compute_artefact_rows",
+                    list_data = rlang::sym(
+                      stringr::str_c(
+                        c("data", artefact_id, variable),
+                        collapse = "_"
+                      )
+                    )
+                  )
+                )
+
+              purrr::compact(
+                list(target_files_variable, target_data, target_n_rows)
+              )
             }
           ) |>
           purrr::list_flatten()
@@ -325,6 +349,30 @@ build_producer_import_targets <- function(list_subset_filters) {
       )
     )
 
+  # The rows of each artefact: its count target, or the sum over the count
+  #   targets of its variables
+  list_n_rows <-
+    purrr::map(
+      .x = rlang::set_names(vec_artefact_ids),
+      .f = ~ {
+        vec_variables_artefact <-
+          purrr::chuck(list_variables, .x)
+
+        if (
+          base::length(vec_variables_artefact) == 0L
+        ) {
+          rlang::sym(stringr::str_c("n_rows_", .x))
+        } else {
+          rlang::call2(
+            "sum",
+            !!!rlang::syms(
+              stringr::str_c("n_rows_", .x, "_", vec_variables_artefact)
+            )
+          )
+        }
+      }
+    )
+
   list_targets_stage <-
     list(
       targets::tar_target(
@@ -379,7 +427,8 @@ build_producer_import_targets <- function(list_subset_filters) {
             "list",
             !!!rlang::syms(stringr::str_c("data_files_", vec_artefact_ids))
           ),
-          data_manifest = rlang::sym("data_producer_manifest")
+          data_manifest = rlang::sym("data_producer_manifest"),
+          vec_n_rows = rlang::call2("c", !!!list_n_rows)
         )
       )
     )

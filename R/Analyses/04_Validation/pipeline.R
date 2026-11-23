@@ -156,6 +156,14 @@ list(
     command = load_config_value(value = c("validation", "v1_comparison")),
     cue = targets::tar_cue(mode = "always")
   ),
+  # The scope of each pinned trait artefact in the counts per source
+  targets::tar_target(
+    name = "list_trait_value_sources",
+    command = load_config_value(
+      value = c("validation", "trait_value_counts")
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
   targets::tar_target(
     name = "file_v1_reference",
     command = here::here(purrr::chuck(list_v1_comparison, "reference")),
@@ -230,6 +238,16 @@ list(
     command = diagnose_trait_units(
       path_database = path_database,
       list_build_manifest = list_build_manifest
+    )
+  ),
+  # One TraitsValue row per record of each pinned trait artefact, from the
+  #   counts per source and the row counts of the pins
+  targets::tar_target(
+    name = "data_check_trait_value_counts",
+    command = diagnose_trait_value_counts(
+      data_counts = data_database_counts,
+      list_build_manifest = list_build_manifest,
+      list_sources = list_trait_value_sources
     )
   ),
   # Repeated or missing names in the name columns the schema does not keep
@@ -395,6 +413,7 @@ list(
       data_check_version_row,
       data_check_build_producers,
       data_check_trait_units,
+      data_check_trait_value_counts,
       data_check_names,
       data_check_orphans,
       data_check_missing_coordinates,

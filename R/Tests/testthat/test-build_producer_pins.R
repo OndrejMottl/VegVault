@@ -36,7 +36,8 @@ testthat::test_that("build_producer_pins() records every artefact", {
   res <-
     build_producer_pins(
       list_data_files = list(data_files_splot, data_files_bien),
-      data_manifest = data_manifest
+      data_manifest = data_manifest,
+      vec_n_rows = c(bien_traits = 7, splot_plots = 3)
     )
 
   testthat::expect_type(res, "list")
@@ -50,6 +51,7 @@ testthat::test_that("build_producer_pins() records every artefact", {
       contract_version = "1.1.0",
       mode = "release",
       tag = "v2.0.0",
+      n_rows = 3,
       files = list(
         list(
           file_name = "data_splot.qs",
@@ -62,8 +64,10 @@ testthat::test_that("build_producer_pins() records every artefact", {
 
   testthat::expect_named(
     purrr::chuck(res, 2L),
-    c("artefact_id", "contract_version", "mode", "tag", "files")
+    c("artefact_id", "contract_version", "mode", "tag", "n_rows", "files")
   )
+
+  testthat::expect_equal(purrr::chuck(res, 2L, "n_rows"), 7)
 
   # The field exists (checked above) and holds NULL
   testthat::expect_null(purrr::pluck(res, 2L, "tag"))
@@ -95,7 +99,8 @@ testthat::test_that("build_producer_pins() writes no paths", {
       data_manifest = tibble::tibble(
         artefact_id = "bien_traits",
         contract_version = "1.0.0"
-      )
+      ),
+      vec_n_rows = c(bien_traits = 2)
     )
 
   vec_yaml <-
@@ -131,7 +136,8 @@ testthat::test_that("build_producer_pins() validates its input", {
   testthat::expect_error(
     build_producer_pins(
       list_data_files = list(data_files, data_files),
-      data_manifest = data_manifest
+      data_manifest = data_manifest,
+      vec_n_rows = c(splot_plots = 1)
     ),
     regexp = "more\\s+than\\s+once"
   )
@@ -144,7 +150,8 @@ testthat::test_that("build_producer_pins() validates its input", {
           dplyr::mutate(data_files, artefact_id = "bien_plots")
         )
       ),
-      data_manifest = data_manifest
+      data_manifest = data_manifest,
+      vec_n_rows = c(splot_plots = 1)
     ),
     regexp = "one\\s+artefact"
   )
@@ -152,7 +159,8 @@ testthat::test_that("build_producer_pins() validates its input", {
   testthat::expect_error(
     build_producer_pins(
       list_data_files = list(dplyr::slice(data_files, 0L)),
-      data_manifest = data_manifest
+      data_manifest = data_manifest,
+      vec_n_rows = c(splot_plots = 1)
     ),
     regexp = "one\\s+artefact"
   )
@@ -162,7 +170,8 @@ testthat::test_that("build_producer_pins() validates its input", {
       list_data_files = list(
         dplyr::mutate(data_files, artefact_id = "bien_plots")
       ),
-      data_manifest = data_manifest
+      data_manifest = data_manifest,
+      vec_n_rows = c(splot_plots = 1)
     ),
     regexp = "bien_plots"
   )
@@ -170,8 +179,46 @@ testthat::test_that("build_producer_pins() validates its input", {
   testthat::expect_error(
     build_producer_pins(
       list_data_files = list(dplyr::select(data_files, -sha256)),
-      data_manifest = data_manifest
+      data_manifest = data_manifest,
+      vec_n_rows = c(splot_plots = 1)
     ),
     regexp = "sha256"
+  )
+
+  # Every artefact needs one whole, non-negative row count
+  testthat::expect_error(
+    build_producer_pins(
+      list_data_files = list(data_files),
+      data_manifest = data_manifest,
+      vec_n_rows = c(bien_plots = 1)
+    ),
+    regexp = "vec_n_rows"
+  )
+
+  testthat::expect_error(
+    build_producer_pins(
+      list_data_files = list(data_files),
+      data_manifest = data_manifest,
+      vec_n_rows = c(splot_plots = 1.5)
+    ),
+    regexp = "vec_n_rows"
+  )
+
+  testthat::expect_error(
+    build_producer_pins(
+      list_data_files = list(data_files),
+      data_manifest = data_manifest,
+      vec_n_rows = c(splot_plots = -1)
+    ),
+    regexp = "vec_n_rows"
+  )
+
+  testthat::expect_error(
+    build_producer_pins(
+      list_data_files = list(data_files),
+      data_manifest = data_manifest,
+      vec_n_rows = c(splot_plots = 1, bien_plots = 2)
+    ),
+    regexp = "vec_n_rows"
   )
 })

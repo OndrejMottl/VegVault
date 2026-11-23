@@ -59,6 +59,7 @@ testthat::test_that("build_producer_import_targets() declares the stage", {
         vec_variables
       ),
       vec_names_data,
+      stringr::str_replace(vec_names_data, "^data_", "n_rows_"),
       vec_names_stage
     )
   )
@@ -184,6 +185,23 @@ testthat::test_that("build_producer_import_targets() wires the inputs", {
   testthat::expect_true(
     base::all(
       stringr::str_c("data_files_", c("splot_plots", "hwsd_soil")) %in%
+        purrr::pluck(list_targets, "list_producer_pins", "deps")
+    )
+  )
+
+  # Rows are counted per data target, so no artefact is loaded whole for
+  #   its count; the pins add up the variables of an artefact
+  testthat::expect_equal(
+    purrr::pluck(list_targets, "n_rows_chelsa_neoclimate_bio12", "deps"),
+    c("compute_artefact_rows", "data_chelsa_neoclimate_bio12")
+  )
+
+  testthat::expect_true(
+    base::all(
+      c(
+        "n_rows_splot_plots", "n_rows_chelsa_neoclimate_bio1",
+        "n_rows_chelsa_trace21k_palaeoclimate_bio19"
+      ) %in%
         purrr::pluck(list_targets, "list_producer_pins", "deps")
     )
   )
@@ -314,10 +332,40 @@ testthat::test_that("build_producer_import_targets() runs on fixtures", {
       dplyr::pull(targets::tar_progress(store = path_store), progress)
   )
 
-  testthat::expect_length(
-    targets::tar_read(list_producer_pins, store = path_store),
-    base::length(vec_contract_ids)
-  )
+  list_pins <-
+    targets::tar_read(list_producer_pins, store = path_store)
+
+  testthat::expect_length(list_pins, base::length(vec_contract_ids))
+
+  # Each pin records the rows handed on: the rows of the fixture files
+  vec_n_rows_pins <-
+    purrr::map_dbl(.x = list_pins, .f = ~ purrr::chuck(.x, "n_rows")) |>
+    rlang::set_names(
+      purrr::map_chr(.x = list_pins, .f = ~ purrr::chuck(.x, "artefact_id"))
+    )
+
+  vec_n_rows_fixtures <-
+    purrr::map_dbl(
+      .x = rlang::set_names(base::names(vec_n_rows_pins)),
+      .f = ~ base::list.files(
+        path = here::here("Data", "Contracts", "fixtures", "valid", .x),
+        full.names = TRUE
+      ) |>
+        purrr::map_dbl(
+          .f = ~ base::nrow(
+            if (
+              stringr::str_detect(.x, "[.]csv$")
+            ) {
+              utils::read.csv(.x)
+            } else {
+              qs2::qs_read(.x)
+            }
+          )
+        ) |>
+        base::sum()
+    )
+
+  testthat::expect_equal(vec_n_rows_pins, vec_n_rows_fixtures)
 
   testthat::expect_equal(
     targets::tar_read(vec_chelsa_trace21k_ages, store = path_store),
@@ -487,7 +535,7 @@ testthat::test_that("build_producer_import_targets() runs on fixtures", {
     c("bio1", "bio4", "bio6", "bio12", "bio15", "bio18", "bio19")
 
   # The file selections of every neoclimate variable run again, but only
-  #   bio12 has new files
+  #   bio12 has new files; the two changed data targets are counted again
   testthat::expect_setequal(
     base::setdiff(
       vec_built_changed,
@@ -496,7 +544,8 @@ testthat::test_that("build_producer_import_targets() runs on fixtures", {
     c(
       "file_producer_manifest", "data_producer_manifest", "data_splot_plots",
       stringr::str_c("data_files_chelsa_neoclimate_", vec_variables),
-      "data_chelsa_neoclimate_bio12", "list_producer_pins"
+      "data_chelsa_neoclimate_bio12", "n_rows_splot_plots",
+      "n_rows_chelsa_neoclimate_bio12", "list_producer_pins"
     )
   )
 

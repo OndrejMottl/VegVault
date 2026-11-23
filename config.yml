@@ -237,6 +237,13 @@ default:
     links:
       # Positions drawn per stratum; a smaller stratum is checked whole
       n_positions_per_stratum: 200
+    # Trait values: the TraitsValue rows of each trait source equal the
+    #   records of its pinned artefact (the pin's `n_rows`, counted by stage
+    #   01 after the subset cut). Per trait artefact id, the scope of its
+    #   rows in the counts per source (dataset type / source type)
+    trait_value_counts:
+      try_traits: "traits / TRY"
+      bien_traits: "traits / BIEN"
     # Comparison with v1.0.0: rows per table, datasets, samples,
     #   positions, taxon links and trait values per source, and abiotic
     #   values per variable, against the committed reference table (built
