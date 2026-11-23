@@ -15,7 +15,9 @@
 #' as the observed value when every value is right, otherwise one `fail`
 #' row per trait domain with wrong values, scope the domain name, the
 #' number of wrong values as the observed value, 0 as the threshold, and
-#' the count of each kind of problem in the message.
+#' the count of each kind of problem in the message: values without a
+#' conversion rule, values not in the unit of their rule, values with a
+#' derivation from another input unit, and missing or infinite values.
 #' @details
 #' The unit of a value is the unit of its trait's domain
 #' (`TraitsDomain.trait_unit`). It must equal the unit its rules produce:
@@ -26,9 +28,11 @@
 #' must be present and finite. The schema already requires a conversion
 #' rule for every value, one unit per domain and unique keys, and
 #' `diagnose_foreign_keys()` checks that the rules exist; a value whose
-#' rule or domain is missing fails here too. A value with a missing domain
-#' is reported under `(none)`. Opens the database read-only. Aborts only
-#' when the database is not the one of the manifest.
+#' conversion rule does not exist fails here too, counted on its own and
+#' not as a unit problem. A value with a missing domain is reported under
+#' `(none)` and fails, because it has no unit to compare. Opens the
+#' database read-only. Aborts only when the database is not the one of the
+#' manifest.
 #' @seealso [diagnose_foreign_keys()]
 #' @examples
 #' \dontrun{
@@ -55,14 +59,16 @@ diagnose_trait_units <- function(
       statement = stringr::str_c(
         "SELECT COALESCE(d.trait_domain_name, '(none)') AS scope,",
         "COUNT(*) AS n_values,",
-        "SUM(COALESCE(r.output_unit, c.standardized_unit)",
+        "SUM(c.trait_unit_conversion_id IS NULL) AS n_rule,",
+        "SUM(c.trait_unit_conversion_id IS NOT NULL",
+        "AND COALESCE(r.output_unit, c.standardized_unit)",
         "IS NOT d.trait_unit) AS n_unit,",
         "SUM(v.trait_derivation_id IS NOT NULL",
         "AND r.input_unit IS NOT c.standardized_unit) AS n_input,",
         "SUM(v.trait_value IS NULL",
         "OR ABS(v.trait_value) > 1.7976931348623157e308) AS n_value,",
-        "SUM(",
-        "COALESCE(r.output_unit, c.standardized_unit) IS NOT d.trait_unit",
+        "SUM(c.trait_unit_conversion_id IS NULL",
+        "OR COALESCE(r.output_unit, c.standardized_unit) IS NOT d.trait_unit",
         "OR (v.trait_derivation_id IS NOT NULL",
         "AND r.input_unit IS NOT c.standardized_unit)",
         "OR v.trait_value IS NULL",
@@ -83,7 +89,7 @@ diagnose_trait_units <- function(
     tibble::as_tibble() |>
     dplyr::mutate(
       dplyr::across(
-        .cols = c(n_values, n_unit, n_input, n_value, n_wrong),
+        .cols = c(n_values, n_rule, n_unit, n_input, n_value, n_wrong),
         .fns = ~ base::as.integer(dplyr::coalesce(.x, 0))
       )
     ) |>
@@ -115,6 +121,8 @@ diagnose_trait_units <- function(
         threshold = 0L,
         message = stringr::str_c(
           "Trait values of ", dplyr::pull(data_wrong, scope), ": ",
+          dplyr::pull(data_wrong, n_rule),
+          " without a conversion rule, ",
           dplyr::pull(data_wrong, n_unit),
           " not in the unit of its rule, ",
           dplyr::pull(data_wrong, n_input),
