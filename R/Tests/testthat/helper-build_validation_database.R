@@ -1,6 +1,6 @@
 # Build a small 2.0.0 database that passes the validation checks: the
 #   tables of build_database_fixture(), the version rows of 1.0.0 and of the
-#   build, one producer row, a pin manifest and a build manifest written
+#   build, three producer rows, a pin manifest and a build manifest written
 #   after the last change to the database. As the link step would, it
 #   stores the truncated geodesic distances of the two fixture links
 #   (13 and 13 km, not the fixture's 10 and 12) and gives positions 101 to
@@ -142,19 +142,43 @@ build_validation_database <- function(
           sep = " "
         )
       )
+
+      # The producer rows of the two trait pins
+      DBI::dbExecute(
+        .x,
+        stringr::str_c(
+          "INSERT INTO BuildProducers VALUES (2, 'try_traits', ?),",
+          "(2, 'bien_traits', ?)",
+          sep = " "
+        ),
+        params = base::list(tag_stored, tag_stored)
+      )
     }
   )
 
+  # One pin per producer row, with the rows stage 01 would record: the 2
+  #   sPlot plots, the 3 TRY trait values and no BIEN trait value of the
+  #   fixture
+  data_pins <-
+    tibble::tribble(
+      ~artefact_id, ~n_rows, ~file_name,
+      "splot_plots", 2, "data_splot_2026-11-20__0123456789__.qs",
+      "try_traits", 3, "data_trait_try_2026-11-20__0123456789__.qs",
+      "bien_traits", 0, "data_traits_bien_0_2026-11-20__0123456789__.qs"
+    )
+
   list_producer_pins <-
-    base::list(
-      base::list(
-        artefact_id = "splot_plots",
+    purrr::map(
+      .x = base::seq_len(base::nrow(data_pins)),
+      .f = ~ base::list(
+        artefact_id = dplyr::pull(data_pins, artefact_id)[.x],
         contract_version = "1.0.0",
         mode = base::ifelse(profile == "release", "release", "dev"),
         tag = tag,
+        n_rows = dplyr::pull(data_pins, n_rows)[.x],
         files = base::list(
           base::list(
-            file_name = "data_splot_2026-11-20__0123456789__.qs",
+            file_name = dplyr::pull(data_pins, file_name)[.x],
             size = 10L,
             sha256 = base::strrep("ab", 32L)
           )

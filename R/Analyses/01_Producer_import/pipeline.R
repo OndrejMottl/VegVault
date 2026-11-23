@@ -72,7 +72,9 @@ targets::tar_option_set(
 #     TraitUnitConversion and TraitDerivation without the id), and
 #     `check_trait_rule_keys`: every rule key of `try_traits` and
 #     `bien_traits` is in them
-#   - `list_producer_pins`: the pins for save_build_manifest()
+#   - `list_producer_pins`: the pins for save_build_manifest(), each with
+#     `n_rows`, the rows handed on (after the subset cut), which the
+#     validation stage compares with the database
 #   - `profile_build`: the profile of the latest run
 # In the `subset` profile every data target holds only the subset box.
 # validate_target_store_contract() refuses this store after a run that
