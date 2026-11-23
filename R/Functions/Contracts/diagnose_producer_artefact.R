@@ -216,20 +216,22 @@ diagnose_producer_artefact <- function(
           .f = ~ base::as.character(purrr::chuck(.x, "variable"))
         )
 
-      purrr::pmap(
-        .l = base::list(
-          list_objects,
-          vec_file_names,
-          dplyr::pull(data_files, "variable"),
-          is_frame
-        ),
-        .f = ~ {
-          data_object <- ..1
+      vec_file_variables <-
+        dplyr::pull(data_files, "variable")
 
-          sel_variable <- ..3
+      # Indexed rather than pmap() with ..1: targets warns on ..1 when it
+      #   scans the functions a pipeline uses
+      purrr::map(
+        .x = base::seq_along(list_objects),
+        .f = ~ {
+          data_object <- list_objects[[.x]]
+
+          sel_file_name <- vec_file_names[.x]
+
+          sel_variable <- vec_file_variables[.x]
 
           flag_checkable <-
-            ..4 &&
+            is_frame[.x] &&
             !base::is.na(sel_variable) &&
             value_column %in% base::names(data_object) &&
             base::is.atomic(data_object[[value_column]])
@@ -246,7 +248,7 @@ diagnose_producer_artefact <- function(
               nullable = TRUE,
               contract_id = contract_id,
               column = stringr::str_c(value_column, " [", sel_variable, "]"),
-              file_name = ..2
+              file_name = sel_file_name
             )
           }
         }

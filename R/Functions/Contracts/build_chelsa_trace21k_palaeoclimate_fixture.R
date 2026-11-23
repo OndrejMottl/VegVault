@@ -165,19 +165,23 @@ build_chelsa_trace21k_palaeoclimate_fixture <- function(
   name_template <-
     purrr::chuck(contract, "file", "name_templates")[1]
 
+  vec_batches <-
+    dplyr::pull(data_batches, "batch")
+
+  vec_batch_tokens <-
+    vec_tokens[dplyr::pull(data_batches, "index_variable")]
+
+  # Indexed rather than pmap() with ..1: targets warns on ..1 when it scans
+  #   the functions a pipeline uses
   vec_names <-
-    purrr::pmap_chr(
-      .l = base::list(
-        list_files,
-        dplyr::pull(data_batches, "batch"),
-        vec_tokens[dplyr::pull(data_batches, "index_variable")]
-      ),
+    purrr::map_chr(
+      .x = base::seq_along(list_files),
       .f = ~ build_producer_file_name(
         name_template = name_template,
         date = date_file,
-        hash = rlang::hash(..1),
-        partition = ..2,
-        variable_token = ..3
+        hash = rlang::hash(list_files[[.x]]),
+        partition = vec_batches[.x],
+        variable_token = vec_batch_tokens[.x]
       )
     )
 
