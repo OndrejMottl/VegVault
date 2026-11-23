@@ -301,18 +301,25 @@ save_contract_copy <- function(
   ## Record -----
   #--------------------------------------------------#
 
-  # Function files have no contract fields, so their NA values are dropped
+  data_files_record <-
+    dplyr::select(
+      data_files_selected,
+      "path", "sha256", "contract_id", "contract_version"
+    )
+
+  # Function files have no contract fields, so their NA values are dropped.
+  #   Indexed rather than pmap() with ..1: targets warns on ..1 when it
+  #   scans the functions a pipeline loads
   list_files_record <-
-    data_files_selected |>
-    dplyr::select("path", "sha256", "contract_id", "contract_version") |>
-    purrr::pmap(
-      .f = ~ base::list(
-        path = ..1,
-        sha256 = ..2,
-        contract_id = ..3,
-        contract_version = ..4
-      ) |>
-        purrr::discard(.p = ~ base::is.na(.x))
+    purrr::map(
+      .x = base::seq_len(base::nrow(data_files_record)),
+      .f = ~ {
+        index_file <- .x
+
+        data_files_record[index_file, ] |>
+          base::as.list() |>
+          purrr::discard(.p = ~ base::is.na(.x))
+      }
     )
 
   text_record <-
