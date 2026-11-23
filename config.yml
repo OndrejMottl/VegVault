@@ -280,6 +280,12 @@ default:
           scopes: ["traits / BIEN"]
           reason: "BIEN trait samples without a value are dropped; v1.0.0
             has 238,777 (G2 decision 4)."
+        - metrics: [sample_taxa_rows]
+          scopes: ["vegetation_plot / BIEN"]
+          reason: "One record per taxon in each plot: repeated listings
+            of the same taxon are merged and only the latest survey of a
+            plot is kept, so 524,439 records against 972,791 in v1.0.0
+            (VegVault-Vegetation_data pull request 26)."
         - metrics: [datasets, samples, positions, sample_taxa_rows]
           scopes: ["fossil_pollen_archive / FOSSILPOL"]
           reason: "FOSSILPOL rerun with a fresh Neotoma download: 1,551
