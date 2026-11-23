@@ -147,25 +147,77 @@ artefacts:
         - trait_derivations.csv
   - artefact_id: chelsa_neoclimate
     contract_version: 1.1.0
-    note: Placeholder until VegVault-abiotic_data tags v2.0.0.
+    note: >-
+      dev: the 2.0.0 release build on the VegVault-abiotic_data branch 2.0.0
+      at 2416691, committed in Outputs/Data/Neoclimate; 7 files, one per
+      variable, of 1442880 rows each. Bytes and SHA-256 of every file are
+      in Outputs/Tables/export_manifest.csv of that commit. release:
+      placeholder until VegVault-abiotic_data tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      files:
+        - CHELSA_bio_01_2026-11-23__541b40f5ad9413f4024bfabb522519c2__.qs
+        - CHELSA_bio_04_2026-11-23__e6498f68819a8c5081c18cdd62be9a3c__.qs
+        - CHELSA_bio_06_2026-11-23__ffdeeef56fca678d61c823f323e5f64a__.qs
+        - CHELSA_bio_12_2026-11-23__e948db8390e6e31cbc489ff093cf0bf3__.qs
+        - CHELSA_bio_15_2026-11-23__7074242e3a6f05b1aa870ad7eaf70e0a__.qs
+        - CHELSA_bio_18_2026-11-23__0ee9acac8004b466b2b4feed6e743755__.qs
+        - CHELSA_bio_19_2026-11-23__611e6688094f366ce53950bb1cbf9386__.qs
   - artefact_id: chelsa_trace21k_palaeoclimate
     contract_version: 2.0.0
-    note: Placeholder until VegVault-abiotic_data tags v2.0.0.
+    note: >-
+      dev: the 2.0.0 release build on the VegVault-abiotic_data branch 2.0.0
+      at 2416691, committed in Outputs/Data/Palaoclimate; 28 files, four
+      batches per variable, of 12485990 to 13346640 rows. Bytes
+      and SHA-256 of every file are in Outputs/Tables/export_manifest.csv of
+      that commit. release: placeholder until VegVault-abiotic_data tags
+      v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      files:
+        - bio01_batch_1_2026-11-23__e994e0bb970507835a742bdca683ee47__.qs
+        - bio01_batch_2_2026-11-23__cad1d4825b6f59e317f5e13f7a3d9181__.qs
+        - bio01_batch_3_2026-11-23__f1bc14f4448543c641821cde557a2562__.qs
+        - bio01_batch_4_2026-11-23__d7ff0cb30acf6e042bc2cccee360f66f__.qs
+        - bio04_batch_1_2026-11-23__715d4065d3ad0c200c5bf1a5519c5f7c__.qs
+        - bio04_batch_2_2026-11-23__e9f6609092a70a1e8db5b4d72dcb5ffc__.qs
+        - bio04_batch_3_2026-11-23__ddaeb7d51c9801c0e7b59b88ce8d283c__.qs
+        - bio04_batch_4_2026-11-23__4379c5d2fc8cabac8eb20603c9564653__.qs
+        - bio06_batch_1_2026-11-23__42f832654985f051a2914d2e0e3706ef__.qs
+        - bio06_batch_2_2026-11-23__85e94df8e1227a777fef29c5f458a7c7__.qs
+        - bio06_batch_3_2026-11-23__4b9763cb9ff96f814d57f3424d0ed88e__.qs
+        - bio06_batch_4_2026-11-23__861e2955d667b3d5acef37c4bf35d441__.qs
+        - bio12_batch_1_2026-11-23__47031c3182f26d8264d8ee0e5ef5fef8__.qs
+        - bio12_batch_2_2026-11-23__d861bb0d71c12bcf08e2e123a88bb082__.qs
+        - bio12_batch_3_2026-11-23__da74ed762aa40a360d6e9835d753aa6d__.qs
+        - bio12_batch_4_2026-11-23__c7b5d33ba5492ccd455c8dc652219983__.qs
+        - bio15_batch_1_2026-11-23__59f5befc4d41ee387da431bfabe7ac3e__.qs
+        - bio15_batch_2_2026-11-23__5eb24e75b544a562294e441f0db68a0c__.qs
+        - bio15_batch_3_2026-11-23__9a711197ae4ed39621b621de177d8518__.qs
+        - bio15_batch_4_2026-11-23__5f78d56a25ed740f519cd32ec8b2474c__.qs
+        - bio18_batch_1_2026-11-23__486b7d32e43a9ae0b8bc48f4fba909a5__.qs
+        - bio18_batch_2_2026-11-23__55a01dc935d8b87d8f6183f33a016987__.qs
+        - bio18_batch_3_2026-11-23__d56b7c720902f5f8f3bd70b786496bd9__.qs
+        - bio18_batch_4_2026-11-23__af9c487dea59e4e88c3463a5d1d0259d__.qs
+        - bio19_batch_1_2026-11-23__b816e23df96fa12deafe2338b9304ea7__.qs
+        - bio19_batch_2_2026-11-23__61d48016628de36be3f56d74cb8a238d__.qs
+        - bio19_batch_3_2026-11-23__5d37b267473e6e3a5448d4830db76b28__.qs
+        - bio19_batch_4_2026-11-23__29d78fbc25ac01daf11ce7cd611cd1d8__.qs
   - artefact_id: hwsd_soil
     contract_version: 2.0.0
-    note: Placeholder until VegVault-abiotic_data tags v2.0.0.
+    note: >-
+      dev: the 2.0.0 release build on the VegVault-abiotic_data branch 2.0.0
+      at 2416691, committed in Outputs/Data/HWSD; 318305 rows
+      (203130 bytes, SHA-256
+      7bd4c1c2701fb1213a3598d760a042ccbe355354e3a3afefd1c33f7ad49848e3).
+      release: placeholder until VegVault-abiotic_data tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      files:
+        - hwsd_data_2026-11-23__7b6ed97a6b0c32b4703fe69c9e0dfa51__.qs
