@@ -160,6 +160,41 @@ testthat::test_that("diagnose_trait_units() fails values not finite", {
 })
 
 
+testthat::test_that("diagnose_trait_units() fails a value without a rule", {
+  list_build <-
+    build_validation_database(dir = withr::local_tempdir())
+
+  # The leaf-area value names a conversion rule that does not exist; the
+  #   connection does not enforce foreign keys, as in the build
+  run_with_database(
+    path_database = purrr::chuck(list_build, "path_database"),
+    fn = DBI::dbExecute,
+    statement = stringr::str_c(
+      "UPDATE TraitsValue SET trait_unit_conversion_id = 99",
+      "WHERE trait_id = 2",
+      sep = " "
+    )
+  )
+
+  res <-
+    diagnose_trait_units(
+      path_database = purrr::chuck(list_build, "path_database"),
+      list_build_manifest = purrr::chuck(list_build, "list_build_manifest")
+    )
+
+  testthat::expect_equal(dplyr::pull(res, scope), "Leaf Area")
+
+  testthat::expect_equal(dplyr::pull(res, status), "fail")
+
+  testthat::expect_equal(dplyr::pull(res, observed), "1")
+
+  testthat::expect_match(
+    dplyr::pull(res, message),
+    "1 without a conversion rule"
+  )
+})
+
+
 #----------------------------------------------------------#
 # Inputs -----
 #----------------------------------------------------------#
