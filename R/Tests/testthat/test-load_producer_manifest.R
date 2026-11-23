@@ -18,8 +18,15 @@ testthat::test_that("load_producer_manifest() reads a pinned manifest", {
     res,
     c(
       "artefact_id", "contract_version", "path_contract", "repository",
-      "directory", "note", "release_tag", "release_files", "dev_files"
+      "directory", "note", "release_tag", "release_files", "dev_files",
+      "dev_directory"
     )
+  )
+
+  # Without a dev folder, dev files are read from the contract folder
+  testthat::expect_equal(
+    dplyr::pull(res, dev_directory),
+    dplyr::pull(res, directory)
   )
 
   testthat::expect_equal(
@@ -58,6 +65,38 @@ testthat::test_that("load_producer_manifest() reads the project manifest", {
     stringr::str_remove("[.]yml$")
 
   testthat::expect_setequal(dplyr::pull(res, artefact_id), vec_contract_ids)
+})
+
+testthat::test_that("load_producer_manifest() reads a dev folder", {
+  list_fixture <-
+    build_producer_manifest_fixture(dir_root = withr::local_tempdir())
+
+  path_manifest <-
+    purrr::chuck(list_fixture, "path_manifest")
+
+  yaml::read_yaml(path_manifest) |>
+    purrr::assign_in(
+      where = list("artefacts", 1L, "dev", "directory"),
+      value = "Outputs/Data_temp"
+    ) |>
+    yaml::write_yaml(file = path_manifest)
+
+  res <-
+    load_producer_manifest(
+      path_manifest = path_manifest,
+      flag_require_all_contracts = FALSE
+    )
+
+  testthat::expect_equal(
+    dplyr::pull(res, dev_directory),
+    c("Outputs/Data_temp", "Outputs/Data")
+  )
+
+  # The release files keep the contract folder
+  testthat::expect_equal(
+    dplyr::pull(res, directory),
+    c("Outputs/Data", "Outputs/Data")
+  )
 })
 
 testthat::test_that("load_producer_manifest() needs every contract", {

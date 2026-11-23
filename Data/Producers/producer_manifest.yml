@@ -15,6 +15,10 @@
 # - dev: `files`, the explicit file names in the sibling producer checkout
 #     (<suite root>/<repository name>/<directory>/), for rehearsal builds;
 #     never the newest file by date. An empty list is a placeholder.
+#     `directory` (optional) replaces the contract's folder for the dev
+#     files, relative to the checkout, for example `Outputs/Data_temp`,
+#     where producers built from the project template write test
+#     artefacts.
 # Change an entry only together with the producer release it pins.
 
 manifest_version: 1
@@ -73,20 +77,44 @@ artefacts:
         - data_age_uncertainty_D_2026-11-20__f07eb9ae814666b400489a9e2845bc4f__.qs
   - artefact_id: try_traits
     contract_version: 2.0.0
-    note: Placeholder until VegVault-Trait_data tags v2.0.0.
+    note: >-
+      dev: the converted pipeline in its dev profile (VegVault-Trait_data
+      issue 15) on TRY request 28498, 897726 records; git-ignored in
+      Outputs/Data_temp (36408403 bytes, SHA-256
+      7b13da4f4e833e3222bfc5ec1179435036e87ae270bfa3572bbc0a8f1a8b8002).
+      release: placeholder until VegVault-Trait_data tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      directory: Outputs/Data_temp
+      files:
+        - data_trait_try_2026-11-21__d0efb27990209449b88846ad2f64e3f0__.qs
   - artefact_id: bien_traits
     contract_version: 1.0.0
-    note: Placeholder until VegVault-Trait_data tags v2.0.0.
+    note: >-
+      dev: the converted pipeline in its dev profile (VegVault-Trait_data
+      issue 15) on the BIEN download of 2026-11-19, 10023769 records in
+      parts 0 to 3; git-ignored in Outputs/Data_temp. Bytes and SHA-256 by
+      part: 0, 41311322,
+      9f670fc6fc9069e47c123cbb552dd3d39d7be4f3d634f4ddd38b2c79f10e7153; 1,
+      47116914,
+      9e8b7d40572b0a716daca02145e1daf7c94bea6c0f246f9e6cbecfdb91475118; 2,
+      47123217,
+      c84f7399af1db88e0f1b08232e6939862f73710257b0c8345a1a96901cbbbade; 3,
+      47160112,
+      26d241935326d6bf8daf2a0fed2a3e0bfa4de65875a7885f7bc8ed9238b8b702.
+      release: placeholder until VegVault-Trait_data tags v2.0.0.
     release:
       tag: null
       files: []
     dev:
-      files: []
+      directory: Outputs/Data_temp
+      files:
+        - data_traits_bien_0_2026-11-21__cd2de89218090bc15cd4d291015867ff__.qs
+        - data_traits_bien_1_2026-11-21__e0a063079e89367a45eea6c8db65c136__.qs
+        - data_traits_bien_2_2026-11-21__4c067146b45629e869b3d4c3902db429__.qs
+        - data_traits_bien_3_2026-11-21__f93b0aa95da0d39ced316a9fdeb0cc2b__.qs
   - artefact_id: chelsa_neoclimate
     contract_version: 1.1.0
     note: Placeholder until VegVault-abiotic_data tags v2.0.0.

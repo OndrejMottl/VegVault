@@ -61,6 +61,65 @@ testthat::test_that("resolve_producer_artefact() finds the dev files", {
   )
 })
 
+testthat::test_that("resolve_producer_artefact() reads a dev folder", {
+  list_fixture <-
+    build_producer_manifest_fixture(dir_root = withr::local_tempdir())
+
+  path_manifest <-
+    purrr::chuck(list_fixture, "path_manifest")
+
+  yaml::read_yaml(path_manifest) |>
+    purrr::assign_in(
+      where = list("artefacts", 1L, "dev", "directory"),
+      value = "Outputs/Data_temp"
+    ) |>
+    yaml::write_yaml(file = path_manifest)
+
+  # The sPlot dev files move to the producer's git-ignored test folder
+  dir_checkout <-
+    base::file.path(
+      purrr::chuck(list_fixture, "dir_dev_root"),
+      "VegVault-Vegetation_data"
+    )
+
+  vec_paths_old <-
+    base::list.files(
+      base::file.path(dir_checkout, "Outputs", "Data"),
+      full.names = TRUE
+    )
+
+  base::dir.create(base::file.path(dir_checkout, "Outputs", "Data_temp"))
+
+  base::file.rename(
+    from = vec_paths_old,
+    to = base::file.path(
+      dir_checkout, "Outputs", "Data_temp", base::basename(vec_paths_old)
+    )
+  )
+
+  res <-
+    resolve_producer_artefact(
+      data_manifest = load_producer_manifest(
+        path_manifest = path_manifest,
+        flag_require_all_contracts = FALSE
+      ),
+      artefact_id = "splot_plots",
+      mode = "dev",
+      dir_dev_root = purrr::chuck(list_fixture, "dir_dev_root"),
+      dir_cache = withr::local_tempdir(),
+      url_template = purrr::chuck(list_fixture, "url_template")
+    )
+
+  testthat::expect_equal(base::nrow(res), 1L)
+
+  testthat::expect_match(
+    dplyr::pull(res, path),
+    "VegVault-Vegetation_data/Outputs/Data_temp/data_splot_"
+  )
+
+  testthat::expect_true(base::file.exists(dplyr::pull(res, path)))
+})
+
 testthat::test_that("resolve_producer_artefact() fetches release files", {
   list_fixture <-
     build_producer_manifest_fixture(dir_root = withr::local_tempdir())

@@ -19,8 +19,10 @@
 #' `contract_version`, `path_contract`, `repository` and `directory` (from
 #' the contract), `note` (character, `NA` when absent), `release_tag`
 #' (character, `NA` for a placeholder), `release_files` (a list of tibbles
-#' with `file_name`, `size` and `sha256`) and `dev_files` (a list of
-#' character vectors of file names).
+#' with `file_name`, `size` and `sha256`), `dev_files` (a list of
+#' character vectors of file names) and `dev_directory` (the folder of the
+#' dev files in the producer checkout: the entry's `dev: directory`, or the
+#' contract's `directory` when it has none).
 #' @details
 #' The manifest is a YAML map with `manifest_version` (1) and `artefacts`,
 #' a list of entries, each a map checked by
@@ -322,6 +324,14 @@ load_producer_manifest <- function(
         .f = ~ purrr::pluck(.x, "dev", "files", .default = list()) |>
           base::unlist(use.names = FALSE) |>
           base::as.character()
+      ),
+      dev_directory = purrr::map2_chr(
+        .x = list_artefacts,
+        .y = list_contracts,
+        .f = ~ purrr::pluck(
+          .x, "dev", "directory",
+          .default = purrr::chuck(.y, "producer", "directory")
+        )
       )
     )
 

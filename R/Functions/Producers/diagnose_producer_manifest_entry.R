@@ -20,7 +20,12 @@
 #' `is_release_tag()`) and at least one file, each with `file_name`,
 #' `size` (bytes, a positive whole number) and `sha256` (64 lower-case
 #' hexadecimal characters). `dev` has `files`, a possibly empty list of
-#' file names. Every file name must be a plain name that matches a
+#' file names, and may have `directory`, the folder of those files relative
+#' to the producer checkout (for example `Outputs/Data_temp`, where a
+#' producer built from the project template writes its test artefacts),
+#' with forward slashes and no empty, `.` or `..` part; without it, the dev
+#' files are in the contract's folder. Every file name must be a plain name
+#' that matches a
 #' file-name template of the contract, and no name may repeat within
 #' `release` or within `dev`.
 #' @examples
@@ -362,6 +367,30 @@ diagnose_producer_manifest_entry <- function(
       base::character(0)
     }
 
+  # An optional folder of the dev files, relative to the producer checkout:
+  #   forward slashes, no empty, `.` or `..` part, no drive or root
+  value_dev_directory <-
+    purrr::pluck(list_entry, "dev", "directory")
+
+  vec_directory_parts <-
+    if (
+      assertthat::is.string(value_dev_directory)
+    ) {
+      stringr::str_split_1(value_dev_directory, pattern = "/")
+    } else {
+      base::character(0)
+    }
+
+  flag_dev_directory_valid <-
+    base::is.null(value_dev_directory) ||
+    (
+      assertthat::is.string(value_dev_directory) &&
+        !base::is.na(value_dev_directory) &&
+        !stringr::str_detect(value_dev_directory, "[\\\\:]") &&
+        base::all(base::nzchar(vec_directory_parts)) &&
+        !base::any(vec_directory_parts %in% c(".", ".."))
+    )
+
   vec_problems_dev <-
     if (
       "dev" %in% vec_fields
@@ -374,13 +403,21 @@ diagnose_producer_manifest_entry <- function(
         ),
         stringr::str_c(
           "dev: unknown field '",
-          base::setdiff(vec_dev_fields, "files"),
+          base::setdiff(vec_dev_fields, c("files", "directory")),
           "'."
         ),
         if (
           !flag_dev_files_valid
         ) {
           "dev.files: must be a list of file names."
+        },
+        if (
+          !flag_dev_directory_valid
+        ) {
+          stringr::str_c(
+            "dev.directory: must be a relative folder inside the producer ",
+            "checkout, with forward slashes, such as 'Outputs/Data_temp'."
+          )
         }
       )
     }
