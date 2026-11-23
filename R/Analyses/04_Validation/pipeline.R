@@ -223,6 +223,15 @@ list(
       list_build_manifest = list_build_manifest
     )
   ),
+  # Every trait value finite and in the unit its conversion and derivation
+  #   rules produce
+  targets::tar_target(
+    name = "data_check_trait_units",
+    command = diagnose_trait_units(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
   # Repeated or missing names in the name columns the schema does not keep
   #   unique
   targets::tar_target(
@@ -385,6 +394,7 @@ list(
       data_check_foreign_keys,
       data_check_version_row,
       data_check_build_producers,
+      data_check_trait_units,
       data_check_names,
       data_check_orphans,
       data_check_missing_coordinates,

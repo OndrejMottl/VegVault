@@ -5,7 +5,9 @@
 #   stores the truncated geodesic distances of the two fixture links
 #   (13 and 13 km, not the fixture's 10 and 12) and gives positions 101 to
 #   105, without links, to the plot and fossil samples that have
-#   coordinates and an age.
+#   coordinates and an age. The fixture's leaf-area value (domain unit mm2)
+#   uses the only conversion rule, which gives m; a second rule, giving
+#   mm2, is added for it, so that the trait units agree.
 # Returns a list with `path_database`, `list_build_manifest`,
 #   `list_version` and `path_producer_manifest`.
 build_validation_database <- function(
@@ -77,6 +79,29 @@ build_validation_database <- function(
         .x,
         "INSERT INTO BuildProducers VALUES (2, 'splot_plots', ?)",
         params = base::list(tag_stored)
+      )
+
+      # A rule in the unit of the leaf-area domain, for its value
+      DBI::dbExecute(
+        .x,
+        stringr::str_c(
+          "INSERT INTO TraitUnitConversion (trait_unit_conversion_id,",
+          "conversion_rule_key, rule_version, source_provider,",
+          "source_trait_id, normalized_original_unit, standardized_unit,",
+          "trait_dimension, operation, multiplier, evidence)",
+          "VALUES (2, 'fixture_identity_mm2', '1', 'fixture', 'fixture',",
+          "'mm2', 'mm2', 'area', 'identity', 1, 'Test fixture')",
+          sep = " "
+        )
+      )
+
+      DBI::dbExecute(
+        .x,
+        stringr::str_c(
+          "UPDATE TraitsValue SET trait_unit_conversion_id = 2",
+          "WHERE trait_id = 2",
+          sep = " "
+        )
       )
 
       # The distances the link step stores for the fixture links
