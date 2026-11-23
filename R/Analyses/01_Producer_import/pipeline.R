@@ -53,8 +53,9 @@ targets::tar_option_set(
 # 2. Public targets -----
 #----------------------------------------------------------#
 
-# Proposed for the gridpoint and database assembly stages; the names are
-#   agreed with the database-core lane before those stages import them.
+# Agreed with the database-core lane (VegVault issue 95), whose
+#   gridpoint and database assembly stages import them; a new or renamed
+#   public target is agreed with that lane first.
 #   - `data_<artefact id>` for splot_plots, bien_plots, fossilpol_assembly,
 #     fossilpol_age_uncertainty, try_traits, bien_traits, hwsd_soil,
 #     trait_unit_conversions and trait_derivations: the validated artefact
