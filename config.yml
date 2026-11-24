@@ -319,11 +319,12 @@ default:
     # Sample ages of one fossil pollen dataset with the range of their age
     #   iterations (age_uncertainty.R)
     sample_age:
-      # Dataset name, `fossilpol_<Neotoma dataset ID>`. v1 showed the
-      #   dataset with database ID 91256, but IDs change with every build.
-      #   Not chosen yet: this figure stops (the others are drawn) until a
-      #   name is set here.
-      dataset_name: null
+      # Dataset name, `fossilpol_<Neotoma dataset ID>`, because database IDs
+      #   change with every build. Hail Lake (Yukon), the dataset that v1
+      #   showed under database ID 91256. It lies inside the subset box, so
+      #   the `subset` profile draws the same dataset. Set to null, this
+      #   figure stops (the others are drawn).
+      dataset_name: "fossilpol_1001"
     # Gridpoints and their links to vegetation plots in one country
     #   (gridpoint_resolution.R)
     gridpoint_example:
