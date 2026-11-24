@@ -220,8 +220,10 @@ default:
           age_deviation: {bio1: 0.05, bio4: 0.05, bio6: 0.05,
             bio12: 0.314, bio15: 0.095, bio18: 0.35, bio19: 0.277}
       # Accepted exceptions of the same check (allow-list, accepted by
-      #   Ondrej Mottl on 2026-11-21); a band within the latitude limits
-      #   is not flagged by the listed rules
+      #   Ondrej Mottl: the Antarctic entry on 2026-11-21, the other three
+      #   on 2026-11-24 from a map of the first full-size development
+      #   database); a band within the latitude limits is not flagged by
+      #   the listed rules
       zero_share_exceptions:
         - artefact_id: chelsa_trace21k_palaeoclimate
           variables: [bio12, bio18, bio19]
@@ -231,6 +233,37 @@ default:
           reason: "Antarctic interior: CHELSA-TraCE21k has no downscaled
             precipitation south of 74 S, so zero shares up to 1 occur in
             every age."
+        - artefact_id: chelsa_trace21k_palaeoclimate
+          variables: [bio18]
+          rules: [max, step, age_deviation]
+          lat_min: 22
+          lat_max: 26
+          reason: "Eastern Sahara, Nile valley and Arabia: the warmest
+            quarter is dry, and CHELSA-TraCE21k stores precipitation in
+            whole kg m-2, so less than 0.5 is stored as 0 (present-day
+            median 0.3 at these gridpoints). From 5500 years the bands
+            hold few gridpoints, at other places, which raises the age
+            deviation."
+        - artefact_id: chelsa_trace21k_palaeoclimate
+          variables: [bio18]
+          rules: [step]
+          lat_min: 31
+          lat_max: 34
+          reason: "Jordan valley and Dead Sea area (35 to 36 E): dry
+            summers, stored as 0 in whole kg m-2. From 5500 years the
+            bands hold only 13 to 136 gridpoints, so a few zeros change
+            the share by more than the threshold."
+        - artefact_id: chelsa_trace21k_palaeoclimate
+          variables: [bio19]
+          rules: [step]
+          lat_min: 11
+          lat_max: 16
+          reason: "Sahel and Sudanian belt: the coldest quarter is mostly
+            the dry winter, stored as 0 in whole kg m-2. Where the dry
+            winter and the rainy season differ little in temperature, the
+            coldest quarter switches between them, so bio19 changes
+            between 0 and several hundred kg m-2 from place to place and
+            between the present day and the past."
     # Links between positions and gridpoints, checked against the rule of
     #   the `link` section on a stratified random sample of positions
     #   (near the dateline, at high latitudes, elsewhere), drawn with
