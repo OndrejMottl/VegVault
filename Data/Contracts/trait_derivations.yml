@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: trait_derivations
-contract_version: 1.0.0
+contract_version: 1.0.1
 status: active
 title: Trait derivation rules of the trait producer
 description: >-
@@ -13,10 +13,11 @@ producer:
   repository: OndrejMottl/VegVault-Trait_data
   directory: config/trait_units
 consumers:
+  - R/Analyses/01_Producer_import/pipeline.R
   - R/Functions/Contracts/load_producer_csv.R
   - R/Functions/Producers/build_trait_unit_rules.R
   - R/Functions/Producers/validate_trait_rule_keys.R
-  - R/Functions/Traits/save_trait_rules.R
+  - R/Functions/Database/build_database_tables.R
 file:
   name_templates:
     - 'trait_derivations.csv'

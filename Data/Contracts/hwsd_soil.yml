@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: hwsd_soil
-contract_version: 2.0.0
+contract_version: 2.0.1
 status: active
 title: HWSD v2.2 soil groups on the gridpoint raster
 description: >-
@@ -11,8 +11,8 @@ producer:
   repository: OndrejMottl/VegVault-abiotic_data
   directory: Outputs/Data/HWSD
 consumers:
-  - R/02_Main_analyses/09_Import_wosis_soil_data.R
-  - R/02_Main_analyses/06_Create_gridpoints.R
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Database/prepare_abiotic_tables.R
 file:
   name_templates:
     - 'hwsd_data_{date}__{hash}__.qs'

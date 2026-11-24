@@ -24,7 +24,7 @@
 manifest_version: 1
 artefacts:
   - artefact_id: splot_plots
-    contract_version: 2.0.0
+    contract_version: 2.0.1
     note: >-
       dev: the 2.0.0 release build on the VegVault-Vegetation_data branch
       2.0.0 at bf6e973, committed in Outputs/Data (16853422 bytes, SHA-256
@@ -37,7 +37,7 @@ artefacts:
       files:
         - data_splot_2026-11-21__2ed4d1fa3dba6301a6f45852b0781369__.qs
   - artefact_id: bien_plots
-    contract_version: 2.0.0
+    contract_version: 2.0.1
     note: >-
       dev: the 2.0.0 release build on the VegVault-Vegetation_data branch
       2.0.0 at bf6e973, committed in Outputs/Data (10680584 bytes, SHA-256
@@ -50,7 +50,7 @@ artefacts:
       files:
         - data_bien_2026-11-21__0ed9a8257a90bd3577866baafc97f156__.qs
   - artefact_id: fossilpol_assembly
-    contract_version: 1.0.0
+    contract_version: 1.0.1
     note: >-
       dev: the 2.0.0 rerun on the VegVault-FOSSILPOL branch 2.0.0 at
       180c79b. release: placeholder until VegVault-FOSSILPOL tags v2.0.0.
@@ -61,7 +61,7 @@ artefacts:
       files:
         - data_assembly_light_2026-11-20__2d58d41c506527e41a5e1ee1a6e5768e__.qs
   - artefact_id: fossilpol_age_uncertainty
-    contract_version: 1.0.0
+    contract_version: 1.0.1
     note: >-
       dev: the 2.0.0 rerun on the VegVault-FOSSILPOL branch 2.0.0 at
       180c79b, parts A to D. release: placeholder until VegVault-FOSSILPOL
@@ -76,7 +76,7 @@ artefacts:
         - data_age_uncertainty_C_2026-11-20__cc57dfde08adb1c3f14e02fd1550644b__.qs
         - data_age_uncertainty_D_2026-11-20__f07eb9ae814666b400489a9e2845bc4f__.qs
   - artefact_id: try_traits
-    contract_version: 2.0.1
+    contract_version: 2.0.2
     note: >-
       dev: the 2.0.0 release build on the VegVault-Trait_data branch 2.0.0
       at 5ab2904, committed in Outputs/Data; TRY request 28498, 897183
@@ -90,7 +90,7 @@ artefacts:
       files:
         - data_trait_try_2026-11-21__34ea0a08bac7af8869832f1a6456a315__.qs
   - artefact_id: bien_traits
-    contract_version: 1.0.1
+    contract_version: 1.0.2
     note: >-
       dev: the 2.0.0 release build on the VegVault-Trait_data branch 2.0.0
       at 5ab2904, committed in Outputs/Data; BIEN download of 2026-11-19,
@@ -114,7 +114,7 @@ artefacts:
         - data_traits_bien_2_2026-11-21__4c067146b45629e869b3d4c3902db429__.qs
         - data_traits_bien_3_2026-11-21__f93b0aa95da0d39ced316a9fdeb0cc2b__.qs
   - artefact_id: trait_unit_conversions
-    contract_version: 1.0.0
+    contract_version: 1.0.1
     note: >-
       dev: the trait unit registry in config/trait_units of the
       VegVault-Trait_data branch 2.0.0 at 5ab2904, 65 rules; the committed
@@ -130,7 +130,7 @@ artefacts:
       files:
         - unit_conversions.csv
   - artefact_id: trait_derivations
-    contract_version: 1.0.0
+    contract_version: 1.0.1
     note: >-
       dev: the trait unit registry in config/trait_units of the
       VegVault-Trait_data branch 2.0.0 at 5ab2904, 1 rule; the committed
@@ -146,7 +146,7 @@ artefacts:
       files:
         - trait_derivations.csv
   - artefact_id: chelsa_neoclimate
-    contract_version: 1.1.0
+    contract_version: 1.1.1
     note: >-
       dev: the 2.0.0 release build on the VegVault-abiotic_data branch 2.0.0
       at 2416691, committed in Outputs/Data/Neoclimate; 7 files, one per
@@ -166,7 +166,7 @@ artefacts:
         - CHELSA_bio_18_2026-11-23__0ee9acac8004b466b2b4feed6e743755__.qs
         - CHELSA_bio_19_2026-11-23__611e6688094f366ce53950bb1cbf9386__.qs
   - artefact_id: chelsa_trace21k_palaeoclimate
-    contract_version: 2.0.0
+    contract_version: 2.0.1
     note: >-
       dev: the 2.0.0 release build on the VegVault-abiotic_data branch 2.0.0
       at 2416691, committed in Outputs/Data/Palaoclimate; 28 files, four
@@ -208,7 +208,7 @@ artefacts:
         - bio19_batch_3_2026-11-23__5d37b267473e6e3a5448d4830db76b28__.qs
         - bio19_batch_4_2026-11-23__29d78fbc25ac01daf11ce7cd611cd1d8__.qs
   - artefact_id: hwsd_soil
-    contract_version: 2.0.0
+    contract_version: 2.0.1
     note: >-
       dev: the 2.0.0 release build on the VegVault-abiotic_data branch 2.0.0
       at 2416691, committed in Outputs/Data/HWSD; 318305 rows

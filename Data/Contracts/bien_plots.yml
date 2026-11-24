@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: bien_plots
-contract_version: 2.0.0
+contract_version: 2.0.1
 status: active
 title: BIEN vegetation plots
 description: >-
@@ -11,7 +11,9 @@ producer:
   repository: OndrejMottl/VegVault-Vegetation_data
   directory: Outputs/Data
 consumers:
-  - R/02_Main_analyses/02_Import_bien_data.R
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Gridpoints/prepare_modern_positions.R
+  - R/Functions/Database/prepare_bien_plot_tables.R
 file:
   name_templates:
     - 'data_bien_{date}__{hash}__.qs'

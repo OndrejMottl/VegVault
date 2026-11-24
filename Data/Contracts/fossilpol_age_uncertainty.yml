@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: fossilpol_age_uncertainty
-contract_version: 1.0.0
+contract_version: 1.0.1
 status: active
 title: FOSSILPOL age-uncertainty iterations
 description: >-
@@ -12,7 +12,9 @@ producer:
   repository: OndrejMottl/VegVault-FOSSILPOL
   directory: Outputs/Data
 consumers:
-  - R/02_Main_analyses/03_Import_fossilpol_data.R
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Producers/validate_fossilpol_relations.R
+  - R/Functions/Database/prepare_fossilpol_tables.R
 file:
   name_templates:
     - 'data_age_uncertainty_{partition}_{date}__{hash}__.qs'
