@@ -2,7 +2,7 @@
 
 This folder holds one machine-readable contract per artefact that VegVault reads from a producer repository, the synthetic fixtures that satisfy (or deliberately break) each contract, and this description of the format. The contracts make the interface between the producers and VegVault explicit: file names, partitioning, column names and classes, missing values, units, nesting, keys and plausible values. VegVault's import validates every artefact against its contract before anything is written to SQLite, and producers validate their export against the same contract before tagging.
 
-Status: proposed for gate G1 of the 2.0.0 release. How producers use the contracts is decided: each producer keeps a copy (see below). The format and the plausible climate ranges are agreed at G1; until then the contracts may change without a version bump.
+Status: agreed for the 2.0.0 release (data provider checkpoint G1, 2026-11-20, recorded in VegVault issue 86). Producers keep a copy (see below), and every change follows the procedure at the end of this file, with a version bump.
 
 ## Contracts
 
@@ -22,11 +22,11 @@ Status: proposed for gate G1 of the 2.0.0 release. How producers use the contrac
 
 FOSSILPOL has no references contract: VegVault takes references from the assembly's `doi` and `source_of_data` and does not read the producer's `Outputs/Meta_and_references/`.
 
-`source_manifest.csv` in this folder is not a contract. It lists the upstream sources of every producer (version, download dates, checksum, licence, citation) and is owned by the coordination lane (VegVault issue 82). The contract and pin tooling read only `.yml` files and never read it.
+`source_manifest.csv` in this folder is not a contract. It lists the upstream sources of every producer (version, download dates, checksum, licence, citation) and was compiled in the source inventory (VegVault issue 82). The contract and pin tooling read only `.yml` files and never read it.
 
 ## Contract format
 
-A contract is a YAML file named `<contract_id>.yml`. `load_producer_contract()` reads it and rejects any field it does not know, so a typo fails loudly. Every entry that describes data carries an `evidence` field saying where the rule comes from: an import script and line, a producer script, or what the v1 artefact showed.
+A contract is a YAML file named `<contract_id>.yml`. `load_producer_contract()` reads it and rejects any field it does not know, so a typo fails loudly. Every entry that describes data carries an `evidence` field saying where the rule comes from: an import script and line, a producer script, or what the v1 artefact showed. Evidence that cites a v1.0.0 import script (for example `02_Import_bien_data.R:92`) refers to the scripts of `R/02_Main_analyses/` that built v1.0.0; the 2.0.0 stages replaced them, and commit `0a530f9` is the last that holds them.
 
 ### Top-level fields
 
@@ -94,7 +94,7 @@ A column of class `list` (a list-column) needs an `element` entry describing eve
 
 `keys` is a list of column sets, written as `- [plot_observation_id]` or `- [long, lat, time_id]`; missing values count as equal. `rounded_keys` entries add `digits`: the numeric columns are rounded to that many decimals before the uniqueness check, for keys that the import turns into names with rounded coordinates (gridpoint names use 2 decimals). `dependencies` entries have `determinant` and `dependent` column lists; every value of the determinant must occur with one value of the dependent.
 
-`variables` is used where an artefact has one file (or one set of batches) per variable: `value_column` names the column holding the values and `table` lists every variable with `variable`, `file_token` (the `{variable}` text in the file name), `unit`, `description`, `evidence` and optional `checks` that apply to `value_column` in that variable's files. Every variable must have files. The units and descriptions equal the strings the v1 import scripts hard-code, so the import can read them from here.
+`variables` is used where an artefact has one file (or one set of batches) per variable: `value_column` names the column holding the values and `table` lists every variable with `variable`, `file_token` (the `{variable}` text in the file name), `unit`, `description`, `evidence` and optional `checks` that apply to `value_column` in that variable's files. Every variable must have files. The units and descriptions equal the strings the v1.0.0 import scripts hard-coded, so the 2.0.0 import reads them from here.
 
 `relations` document links between columns of different artefacts or of different list-columns (for example every age-uncertainty dataset exists in the assembly, and the levels and counts of a dataset have the same samples). The contract validator does not evaluate them; the producer import stage checks them once both artefacts are loaded (`validate_fossilpol_relations()`, the target `check_fossilpol_relations`). A new relation needs a check there too.
 
@@ -113,7 +113,7 @@ validate_producer_artefact(
 
 Dependencies: `assertthat`, `cli`, `dplyr`, `purrr`, `qs2`, `readr`, `rlang`, `stringr`, `tibble`, `vctrs` and `yaml` for the validator and the copy check; `here` and `tidyr` for the fixture builders; `testthat` and `withr` for the tests. Every producer lockfile holds all of them. `save_contract_copy()` and the tests of the copy functions also call the `git` executable.
 
-Run the tests with `Rscript R/Tests/Run_tests.R` from the repository root. The script `tests/test_contract_fixtures_integration.R` drives the v1 database writers with the fixtures in a temporary SQLite file.
+Run the tests with `Rscript R/Tests/Run_tests.R` from the repository root. The tests of the import stage and of the database assembly also build their test stores and databases from the fixtures.
 
 ## Fixtures
 
@@ -174,7 +174,9 @@ save_contract_copy(
 - a copied contract fails `load_producer_contract()`;
 - the producer already holds a copy for another repository, or holds a `.R` file in `R/Functions/Contracts/` or a `.yml` file in `Data/Contracts/` that no earlier copy wrote.
 
-An earlier copy is replaced, and files that VegVault no longer has are removed. The producer lane reviews the change and commits the copy and the record in its own repository.
+An earlier copy is replaced, and files that VegVault no longer has are removed. The copy and the record are reviewed and committed together in the producer repository.
+
+VegVault-FOSSILPOL keeps no copy: it is a separate project that is not built from the project template. VegVault checks its files at import, and its release notes name the contract versions its files pass (decided for 2.0.0, recorded in VegVault issue 86).
 
 On Windows, `save_contract_copy()` can stop with "Could not read the git status of the project" when the repository folders are owned by another Windows account. R sets `HOME` to the Documents folder, so the `git` it starts does not read the user's global configuration and misses its `safe.directory` entries. Set `HOME` to the user profile for that R process, for example with `$env:HOME = $env:USERPROFILE` in PowerShell before starting `Rscript`.
 
@@ -215,9 +217,9 @@ The import stage (`R/Analyses/01_Producer_import/`) validates every pinned artef
 
 ## Changing a contract
 
-Contracts change only through the VegVault pipeline lane (lane L6, VegVault issue 92), in a pull request into the release branch.
+Contracts change only through a pull request into the release branch of VegVault.
 
 1. Edit the contract and bump `contract_version`: major for a change that can reject an artefact that passed before (a new required column, a stricter class, range or key, a renamed or removed column); minor for a change that only accepts more (a new optional column, a relaxed check); patch for descriptions, evidence and notes.
-2. Update the fixture builder if needed, rebuild the fixtures with `R/Contracts/build_contract_fixtures.R` (`flag_rewrite <- TRUE`), and run the tests and `tests/test_contract_fixtures_integration.R`.
-3. Check every consumer: the VegVault import stage and, while they exist, the v1 import scripts listed under `consumers`; the database assembly that writes the imported rows; the website pages under `website/database_structure/`; and `vaultkeepr` if the change alters the SQLite schema or the meaning of stored values.
+2. Update the fixture builder if needed, rebuild the fixtures with `R/Contracts/build_contract_fixtures.R` (`flag_rewrite <- TRUE`), and run the tests. Set the new `contract_version` in the artefact's entry of `Data/Producers/producer_manifest.yml` too.
+3. Check every consumer: the files listed under `consumers` (the import stage and the gridpoint and database assembly functions that read the imported tables); the website pages under `website/database_structure/`; and `vaultkeepr` if the change alters the SQLite schema or the meaning of stored values.
 4. After the merge, the maintainer announces the new version in the release umbrella issue (VegVault issue 86). Each affected producer makes its copy again with `save_contract_copy()`, validates its export with the new copy and commits both. Until then its copy check fails against an up-to-date VegVault checkout.

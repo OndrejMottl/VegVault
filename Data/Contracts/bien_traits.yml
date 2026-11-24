@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: bien_traits
-contract_version: 1.0.1
+contract_version: 1.0.2
 status: active
 title: BIEN plant traits under the unit contract
 description: >-
@@ -12,10 +12,10 @@ producer:
   repository: OndrejMottl/VegVault-Trait_data
   directory: Outputs/Data
 consumers:
-  - R/02_Main_analyses/05_Import_bien_trait_data.R
-  - R/Functions/Traits/load_local_trait_artifacts.R
-  - R/Functions/Traits/validate_trait_import.R
-  - R/Functions/Traits/save_trait_domain.R
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Producers/validate_trait_rule_keys.R
+  - R/Functions/Gridpoints/prepare_modern_positions.R
+  - R/Functions/Database/prepare_trait_tables.R
 file:
   name_templates:
     - 'data_traits_bien_{partition}_{date}__{hash}__.qs'

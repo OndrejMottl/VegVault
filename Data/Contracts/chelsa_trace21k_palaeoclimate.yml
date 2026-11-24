@@ -1,6 +1,6 @@
 # Producer artefact contract. Format: Data/Contracts/README.md
 contract_id: chelsa_trace21k_palaeoclimate
-contract_version: 2.0.0
+contract_version: 2.0.1
 status: active
 title: CHELSA-TraCE21k palaeoclimate bioclimatic variables
 description: >-
@@ -12,9 +12,11 @@ producer:
   repository: OndrejMottl/VegVault-abiotic_data
   directory: Outputs/Data/Palaoclimate
 consumers:
-  - R/02_Main_analyses/06_Create_gridpoints.R
-  - R/02_Main_analyses/08_Import_chelsa_trace21k_climate_data.R
-  - R/Functions/add_chelsa_trace_data.R
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Producers/prepare_climate_coordinates.R
+  - R/Functions/Producers/prepare_chelsa_trace21k_ages.R
+  - R/Functions/Gridpoints/prepare_gridpoint_cells.R
+  - R/Functions/Database/prepare_abiotic_tables.R
 file:
   name_templates:
     - 'bio{variable}_batch_{partition}_{date}__{hash}__.qs'
