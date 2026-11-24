@@ -37,6 +37,8 @@
 #' five scopes describe the structure the assembly writes, so a row found
 #' there is a build error. The last three can come from the producer data,
 #' for example a masked cell, so they ask a reviewer for a judgement.
+#' The statements are those of `build_orphan_statements()`; each reads
+#' `PositionLink` at most once.
 #' Opens the database read-only, once per scope. Aborts only when the
 #' database is not the one of the manifest.
 #' @examples
@@ -55,78 +57,8 @@ diagnose_orphan_rows <- function(
     list_build_manifest = list_build_manifest
   )
 
-  # Gridpoint samples, as a subquery; SQLite builds it once per statement
-  sql_gridpoint_samples <-
-    base::paste(
-      "SELECT ds.sample_id FROM DatasetSample AS ds",
-      "JOIN Datasets AS d ON d.dataset_id = ds.dataset_id",
-      "JOIN DatasetTypeID AS t ON t.dataset_type_id = d.dataset_type_id",
-      "WHERE t.dataset_type = 'gridpoints'"
-    )
-
   data_scopes <-
-    tibble::tribble(
-      ~scope, ~status_found, ~statement, ~description,
-      "datasets_without_samples", "fail",
-      base::paste(
-        "SELECT COUNT(*) FROM Datasets WHERE dataset_id NOT IN",
-        "(SELECT dataset_id FROM DatasetSample)"
-      ),
-      "Datasets without a sample",
-      "samples_without_dataset", "fail",
-      base::paste(
-        "SELECT COUNT(*) FROM Samples WHERE sample_id NOT IN",
-        "(SELECT sample_id FROM DatasetSample)"
-      ),
-      "Samples without a dataset",
-      "positions_without_samples", "fail",
-      base::paste(
-        "SELECT COUNT(*) FROM Positions WHERE position_id NOT IN",
-        "(SELECT position_id FROM SamplePosition)"
-      ),
-      "Positions without a sample",
-      "gridpoints_with_position", "fail",
-      base::paste(
-        "SELECT COUNT(*) FROM SamplePosition WHERE sample_id IN (",
-        sql_gridpoint_samples, ")"
-      ),
-      "Gridpoint samples with a position of their own",
-      "links_to_other_samples", "fail",
-      base::paste(
-        "SELECT COUNT(*) FROM PositionLink WHERE sample_ref_id NOT IN (",
-        sql_gridpoint_samples, ")"
-      ),
-      "Position links to a sample that is not a gridpoint",
-      "linked_gridpoints_without_values", "flag",
-      base::paste(
-        "SELECT COUNT(*) FROM (SELECT DISTINCT sample_ref_id FROM",
-        "PositionLink) WHERE sample_ref_id NOT IN",
-        "(SELECT sample_id FROM AbioticData) AND sample_ref_id IN (",
-        sql_gridpoint_samples, ")"
-      ),
-      "Linked gridpoint samples without an abiotic value",
-      "taxa_without_use", "flag",
-      base::paste(
-        "SELECT COUNT(*) FROM Taxa WHERE",
-        "taxon_id NOT IN (SELECT taxon_id FROM SampleTaxa",
-        "WHERE taxon_id IS NOT NULL) AND",
-        "taxon_id NOT IN (SELECT taxon_id FROM TraitsValue) AND",
-        "taxon_id NOT IN (SELECT taxon_id FROM TaxonClassification) AND",
-        "taxon_id NOT IN (SELECT taxon_species FROM TaxonClassification",
-        "WHERE taxon_species IS NOT NULL) AND",
-        "taxon_id NOT IN (SELECT taxon_genus FROM TaxonClassification",
-        "WHERE taxon_genus IS NOT NULL) AND",
-        "taxon_id NOT IN (SELECT taxon_family FROM TaxonClassification",
-        "WHERE taxon_family IS NOT NULL)"
-      ),
-      "Taxa used by no sample, trait value or classification",
-      "abiotic_variables_without_values", "flag",
-      base::paste(
-        "SELECT COUNT(*) FROM AbioticVariable WHERE abiotic_variable_id",
-        "NOT IN (SELECT abiotic_variable_id FROM AbioticData)"
-      ),
-      "Abiotic variables without a value"
-    )
+    build_orphan_statements()
 
   vec_counts <-
     purrr::map_int(
