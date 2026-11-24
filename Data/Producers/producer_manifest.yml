@@ -29,10 +29,13 @@ artefacts:
       dev: the 2.0.0 release build on the VegVault-Vegetation_data branch
       2.0.0 at bf6e973, committed in Outputs/Data (16853422 bytes, SHA-256
       1ebbd2583c2172f5fbbbb165c399efdba5753e84781941d2e33f6c8ba8cc3c54).
-      release: placeholder until VegVault-Vegetation_data tags v2.0.0.
+      release: the v2.0.0 release of VegVault-Vegetation_data (commit dc04061, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: data_splot_2026-11-21__2ed4d1fa3dba6301a6f45852b0781369__.qs
+          size: 16853422
+          sha256: 1ebbd2583c2172f5fbbbb165c399efdba5753e84781941d2e33f6c8ba8cc3c54
     dev:
       files:
         - data_splot_2026-11-21__2ed4d1fa3dba6301a6f45852b0781369__.qs
@@ -42,10 +45,13 @@ artefacts:
       dev: the 2.0.0 release build on the VegVault-Vegetation_data branch
       2.0.0 at bf6e973, committed in Outputs/Data (10680584 bytes, SHA-256
       b5120e771246b92fc6a93d23aa91eb99175969fe74782fef3f9e4600ef163d69).
-      release: placeholder until VegVault-Vegetation_data tags v2.0.0.
+      release: the v2.0.0 release of VegVault-Vegetation_data (commit dc04061, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: data_bien_2026-11-21__0ed9a8257a90bd3577866baafc97f156__.qs
+          size: 10680584
+          sha256: b5120e771246b92fc6a93d23aa91eb99175969fe74782fef3f9e4600ef163d69
     dev:
       files:
         - data_bien_2026-11-21__0ed9a8257a90bd3577866baafc97f156__.qs
@@ -53,10 +59,13 @@ artefacts:
     contract_version: 1.0.1
     note: >-
       dev: the 2.0.0 rerun on the VegVault-FOSSILPOL branch 2.0.0 at
-      180c79b. release: placeholder until VegVault-FOSSILPOL tags v2.0.0.
+      180c79b. release: the v2.0.0 release of VegVault-FOSSILPOL (commit eef3ecb, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: data_assembly_light_2026-11-20__2d58d41c506527e41a5e1ee1a6e5768e__.qs
+          size: 7959644
+          sha256: 1de7856236cdcbf33a58a95cdabc0dd4ce6a16e9b17a6979e5da73a15ebc8a45
     dev:
       files:
         - data_assembly_light_2026-11-20__2d58d41c506527e41a5e1ee1a6e5768e__.qs
@@ -64,11 +73,22 @@ artefacts:
     contract_version: 1.0.1
     note: >-
       dev: the 2.0.0 rerun on the VegVault-FOSSILPOL branch 2.0.0 at
-      180c79b, parts A to D. release: placeholder until VegVault-FOSSILPOL
-      tags v2.0.0.
+      180c79b, parts A to D. release: the v2.0.0 release of VegVault-FOSSILPOL (commit eef3ecb, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: data_age_uncertainty_A_2026-11-20__a7c6da001c8693cee0b240aab6f0fb11__.qs
+          size: 52793608
+          sha256: 17f7421acb3f9cb95d6b6b5acbeeefa81db2aa2fb3aec812c6d5f6e273443246
+        - file_name: data_age_uncertainty_B_2026-11-20__5923c97dab14b49e4a99a113d5dc23e7__.qs
+          size: 52544222
+          sha256: 3a1c6efa01a000750daa9c90d6d0d9fc2b68ebc39e01b7aebfd8440a842254d8
+        - file_name: data_age_uncertainty_C_2026-11-20__cc57dfde08adb1c3f14e02fd1550644b__.qs
+          size: 52122017
+          sha256: 4205d18fd3c377a7cdf9f185f4064516698fecf86705ef36673263f544c75d1f
+        - file_name: data_age_uncertainty_D_2026-11-20__f07eb9ae814666b400489a9e2845bc4f__.qs
+          size: 15994426
+          sha256: e52f02d4951d12814a3812ad1115e998af7fdfd9bdbe723c38a6def62ac9842c
     dev:
       files:
         - data_age_uncertainty_A_2026-11-20__a7c6da001c8693cee0b240aab6f0fb11__.qs
@@ -82,10 +102,13 @@ artefacts:
       at 5ab2904, committed in Outputs/Data; TRY request 28498, 897183
       records (36346241 bytes, SHA-256
       f86bd39190c6a4b3b09f47b51e8bcdd94c1cfe1af288289dd529ea5e525ec654).
-      release: placeholder until VegVault-Trait_data tags v2.0.0.
+      release: the v2.0.0 release of VegVault-Trait_data (commit 977222c, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: data_trait_try_2026-11-21__34ea0a08bac7af8869832f1a6456a315__.qs
+          size: 36346241
+          sha256: f86bd39190c6a4b3b09f47b51e8bcdd94c1cfe1af288289dd529ea5e525ec654
     dev:
       files:
         - data_trait_try_2026-11-21__34ea0a08bac7af8869832f1a6456a315__.qs
@@ -103,10 +126,22 @@ artefacts:
       c84f7399af1db88e0f1b08232e6939862f73710257b0c8345a1a96901cbbbade; 3,
       47160112,
       26d241935326d6bf8daf2a0fed2a3e0bfa4de65875a7885f7bc8ed9238b8b702.
-      release: placeholder until VegVault-Trait_data tags v2.0.0.
+      release: the v2.0.0 release of VegVault-Trait_data (commit 977222c, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: data_traits_bien_0_2026-11-21__cd2de89218090bc15cd4d291015867ff__.qs
+          size: 41311322
+          sha256: 9f670fc6fc9069e47c123cbb552dd3d39d7be4f3d634f4ddd38b2c79f10e7153
+        - file_name: data_traits_bien_1_2026-11-21__e0a063079e89367a45eea6c8db65c136__.qs
+          size: 47116914
+          sha256: 9e8b7d40572b0a716daca02145e1daf7c94bea6c0f246f9e6cbecfdb91475118
+        - file_name: data_traits_bien_2_2026-11-21__4c067146b45629e869b3d4c3902db429__.qs
+          size: 47123217
+          sha256: c84f7399af1db88e0f1b08232e6939862f73710257b0c8345a1a96901cbbbade
+        - file_name: data_traits_bien_3_2026-11-21__f93b0aa95da0d39ced316a9fdeb0cc2b__.qs
+          size: 47160112
+          sha256: 26d241935326d6bf8daf2a0fed2a3e0bfa4de65875a7885f7bc8ed9238b8b702
     dev:
       files:
         - data_traits_bien_0_2026-11-21__cd2de89218090bc15cd4d291015867ff__.qs
@@ -121,11 +156,13 @@ artefacts:
       file has 7203 bytes and SHA-256
       f1cd8e9f6a4464d8a6fa03e3f82f935c18ead90b8afde60bfef7e682fefaa0f5. A
       Windows checkout may hold it with CRLF line ends, which changes its
-      size and checksum but not its content. release: placeholder until
-      VegVault-Trait_data tags v2.0.0.
+      size and checksum but not its content. release: the v2.0.0 release of VegVault-Trait_data (commit 977222c, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: unit_conversions.csv
+          size: 7203
+          sha256: f1cd8e9f6a4464d8a6fa03e3f82f935c18ead90b8afde60bfef7e682fefaa0f5
     dev:
       files:
         - unit_conversions.csv
@@ -137,11 +174,13 @@ artefacts:
       file has 216 bytes and SHA-256
       d44d3746839a2b769e9b79dadfc42e89f04853826fb8cc822b3330c658ec050c. A
       Windows checkout may hold it with CRLF line ends, which changes its
-      size and checksum but not its content. release: placeholder until
-      VegVault-Trait_data tags v2.0.0.
+      size and checksum but not its content. release: the v2.0.0 release of VegVault-Trait_data (commit 977222c, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: trait_derivations.csv
+          size: 216
+          sha256: d44d3746839a2b769e9b79dadfc42e89f04853826fb8cc822b3330c658ec050c
     dev:
       files:
         - trait_derivations.csv
@@ -151,11 +190,31 @@ artefacts:
       dev: the 2.0.0 release build on the VegVault-abiotic_data branch 2.0.0
       at 2416691, committed in Outputs/Data/Neoclimate; 7 files, one per
       variable, of 1442880 rows each. Bytes and SHA-256 of every file are
-      in Outputs/Tables/export_manifest.csv of that commit. release:
-      placeholder until VegVault-abiotic_data tags v2.0.0.
+      in Outputs/Tables/export_manifest.csv of that commit. release: the v2.0.0 release of VegVault-abiotic_data (commit e5118a6, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: CHELSA_bio_01_2026-11-23__541b40f5ad9413f4024bfabb522519c2__.qs
+          size: 1250051
+          sha256: 6f8351e75da4fb0d4f0802af8488decaf4f9a76f253863d31a26513b3b81e5cd
+        - file_name: CHELSA_bio_04_2026-11-23__e6498f68819a8c5081c18cdd62be9a3c__.qs
+          size: 2752641
+          sha256: 5cc017f88f95ab46f1f50a9b699127b30d8ff468ff902842d95755c7764e59fd
+        - file_name: CHELSA_bio_06_2026-11-23__ffdeeef56fca678d61c823f323e5f64a__.qs
+          size: 1412285
+          sha256: 22497b20be14dd2a0630dda75dc126250c1cf67980c71d254dc91213a5ccdd98
+        - file_name: CHELSA_bio_12_2026-11-23__e948db8390e6e31cbc489ff093cf0bf3__.qs
+          size: 3715573
+          sha256: bb536d0f7a2605514983383a466e10e3ed03499dee6dbb7719f828e43a2b975c
+        - file_name: CHELSA_bio_15_2026-11-23__7074242e3a6f05b1aa870ad7eaf70e0a__.qs
+          size: 2521204
+          sha256: 1eafb644d91f4624326e463a4097eb89c654e86d05246a51298747b4b1981e81
+        - file_name: CHELSA_bio_18_2026-11-23__0ee9acac8004b466b2b4feed6e743755__.qs
+          size: 3297133
+          sha256: 0122e983563089c33224dbc5aad39df2d1ce15e8ec7fc73d2addeb4513cc6574
+        - file_name: CHELSA_bio_19_2026-11-23__611e6688094f366ce53950bb1cbf9386__.qs
+          size: 3218531
+          sha256: 259ca0a49ce3a04a50c1acd0b8443cce050ea96a27b3d8745b0281ac89b6935e
     dev:
       files:
         - CHELSA_bio_01_2026-11-23__541b40f5ad9413f4024bfabb522519c2__.qs
@@ -172,11 +231,94 @@ artefacts:
       at 2416691, committed in Outputs/Data/Palaoclimate; 28 files, four
       batches per variable, of 12485990 to 13346640 rows. Bytes
       and SHA-256 of every file are in Outputs/Tables/export_manifest.csv of
-      that commit. release: placeholder until VegVault-abiotic_data tags
-      v2.0.0.
+      that commit. release: the v2.0.0 release of VegVault-abiotic_data (commit e5118a6, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: bio01_batch_1_2026-11-23__e994e0bb970507835a742bdca683ee47__.qs
+          size: 30245556
+          sha256: a82adee3ef90dc3170007be45d70823d3f44dd77a7aee842e952d7a38e172c64
+        - file_name: bio01_batch_2_2026-11-23__cad1d4825b6f59e317f5e13f7a3d9181__.qs
+          size: 30282741
+          sha256: aaa418e0d05d8897fcbc6ef519e252728038cfc6e4429a5407b39401e98e0087
+        - file_name: bio01_batch_3_2026-11-23__f1bc14f4448543c641821cde557a2562__.qs
+          size: 30625118
+          sha256: 3e5391ab9654b50ef4b9ce8092afa9fa2f72d9c8b421a2c0edcf55631f0d416a
+        - file_name: bio01_batch_4_2026-11-23__d7ff0cb30acf6e042bc2cccee360f66f__.qs
+          size: 31434541
+          sha256: 88f3a2fc55f9b4e3b0e5f1b864508c1cc9f0dcb8887c69494ba5d872f57f4e52
+        - file_name: bio04_batch_1_2026-11-23__715d4065d3ad0c200c5bf1a5519c5f7c__.qs
+          size: 43994673
+          sha256: 1b12dff7d64c944df766ae1654ef5101963d058a319b04371a56f83dce725fc0
+        - file_name: bio04_batch_2_2026-11-23__e9f6609092a70a1e8db5b4d72dcb5ffc__.qs
+          size: 44108087
+          sha256: 8203415096a47d8a86e228a491d1d0fc2f791535bfae08de28cdc39eef0c970f
+        - file_name: bio04_batch_3_2026-11-23__ddaeb7d51c9801c0e7b59b88ce8d283c__.qs
+          size: 44359777
+          sha256: a34fbb3c12c60bc7af570cc132318fb14d26df22795229b86afa99ff7a0ef534
+        - file_name: bio04_batch_4_2026-11-23__4379c5d2fc8cabac8eb20603c9564653__.qs
+          size: 44907041
+          sha256: b6accfc166c496fd19582a89d8b61b8045174136a5a3fe5d8a3e0614bfdfe6e8
+        - file_name: bio06_batch_1_2026-11-23__42f832654985f051a2914d2e0e3706ef__.qs
+          size: 13058534
+          sha256: 6f64bf8951cf5db9f45c3794da9d92224c54e03704812292d3e5821d27a7ae2c
+        - file_name: bio06_batch_2_2026-11-23__85e94df8e1227a777fef29c5f458a7c7__.qs
+          size: 13202719
+          sha256: 7f2170cd37110e43cc393f00181b7744e94b7bc7ad4f57ed75ea3e953e613e9a
+        - file_name: bio06_batch_3_2026-11-23__4b9763cb9ff96f814d57f3424d0ed88e__.qs
+          size: 13569607
+          sha256: 5e47158db6446bdbb21b9d4dfa6961f904f667689c0283f4fb3fe9665447e701
+        - file_name: bio06_batch_4_2026-11-23__861e2955d667b3d5acef37c4bf35d441__.qs
+          size: 14482259
+          sha256: a327d443add4a2ca95aee9857bbca9ef1bb55385fd25b81ca7afe5351fb13a80
+        - file_name: bio12_batch_1_2026-11-23__47031c3182f26d8264d8ee0e5ef5fef8__.qs
+          size: 20135300
+          sha256: 1d94049196291c151e331fd103359ca63eefe96e48a7ed00dcf328e379f81753
+        - file_name: bio12_batch_2_2026-11-23__d861bb0d71c12bcf08e2e123a88bb082__.qs
+          size: 19349949
+          sha256: 74e8b8d72c232d2eda46496fc4cbb6ffac038dff3ac1d5b3fa1ffc9c3ad73471
+        - file_name: bio12_batch_3_2026-11-23__da74ed762aa40a360d6e9835d753aa6d__.qs
+          size: 18739900
+          sha256: 1897b918ab7500d27bd3b5807649292f49c3d8849c499e509923b196d50f3477
+        - file_name: bio12_batch_4_2026-11-23__c7b5d33ba5492ccd455c8dc652219983__.qs
+          size: 18726275
+          sha256: 88c86413687fb6c5c29b7925db28bd24abdef509efbfea9aded61ee68a1c4166
+        - file_name: bio15_batch_1_2026-11-23__59f5befc4d41ee387da431bfabe7ac3e__.qs
+          size: 43219098
+          sha256: e2af96610f2f27c83f92ea6157fcd5400bcf23977a7d1f0e23e1313e7dcf0df4
+        - file_name: bio15_batch_2_2026-11-23__5eb24e75b544a562294e441f0db68a0c__.qs
+          size: 43345898
+          sha256: cb26f7c39a3fa21bc3fb5e35e351370c5e984563f54bcc62c0dd6135c444adef
+        - file_name: bio15_batch_3_2026-11-23__9a711197ae4ed39621b621de177d8518__.qs
+          size: 43108318
+          sha256: 8aa0818fb1f665dd2aba447cce9f4d8189db55e038c380f4026a0538d3064447
+        - file_name: bio15_batch_4_2026-11-23__5f78d56a25ed740f519cd32ec8b2474c__.qs
+          size: 42107242
+          sha256: 9a1754170c38dede460cbaa9d94dd2ac50e028f7144b696986e359a7712c2f0a
+        - file_name: bio18_batch_1_2026-11-23__486b7d32e43a9ae0b8bc48f4fba909a5__.qs
+          size: 14428934
+          sha256: 264425e5b3b2a0fd8fefde81f262f612e6f871af0ca7e8b59a018dde1648fa7f
+        - file_name: bio18_batch_2_2026-11-23__55a01dc935d8b87d8f6183f33a016987__.qs
+          size: 14769287
+          sha256: 64c6271670cbe8650c68513726ed6d521ca2b6b8f415d34525c14aeea4350850
+        - file_name: bio18_batch_3_2026-11-23__d56b7c720902f5f8f3bd70b786496bd9__.qs
+          size: 15328721
+          sha256: 06dc7407bf251f6d39f26f444c15f0f8d0a427a1cfbc39e75a663073e4a66e45
+        - file_name: bio18_batch_4_2026-11-23__af9c487dea59e4e88c3463a5d1d0259d__.qs
+          size: 14974995
+          sha256: 7faeeda2c07f9ee896d4ded4ce89391267a6fe562118da03ed2dc1e3b2d50507
+        - file_name: bio19_batch_1_2026-11-23__b816e23df96fa12deafe2338b9304ea7__.qs
+          size: 12866011
+          sha256: 7c895be6c3bd8cd21efaf4f546fb055799579eba5899dda5fae8cd4a85cbb450
+        - file_name: bio19_batch_2_2026-11-23__61d48016628de36be3f56d74cb8a238d__.qs
+          size: 12517992
+          sha256: e1004a45d022fb87bd9c16172d435950831cc00d9dc1e9f32e8a320037994f8a
+        - file_name: bio19_batch_3_2026-11-23__5d37b267473e6e3a5448d4830db76b28__.qs
+          size: 12542015
+          sha256: 4f45ce6e84d36df083ab6551dd7a7f6191856004715fa69acbc6d52fff487763
+        - file_name: bio19_batch_4_2026-11-23__29d78fbc25ac01daf11ce7cd611cd1d8__.qs
+          size: 12096189
+          sha256: a8cf37b26865dec2e198bd6c9ceeeebb4f74dff8f5e4b841454872f9882167ef
     dev:
       files:
         - bio01_batch_1_2026-11-23__e994e0bb970507835a742bdca683ee47__.qs
@@ -214,10 +356,13 @@ artefacts:
       at 2416691, committed in Outputs/Data/HWSD; 318305 rows
       (203130 bytes, SHA-256
       7bd4c1c2701fb1213a3598d760a042ccbe355354e3a3afefd1c33f7ad49848e3).
-      release: placeholder until VegVault-abiotic_data tags v2.0.0.
+      release: the v2.0.0 release of VegVault-abiotic_data (commit e5118a6, 2026-11-24).
     release:
-      tag: null
-      files: []
+      tag: v2.0.0
+      files:
+        - file_name: hwsd_data_2026-11-23__7b6ed97a6b0c32b4703fe69c9e0dfa51__.qs
+          size: 203130
+          sha256: 7bd4c1c2701fb1213a3598d760a042ccbe355354e3a3afefd1c33f7ad49848e3
     dev:
       files:
         - hwsd_data_2026-11-23__7b6ed97a6b0c32b4703fe69c9e0dfa51__.qs
