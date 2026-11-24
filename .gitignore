@@ -52,6 +52,13 @@ secrets.yaml
 
 # Large files
 Outputs/Data/VegVault/VegVault.sqlite
+# The 2.0.0 database, wherever secrets.yaml puts it inside the checkout,
+#   with its work copy, the SQLite side files and the build manifest
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*_build_manifest.yml
 Outputs/Data/VegVault/Flat_files/
 !Outputs/Data/VegVault/Flat_files/Column_names/*.csv
 Data/Processed/Classified_taxa/
