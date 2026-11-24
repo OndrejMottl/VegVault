@@ -69,7 +69,8 @@ testthat::test_that("build_database_assembly_targets() declares the stage", {
       "n_link_coordinate_digits", "n_taxon_batches", "name_check_taxon",
       "sel_taxon_db_name", "sel_taxon_db_class",
       "flag_taxon_only_exact_match", "sel_taxon_kingdom", "n_build_chunk_size",
-      "list_pragmas_load", "list_pragmas_final", "file_producer_manifest",
+      "list_taxon_corrections", "list_pragmas_load", "list_pragmas_final",
+      "file_producer_manifest",
       "file_contract_chelsa_neoclimate",
       "file_contract_chelsa_trace21k_palaeoclimate",
       "list_variables_chelsa_neoclimate",
@@ -94,7 +95,8 @@ testthat::test_that("build_database_assembly_targets() declares the stage", {
         vec_variables
       ),
       "list_positions", "data_gridpoint_samples", "vec_taxon_names",
-      "data_taxon_batches", "data_classification", "list_database_tables",
+      "data_taxon_batches", "data_classification",
+      "data_classification_corrected", "list_database_tables",
       "list_position_tables", "list_metadata_tables", "list_database_load",
       "file_build_manifest"
     )
@@ -242,8 +244,11 @@ testthat::test_that("build_database_assembly_targets() wires the inputs", {
         "sel_taxon_db_class", "flag_taxon_only_exact_match",
         "sel_taxon_kingdom"
       ),
+      data_classification_corrected = c(
+        "data_classification", "list_taxon_corrections"
+      ),
       list_tables_taxospace = c(
-        "data_classification", "list_source_taxospace"
+        "data_classification_corrected", "list_source_taxospace"
       ),
       list_database_tables = c(
         "list_tables_splot", "list_tables_gridpoints",
@@ -272,6 +277,11 @@ testthat::test_that("build_database_assembly_targets() wires the inputs", {
       base::all(.x %in% purrr::chuck(list_deps, .y)),
       label = .y
     )
+  )
+
+  # A changed correction must not classify any batch again
+  testthat::expect_false(
+    "list_taxon_corrections" %in% purrr::chuck(list_deps, "data_classification")
   )
 })
 
