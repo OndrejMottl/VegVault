@@ -494,6 +494,16 @@ default:
       #   Coniferina) stays unclassified, and "Dryas sp" is the plant genus,
       #   not the butterfly genus of the same name
       kingdom: "Plantae"
+      # Classifications set by hand, applied after the batches: each entry
+      #   gives a taxon name as written and the ranks it gets (species_name,
+      #   genus_name, family_name; a rank left out is missing). The
+      #   FOSSILPOL pollen type "Pinus Picea" is the Neotoma type
+      #   "Pinus/Picea", pollen of pine or spruce; the service matches it to
+      #   Abies alba (GBIF lists Pinus picea as its synonym), so it is set
+      #   to the family of both genera (decided 2026-11-23)
+      corrections:
+        - taxon_name: "Pinus Picea"
+          family_name: "Pinaceae"
     # Fixed values and references of each source, with the texts of
     #   v1.0.0. A reference has a role: the source type, or every data
     #   source, sampling method, taxon or trait of the source. References

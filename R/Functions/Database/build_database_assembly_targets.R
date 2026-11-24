@@ -37,7 +37,10 @@
 #'   \item the taxon names, their batches (`prepare_taxon_batches()`, split
 #'     into a list) and `data_classification`, one branch per batch; each
 #'     branch depends only on the names of its batch, so a later build
-#'     classifies again only the batches that gain names;
+#'     classifies again only the batches that gain names; then
+#'     `data_classification_corrected`, with the corrections set by hand in
+#'     `build: classification: corrections`
+#'     (`prepare_corrected_classification()`);
 #'   \item `list_database_tables`, `list_position_tables` and
 #'     `list_metadata_tables`, the rows of every table with their ids;
 #'   \item `list_database_load`, which writes the database with
@@ -299,6 +302,15 @@ build_database_assembly_targets <- function(
         name = "sel_taxon_kingdom",
         command = quote(
           load_config_value(value = c("build", "classification", "kingdom"))
+        ),
+        cue = cue_always
+      ),
+      targets::tar_target_raw(
+        name = "list_taxon_corrections",
+        command = quote(
+          load_config_value(
+            value = c("build", "classification", "corrections")
+          )
         ),
         cue = cue_always
       ),
@@ -741,11 +753,23 @@ build_database_assembly_targets <- function(
         ),
         pattern = quote(map(data_taxon_batches))
       ),
+      # The corrections set by hand apply after the batches, so a changed
+      #   correction classifies no name again
+      targets::tar_target_raw(
+        name = "data_classification_corrected",
+        command = quote(
+          prepare_corrected_classification(
+            data_classification = data_classification,
+            list_corrections = list_taxon_corrections,
+            verbose = FALSE
+          )
+        )
+      ),
       targets::tar_target_raw(
         name = "list_tables_taxospace",
         command = quote(
           prepare_classification_tables(
-            data_classification = data_classification,
+            data_classification = data_classification_corrected,
             list_source = list_source_taxospace,
             verbose = FALSE
           )
