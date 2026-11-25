@@ -144,7 +144,7 @@ Other owned areas: `Data/Contracts/`, `R/Functions/Contracts/`, `R/Functions/Exp
 - Every stage runner, pipeline and test run starts with `library(here)` and `source(here::here("R/___setup_project___.R"))`.
 - The setup aborts if `R_CONFIG_ACTIVE` names an unknown profile or the data root does not exist, loads every file in `R/Functions/`, attaches `packages: attach` from `config.yml`, regenerates `R/package_dependencies.R`, sets the seed and the ggplot theme, and resolves `path_data_storage`.
 - The lockfile is the template's `renv.lock`, restored once per checkout with `Rscript R/___Init_project___.R` (see `.ai/r-environment.md`).
-- `R/00_Config_file.R` is a compatibility file for the website: it sources the setup and keeps the objects the website uses, `path_to_vegvault` (the v1 database, `database_v1_path` of `secrets.yaml`), `data_version_control` and `db_version` (from `database: versions` of `config.yml`). Remove it when the website moves to the new setup, after the 2.0.0 release.
+- `R/00_Config_file.R` is a compatibility file for the website: it sources the setup and keeps the objects the website uses, `path_to_vegvault` (the release database, `database_path` of `secrets.yaml`), `list_build_manifest` (its build manifest, which must still describe the file and record a `release` build), `data_version_control` and `db_version` (from `database: versions` of `config.yml`). `R/Website/00_Config_quarto.R` opens the connection `con` of the pages on that database read-only, and the counts the pages show come from `load_database_statistics()` in `R/Functions/Website/`. Remove it when the website moves to the new setup, after the 2.0.0 release.
 
 ## Tests
 
