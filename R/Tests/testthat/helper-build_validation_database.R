@@ -48,6 +48,9 @@ build_validation_database <- function(
   run_with_database(
     path_database = path_database,
     fn = ~ {
+      # The version rows of the build replace the one row of the fixture
+      DBI::dbExecute(.x, "DELETE FROM version_control")
+
       DBI::dbExecute(
         .x,
         stringr::str_c(
