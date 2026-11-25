@@ -44,10 +44,12 @@ fonts_data <-
 # 2. Conect to Database -----
 #----------------------------------------------------------#
 
+# Read-only, so that no page can change the database
 con <-
   DBI::dbConnect(
     RSQLite::SQLite(),
-    path_to_vegvault
+    path_to_vegvault,
+    flags = RSQLite::SQLITE_RO
   )
 
 

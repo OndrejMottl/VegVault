@@ -27,7 +27,7 @@ The assembly stage builds every table in memory and writes the file once, with t
 
 ## Live database safety
 
-The pipeline stages resolve the live database path with `resolve_database_path()` from the git-ignored `secrets.yaml` (`database_path`, and `database_v1_path` for the released v1 database). The website gets `path_to_vegvault` from the compatibility `R/00_Config_file.R`, which resolves `database_v1_path` the same way; `secrets.yaml` replaces the former `.secrets/path.yaml`. Treat every resolved file as live user data. The `subset` profile uses a disposable database under the data root instead (see `.ai/analysis-structure.md`).
+The pipeline stages resolve the live database path with `resolve_database_path()` from the git-ignored `secrets.yaml` (`database_path`, and `database_v1_path` for the released v1 database). The website gets `path_to_vegvault` from the compatibility `R/00_Config_file.R`, which resolves `database_path` the same way, and `R/Website/00_Config_quarto.R` opens it read-only; `secrets.yaml` replaces the former `.secrets/path.yaml`. Treat every resolved file as live user data. The `subset` profile uses a disposable database under the data root instead (see `.ai/analysis-structure.md`).
 
 - Never display or commit `secrets.yaml`, `.secrets/` or a resolved private path.
 - Never run database creation, a stage that builds or writes the database or `R/Analyses/00_run_main.R` against the live path without explicit user authorization naming that target.

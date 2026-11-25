@@ -38,11 +38,22 @@ set.seed(1234)
 # 1. Database path -----
 #----------------------------------------------------------#
 
-# The database the website reads: the released v1 database,
-#   `database_v1_path` in the git-ignored secrets.yaml, which replaces
-#   .secrets/path.yaml. The 2.0.0 build writes `database_path` instead
+# The database the website reads: the release database, `database_path`
+#   in the git-ignored secrets.yaml
 path_to_vegvault <-
-  resolve_database_path(key = "database_v1_path")
+  resolve_database_path(key = "database_path")
+
+# Its build manifest must still describe the file (name, size and
+#   modification time) and record a release build from a clean checkout,
+#   so that the pages report the published database and nothing else
+list_build_manifest <-
+  load_build_manifest(
+    path_manifest = resolve_build_manifest_path(
+      path_database = path_to_vegvault
+    ),
+    path_database = path_to_vegvault,
+    profile_expected = "release"
+  )
 
 
 #----------------------------------------------------------#
@@ -64,3 +75,19 @@ db_version <-
   data_version_control |>
   dplyr::slice_tail(n = 1) |>
   dplyr::pull(version)
+
+# The version the pages print must be the version the database records;
+#   the two differ only when config.yml was changed after the build
+version_manifest <-
+  purrr::chuck(list_build_manifest, "version", "version")
+
+if (
+  !base::identical(base::as.character(version_manifest), db_version)
+) {
+  cli::cli_abort(
+    c(
+      "The database version in config.yml is not the one of the database.",
+      "i" = "config.yml: {db_version}; build manifest: {version_manifest}."
+    )
+  )
+}

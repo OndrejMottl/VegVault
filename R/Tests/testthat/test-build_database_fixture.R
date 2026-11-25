@@ -32,7 +32,7 @@ testthat::test_that("build_database_fixture() fills the documented rows", {
       "AbioticVariable", "AbioticData", "AbioticDataReference",
       "TraitsDomain", "Traits", "TraitsValue", "TraitUnitConversion",
       "DatasetTypeID", "DatasetSourceTypeID", "References",
-      "Positions", "SamplePosition", "PositionLink"
+      "Positions", "SamplePosition", "PositionLink", "version_control"
     )
 
   vec_n_rows <-
@@ -56,7 +56,27 @@ testthat::test_that("build_database_fixture() fills the documented rows", {
   testthat::expect_equal(
     vec_n_rows,
     c(9L, 11L, 11L, 10L, 2L, 7L, 6L, 10L, 2L, 5L, 2L, 2L, 2L, 3L, 2L,
-      4L, 5L, 0L, 2L, 2L, 2L)
+      4L, 5L, 0L, 2L, 2L, 2L, 1L)
+  )
+})
+
+testthat::test_that("build_database_fixture() records version 2.0.0", {
+  path_database <-
+    build_database_fixture(
+      path_database = base::file.path(withr::local_tempdir(), "f.sqlite")
+    )
+
+  data_versions <-
+    run_with_database(
+      path_database = path_database,
+      fn = DBI::dbGetQuery,
+      statement = "SELECT id, version FROM version_control",
+      flag_read_only = TRUE
+    )
+
+  testthat::expect_equal(
+    data_versions,
+    base::data.frame(id = 1L, version = "2.0.0")
   )
 })
 

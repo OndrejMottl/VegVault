@@ -15,6 +15,10 @@
 #' @details
 #' The rows are fixed, so tests can compute the expected results by hand:
 #' \itemize{
+#'   \item One version row, `version_control` id 1 with version `2.0.0`,
+#'     as every 2.0.0 database has: `vaultkeepr` reads a database without
+#'     version rows as 1.0.0 and warns that its trait units may be
+#'     unreliable.
 #'   \item Dataset types 1 `vegetation_plot`, 2 `fossil_pollen_archive`,
 #'     3 `traits` and 4 `gridpoints` (`vaultkeepr` expects 4 for
 #'     gridpoints); source types 1 `sPlotOpen`, 2 `BIEN`, 3 `FOSSILPOL`,
@@ -88,6 +92,10 @@ build_database_fixture <- function(
   # Table rows, in an order that respects the foreign keys
   list_tables <-
     list(
+      version_control = tibble::tribble(
+        ~id, ~version, ~update_date, ~changelog,
+        1L, "2.0.0", "2026-11-25", "Test fixture"
+      ),
       DatasetTypeID = tibble::tribble(
         ~dataset_type_id, ~dataset_type,
         1L, "vegetation_plot",
