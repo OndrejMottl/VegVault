@@ -69,6 +69,42 @@ testthat::test_that("plot_plot_climate() maps plots coloured by value", {
   testthat::expect_no_error(ggplot2::ggplotGrob(res))
 })
 
+testthat::test_that("plot_plot_climate() names a long unit only once", {
+  list_figure_style <-
+    build_figure_style(
+      list_graphical = load_config_value(
+        value = c("graphical", "manuscript")
+      ),
+      list_colors = load_figure_colors(path_colors = here::here("colors.json"))
+    )
+
+  data_climate <-
+    tibble::tibble(
+      sample_id = c(1L, 2L),
+      coord_long = c(14, 16),
+      coord_lat = c(50, 49.5),
+      n_taxa = c(2L, 3L),
+      abiotic_variable_unit = c("C (degree Celsius)", "C (degree Celsius)"),
+      abiotic_value = c(8.5, 9)
+    )
+
+  res <-
+    plot_plot_climate(
+      data_plot_climate = data_climate,
+      list_region = list(
+        lon_min = 12, lon_max = 18.9, lat_min = 48.5, lat_max = 51.1
+      ),
+      abiotic_variable_label = "MAT",
+      list_figure_style = list_figure_style
+    )
+
+  # The unit as stored is "symbol (name)"; the legend title shows the name
+  testthat::expect_equal(
+    purrr::pluck(ggplot2::get_labs(res), "colour"),
+    "MAT (degree Celsius)"
+  )
+})
+
 
 #----------------------------------------------------------#
 # Inputs -----
