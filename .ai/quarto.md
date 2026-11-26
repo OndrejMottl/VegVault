@@ -4,7 +4,7 @@ Apply this guide to `README.qmd`, website `.qmd` sources, `_quarto.yml`, JSON th
 
 ## Source and generated files
 
-- `README.qmd` is the source for `README.md`; edit the QMD and regenerate the Markdown.
+- `README.qmd` is the source for `README.md`; edit the QMD and regenerate the Markdown with `quarto render README.qmd` from the repository root. `README.qmd` is not in the render list of `_quarto.yml`, so it renders on its own into `README.md`, not into `docs/`. Its numbers come from the saved counts of the newest release in `Data/Versions/`, so it never opens a database.
 - `_quarto.yml` configures a website whose rendered output is `docs/` and whose pre-render step is `R/Website/generate_theme.R`.
 - Edit `.qmd`, `colors.json`, `fonts.json`, `topics.json`, SCSS sources, and supporting R code rather than patching generated HTML, generated Markdown mirrors, or compiled assets directly. `generate_theme.R` writes `_colors.scss`, `_fonts.scss` and `_topics.scss` (the colour and Font Awesome icon of each heading topic).
 - Before treating an unfamiliar `.md` or asset as generated, inspect its source relationship. Do not delete tracked generated files merely because they are reproducible.
