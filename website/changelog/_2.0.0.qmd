@@ -137,6 +137,7 @@ The sections below describe what changed.
 | [Soil groups]{.abiotic} come from HWSD v2.2, with new codes | **Breaks code** that looks up [soil]{.abiotic} codes | [Climate and soil](#v2-0-0-abiotic) |
 | The flat files have no file of `AbioticDataReference` | **Breaks code** that reads that file | [The schema](#v2-0-0-schema) |
 | The unit label of `bio4` is corrected | **Breaks code** that matches the label text | [Climate and soil](#v2-0-0-abiotic) |
+| BIEN [trait]{.traits} records that name no provider have no data source | **Breaks code** that requires a data source for every record | [Plant traits](#v2-0-0-traits) |
 | `bio4`, [trait units]{.traits} and a [precipitation]{.abiotic} artefact are corrected | Changes results | [Climate and soil](#v2-0-0-abiotic), [Plant traits](#v2-0-0-traits) |
 | Links follow the documented rule exactly | Changes results: more links at high latitudes and across the dateline | [Links between samples and gridpoints](#v2-0-0-links) |
 | [Taxon names]{.taxa} are classified again | Changes results | [Vegetation, fossil pollen and taxa](#v2-0-0-taxa) |
@@ -270,6 +271,10 @@ Because the rule of 2.0.0 keeps every link of 1.0.0 on the same inputs, the lowe
   The [TRY]{.traits} reference of each record is stored as a sample reference.
 - **Counts:** `r label_count(count_2_0_0("traits_value_rows", "traits / TRY"))` [TRY]{.traits} values in `r label_count(count_2_0_0("datasets", "traits / TRY"))` [datasets]{.database} (1.0.0: `r label_count(count_1_0_0("traits_value_rows", "traits / TRY"))` in `r label_count(count_1_0_0("datasets", "traits / TRY"))`), and `r label_count(count_2_0_0("traits_value_rows", "traits / BIEN"))` BIEN values in `r label_count(count_2_0_0("datasets", "traits / BIEN"))` [datasets]{.database} (1.0.0: `r label_count(count_1_0_0("traits_value_rows", "traits / BIEN"))` in `r label_count(count_1_0_0("datasets", "traits / BIEN"))`).
   BIEN [trait]{.traits} samples without a value are dropped ([database design, decision 4](https://github.com/OndrejMottl/VegVault/blob/v2.0.0/Documentation/Database_design_2.0.0.md#decisions-for-gate-g2)).
+- **BIEN [trait]{.traits} records that name no provider have no data source.**
+  The data source of a BIEN [trait]{.traits} record is the principal investigator of its BIEN project, and 7,869 BIEN plant-height values in 3,609 [datasets]{.database} name none.
+  In 2.0.0 their `data_source_id` is empty; in 1.0.0 they pointed to a data source without a description, so neither version names their provider ([check on VegVault issue 167](https://github.com/OndrejMottl/VegVault/issues/167#issuecomment-7196060171)).
+  {vaultkeepr} returns `NA` as their `data_source_desc` in both versions, but code that joins every [dataset]{.database} to a data source drops these records in 2.0.0.
 
 ### Vegetation, fossil pollen and taxa {#v2-0-0-taxa .topic-taxa}
 
