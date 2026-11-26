@@ -38,7 +38,7 @@ testthat::test_that("plot_dataset_counts() combines waffle and lollipop", {
     collect_grob_labels(grob = ggplot2::ggplotGrob(res))
 
   # 304,000 datasets: 304 squares of 1000 datasets
-  testthat::expect_true("one square is 1000 Datasets" %in% vec_labels)
+  testthat::expect_true("One square is 1,000 Datasets" %in% vec_labels)
 
   testthat::expect_true("Neotoma - FOSSILPOL" %in% vec_labels)
 
@@ -83,7 +83,7 @@ testthat::test_that("plot_dataset_counts() leaves out missing sources", {
     collect_grob_labels(grob = grob_res)
 
   # The waffle counts all 10 datasets; the lollipops show named sources
-  testthat::expect_true("one square is 1 Datasets" %in% vec_labels)
+  testthat::expect_true("One square is 1 Datasets" %in% vec_labels)
 
   testthat::expect_false("NA" %in% vec_labels)
 
