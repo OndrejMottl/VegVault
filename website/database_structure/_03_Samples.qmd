@@ -295,7 +295,7 @@ if (
 
 ### Sample age uncertainty (`SampleUncertainty`) {.topic-paleo}
 
-Each [Sample]{.database} from the `fossil_pollen_archive` [Dataset]{.database} is also associated with an [uncertainty matrix]{.paleo} generated during the re-estimation of ages using [FOSSILPOL workflow]([https](https://bit.ly/FOSSILPOL)). This matrix provides a range of potential ages derived from [age-depth modelling]{.paleo}, reflecting the inherent uncertainty in dating [paleoecological records]{.paleo}. 
+Each [Sample]{.database} from the `fossil_pollen_archive` [Dataset]{.database} is also associated with an [uncertainty matrix]{.paleo} generated during the re-estimation of ages using [FOSSILPOL workflow](https://bit.ly/FOSSILPOL). This matrix provides a range of potential ages derived from [age-depth modelling]{.paleo}, reflecting the inherent uncertainty in dating [paleoecological records]{.paleo}. 
 
 
 ```{r}

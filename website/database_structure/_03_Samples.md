@@ -107,8 +107,8 @@ Each <span class="database">Sample</span> from the
 `fossil_pollen_archive` <span class="database">Dataset</span> is also
 associated with an <span class="paleo">uncertainty matrix</span>
 generated during the re-estimation of ages using [FOSSILPOL
-workflow](%5Bhttps%5D(https://bit.ly/FOSSILPOL)). This matrix provides a
-range of potential ages derived from <span class="paleo">age-depth
+workflow](https://bit.ly/FOSSILPOL). This matrix provides a range of
+potential ages derived from <span class="paleo">age-depth
 modelling</span>, reflecting the inherent uncertainty in dating
 <span class="paleo">paleoecological records</span>.
 

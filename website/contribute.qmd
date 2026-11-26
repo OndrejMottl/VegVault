@@ -14,7 +14,7 @@ To maintain the highest quality of data and code, we adhere to strict guidelines
 ## Ways to Contribute
 
 ### Report Issues or Request Features
-Found a bug or have an idea for enhancement? Visit our [Contact & Support](contact.qmd#report-issues--bugs) page for detailed reporting guidelines.
+Found a bug or have an idea for enhancement? Visit our [Contact & Support](contact.qmd#report-issues-bugs) page for detailed reporting guidelines.
 
 ### Data Contributions
 
@@ -36,7 +36,7 @@ We welcome contributions to improve [VegVault]{.vegvault}'s [codebase]{.reproduc
 **Git & GitHub Proficiency:**
 
 - Familiarity with [Git version control](https://git-scm.com/)
-- Understanding of [GitHub workflows](https://help.github.com/categories/bootcamp/)
+- Understanding of [GitHub workflows](https://docs.github.com/en/get-started/start-your-journey)
 - Experience with pull requests and collaborative development
 
 **Coding Standards:**
@@ -74,7 +74,7 @@ When ready to contribute your changes:
    - Be patient during the review process
 
 **4. Merge Conflicts**
-If you encounter merge conflicts, consult this [git tutorial](https://lab.github.com/githubtraining/managing-merge-conflicts) for resolution strategies.
+If you encounter merge conflicts, consult GitHub's guide to [resolving a merge conflict](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github) for resolution strategies.
 
 ## Related Resources
 
