@@ -10,9 +10,11 @@
 #' @return
 #' A ggplot object; the x axis title names the size unit.
 #' @details
-#' Samples without a size are left out. Aborts when a required column is
-#' missing, when no sample has a size, or when the sizes have more than one
-#' unit.
+#' Samples without a size are left out. Both axes are labelled as powers of
+#' ten. The right margin is wider than in the other figures, so that the
+#' label at the right end of the x axis stays inside the figure. Aborts
+#' when a required column is missing, when no sample has a size, or when
+#' the sizes have more than one unit.
 #' @examples
 #' \dontrun{
 #' fig_samples_plot_size <-
@@ -81,7 +83,17 @@ plot_plot_sizes <- function(
         y = ggplot2::after_stat(dplyr::na_if(count, 0))
       )
     ) +
-    ggplot2::scale_x_continuous(transform = "log10") +
+    ggplot2::scale_x_continuous(
+      transform = "log10",
+      breaks = scales::trans_breaks(
+        trans = "log10",
+        inv = function(x) 10^x
+      ),
+      labels = scales::trans_format(
+        trans = "log10",
+        format = scales::math_format(10^.x)
+      )
+    ) +
     ggplot2::scale_y_continuous(
       transform = "log10",
       breaks = scales::trans_breaks(
@@ -98,6 +110,15 @@ plot_plot_sizes <- function(
       y = "Number of Samples"
     ) +
     purrr::chuck(list_figure_style, "theme") +
+    ggplot2::theme(
+      plot.margin = ggplot2::margin(
+        t = 0.1,
+        r = 0.5,
+        b = 0,
+        l = 0.1,
+        unit = "cm"
+      )
+    ) +
     ggplot2::geom_histogram(
       fill = purrr::chuck(list_figure_style, "colors", "grey"),
       colour = NA,
