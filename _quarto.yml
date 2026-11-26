@@ -46,6 +46,8 @@ website:
             href: website/database_assembly.qmd
           - text: VegVault Access
             href: website/database_access.qmd
+          - text: VegVault Changelog
+            href: website/database_changelog.qmd
           - text: Examples of usage
             href: website/database_examples.qmd
       - text: Outputs and Materials 

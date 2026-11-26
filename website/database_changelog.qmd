@@ -1,0 +1,54 @@
+---
+date: 2026/11/26
+date-format: long
+date-modified: last-modified
+sidebar: true
+---
+
+# VegVault Changelog
+
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("website/database_changelog.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+```
+
+This page lists every version of [VegVault]{.vegvault} and gives each release its own section, newest first.
+Each section says what changed against the release before it and what that means for code written for the earlier release.
+Every [database]{.database} file records its version in its `version_control` table, and the R package [{vaultkeepr}](https://bit.ly/vaultkeepr), from its version 0.2.0, reads it when it opens the file.
+
+## All versions
+
+```{r}
+#| label: changelog-versions
+#| echo: false
+
+data_version_control |>
+  dplyr::arrange(dplyr::desc(dplyr::row_number())) |>
+  dplyr::select("version", "update_date", "changelog") |>
+  knitr::kable(
+    col.names = c("Version", "Date", "Changes")
+  )
+```
+
+## VegVault 2.0.0 {#vegvault-2-0-0}
+
+{{< include changelog/_2.0.0.qmd >}}
+
+## VegVault 1.0.0 {#vegvault-1-0-0}
+
+The first release of [VegVault]{.vegvault}, described in the [[VegVault]{.vegvault} data paper](https://doi.org/10.1038/s41597-025-06176-1).
+Its [SQLite database]{.database} ([10.48700/datst.t21cz-2nq07](https://doi.org/10.48700/datst.t21cz-2nq07)) and its flat files ([10.48700/datst.thktf-5rr35](https://doi.org/10.48700/datst.thktf-5rr35)) are deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/).
