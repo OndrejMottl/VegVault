@@ -186,6 +186,14 @@ testthat::test_that("build_figure_style() sets the v1 theme", {
     ggplot2::calc_element(element = "panel.grid.minor", theme = theme_res),
     "ggplot2::element_blank"
   )
+
+  # A margin on the left keeps the y axis title inside the figure
+  unit_margin <-
+    purrr::chuck(theme_res, "plot.margin")
+
+  testthat::expect_equal(base::as.numeric(unit_margin), c(0.1, 0.1, 0, 0.1))
+
+  testthat::expect_equal(base::unique(grid::unitType(unit_margin)), "cm")
 })
 
 testthat::test_that("build_figure_style() works with the project config", {

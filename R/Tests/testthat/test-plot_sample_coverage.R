@@ -41,7 +41,7 @@ testthat::test_that("plot_sample_coverage() combines map and histogram", {
   testthat::expect_true(
     base::all(
       c(
-        "Longitude", "Age (ka cal yr BP)", "Number of Samples",
+        "Longitude", "Age (ka cal yr BP)", "Samples per 1,000 years",
         "Dataset Type", "vegetation plot", "fossil pollen archive"
       ) %in% vec_labels
     )

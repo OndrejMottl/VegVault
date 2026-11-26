@@ -48,6 +48,43 @@ testthat::test_that("plot_plot_sizes() draws a histogram of sizes", {
   testthat::expect_no_warning(ggplot2::ggplotGrob(res))
 })
 
+testthat::test_that("plot_plot_sizes() labels both axes as powers of ten", {
+  list_figure_style <-
+    build_figure_style(
+      list_graphical = load_config_value(
+        value = c("graphical", "manuscript")
+      ),
+      list_colors = load_figure_colors(path_colors = here::here("colors.json"))
+    )
+
+  res <-
+    plot_plot_sizes(
+      data_plot_sizes = tibble::tibble(
+        sample_id = 1:2,
+        sample_size = c(0.1, 1e5),
+        sample_size_unit = c("square meters", "square meters")
+      ),
+      list_figure_style = list_figure_style
+    )
+
+  vec_labels_x <-
+    ggplot2::get_guide_data(plot = res, aesthetic = "x") |>
+    dplyr::pull(.label) |>
+    purrr::map_chr(.f = ~ base::deparse(.x))
+
+  testthat::expect_true(
+    base::all(stringr::str_detect(vec_labels_x, "^10\\^-?[0-9]+$"))
+  )
+
+  # A wider right margin keeps the label at the right end inside the figure
+  unit_margin <-
+    purrr::chuck(res, "theme", "plot.margin")
+
+  testthat::expect_equal(base::as.numeric(unit_margin), c(0.1, 0.5, 0, 0.1))
+
+  testthat::expect_equal(base::unique(grid::unitType(unit_margin)), "cm")
+})
+
 
 #----------------------------------------------------------#
 # Inputs -----

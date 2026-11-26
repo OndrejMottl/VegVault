@@ -44,6 +44,9 @@ testthat::test_that("plot_dataset_counts() combines waffle and lollipop", {
 
   testthat::expect_false("FOSSILPOL" %in% vec_labels)
 
+  # The counts are written with comma thousands separators
+  testthat::expect_true("120,000" %in% vec_labels)
+
   testthat::expect_true(
     base::all(
       c(

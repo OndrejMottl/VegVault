@@ -56,6 +56,19 @@ testthat::test_that("plot_taxa_classification() draws labelled counts", {
   )
 
   testthat::expect_no_error(ggplot2::ggplotGrob(res))
+
+  # The counts on the y axis are written with thousands separators
+  vec_labels_y <-
+    ggplot2::get_guide_data(plot = res, aesthetic = "y") |>
+    dplyr::pull(.label)
+
+  testthat::expect_true("1,000" %in% vec_labels_y)
+
+  # The labels of the counts use the same separators as the axis
+  testthat::expect_equal(
+    dplyr::pull(ggplot2::layer_data(plot = res, i = 3L), label),
+    c("1,000", "600", "200", "50", "100")
+  )
 })
 
 

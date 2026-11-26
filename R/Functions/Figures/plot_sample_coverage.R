@@ -15,9 +15,10 @@
 #' @details
 #' Dataset types are shown with spaces instead of underscores. The map
 #' shows the distinct locations per type; the histogram counts the distinct
-#' ages per dataset on a log scale, over 0 to 20 ka as in v1. Country
-#' outlines come from the `maps` package. Aborts when a required column is
-#' missing.
+#' ages per dataset in bins of 1,000 years on a log scale, over 0 to 20 ka
+#' as in v1, with the bars of a bin overlaid instead of stacked (see
+#' `plot_sample_age_histogram()`). Country outlines come from the `maps`
+#' package. Aborts when a required column is missing.
 #' @examples
 #' \dontrun{
 #' fig_vegetation <-
@@ -91,42 +92,10 @@ plot_sample_coverage <- function(
       alpha = 0.5
     )
 
-  vec_breaks_count <-
-    10^(0:9)
-
   fig_time <-
-    data_time |>
-    ggplot2::ggplot(
-      mapping = ggplot2::aes(
-        x = age,
-        y = ggplot2::after_stat(count)
-      )
-    ) +
-    ggplot2::scale_fill_manual(values = palette_dataset_type) +
-    ggplot2::scale_y_continuous(
-      transform = scales::transform_log1p(),
-      breaks = vec_breaks_count,
-      labels = c("1", "10", "100", stringr::str_c("1e", 3:9))
-    ) +
-    ggplot2::scale_x_continuous(
-      breaks = base::seq(0, 20e3, by = 5e3),
-      labels = base::seq(0, 20, by = 5)
-    ) +
-    ggplot2::labs(
-      x = "Age (ka cal yr BP)",
-      y = "Number of Samples",
-      fill = "Dataset Type"
-    ) +
-    theme_figure +
-    ggplot2::theme(legend.position = "top") +
-    ggplot2::coord_cartesian(
-      xlim = c(0.2, 20e3),
-      ylim = c(1, 1e9)
-    ) +
-    ggplot2::geom_histogram(
-      mapping = ggplot2::aes(fill = dataset_type),
-      alpha = 1,
-      bins = 20
+    plot_sample_age_histogram(
+      data_sample_ages = data_time,
+      list_figure_style = list_figure_style
     )
 
   grob_legend <-

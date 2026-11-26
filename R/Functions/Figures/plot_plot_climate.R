@@ -18,10 +18,13 @@
 #' @return
 #' A ggplot object.
 #' @details
-#' The graticule has lines every 2 degrees of longitude and 0.5 degrees of
-#' latitude over the region, as in v1. Country outlines come from the
-#' `maps` package. Aborts when a required column is missing or the data
-#' hold more than one unit.
+#' The legend title is the label followed by the unit in parentheses. A
+#' unit stored as a symbol with its name in parentheses, such as
+#' `"C (degree Celsius)"`, is shown by its name only (`"MAT (degree
+#' Celsius)"`), so that the parentheses are not nested. The graticule has
+#' lines every 2 degrees of longitude and 0.5 degrees of latitude over the
+#' region, as in v1. Country outlines come from the `maps` package. Aborts
+#' when a required column is missing or the data hold more than one unit.
 #' @examples
 #' \dontrun{
 #' fig_cz_jsdm <-
@@ -74,11 +77,20 @@ plot_plot_climate <- function(
     )
   }
 
+  # A unit stored as "symbol (name)" is shown by its name, so that the
+  #   parentheses of the title are not nested
+  vec_units_shown <-
+    stringr::str_replace(
+      string = vec_units,
+      pattern = "^.+ \\((.+)\\)$",
+      replacement = "\\1"
+    )
+
   label_colour <-
     if (
-      base::length(vec_units) == 1L
+      base::length(vec_units_shown) == 1L
     ) {
-      stringr::str_c(abiotic_variable_label, " (", vec_units, ")")
+      stringr::str_c(abiotic_variable_label, " (", vec_units_shown, ")")
     } else {
       abiotic_variable_label
     }

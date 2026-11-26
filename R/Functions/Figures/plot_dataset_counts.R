@@ -19,8 +19,9 @@
 #' for `compute_waffle_unit()` datasets: 1000 for the v1 database, as in
 #' v1. The log axis ends at `compute_log_axis_max()` (10 million for the v1
 #' counts, as in v1), and the stems start at one dataset, its lower limit
-#' (v1 drew them from zero, outside the log axis). Aborts when a required
-#' column is missing.
+#' (v1 drew them from zero, outside the log axis). The count labels use
+#' comma thousands separators, as in the other figures. Aborts when a
+#' required column is missing.
 #' @examples
 #' \dontrun{
 #' fig_datasets <-
@@ -166,7 +167,7 @@ plot_dataset_counts <- function(
       position = position_lollipop
     ) +
     ggplot2::geom_label(
-      mapping = ggplot2::aes(label = scales::number(n_datasets)),
+      mapping = ggplot2::aes(label = scales::comma(n_datasets)),
       vjust = -0.5,
       size = point_size,
       position = position_lollipop
