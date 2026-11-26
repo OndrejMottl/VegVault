@@ -6,12 +6,9 @@
 
 <!-- badges: start -->
 
-[![Version](https://img.shields.io/github/v/release/OndrejMottl/VegVault?label=Version&logo=github.png)](https://github.com/OndrejMottl/VegVault/releases)
+[![Version](https://img.shields.io/github/v/release/OndrejMottl/VegVault?label=Version&logo=github)](https://github.com/OndrejMottl/VegVault/releases)
 <!-- badges: end -->
 
-The goal of this repo is to create an SQLite database with all data from
-[BIODYNAMICS
-project](https://ondrejmottl.github.io/projects/BIODYNAMICS/).
+The goal of this repo is to create an SQLite database with all data from [BIODYNAMICS project](https://ondrejmottl.github.io/projects/BIODYNAMICS/).
 
-Please visit [VegVault website](https://bit.ly/VegVault) for more
-details.
+Please visit [VegVault website](https://bit.ly/VegVault) for more details.

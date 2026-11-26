@@ -1,5 +1,11 @@
 ---
-format: gfm
+format:
+  gfm:
+    # The line breaks of this file, no wrapping, and no ".png" added to
+    #   image links without an extension (pandoc's default), which broke
+    #   the badge URL
+    wrap: preserve
+    default-image-extension: ""
 ---
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
@@ -10,7 +16,6 @@ format: gfm
 [![Version](https://img.shields.io/github/v/release/OndrejMottl/VegVault?label=Version&logo=github)](https://github.com/OndrejMottl/VegVault/releases)
 <!-- badges: end -->
 
-The goal of this repo is to create an SQLite database with all data from
-[BIODYNAMICS project](https://ondrejmottl.github.io/projects/BIODYNAMICS/).
+The goal of this repo is to create an SQLite database with all data from [BIODYNAMICS project](https://ondrejmottl.github.io/projects/BIODYNAMICS/).
 
 Please visit [VegVault website](https://bit.ly/VegVault) for more details.
