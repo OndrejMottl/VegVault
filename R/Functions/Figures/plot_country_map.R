@@ -10,9 +10,16 @@
 #' `lat_max` (degrees): the map extent.
 #' @param list_figure_style
 #' Named list, as returned by `build_figure_style()`.
+#' @param n_breaks_lon
+#' `NULL` (default) or a positive whole number: the approximate number of
+#' longitude labels, for a map too narrow for the labels that `coord_sf()`
+#' chooses. `NULL` keeps the `coord_sf()` labels.
 #' @return
 #' A ggplot object with `coord_sf()` on the extent, the land of the `maps`
 #' package in grey and the country outline; layers can be added to it.
+#' @details
+#' With `n_breaks_lon`, the longitudes are chosen by
+#' `scales::breaks_extended()`, which may return one label more or fewer.
 #' @examples
 #' \dontrun{
 #' fig_overview <-
@@ -27,7 +34,8 @@
 plot_country_map <- function(
   data_country_border,
   list_extent,
-  list_figure_style
+  list_figure_style,
+  n_breaks_lon = NULL
 ) {
   assertthat::assert_that(
     base::inherits(data_country_border, "sf"),
@@ -41,8 +49,34 @@ plot_country_map <- function(
     msg = "`list_figure_style` must be the list of build_figure_style()."
   )
 
+  assertthat::assert_that(
+    base::is.null(n_breaks_lon) ||
+      (
+        base::is.numeric(n_breaks_lon) &&
+          base::length(n_breaks_lon) == 1L &&
+          !base::is.na(n_breaks_lon) &&
+          n_breaks_lon >= 1 &&
+          n_breaks_lon == base::round(n_breaks_lon)
+      ),
+    msg = "`n_breaks_lon` must be NULL or a positive whole number."
+  )
+
+  # NULL keeps the longitudes that coord_sf() chooses
+  scale_lon <-
+    NULL
+
+  if (
+    !base::is.null(n_breaks_lon)
+  ) {
+    scale_lon <-
+      ggplot2::scale_x_continuous(
+        breaks = scales::breaks_extended(n = n_breaks_lon)
+      )
+  }
+
   res <-
     ggplot2::ggplot() +
+    scale_lon +
     ggplot2::labs(
       x = "Longitude",
       y = "Latitude"

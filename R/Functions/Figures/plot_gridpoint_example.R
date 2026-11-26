@@ -23,8 +23,10 @@
 #' @details
 #' Country outlines come from the `maps` package, the highlighted country
 #' from `data_country_border`. Axis breaks are the `coord_sf()` defaults
-#' for each extent (v1 listed them for Czechia and Europe). Aborts when a
-#' required column is missing.
+#' for each extent (v1 listed them for Czechia and Europe), except the
+#' longitudes of the two small maps on the left, which are thinned to about
+#' three labels so that they do not overlap. Aborts when a required column
+#' is missing.
 #' @examples
 #' \dontrun{
 #' fig_gridpoints_example <-
@@ -76,11 +78,16 @@ plot_gridpoint_example <- function(
   col_brown_neutral <-
     purrr::chuck(list_figure_style, "colors", "brown_neutral")
 
+  # The two maps of the narrow left column get fewer longitude labels, so
+  #   that the labels do not overlap
+  n_breaks_lon_small <- 3L
+
   fig_overview <-
     plot_country_map(
       data_country_border = data_country_border,
       list_extent = list_overview,
-      list_figure_style = list_figure_style
+      list_figure_style = list_figure_style,
+      n_breaks_lon = n_breaks_lon_small
     )
 
   fig_region <-
@@ -90,8 +97,16 @@ plot_gridpoint_example <- function(
       list_figure_style = list_figure_style
     )
 
+  fig_region_small <-
+    plot_country_map(
+      data_country_border = data_country_border,
+      list_extent = list_region,
+      list_figure_style = list_figure_style,
+      n_breaks_lon = n_breaks_lon_small
+    )
+
   fig_gridpoints <-
-    fig_region +
+    fig_region_small +
     ggplot2::geom_point(
       data = data_gridpoint_locations,
       mapping = ggplot2::aes(
