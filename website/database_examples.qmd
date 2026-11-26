@@ -51,7 +51,7 @@ invisible(
 
 :::: {.columns}
 ::: {.column width="75%"}
-To make [VegVault]{.vegvault} as accessible as possible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a comprehensive R package providing intuitive functions for interacting with the [database]{.database}. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory. With >95% code coverage, {vaultkeepr} is a [well-tested]{.reproducibility} interface for [VegVault]{.vegvault}.
+To make [VegVault]{.vegvault} as accessible as possible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a comprehensive R package providing intuitive functions for interacting with the [database]{.database}. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory. With >95% code coverage, {vaultkeepr} is a well-tested interface for [VegVault]{.vegvault}.
 :::
 
 ::: {.column width="25%"}
@@ -92,22 +92,25 @@ The following diagram illustrates the systematic workflow for accessing and extr
 #| label: figure-extracting-data
 knitr::include_graphics(
   here::here(
-    "Outputs/Figures/Scheme_extraction/Scheme_04.png"
+    "Outputs/Figures/Scheme_extraction/extraction_workflow.png"
   )
 )
 ```
 
 ### Key Workflow Steps:
 
-1. **[Download VegVault](database_access.qmd)** database and install {vaultkeepr}
-2. **Select Dataset Types**: Choose from `vegetation_plot`, `fossil_pollen_archive`, `traits`, or `gridpoints`
-3. **Geographic Filtering**: Define spatial extent using `vaultkeepr::select_dataset_by_geo()`
-4. **Temporal Filtering**: Set age ranges with `vaultkeepr::select_samples_by_age()`
-5. **Add Data Attributes**:
-   - **Taxa data**: Use `vaultkeepr::get_taxa()` with taxonomic harmonization options
-   - **Trait data**: Use `vaultkeepr::get_traits()` and filter by trait domains
-   - **Abiotic data**: Use `vaultkeepr::get_abiotic_data()` with spatial-temporal linking options
-6. **Extract & Citation**: Use `vaultkeepr::extract_data()` and `vaultkeepr::get_references()`
+1. **Get the VegVault database**: [download](database_access.qmd) the SQLite file.
+2. **Get the {vaultkeepr} R package**: install it from GitHub as shown above. In R, every query then opens the database with `vaultkeepr::open_vault()` and starts from its datasets with `vaultkeepr::get_datasets()`.
+3. **Choose the dataset types**: keep `vegetation_plot`, `fossil_pollen_archive`, `traits` or `gridpoints` with `vaultkeepr::select_dataset_by_type()`.
+4. **Choose the area and the time period**:
+   - **Area**: keep the datasets within a range of latitude and longitude with `vaultkeepr::select_dataset_by_geo()`
+   - **Samples**: add the samples of these datasets with `vaultkeepr::get_samples()`
+   - **Time period**: keep the samples within an age range with `vaultkeepr::select_samples_by_age()`
+5. **Choose the attributes to include**:
+   - **Taxa**: `vaultkeepr::get_taxa()`, with options for taxonomic harmonization
+   - **Traits**: `vaultkeepr::get_traits()`, filtered by trait domain with `vaultkeepr::select_traits_by_domain_name()`
+   - **Abiotic data**: `vaultkeepr::get_abiotic_data()`, with options for linking samples to gridpoints in space and time
+6. **Extract the data and references**: `vaultkeepr::extract_data()` returns the data, and `vaultkeepr::get_references()` the references to cite.
 
 ## Practical Examples
 

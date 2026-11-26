@@ -37,6 +37,11 @@ This page provides access to all VegVault-related resources including the databa
 
 ### Primary Database Access
 
+::: {.callout-important}
+**To be updated after the deposit:** VegVault `r db_version` and its flat files receive their DOIs when they are deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/).
+Until then, the buttons on this page lead to VegVault 1.0.0.
+:::
+
 **VegVault v1.0.0 (SQLite Database - Recommended)**
 [Download Database v1.0.0](https://doi.org/10.48700/datst.t21cz-2nq07){.btn}
 
@@ -66,7 +71,9 @@ knitr::include_graphics(
 [Download Database v1.0.0 as Flat Files](https://doi.org/10.48700/datst.thktf-5rr35){.btn}
 
 ::: {.callout-warning}
-**Note**: Flat files are provided for accessibility but are not the preferred method. Many files exceed 1GB and may be difficult to load. We strongly recommend using the SQLite database with [{vaultkeepr}](https://bit.ly/vaultkeepr) for optimal performance.
+**Note**: Flat files are provided for accessibility but are not the preferred method.
+The largest files exceed 1 GB and may be difficult to load; the [Database Access](database_access.qmd#alternative-access-flat-files) page gives their sizes.
+We strongly recommend using the SQLite database with [{vaultkeepr}](https://bit.ly/vaultkeepr) for optimal performance.
 :::
 
 ## Publications
@@ -76,6 +83,8 @@ knitr::include_graphics(
 **"VegVault dataset: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers"** [![](https://img.shields.io/badge/DOI-10.1038/s41597--025--06176--1-blue)](https://doi.org/10.1038/s41597-025-06176-1)
 
 ### Pre-print
+
+The pre-print is the earlier version of the main article.
 
 **"VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers"** [![](https://img.shields.io/badge/DOI-10.1101/2025.01.31.635213-blue)](https://doi.org/10.1101/2025.01.31.635213)
 
@@ -116,7 +125,7 @@ knitr::include_graphics(
 
 ### Recent Presentations
 
-**VegVault - JCU, České Budějovice, Czech Republic (December 110, 2025)**
+**VegVault - JCU, České Budějovice, Czech Republic (December 10, 2025)**
 
 - [View Slides](https://ondrejmottl.github.io/VegVault-Presentation-20251210/)
 - [Source Code](https://github.com/OndrejMottl/VegVault-Presentation-20251210)

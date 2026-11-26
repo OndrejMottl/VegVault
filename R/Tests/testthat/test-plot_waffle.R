@@ -23,7 +23,7 @@ testthat::test_that("plot_waffle() returns a waffle chart", {
 
   testthat::expect_equal(
     purrr::pluck(ggplot2::get_labs(res), "caption"),
-    "one square is 1000 Datasets"
+    "One square is 1,000 Datasets"
   )
 
   testthat::expect_equal(

@@ -11,7 +11,7 @@
 #' @examples
 #' \dontrun{
 #' build_absolute_graphics_include(
-#'   path = "Outputs/Figures/schema_diagram.png"
+#'   path = "Outputs/Figures/schema_diagram.svg"
 #' )
 #' }
 build_absolute_graphics_include <- function(path) {

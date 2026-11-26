@@ -3,5 +3,8 @@ project:
 
 format:
   gfm:
+    # Keeps the classes of headings ({.topic-traits}) for the page that
+    #   includes the Markdown
+    variant: +attributes
     fig-width: 10
 

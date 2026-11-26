@@ -1,0 +1,11 @@
+{
+  "paleo": {"color": "purpleLight", "icon": "layer-group", "icon_color": "black"},
+  "neo-vegetation": {"color": "greenLight", "icon": "seedling", "icon_color": "black"},
+  "traits": {"color": "blueDark", "icon": "leaf", "icon_color": "white"},
+  "abiotic": {"color": "greenDark", "icon": "cloud-sun", "icon_color": "white"},
+  "reproducibility": {"color": "brownLight", "icon": "code-branch", "icon_color": "white"},
+  "database": {"color": "brownDark", "icon": "database", "icon_color": "white"},
+  "samples": {"color": "brownDark", "icon": "vial", "icon_color": "white"},
+  "taxa": {"color": "brownNeutral", "icon": "sitemap", "icon_color": "white"},
+  "references": {"color": "brownLight", "icon": "book", "icon_color": "white"}
+}

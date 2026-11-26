@@ -4,8 +4,10 @@ $black: #242531ff;
 .text-color-black { color: #242531ff !important ; }
 .text-background-black {
 background-color: #242531ff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $white: #ffffffff;
@@ -13,8 +15,10 @@ $white: #ffffffff;
 .text-color-white { color: #ffffffff !important ; }
 .text-background-white {
 background-color: #ffffffff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $grey: #999999ff;
@@ -22,8 +26,10 @@ $grey: #999999ff;
 .text-color-grey { color: #999999ff !important ; }
 .text-background-grey {
 background-color: #999999ff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $brownDark: #8a554eff;
@@ -31,8 +37,10 @@ $brownDark: #8a554eff;
 .text-color-brownDark { color: #8a554eff !important ; }
 .text-background-brownDark {
 background-color: #8a554eff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $brownNeutral: #8B6965ff;
@@ -40,8 +48,10 @@ $brownNeutral: #8B6965ff;
 .text-color-brownNeutral { color: #8B6965ff !important ; }
 .text-background-brownNeutral {
 background-color: #8B6965ff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $brownLight: #bc7052ff;
@@ -49,8 +59,10 @@ $brownLight: #bc7052ff;
 .text-color-brownLight { color: #bc7052ff !important ; }
 .text-background-brownLight {
 background-color: #bc7052ff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $beigeDark: #ae8a7bff;
@@ -58,8 +70,10 @@ $beigeDark: #ae8a7bff;
 .text-color-beigeDark { color: #ae8a7bff !important ; }
 .text-background-beigeDark {
 background-color: #ae8a7bff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $beigeLight: #e6b482ff;
@@ -67,8 +81,10 @@ $beigeLight: #e6b482ff;
 .text-color-beigeLight { color: #e6b482ff !important ; }
 .text-background-beigeLight {
 background-color: #e6b482ff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $blueDark: #156064ff;
@@ -76,8 +92,10 @@ $blueDark: #156064ff;
 .text-color-blueDark { color: #156064ff !important ; }
 .text-background-blueDark {
 background-color: #156064ff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $blueLight: #52758fff;
@@ -85,8 +103,10 @@ $blueLight: #52758fff;
 .text-color-blueLight { color: #52758fff !important ; }
 .text-background-blueLight {
 background-color: #52758fff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $greenDark: #5f634fff;
@@ -94,8 +114,10 @@ $greenDark: #5f634fff;
 .text-color-greenDark { color: #5f634fff !important ; }
 .text-background-greenDark {
 background-color: #5f634fff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $greenLight: #3ddc47ff;
@@ -103,8 +125,10 @@ $greenLight: #3ddc47ff;
 .text-color-greenLight { color: #3ddc47ff !important ; }
 .text-background-greenLight {
 background-color: #3ddc47ff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $purpleDark: #4b2f5aff;
@@ -112,8 +136,10 @@ $purpleDark: #4b2f5aff;
 .text-color-purpleDark { color: #4b2f5aff !important ; }
 .text-background-purpleDark {
 background-color: #4b2f5aff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 
 $purpleLight: #aa6da3ff;
@@ -121,7 +147,9 @@ $purpleLight: #aa6da3ff;
 .text-color-purpleLight { color: #aa6da3ff !important ; }
 .text-background-purpleLight {
 background-color: #aa6da3ff;
-padding: $smallMargin;
-border-radius: 3px;
+padding: 0.08em 0.38em;
+border-radius: 0.35em;
+-webkit-box-decoration-break: clone;
+box-decoration-break: clone;
  }
 

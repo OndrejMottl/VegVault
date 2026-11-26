@@ -12,7 +12,7 @@ The main areas of the VegVault repository are (`.ai/analysis-structure.md` descr
 - `R/Analyses/`: the `{targets}` stages, each run through its `00_run.R` (all of them through `00_run_main.R`); never run a stage that builds or writes the database without explicit authorization
 - `R/Functions/`: reusable project functions, with tests in `R/Tests/testthat/`
 - `R/00_Config_file.R`: the legacy entry point that the website still sources (directly and through `R/Website/00_Config_quarto.R`), kept until the website moves to the new setup. The v1.0.0 scripts (`R/01_Master.R`, `R/01_Data_processing/`, `R/02_Main_analyses/`, `R/03_Visualisation/`) are deleted
-- `R/Website/`: website-support code (formerly `R/04_Webiste/`): the setup every website page sources (`00_Config_quarto.R`), the Quarto pre-render step (`generate_theme.R`) and `render_dots.R`
+- `R/Website/`: website-support code (formerly `R/04_Webiste/`): the setup every website page sources (`00_Config_quarto.R`), the Quarto pre-render step (`generate_theme.R`), `render_dots.R` and the figures drawn in code: the data assembly (`render_assembly_workflow.R`), the data extraction (`render_extraction_workflow.R`) and the schema diagrams (`render_schema_diagrams.R`)
 
 ## Project setup and clean execution
 

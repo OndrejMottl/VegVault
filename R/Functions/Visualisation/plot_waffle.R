@@ -40,7 +40,9 @@
 #' A ggplot object.
 #' @details
 #' The waffle hides the axes and the grid and fills the panel with
-#' `col_background`, also over `theme_base`.
+#' `col_background`, also over `theme_base`. The caption reads
+#' "One square is <one_point_is> <data_point_name>", with the number
+#' written with thousands separators (for example "1,000").
 #' @examples
 #' \dontrun{
 #' plot_dataset_types <-
@@ -112,7 +114,9 @@ plot_waffle <- function(
       title = plot_title,
       fill = "",
       caption = stringr::str_c(
-        "one square is", one_point_is, data_point_name,
+        "One square is",
+        scales::label_comma()(one_point_is),
+        data_point_name,
         sep = " "
       )
     ) +

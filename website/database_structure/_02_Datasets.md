@@ -1,8 +1,8 @@
 
 
-## Datasets
+## Datasets {#datasets .topic-database .topic-icon}
 
-### Dataset Structure Overview (`Datasets`)
+### Dataset Structure Overview (`Datasets`) {#dataset-structure-overview-datasets .topic-database}
 
 The `Datasets` table represents the main organizational structure in
 <span class="vegvault">VegVault</span>, serving as the keystone for
@@ -13,8 +13,8 @@ managing and organizing all data. Each
 location (`coord_lat`, `coord_long`), <span class="database">Dataset
 Type</span> (`dataset_type_id`), <span class="database">Dataset
 Source</span> (`data_source_id`), <span class="database">Dataset Source
-Type</span> (`dataset_source_type_id`), and
-<span class="database">Sampling Method</span> (`sampling_method_id`).
+Type</span> (`data_source_type_id`), and <span class="database">Sampling
+Method</span> (`sampling_method_id`).
 
 | column_name         | data_type | description                          |
 |---------------------|-----------|--------------------------------------|
@@ -29,11 +29,10 @@ Type</span> (`dataset_source_type_id`), and
 
 Column names and types for table `Datasets`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Datasets.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Datasets.svg){fig-align="center"
+width="100%"}
 
-#### <span class="database">Dataset Types</span> (`DatasetTypeID`)
+#### Dataset Types (`DatasetTypeID`) {#dataset-types-datasettypeid .topic-database}
 
 The <span class="database">Dataset Type</span> defines the most basic
 classification of each <span class="database">Dataset</span>, ensuring
@@ -58,7 +57,7 @@ that the vast amount of data is categorized systematically. Currently,
   information</span> (a <span class="database">Dataset Type</span>
   created to hold <span class="abiotic">abiotic data</span>, see details
   in the [Database
-  Assemly](.\website/database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)).
+  Assemly](database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)).
 
 | column_name | data_type | description |
 |----|----|----|
@@ -67,15 +66,13 @@ that the vast amount of data is categorized systematically. Currently,
 
 Column names and types for table `DatasetTypeID`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetTypeID.svg){fig-align="center"
+width="100%"}
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_type.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_type.png){fig-align="center"
+width="100%"}
 
-#### <span class="database">Dataset Source-Types</span> (`DatasetSourceTypeID`)
+#### Dataset Source-Types (`DatasetSourceTypeID`) {#dataset-source-types-datasetsourcetypeid .topic-database}
 
 <span class="vegvault">VegVault</span> maintains detailed information
 about the <span class="database">primary data source</span>, thereby
@@ -94,8 +91,9 @@ current <span class="database">Source-Types</span> in
   sPlot](https://idiv-biodiversity.de/en/splot/splotopen.html)
 - <span class="traits">TRY</span> - [TRY Plant Trait
   Database](https://www.try-db.org/TryWeb/Home.php)
-- <span class="paleo">Neotoma-FOSSILPOL</span> - [The workflow that aims
-  to process and standardise global palaeoecological pollen
+- <span class="paleo">Neotoma-FOSSILPOL</span> (source type `FOSSILPOL`
+  in the database) - [The workflow that aims to process and standardise
+  global palaeoecological pollen
   data](https://hope-uib-bio.github.io/FOSSILPOL-website/). Note that we
   specifically state <span class="paleo">Neotoma-FOSSILPOL</span> and
   not just Neotoma, as <span class="paleo">FOSSILPOL</span> not only
@@ -113,39 +111,36 @@ current <span class="database">Source-Types</span> in
 - <span class="abiotic">gridpoints</span> - artificially created
   <span class="database">Datasets</span> to hold
   <span class="abiotic">abiotic data</span>. See [Database
-  Assembly](.\website/database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)
+  Assembly](database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)
   for more details.
 
 | column_name | data_type | description |
 |----|----|----|
 | data_source_type_id | INTEGER | ID of a Dataset Source-Type (unique) |
-| dataset_source_type | TEXT | Text description of individual Dataset Source-Type (currently, BIEN, sPlotOpen, TRY, Neotoma-FOSSILPOL, gridpoints) |
+| dataset_source_type | TEXT | Text description of individual Dataset Source-Type (currently, BIEN, sPlotOpen, TRY, FOSSILPOL, gridpoints) |
 
 Column names and types for table `DatasetSourceTypeID`.
 
-| column_name         | data_type | description            |
-|---------------------|-----------|------------------------|
-| data_source_type_id | INTEGER   | NA                     |
-| reference_id        | INTEGER   | ID of a Reference      |
-| data_source_id      | NA        | ID of a Dataset Source |
+| column_name         | data_type | description                 |
+|---------------------|-----------|-----------------------------|
+| data_source_type_id | INTEGER   | ID of a Dataset Source-Type |
+| reference_id        | INTEGER   | ID of a Reference           |
 
 Column names and types for table `DatasetSourceTypeReference`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourceTypeID.svg){fig-align="center"
+width="100%"}
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source_type.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source_type.png){fig-align="center"
+width="100%"}
 
-#### <span class="database">Dataset Sources</span> (`DatasetSourcesID`)
+#### Dataset Sources (`DatasetSourcesID`) {#dataset-sources-datasetsourcesid .topic-database}
 
 Each individual <span class="database">Dataset</span> from a specific
 <span class="database">Dataset</span>
 <span class="database">Source-Type</span> can have information on the
 source of the data (i.e. sub-database).
-<span class="vegvault">VegVault</span> v1.0.0 currently includes 706
+<span class="vegvault">VegVault</span> 2.0.0 currently includes 693
 sources of <span class="database">Datasets</span>, where each dataset
 can also have one or more direct references to specific data, ensuring
 that users can accurately cite and verify the sources of their data.
@@ -166,18 +161,16 @@ Column names and types for table `DatasetSourcesID`.
 
 Column names and types for table `DatasetSourcesReference`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSourcesID.svg){fig-align="center"
+width="100%"}
 
-Currently, there are 691 sources of
+Currently, there are 693 sources of
 <span class="database">Datasets</span>.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_datasetes_per_source.png){fig-align="center"
+width="100%"}
 
-#### <span class="database">Sampling Methods</span> (`SamplingMethodID`)
+#### Sampling Methods (`SamplingMethodID`) {#sampling-methods-samplingmethodid .topic-database}
 
 Sampling methods vary significantly across the different types of
 <span class="database">Datasets</span> integrated into
@@ -208,15 +201,13 @@ Column names and types for table `SamplingMethodID`.
 
 Column names and types for table `SamplingMethodReference`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SamplingMethodID.svg){fig-align="center"
+width="100%"}
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_sampling_methods_per_dataset_type.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_sampling_methods_per_dataset_type.png){fig-align="center"
+width="100%"}
 
-#### <span class="database">Dataset References</span> (`DatasetReferences`)
+#### Dataset References (`DatasetReferences`) {#dataset-references-datasetreferences .topic-database}
 
 To support robust and transparent scientific research, each
 <span class="database">Dataset</span> in
@@ -238,17 +229,17 @@ users can accurately cite and verify the sources of their data.
 
 Column names and types for table `DatasetReferences`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetReference.svg){fig-align="center"
+width="100%"}
 
 This means that one dataset can have one/several references from each of
 those parts. Let’s take a look at an example of what that could mean in
 practice.
 
-We have selected dataset ID: 91256, which is a
-<span class="paleo">fossil pollen archive</span>. Therefore, it has the
-reference of the *Dataset Source-Type*:
+We have selected the dataset fossilpol_1001 (dataset ID 91184 in this
+version), Hail Lake in Yukon, which is a <span class="paleo">fossil
+pollen archive</span>. Therefore, it has the reference of the *Dataset
+Source-Type*:
 
 - *Flantua, S. G. A., Mottl, O., Felde, V. A., Bhatta, K. P., Birks, H.
   H., Grytnes, J.-A., Seddon, A. W. R., & Birks, H. J. B. (2023). A

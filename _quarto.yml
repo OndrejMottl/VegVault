@@ -2,6 +2,12 @@ project:
   type: website
   output-dir: docs
   pre-render: R/Website/generate_theme.R
+  # Only the front page and the pages in website/ are rendered. Without this
+  #   list Quarto renders every Markdown file of the repository, such as the
+  #   assistant guides, the design notes and the maintainer's untracked notes
+  render:
+    - index.qmd
+    - website/*.qmd
 
 website:
   title: "VegVault"
