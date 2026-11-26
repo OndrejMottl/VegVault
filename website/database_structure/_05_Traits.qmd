@@ -1,4 +1,4 @@
-## Traits
+## Traits {.topic-traits .topic-icon}
 
 ```{r}
 #| label: source config
@@ -37,9 +37,9 @@ invisible(
 )
 ```
 
-### [Traits Structure Overview]{.traits} (`Traits`)
+### Traits Structure Overview (`Traits`) {.topic-traits}
 
-The [Traits]{.traits} table contains the list of [functional traits]{.traits} currently contained in [VegVault]{.vegvault}. The table contains one [Trait]{.traits} per row, with each [Trait]{.traits} containing: a unique [Trait ID]{.traits} (`trait_id`), original [Trait name]{.traits} from primary source (`trait_name`), and [Trait Domain]{.traits} (`trait_domain_id`). [Functional traits]{.traits} of vegetation [taxa]{.database} follow the same structure of [Dataset]{.database} and [Samples]{.database} obtained directly from [Dataset]{.database} [Source-Types]{.database}.
+The [Traits]{.traits} table contains the list of [functional traits]{.traits} currently contained in [VegVault]{.vegvault}. The table contains one [Trait]{.traits} per row, with each [Trait]{.traits} containing: a unique [Trait ID]{.traits} (`trait_id`), original [Trait name]{.traits} from primary source (`trait_name`), and [Trait Domain]{.traits} (`trait_domain_id`). [Functional traits]{.traits} of vegetation [taxa]{.taxa} follow the same structure of [Dataset]{.database} and [Samples]{.database} obtained directly from [Dataset]{.database} [Source-Types]{.database}.
 
 ```{r}
 #| label: Traits variables scheme structure
@@ -67,14 +67,36 @@ load_db_table_data_types(
 #| label: Traits scheme structure
 build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/Traits.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/Traits.svg"
   )
 )
 ```
 
-### [Traits Domain]{.traits} (`TraitsDomain`)
+### Traits Domain (`TraitsDomain`) {.topic-traits}
 
-Traits are grouped into [Trait Domains]{.traits} to allow for easier aggregation of [Traits]{.traits} across data sources. As there are differences in trait names across sources of data and individual [Datasets]{.database}, the [VegVault]{.vegvault} database contains [Trait Domain]{.traits} information to group traits together. In total, six [Trait Domains]{.traits} are present: `Stem specific density`, `Leaf nitrogen content per unit mass`, `Diaspore mass`, `Plant height`, `Leaf area`, `Leaf mass per area`, following [Diaz et al. (2016)](https://www.nature.com/articles/nature16489). Yet, it is up to the user to decide how to further aggregate trait values if multiple trait [Samples]{.database} of one [Trait Domain]{.traits} are available for the same environmental or taxonomic entity.
+```{r}
+#| label: trait-domain-names
+#| include: false
+
+# The names and units as stored in the database; the names keep the
+#   spelling of VegVault 1.0.0, such as "Plant heigh"
+data_trait_domains <-
+  dplyr::tbl(con, "TraitsDomain") %>%
+  dplyr::select("trait_domain_name", "trait_unit") %>%
+  dplyr::collect()
+
+text_trait_domains <-
+  knitr::combine_words(
+    words = dplyr::pull(data_trait_domains, trait_domain_name),
+    before = "`"
+  )
+```
+
+Traits are grouped into [Trait Domains]{.traits} to allow for easier aggregation of [Traits]{.traits} across data sources.
+As there are differences in trait names across sources of data and individual [Datasets]{.database}, the [VegVault]{.vegvault} database contains [Trait Domain]{.traits} information to group traits together.
+In total, `r base::nrow(data_trait_domains)` [Trait Domains]{.traits} are present: `r text_trait_domains`, following [Diaz et al. (2016)](https://www.nature.com/articles/nature16489).
+The names are stored as in VegVault 1.0.0, including the spelling `Plant heigh` for plant height.
+Yet, it is up to the user to decide how to further aggregate trait values if multiple trait [Samples]{.database} of one [Trait Domain]{.traits} are available for the same environmental or taxonomic entity.
 
 ```{r}
 #| label: TraitsDomain variables scheme structure
@@ -102,7 +124,7 @@ load_db_table_data_types(
 #| label: TraitsDomain scheme structure
 build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/TraitsDomain.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitsDomain.svg"
   )
 )
 ```
@@ -166,16 +188,35 @@ n_traits_per_domain <-
   dplyr::collect() %>%
   dplyr::ungroup()
 
+# The figures show the domain names in plain spelling; the database keeps
+#   the names of VegVault 1.0.0 ("Plant heigh", "Leaf Area")
+vec_domain_labels <-
+  c(
+    "Plant heigh" = "Plant height",
+    "Leaf Area" = "Leaf area"
+  )
+
 fig_n_traits_per_domain <-
   n_traits_per_domain %>%
+  dplyr::mutate(
+    trait_domain_label = dplyr::coalesce(
+      base::unname(vec_domain_labels[trait_domain_name]),
+      trait_domain_name
+    ),
+    # Alphabetical from the top, as in the figure of the trait values
+    trait_domain_label = factor(
+      trait_domain_label,
+      levels = base::sort(base::unique(trait_domain_label), decreasing = TRUE)
+    )
+  ) %>%
   ggplot2::ggplot(
     ggplot2::aes(
       y = N,
-      x = trait_domain_name
+      x = trait_domain_label
     )
   ) +
   ggplot2::labs(
-    title = "Trait domains",
+    title = "Traits per trait domain",
     x = "",
     y = "Number of traits"
   ) +
@@ -183,12 +224,12 @@ fig_n_traits_per_domain <-
     fill = "none"
   ) +
   ggplot2::coord_flip(
-    ylim = c(0, 7)
+    ylim = c(0, base::max(dplyr::pull(n_traits_per_domain, N)) + 1.5)
   ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
-      x = trait_domain_name,
-      xend = trait_domain_name,
+      x = trait_domain_label,
+      xend = trait_domain_label,
       yend = 0
     ),
     color = col_black,
@@ -203,26 +244,35 @@ fig_n_traits_per_domain <-
   ) +
   ggplot2::geom_label(
     mapping = ggplot2::aes(
-      label = scales::number(N)
+      label = scales::label_comma()(N)
     ),
     vjust = -0.5,
     size = point_size * 2,
+    family = font_family,
     position = ggplot2::position_dodge(0.5)
   )
 
 save_figure_to_render(fig_n_traits_per_domain)
 ```
 
-### [Traits value]{.traits} (`TraitsValue`)
+### Traits value (`TraitsValue`) {.topic-traits}
 
-In general, data of functional traits of vegetation taxa follow the same structure of the [Dataset]{.database} and [Samples]{.database} obtained directly from the [Dataset Source-Types]{.database}. Therefore, `TraitsValue` table contains not only the actual measured value of [Trait]{.traits} observation but also information about linking information across [Datasets]{.database}, [Samples]{.database}, and [Taxa]{.database}. This comprehensive linkage ensures that each Trait value is accurately associated with its relevant ecological, environmental and taxonomic context.
+In general, data of functional traits of vegetation taxa follow the same structure of the [Dataset]{.database} and [Samples]{.database} obtained directly from the [Dataset Source-Types]{.database}. Therefore, `TraitsValue` table contains not only the actual measured value of [Trait]{.traits} observation but also information about linking information across [Datasets]{.database}, [Samples]{.database}, and [Taxa]{.taxa}. This comprehensive linkage ensures that each Trait value is accurately associated with its relevant ecological, environmental and taxonomic context.
 
-VegVault 2 standardises trait values before import. Each row references exactly
-one versioned conversion rule and, when applicable, one derivation rule. The
-original provider value and unit remain in the producer audit companion rather
-than being overwritten in the database. `TraitUnitConversion` records the
-controlled unit operation and evidence; `TraitDerivation` records transformations
-such as the reciprocal from standardised SLA to LMA.
+Since VegVault 2.0.0, every trait value is stored in the unit of its [Trait Domain]{.traits} (`trait_unit` of `TraitsDomain`), shown in the table below.
+Each value references exactly one versioned conversion rule of `TraitUnitConversion` and, when it is derived from another trait, one derivation rule of `TraitDerivation`, such as the reciprocal that turns specific leaf area (SLA) into leaf mass per area (LMA).
+The values and units as the data providers reported them are not stored in the database; they are part of the trait data release ([VegVault-Trait_data](https://doi.org/10.5281/zenodo.24505585)), together with the audit tables of the conversion.
+
+```{r}
+#| label: trait domain units
+#| tbl-cap: "Unit of the values of each Trait Domain."
+data_trait_domains %>%
+  dplyr::rename(
+    `Trait Domain` = trait_domain_name,
+    `Unit` = trait_unit
+  ) %>%
+  plot_table()
+```
 
 
 ```{r}
@@ -255,7 +305,7 @@ load_db_table_data_types(
 #| label: TraitsValue scheme structure
 build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/TraitsValue.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitsValue.svg"
   )
 )
 ```
@@ -280,39 +330,42 @@ n_occurences_per_dommain <-
 
 fig_n_occurences_per_dommain <-
   n_occurences_per_dommain %>%
-  dplyr::arrange(-N) %>%
   dplyr::mutate(
-    trait_domain_name = factor(
-      trait_domain_name,
-      levels = unique(trait_domain_name)
+    trait_domain_label = dplyr::coalesce(
+      base::unname(vec_domain_labels[trait_domain_name]),
+      trait_domain_name
+    ),
+    trait_domain_label = factor(
+      trait_domain_label,
+      levels = base::sort(base::unique(trait_domain_label), decreasing = TRUE)
     )
   ) %>%
   ggplot2::ggplot(
     ggplot2::aes(
       y = N,
-      x = trait_domain_name
+      x = trait_domain_label
     )
   ) +
   ggplot2::scale_y_continuous(
     transform = scales::transform_log10(),
-    breaks = scales::trans_breaks("log10", function(x) 10^x),
-    labels = scales::trans_format("log10", scales::math_format(10^.x))
+    breaks = c(1e4, 1e5, 1e6, 1e7, 1e8),
+    labels = scales::label_comma()
   ) +
   ggplot2::coord_flip(
-    ylim = c(10e3, 10e9)
+    ylim = c(1e4, 1e8)
   ) +
   ggplot2::labs(
-    title = "Occurences of Trait values",
+    title = "Trait values per trait domain",
     x = "",
-    y = "Number of occurrences (values)"
+    y = "Number of trait values"
   ) +
   ggplot2::guides(
     fill = "none"
   ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
-      x = trait_domain_name,
-      xend = trait_domain_name,
+      x = trait_domain_label,
+      xend = trait_domain_label,
       yend = 0
     ),
     color = col_black,
@@ -327,17 +380,95 @@ fig_n_occurences_per_dommain <-
   ) +
   ggplot2::geom_label(
     mapping = ggplot2::aes(
-      label = scales::number(N)
+      label = scales::label_comma()(N)
     ),
     vjust = -0.5,
     size = point_size * 2,
+    family = font_family,
     position = ggplot2::position_dodge(0.5)
   )
 
 save_figure_to_render(fig_n_occurences_per_dommain)
 ```
 
-### [Traits Reference]{.traits} (`TraitsReference`)
+### Trait Unit Conversion (`TraitUnitConversion`) {.topic-traits}
+
+The `TraitUnitConversion` table holds the rules that bring the value of each data provider to the unit of its [Trait Domain]{.traits}, one rule per row.
+A rule applies to one trait of one provider, and sometimes only to one dataset of that provider, and it is kept under a unique name and a version, so that every stored value can be traced to the rule that converted it.
+
+```{r}
+#| label: TraitUnitConversion variables scheme structure
+#| tbl-cap: "Column names and types for table `TraitUnitConversion`."
+data_comments_trait_unit_conversion <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "trait_unit_conversion_id", "ID of a conversion rule (unique)",
+    "conversion_rule_key", "Name of the rule (unique), for example `try_leaf_area_3112_cm2`",
+    "rule_version", "Version of the rule",
+    "source_provider", "Data provider the rule applies to (`TRY` or `BIEN`)",
+    "source_trait_id", "Trait of the data provider the rule applies to",
+    "source_dataset_key", "Dataset of the data provider the rule is limited to (empty for all datasets)",
+    "normalized_original_unit", "Unit as the data provider reported it, written in one standard way",
+    "standardized_unit", "Unit after the conversion, the unit of the Trait Domain",
+    "trait_dimension", "Physical dimension of the trait, for example `length` or `area`",
+    "operation", "Kind of conversion: `identity`, `multiply` or `reciprocal`",
+    "multiplier", "Factor of the conversion",
+    "evidence", "Reason or source of the rule"
+  )
+
+load_db_table_data_types(
+  con,
+  "TraitUnitConversion"
+) %>%
+  dplyr::full_join(
+    data_comments_trait_unit_conversion,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
+### Trait Derivation (`TraitDerivation`) {.topic-traits}
+
+The `TraitDerivation` table holds the rules that compute one trait from another after its unit conversion, such as leaf mass per area from specific leaf area.
+
+```{r}
+#| label: TraitDerivation variables scheme structure
+#| tbl-cap: "Column names and types for table `TraitDerivation`."
+data_comments_trait_derivation <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "trait_derivation_id", "ID of a derivation rule (unique)",
+    "derivation_rule_key", "Name of the rule (unique), for example `sla_to_lma`",
+    "rule_version", "Version of the rule",
+    "input_unit", "Unit of the trait the rule starts from",
+    "output_unit", "Unit of the derived trait",
+    "trait_dimension", "Physical dimension of the derived trait",
+    "operation", "Kind of derivation, for example `reciprocal`",
+    "multiplier", "Factor of the derivation",
+    "evidence", "Reason or source of the rule"
+  )
+
+load_db_table_data_types(
+  con,
+  "TraitDerivation"
+) %>%
+  dplyr::full_join(
+    data_comments_trait_derivation,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
+```{r}
+#| label: TraitUnitConversion scheme structure
+build_absolute_graphics_include(
+  here::here(
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitUnitConversion.svg"
+  )
+)
+```
+
+### Traits Reference (`TraitsReference`) {.topic-traits}
 
 To ensure clarity and reproducibility, each [Trait]{.traits} in [VegVault]{.vegvault} can have additional [References]{.database} beyond the general [Dataset]{.database} and [Sample]{.database} [References]{.database}. These [Trait]{.traits}-specific [References]{.database} provide detailed provenance and citation information, supporting rigorous scientific research and enabling users to trace the origins and validation of each trait value. 
 
@@ -366,7 +497,7 @@ load_db_table_data_types(
 #| label: TraitsReference scheme structure
 build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/TraitsReference.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/TraitsReference.svg"
   )
 )
 ```

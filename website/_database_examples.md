@@ -133,8 +133,8 @@ data_la_traits <-
   vaultkeepr::get_taxa(classify_to = "genus") %>%
   # add trait information & clasify all data to a genus level
   vaultkeepr::get_traits(classify_to = "genus") %>%
-  # Only select the plant height
-  vaultkeepr::select_traits_by_domain_name(sel_domain = "Plant height") %>%
+  # Only select the plant height (the trait domain is stored as "Plant heigh")
+  vaultkeepr::select_traits_by_domain_name(sel_domain = "Plant heigh") %>%
   vaultkeepr::extract_data()
 ```
 

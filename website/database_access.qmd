@@ -7,31 +7,94 @@ sidebar: true
 
 # Database Access & Usage
 
+```{r}
+#| label: source config
+#| include: FALSE
+#| results: 'hide'
+#| warning: FALSE
+#| message: FALSE
+
+library(here)
+
+here::i_am("website/database_access.qmd")
+
+# Load configuration
+source(
+  here::here(
+    "R/00_Config_file.R"
+  )
+)
+```
+
 ## Download VegVault Database
 
-[VegVault]{.text-background-black .text-color-white .text-bold} v1.0.0 is available as a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} providing integrated access to global vegetation, [trait]{.text-background-blueDark .text-color-white .text-bold}, and [environmental data]{.text-background-greenDark .text-color-white .text-bold}.
+```{r}
+#| label: database-size
+#| include: false
 
-[Download VegVault v1.0.0 (SQLite)](https://doi.org/10.48700/datst.t21cz-2nq07){.btn} 
+data_database_statistics <-
+  load_database_statistics(
+    path_database = path_to_vegvault,
+    list_build_manifest = list_build_manifest
+  )
+
+label_size <-
+  scales::label_bytes(units = "auto_binary", accuracy = 0.1)
+```
+
+[VegVault]{.vegvault} `r db_version` is available as a comprehensive [SQLite database]{.database} providing integrated access to global vegetation, [trait]{.traits}, and [environmental data]{.abiotic}.
+
+::: {.callout-important}
+**To be updated after the deposit:** VegVault `r db_version` and its flat files receive their DOIs when they are deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/).
+Until then, the buttons on this page lead to VegVault 1.0.0.
+:::
+
+[Download VegVault v1.0.0 (SQLite)](https://doi.org/10.48700/datst.t21cz-2nq07){.btn}
 
 ::: {.callout-note}
-**System Requirements**: [VegVault]{.text-background-black .text-color-white .text-bold} contains over 100GB of data. Ensure your system has sufficient storage space and memory (RAM) before downloading.
+**System Requirements**: The [VegVault]{.vegvault} `r db_version` database is a single file of `r label_size(dplyr::pull(data_database_statistics, size_bytes))`.
+Ensure your system has sufficient storage space and memory (RAM) before downloading.
 :::
 
 ### Alternative Access: Flat Files
 
-For users who prefer working with individual data tables, we provide [VegVault]{.text-background-black .text-color-white .text-bold} as separate CSV files:
+For users who prefer working with individual data tables, we provide [VegVault]{.vegvault} as separate CSV files:
 
-[Download VegVault v1.0.0 (Flat Files)](https://doi.org/10.48700/datst.thktf-5rr35){.btn} 
+[Download VegVault v1.0.0 (Flat Files)](https://doi.org/10.48700/datst.thktf-5rr35){.btn}
+
+```{r}
+#| label: flat-file-sizes
+#| include: false
+
+# The flat-file export of the database, the content of the flat-file
+#   deposit
+vec_flat_file_sizes <-
+  resolve_output_dir(
+    path_relative = load_config_value(value = c("export", "output_dir")),
+    section_name = "export"
+  ) |>
+  base::list.files(pattern = "[.]csv$", full.names = TRUE) |>
+  base::file.size()
+
+# Without the export, the sentence below would report no files
+assertthat::assert_that(
+  base::length(vec_flat_file_sizes) > 0L,
+  msg = "The flat-file export is missing; run the export stage first."
+)
+```
 
 ::: {.callout-warning}
-**Note**: Flat files are not the [recommended]{.text-background-brownLight .text-color-white .text-bold} approach. Many files exceed 1GB and may be difficult to load into memory. We strongly recommend using the [SQLite database]{.text-background-brownDark .text-color-white .text-bold} with the {vaultkeepr} R package for optimal performance.
+**Note**: Flat files are not the recommended approach.
+The `r base::length(vec_flat_file_sizes)` table files hold `r label_size(base::sum(vec_flat_file_sizes))` together, and the largest `r base::sum(vec_flat_file_sizes > 1e9)` exceed 1 GB, which may be difficult to load into memory.
+The links between samples and grid points are stored once per position, so the flat files have no `AbioticDataReference` table: join `SamplePosition` and `PositionLink` by `position_id` to get the grid points of each sample.
+We strongly recommend using the [SQLite database]{.database} with the {vaultkeepr} R package for optimal performance.
 :::
 
 ## Accessing VegVault with {vaultkeepr}
 
 :::: {.columns}
 ::: {.column width="75%"}
-To make [VegVault]{.text-background-black .text-color-white .text-bold} easily accessible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a well-tested R package (>95% code coverage) that provides intuitive functions for interacting with the [database]{.text-background-brownDark .text-color-white .text-bold}. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory.
+To make [VegVault]{.vegvault} easily accessible, we developed [{vaultkeepr}](https://bit.ly/vaultkeepr), a well-tested R package (>95% code coverage) that provides intuitive functions for interacting with the [database]{.database}. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory.
 :::
 
 ::: {.column width="25%"}
@@ -89,13 +152,17 @@ VegVault is released under **CC BY 4.0 License** ([Creative Commons Attribution 
 
 When using VegVault in your research:
 
-1. **Cite VegVault**: Always cite the latest VegVault version with its corresponding DOI
+1. **Cite VegVault**: Always cite the VegVault version you used with its corresponding DOI, and the VegVault data paper
 2. **Cite primary sources**: Acknowledge all original data providers included in your analysis
 3. **Use our helper function**: The `vaultkeepr::get_references()` function automatically generates the complete list of recommended citations for your specific data compilation
 
-### Publication & Pre-print
+### Publication
 
-**Pre-print**: "*VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers*" 
+**Data paper**: "*VegVault dataset: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers*"
+
+[Read the Data Paper](https://doi.org/10.1038/s41597-025-06176-1){.btn}
+
+**Pre-print** (the earlier version of the data paper): "*VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers*"
 
 [Access Pre-print](https://doi.org/10.1101/2025.01.31.635213){.btn}
 
@@ -109,7 +176,7 @@ VegVault's quality depends on the completeness, accuracy, and reliability of pri
 
 ### Technical Limitations
 
-- **Storage requirements**: >100GB database size may be challenging for some systems
+- **Storage requirements**: the `r label_size(dplyr::pull(data_database_statistics, size_bytes))` database file may be challenging for some systems
 - **Memory requirements**: Large datasets may require substantial RAM for analysis
 - **Version dependencies**: Always specify the VegVault version used in your research
 
