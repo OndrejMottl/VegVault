@@ -43,6 +43,7 @@ label_size <-
 ```
 
 [VegVault]{.vegvault} `r db_version` is available as a comprehensive [SQLite database]{.database} providing integrated access to global vegetation, [trait]{.traits}, and [environmental data]{.abiotic}.
+What changed between versions, and what it means for code written for an earlier version, is on the [changelog page](database_changelog.qmd).
 
 ::: {.callout-important}
 **To be updated after the deposit:** VegVault `r db_version` and its flat files receive their DOIs when they are deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/).

@@ -60,6 +60,7 @@ This unified database combines [fossil pollen]{.paleo} records, [contemporary ve
 
 The database consists of `r dplyr::pull(data_database_statistics, n_tables)` interconnected tables with `r dplyr::pull(data_database_statistics, n_columns)` fields (variables).
 For detailed technical information, see our [Database Structure](database_structure.qmd) documentation.
+What changed between versions is on the [changelog page](database_changelog.qmd).
 
 ## Database Statistics
 
@@ -301,5 +302,6 @@ knitr::include_graphics(path_fig_vegetation)
 - **[Database Structure](database_structure.qmd)** - Technical database schema
 - **[Database Assembly](database_assembly.qmd)** - Overview of the data assembly process
 - **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Changelog](database_changelog.qmd)** - Versions and what changed between them
 - **[Usage Examples](database_examples.qmd)** - Practical applications
 - **[Materials & Outputs](materials.qmd)** - Publications and resources
