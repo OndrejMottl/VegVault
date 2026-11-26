@@ -1,0 +1,82 @@
+version,metric,scope,n
+2.0.0,table_rows,AbioticData,11063784
+2.0.0,table_rows,AbioticVariable,8
+2.0.0,table_rows,AbioticVariableReference,30
+2.0.0,table_rows,Authors,1
+2.0.0,table_rows,BuildProducers,11
+2.0.0,table_rows,DatasetReferences,107966
+2.0.0,table_rows,DatasetSample,12459714
+2.0.0,table_rows,DatasetSourceTypeID,5
+2.0.0,table_rows,DatasetSourceTypeReference,6
+2.0.0,table_rows,DatasetSourcesID,693
+2.0.0,table_rows,DatasetSourcesReference,4174
+2.0.0,table_rows,DatasetTypeID,4
+2.0.0,table_rows,Datasets,421604
+2.0.0,table_rows,PositionLink,99774719
+2.0.0,table_rows,Positions,384631
+2.0.0,table_rows,References,6111
+2.0.0,table_rows,SamplePosition,9632976
+2.0.0,table_rows,SampleReference,2257638
+2.0.0,table_rows,SampleSizeID,498
+2.0.0,table_rows,SampleTaxa,3398231
+2.0.0,table_rows,SampleUncertainty,100341000
+2.0.0,table_rows,Samples,12459714
+2.0.0,table_rows,SamplingMethodID,61
+2.0.0,table_rows,SamplingMethodReference,72
+2.0.0,table_rows,Taxa,109220
+2.0.0,table_rows,TaxonClassification,108320
+2.0.0,table_rows,TaxonReference,216846
+2.0.0,table_rows,TraitDerivation,1
+2.0.0,table_rows,TraitUnitConversion,65
+2.0.0,table_rows,Traits,16
+2.0.0,table_rows,TraitsDomain,6
+2.0.0,table_rows,TraitsReference,16
+2.0.0,table_rows,TraitsValue,10920952
+2.0.0,table_rows,version_control,5
+2.0.0,datasets,fossil_pollen_archive / FOSSILPOL,1551
+2.0.0,datasets,gridpoints / gridpoints,106415
+2.0.0,datasets,traits / BIEN,194183
+2.0.0,datasets,traits / TRY,28272
+2.0.0,datasets,vegetation_plot / BIEN,24161
+2.0.0,datasets,vegetation_plot / sPlotOpen,67022
+2.0.0,samples,fossil_pollen_archive / FOSSILPOL,100341
+2.0.0,samples,gridpoints / gridpoints,1569221
+2.0.0,samples,traits / BIEN,10023769
+2.0.0,samples,traits / TRY,675200
+2.0.0,samples,vegetation_plot / BIEN,24161
+2.0.0,samples,vegetation_plot / sPlotOpen,67022
+2.0.0,positions,all,384631
+2.0.0,positions,fossil_pollen_archive / FOSSILPOL,100252
+2.0.0,positions,traits / BIEN,194071
+2.0.0,positions,traits / TRY,22875
+2.0.0,positions,vegetation_plot / BIEN,16647
+2.0.0,positions,vegetation_plot / sPlotOpen,53377
+2.0.0,sample_taxa_rows,fossil_pollen_archive / FOSSILPOL,1365322
+2.0.0,sample_taxa_rows,vegetation_plot / BIEN,524439
+2.0.0,sample_taxa_rows,vegetation_plot / sPlotOpen,1508470
+2.0.0,traits_value_rows,traits / BIEN,10023769
+2.0.0,traits_value_rows,traits / TRY,897183
+2.0.0,abiotic_values,HWSD2,83925
+2.0.0,abiotic_values,bio1,1569221
+2.0.0,abiotic_values,bio12,1569201
+2.0.0,abiotic_values,bio15,1564593
+2.0.0,abiotic_values,bio18,1569201
+2.0.0,abiotic_values,bio19,1569201
+2.0.0,abiotic_values,bio4,1569221
+2.0.0,abiotic_values,bio6,1569221
+2.0.0,sample_links,all,2007681491
+2.0.0,n_tables,database,34
+2.0.0,n_views,database,1
+2.0.0,n_columns,database,123
+2.0.0,size_bytes,database,6509383680
+2.0.0,n_datasets,database,421604
+2.0.0,n_samples,database,12459714
+2.0.0,n_samples_gridpoints,database,1569221
+2.0.0,n_taxa,database,109220
+2.0.0,n_taxa_unclassified,database,900
+2.0.0,n_dataset_sources,database,693
+2.0.0,n_trait_domains,database,6
+2.0.0,n_trait_values,database,10920952
+2.0.0,n_abiotic_variables,database,8
+2.0.0,age_min,database,-75
+2.0.0,age_max,database,19994
