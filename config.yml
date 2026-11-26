@@ -279,6 +279,20 @@ default:
     trait_value_counts:
       try_traits: "traits / TRY"
       bien_traits: "traits / BIEN"
+    # Datasets without a named data source (no data_source_id, or a data
+    #   source without a description), per dataset type and source type.
+    #   A scope listed under `accepted` passes with exactly `n_datasets`
+    #   such datasets; any other count, and any such dataset in another
+    #   scope, is flagged for review. The counts are those of the full
+    #   build, so a subset build is flagged
+    missing_data_sources:
+      # Accepted by Ondrej Mottl on 2026-11-26
+      accepted:
+        - scope: "traits / BIEN"
+          n_datasets: 3609
+          reason: "BIEN trait records whose BIEN entry names no project
+            PI (7,869 whole-plant height values) have no data source;
+            v1.0.0 gave them a data source with an empty description."
     # Comparison with v1.0.0: rows per table, datasets, samples,
     #   positions, taxon links and trait values per source, and abiotic
     #   values per variable, against the committed reference table (built
