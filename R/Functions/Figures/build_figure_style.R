@@ -32,8 +32,8 @@
 #' The theme keeps the look of the v1 manuscript figures (their setup
 #' script R/03_Visualisation/01_manuscript/00_Config_mns.R, deleted for
 #' 2.0.0) instead of the
-#' project default `theme_classic()`. Aborts when a required setting or
-#' colour is missing.
+#' project default `theme_classic()`, with a small left margin that v1
+#' lacked. Aborts when a required setting or colour is missing.
 #' @examples
 #' \dontrun{
 #' list_figure_style <-
@@ -194,11 +194,12 @@ build_figure_style <- function(
         fill = col_white,
         colour = col_grey
       ),
+      # v1 had no left margin, which cut off the y axis title at the edge
       plot.margin = ggplot2::margin(
         t = 0.1,
         r = 0.1,
         b = 0,
-        l = 0,
+        l = 0.1,
         unit = "cm"
       )
     )
