@@ -11,8 +11,9 @@
 #' A ggplot object with the levels in the order of the data.
 #' @details
 #' The y axis reaches 20 percent above the largest count, to leave room
-#' for the labels (v1: fixed at 120,000). Aborts when a required column is
-#' missing.
+#' for the labels (v1: fixed at 120,000). The axis and the labels write
+#' the counts with comma thousands separators. Aborts when a required
+#' column is missing.
 #' @examples
 #' \dontrun{
 #' fig_n_taxa_per_class <-
@@ -66,6 +67,9 @@ plot_taxa_classification <- function(
         y = n_taxa
       )
     ) +
+    ggplot2::scale_y_continuous(
+      labels = scales::label_comma()
+    ) +
     ggplot2::labs(
       x = NULL,
       y = "Number of Taxa"
@@ -91,7 +95,7 @@ plot_taxa_classification <- function(
       position = position_lollipop
     ) +
     ggplot2::geom_label(
-      mapping = ggplot2::aes(label = scales::number(n_taxa)),
+      mapping = ggplot2::aes(label = scales::comma(n_taxa)),
       vjust = -0.5,
       size = point_size * 2,
       position = position_lollipop
