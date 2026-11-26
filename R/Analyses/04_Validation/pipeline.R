@@ -164,6 +164,15 @@ list(
     ),
     cue = targets::tar_cue(mode = "always")
   ),
+  # The accepted numbers of datasets without a named data source, with
+  #   their reasons
+  targets::tar_target(
+    name = "list_missing_sources_accepted",
+    command = load_config_value(
+      value = c("validation", "missing_data_sources", "accepted")
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
   targets::tar_target(
     name = "file_v1_reference",
     command = here::here(purrr::chuck(list_v1_comparison, "reference")),
@@ -274,6 +283,16 @@ list(
     command = diagnose_missing_coordinates(
       path_database = path_database,
       list_build_manifest = list_build_manifest
+    )
+  ),
+  # Datasets without a named data source, whose records cannot be traced
+  #   to a data provider, against the accepted counts
+  targets::tar_target(
+    name = "data_check_missing_data_sources",
+    command = diagnose_missing_data_sources(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      list_accepted = list_missing_sources_accepted
     )
   ),
   # One value rule per artefact and variable, from the contracts: age 0
@@ -417,6 +436,7 @@ list(
       data_check_names,
       data_check_orphans,
       data_check_missing_coordinates,
+      data_check_missing_data_sources,
       data_check_abiotic_variables,
       data_check_abiotic_values,
       data_check_abiotic_zero_shares,
