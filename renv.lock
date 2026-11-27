@@ -9080,7 +9080,7 @@
       "Imports": [
         "cli",
         "DBI",
-        "dbplyr",
+        "dbplyr (>= 2.6.0)",
         "dplyr",
         "lifecycle",
         "magrittr",
@@ -9112,8 +9112,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "OndrejMottl",
       "RemoteRepo": "vaultkeepr",
-      "RemoteRef": "4a6579936d221139ca57b59115cd3a8b19ffcf96",
-      "RemoteSha": "4a6579936d221139ca57b59115cd3a8b19ffcf96"
+      "RemoteRef": "v0.2.0",
+      "RemoteSha": "cb215cfb5dff810dc60ed962d1c000d384123cef"
     },
     "vctrs": {
       "Package": "vctrs",
