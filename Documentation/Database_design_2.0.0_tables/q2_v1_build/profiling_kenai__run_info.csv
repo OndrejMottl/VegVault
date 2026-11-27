@@ -1,0 +1,2 @@
+script,box_name,run_started,n_gridpoint_cells,n_gridpoint_ages,n_gridpoint_candidates,seconds_data_raw,seconds_stage06,seconds_stage07_bio1,seconds_validation,n_trace_events,run_db_size_bytes,r_version,sqlite_version
+08_profile_v1_gridpoints.R,kenai,2026-11-19 14:59:54,646,37,23902,0.18697595596313477,43.800365924835205,11.40261697769165,28.37850308418274,467,393195520,4.6.2,3.53.3

@@ -1,0 +1,6 @@
+dataset_type_id,data_source_type_id,n_datasets_drawn,n_datasets_ages_counted,samples_per_dataset_median,samples_per_dataset_max,ages_per_dataset_median,samples_per_age_median
+1,1,1000,1000,1,1,1,1
+1,2,595,595,1,1,1,1
+2,3,617,617,63,834,63,1
+3,2,886,883,71,880685,1,71
+3,4,554,552,188,65195,1,187.5

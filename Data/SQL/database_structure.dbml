@@ -1,29 +1,57 @@
-// Use DBML to define your database structure
+// Conceptual diagram of the VegVault database, version 2.0.0
 // Docs: https://dbml.dbdiagram.io/docs
+// The executable schema is make_tables.sql in this folder. Keep the tables,
+//   columns, types, primary keys, NOT NULL and references of both files the
+//   same: the test of build_database_schema() compares them.
+// DBML has no views and no WITHOUT ROWID tables; they are described in
+//   notes.
 Project VegVault {
   database_type: 'SQLite'
   Note: '''
     # VegVault database
     Interdisciplinary database containing
     - current vegetation plot data
-    - past vegetation plot data (fossil pollen reocrds)
+    - past vegetation plot data (fossil pollen records)
     - trait data
     - current abiotic data (climate, soil)
     - past abiotic data (climate)
+
+    Links between samples and gridpoint samples are stored once per
+    position (Positions, SamplePosition, PositionLink). The view
+    AbioticDataReference (sample_id, sample_ref_id, distance_in_km,
+    distance_in_years) returns them once per sample, as the table of the
+    same name did in v1.0.0.
+
+    Tables with a composite primary key are WITHOUT ROWID tables.
   '''
 }
 
 // Versioning
 Table version_control {
-  version_id INTEGER [PRIMARY KEY]               
-  version TEXT
-  update_timestamp DATETIME 
+  id INTEGER [pk]
+  version TEXT [not null, unique]
+  update_date TEXT [default: `CURRENT_DATE`]
   changelog TEXT
+  build_profile TEXT
+  git_commit TEXT
+  manifest_sha256 TEXT [note: 'SHA-256 of Data/Producers/producer_manifest.yml']
+  Note: 'One row per version, in the order of config.yml'
+}
+
+Table BuildProducers {
+  version_id INTEGER [not null]
+  producer TEXT [not null, note: 'artefact id of the producer pin manifest']
+  tag TEXT [note: 'empty in a development build']
+
+  indexes {
+    (version_id, producer) [pk]
+  }
+  Note: 'One row per producer pin of a build. WITHOUT ROWID'
 }
 
 // Authors
 Table Authors {
-  author_id INTEGER [PRIMARY KEY]
+  author_id INTEGER [pk]
   author_fullname TEXT
   author_email TEXT
   author_orcid TEXT
@@ -31,185 +59,306 @@ Table Authors {
 
 // Datasets
 Table Datasets {
-  dataset_id INTEGER [PRIMARY KEY]
-  dataset_name TEXT 
-  dataset_type_id INTEGER
+  dataset_id INTEGER [pk]
+  dataset_name TEXT [not null, unique]
   data_source_id INTEGER
+  dataset_type_id INTEGER
   data_source_type_id INTEGER
-  coord_long REAL 
-  coord_lat REAL
+  coord_long REAL [note: 'CHECK between -180 and 180']
+  coord_lat REAL [note: 'CHECK between -90 and 90']
   sampling_method_id INTEGER
 }
 
-Table DatasetReference {
-  dataset_id INTEGER
-  reference_id INTEGER
+Table DatasetReferences {
+  dataset_id INTEGER [not null]
+  reference_id INTEGER [not null]
+
+  indexes {
+    (dataset_id, reference_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 // Dataset types (vegetation plot, trait, abiotic,...)
 Table DatasetTypeID {
-  dataset_type_id INTEGER [PRIMARY KEY]
+  dataset_type_id INTEGER [pk]
   dataset_type TEXT
 }
 
-// here was the data obtained (BIEN, Chelsa,...)
+// Where the data were obtained (BIEN, CHELSA,...)
 Table DatasetSourceTypeID {
-  data_source_type_id INTEGER [PRIMARY KEY]
+  data_source_type_id INTEGER [pk]
   dataset_source_type TEXT
 }
 
 Table DatasetSourceTypeReference {
-  data_source_type_id INTEGER
-  reference_id INTEGER 
+  data_source_type_id INTEGER [not null]
+  reference_id INTEGER [not null]
+
+  indexes {
+    (data_source_type_id, reference_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 // ID from the original data source (subdatabase)
 Table DatasetSourcesID {
-  data_source_id INTEGER [PRIMARY KEY]
+  data_source_id INTEGER [pk]
   data_source_desc TEXT
 }
 
-table DatasetSourcesReference {
-  data_source_id INTEGER
-  reference_id INTEGER
+Table DatasetSourcesReference {
+  data_source_id INTEGER [not null]
+  reference_id INTEGER [not null]
+
+  indexes {
+    (data_source_id, reference_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 Table SamplingMethodID {
- sampling_method_id INTEGER [PRIMARY KEY]
- sampling_method_details TEXT
+  sampling_method_id INTEGER [pk]
+  sampling_method_details TEXT
 }
 
 Table SamplingMethodReference {
-  sampling_method_id INTEGER
-  reference_id INTEGER
+  sampling_method_id INTEGER [not null]
+  reference_id INTEGER [not null]
+
+  indexes {
+    (sampling_method_id, reference_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 // Samples
 Table Samples {
-  sample_id INTEGER [PRIMARY KEY]
-  sample_name TEXT
+  sample_id INTEGER [pk]
+  sample_name TEXT [not null, unique]
   sample_details TEXT
   age REAL
   sample_size_id INTEGER
 }
 
 Table SampleReference {
-  sample_id INTEGER
-  reference_id INTEGER
+  sample_id INTEGER [not null]
+  reference_id INTEGER [not null]
+
+  indexes {
+    (sample_id, reference_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 Table DatasetSample {
-  dataset_id INTEGER
-  sample_id INTEGER
+  dataset_id INTEGER [not null]
+  sample_id INTEGER [not null]
+
+  indexes {
+    (dataset_id, sample_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 Table SampleUncertainty {
-  sample_id INTEGER
-  iteration INTEGER
+  sample_id INTEGER [not null]
+  iteration INTEGER [not null]
   age INTEGER
+
+  indexes {
+    (sample_id, iteration) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 Table SampleSizeID {
-  sample_size_id INTEGER [PRIMARY KEY]
+  sample_size_id INTEGER [pk]
   sample_size REAL
   description TEXT
 }
 
 Table SampleTaxa {
-  sample_id INTEGER
-  taxon_id INTEGER
+  sample_id INTEGER [not null]
+  taxon_id INTEGER [not null]
   value REAL
+
+  indexes {
+    (sample_id, taxon_id) [pk]
+  }
+  Note: 'One row per taxon of a sample. WITHOUT ROWID'
 }
 
 // Taxa
 Table Taxa {
-  taxon_id INTEGER [PRIMARY KEY]
+  taxon_id INTEGER [pk]
   taxon_name TEXT
-  }
+}
 
 Table TaxonClassification {
-  taxon_id INTEGER
+  taxon_id INTEGER [pk]
   taxon_species INTEGER
   taxon_genus INTEGER
   taxon_family INTEGER
 }
 
 Table TaxonReference {
-  taxon_id INTEGER
-  reference_id INTEGER
+  taxon_id INTEGER [not null]
+  reference_id INTEGER [not null]
+
+  indexes {
+    (taxon_id, reference_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 // Traits
-table TraitsDomain {
-  trait_domain_id INTEGER [PRIMARY KEY]
-  trait_domain_name TEXT
+Table TraitsDomain {
+  trait_domain_id INTEGER [pk]
+  trait_domain_name TEXT [unique]
+  trait_unit TEXT [not null]
   trait_domanin_description TEXT
 }
 
-table Traits {
-  trait_id INTEGER [PRIMARY KEY]
+Table TraitUnitConversion {
+  trait_unit_conversion_id INTEGER [pk]
+  conversion_rule_key TEXT [not null, unique]
+  rule_version TEXT [not null]
+  source_provider TEXT [not null]
+  source_trait_id TEXT [not null]
+  source_dataset_key TEXT
+  normalized_original_unit TEXT [not null]
+  standardized_unit TEXT [not null]
+  trait_dimension TEXT [not null]
+  operation TEXT [not null]
+  multiplier REAL [not null]
+  evidence TEXT [not null]
+}
+
+Table TraitDerivation {
+  trait_derivation_id INTEGER [pk]
+  derivation_rule_key TEXT [not null, unique]
+  rule_version TEXT [not null]
+  input_unit TEXT [not null]
+  output_unit TEXT [not null]
+  trait_dimension TEXT [not null]
+  operation TEXT [not null]
+  multiplier REAL [not null]
+  evidence TEXT [not null]
+}
+
+Table Traits {
+  trait_id INTEGER [pk]
   trait_domain_id INTEGER
   trait_name TEXT
 }
 
 Table TraitsValue {
-  trait_id INTEGER
-  dataset_id INTEGER
-  sample_id INTEGER //observation ID
-  taxon_id INTEGER
+  trait_id INTEGER [not null]
+  dataset_id INTEGER [not null]
+  sample_id INTEGER [not null] // observation ID
+  taxon_id INTEGER [not null]
   trait_value REAL
+  trait_unit_conversion_id INTEGER [not null]
+  trait_derivation_id INTEGER
+
+  indexes {
+    (dataset_id, sample_id, trait_id, taxon_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 Table TraitsReference {
-  trait_id INTEGER
-  reference_id INTEGER
+  trait_id INTEGER [not null]
+  reference_id INTEGER [not null]
+
+  indexes {
+    (trait_id, reference_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
-
-// The abiotic data will use geopoint as a dataset. Current data will have just
-//  one sample. Palaeoclimate data will have one sample per each time slice.
+// Abiotic data
+// Gridpoints are datasets of the type gridpoints. Current data have one
+//   sample per gridpoint, palaeoclimate data one sample per time slice.
 Table AbioticData {
-  sample_id INTEGER
-  abiotic_variable_id INTEGER
+  sample_id INTEGER [not null]
+  abiotic_variable_id INTEGER [not null]
   abiotic_value REAL
-}
 
-Table AbioticDataReference {
-  sample_id INTEGER
-  sample_ref_id INTEGER
-  distance_in_km INTEGER
-  distance_in_years INTEGER
+  indexes {
+    (sample_id, abiotic_variable_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
 Table AbioticVariable {
-  abiotic_variable_id INTEGER [PRIMARY KEY]
+  abiotic_variable_id INTEGER [pk]
   abiotic_variable_name TEXT
   abiotic_variable_unit TEXT
   measure_details TEXT
 }
 
 Table AbioticVariableReference {
-  abiotic_variable_id INTEGER
-  reference_id INTEGER
+  abiotic_variable_id INTEGER [not null]
+  reference_id INTEGER [not null]
+
+  indexes {
+    (abiotic_variable_id, reference_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
 }
 
-// References 
+// Links between samples and gridpoint samples, once per position
+Table Positions {
+  position_id INTEGER [pk]
+  coord_long REAL [not null, note: 'CHECK between -180 and 180']
+  coord_lat REAL [not null, note: 'CHECK between -90 and 90']
+  age REAL [not null]
+
+  indexes {
+    (coord_long, coord_lat, age) [unique]
+  }
+  Note: 'One row per distinct position of the samples that are not gridpoints'
+}
+
+Table SamplePosition {
+  sample_id INTEGER [pk]
+  position_id INTEGER [not null]
+}
+
+Table PositionLink {
+  position_id INTEGER [not null]
+  sample_ref_id INTEGER [not null, note: 'the gridpoint sample']
+  distance_in_km INTEGER [not null, note: 'CHECK between 0 and 50']
+  distance_in_years INTEGER [not null, note: 'CHECK between 0 and 5000']
+
+  indexes {
+    (position_id, sample_ref_id) [pk]
+  }
+  Note: 'WITHOUT ROWID'
+}
+
+// References
 Table References {
-  reference_id INTEGER [PRIMARY KEY]
+  reference_id INTEGER [pk]
   reference_detail TEXT
-  mandatory BOOLEAN
+  mandatory BOOLEAN [not null, default: false, note: 'CHECK 0 or 1']
 }
 
-// All references
+// All references, written from the referencing column to the column it
+//   refers to
+Ref: BuildProducers.version_id > version_control.id
+
 Ref: Datasets.data_source_type_id > DatasetSourceTypeID.data_source_type_id
-Ref: Datasets.dataset_type_id  > DatasetTypeID.dataset_type_id 
-Ref: Datasets.sampling_method_id > SamplingMethodID.sampling_method_id   
-Ref: Datasets.data_source_id > DatasetSourcesID.data_source_id 
+Ref: Datasets.dataset_type_id > DatasetTypeID.dataset_type_id
+Ref: Datasets.sampling_method_id > SamplingMethodID.sampling_method_id
+Ref: Datasets.data_source_id > DatasetSourcesID.data_source_id
 
-Ref: DatasetReference.dataset_id > Datasets.dataset_id
-Ref: DatasetReference.reference_id > References.reference_id
+Ref: DatasetReferences.dataset_id > Datasets.dataset_id
+Ref: DatasetReferences.reference_id > References.reference_id
 
-Ref: DatasetSourcesReference.data_source_id > DatasetSourcesID.data_source_id 
+Ref: DatasetSourcesReference.data_source_id > DatasetSourcesID.data_source_id
 Ref: DatasetSourcesReference.reference_id > References.reference_id
 
 Ref: DatasetSourceTypeReference.data_source_type_id > DatasetSourceTypeID.data_source_type_id
@@ -218,40 +367,39 @@ Ref: DatasetSourceTypeReference.reference_id > References.reference_id
 Ref: SamplingMethodReference.sampling_method_id > SamplingMethodID.sampling_method_id
 Ref: SamplingMethodReference.reference_id > References.reference_id
 
-Ref: DatasetSample.dataset_id > Datasets.dataset_id 
-Ref: DatasetSample.sample_id > Samples.sample_id 
+Ref: DatasetSample.dataset_id > Datasets.dataset_id
+Ref: DatasetSample.sample_id > Samples.sample_id
 
-Ref: Samples.sample_id < SampleTaxa.sample_id
-Ref: Samples.sample_id < SampleUncertainty.sample_id
-Ref: Samples.sample_id < AbioticData.sample_id
-Ref: Samples.sample_size_id > SampleSizeID.sample_size_id   
-
+Ref: Samples.sample_size_id > SampleSizeID.sample_size_id
 Ref: SampleReference.sample_id > Samples.sample_id
 Ref: SampleReference.reference_id > References.reference_id
+Ref: SampleUncertainty.sample_id > Samples.sample_id
+Ref: SampleTaxa.sample_id > Samples.sample_id
+Ref: SampleTaxa.taxon_id > Taxa.taxon_id
 
-Ref: Taxa.taxon_id < SampleTaxa.taxon_id
-
-Ref: TaxonClassification.taxon_id > Taxa.taxon_id 
-Ref: TaxonClassification.taxon_species > Taxa.taxon_id 
-Ref: TaxonClassification.taxon_genus > Taxa.taxon_id 
-Ref: TaxonClassification.taxon_family > Taxa.taxon_id 
-
+Ref: TaxonClassification.taxon_id > Taxa.taxon_id
+Ref: TaxonClassification.taxon_species > Taxa.taxon_id
+Ref: TaxonClassification.taxon_genus > Taxa.taxon_id
+Ref: TaxonClassification.taxon_family > Taxa.taxon_id
 Ref: TaxonReference.taxon_id > Taxa.taxon_id
 Ref: TaxonReference.reference_id > References.reference_id
 
-Ref: Traits.trait_id < TraitsValue.trait_id   
-Ref: Traits.trait_domain_id > TraitsDomain.trait_domain_id 
-
+Ref: Traits.trait_domain_id > TraitsDomain.trait_domain_id
+Ref: TraitsValue.trait_id > Traits.trait_id
+Ref: TraitsValue.dataset_id > Datasets.dataset_id
+Ref: TraitsValue.sample_id > Samples.sample_id
+Ref: TraitsValue.taxon_id > Taxa.taxon_id
+Ref: TraitsValue.trait_unit_conversion_id > TraitUnitConversion.trait_unit_conversion_id
+Ref: TraitsValue.trait_derivation_id > TraitDerivation.trait_derivation_id
 Ref: TraitsReference.trait_id > Traits.trait_id
 Ref: TraitsReference.reference_id > References.reference_id
 
-Ref: TraitsValue.dataset_id > Datasets.dataset_id  
-Ref: TraitsValue.sample_id > Samples.sample_id 
-Ref: TraitsValue.taxon_id > Taxa.taxon_id 
-
-Ref: AbioticVariable.abiotic_variable_id < AbioticData.abiotic_variable_id
-Ref: AbioticDataReference.sample_id > Samples.sample_id
-Ref: AbioticDataReference.sample_ref_id > Samples.sample_id
-
+Ref: AbioticData.sample_id > Samples.sample_id
+Ref: AbioticData.abiotic_variable_id > AbioticVariable.abiotic_variable_id
 Ref: AbioticVariableReference.abiotic_variable_id > AbioticVariable.abiotic_variable_id
 Ref: AbioticVariableReference.reference_id > References.reference_id
+
+Ref: SamplePosition.sample_id > Samples.sample_id
+Ref: SamplePosition.position_id > Positions.position_id
+Ref: PositionLink.position_id > Positions.position_id
+Ref: PositionLink.sample_ref_id > Samples.sample_id

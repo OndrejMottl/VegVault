@@ -16,7 +16,7 @@ Keep the complete line at or below 72 characters. Describe durable repository be
 
 Use the narrowest meaningful subject:
 
-- one function: the function name, for example `dowload_and_load(): validate failed downloads`
+- one function: the function name, for example `classify_taxa(): send names in sentence case`
 - one script/import: its stable file stem or import name, for example `sPlot import: preserve tagged artifact filename`
 - one producer contract: the domain, for example `Trait data: preserve BIEN output partitions`
 - database/schema integration: `database` or the affected table/domain

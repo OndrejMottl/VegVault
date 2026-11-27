@@ -1,0 +1,12 @@
+value,passed,variant,check
+1,TRUE,tuple_links,positions_cover_samples
+1,TRUE,tuple_links,one_position_per_key
+1,TRUE,gridpoint_tables,cells_complete
+1,TRUE,gridpoint_tables,gridpoints_complete
+1,TRUE,gridpoint_tables,values_complete
+1,TRUE,gridpoint_tables,gridpoint_reference_single
+1,TRUE,gridpoint_tables,gridpoint_age_integral
+1,TRUE,gridpoint_tables,positions_cover_samples
+1,TRUE,gridpoint_tables,one_position_per_key
+1,TRUE,constraints,positions_cover_samples
+1,TRUE,constraints,one_position_per_key

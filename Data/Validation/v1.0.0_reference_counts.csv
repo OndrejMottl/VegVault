@@ -1,0 +1,61 @@
+metric,scope,n_v1,source
+table_rows,AbioticData,10871705,V1_metadata__rowid_bounds.csv
+table_rows,AbioticDataReference,2067445952,V1_metadata__rowid_bounds.csv
+table_rows,AbioticVariable,8,V1_metadata__rowid_bounds.csv
+table_rows,AbioticVariableReference,30,V1_metadata__rowid_bounds.csv
+table_rows,Authors,1,V1_metadata__rowid_bounds.csv
+table_rows,DatasetReferences,107832,V1_metadata__rowid_bounds.csv
+table_rows,DatasetSample,12998979,V1_metadata__rowid_bounds.csv
+table_rows,DatasetSourceTypeID,5,V1_metadata__rowid_bounds.csv
+table_rows,DatasetSourceTypeReference,6,V1_metadata__rowid_bounds.csv
+table_rows,DatasetSourcesID,691,V1_metadata__rowid_bounds.csv
+table_rows,DatasetSourcesReference,6441,V1_metadata__rowid_bounds.csv
+table_rows,DatasetTypeID,4,V1_metadata__rowid_bounds.csv
+table_rows,Datasets,426225,V1_metadata__rowid_bounds.csv
+table_rows,References,7698,V1_metadata__rowid_bounds.csv
+table_rows,SampleReference,1558641,V1_metadata__rowid_bounds.csv
+table_rows,SampleSizeID,498,V1_metadata__rowid_bounds.csv
+table_rows,SampleTaxa,3689420,V1_metadata__rowid_bounds.csv
+table_rows,SampleUncertainty,88423000,V1_metadata__rowid_bounds.csv
+table_rows,Samples,12998979,V1_metadata__rowid_bounds.csv
+table_rows,SamplingMethodID,60,V1_metadata__rowid_bounds.csv
+table_rows,SamplingMethodReference,71,V1_metadata__rowid_bounds.csv
+table_rows,Taxa,109590,V1_metadata__rowid_bounds.csv
+table_rows,TaxonClassification,108228,V1_metadata__rowid_bounds.csv
+table_rows,TaxonReference,227213,V1_metadata__rowid_bounds.csv
+table_rows,Traits,16,V1_metadata__rowid_bounds.csv
+table_rows,TraitsDomain,6,V1_metadata__rowid_bounds.csv
+table_rows,TraitsReference,16,V1_metadata__rowid_bounds.csv
+table_rows,TraitsValue,11366223,V1_metadata__rowid_bounds.csv
+table_rows,version_control,4,V1_metadata__rowid_bounds.csv
+datasets,fossil_pollen_archive / FOSSILPOL,1393,V1_full_scans__dataset_composition.csv
+datasets,gridpoints / gridpoints,106447,V1_full_scans__dataset_composition.csv
+datasets,traits / BIEN,194788,V1_full_scans__dataset_composition.csv
+datasets,traits / TRY,32342,V1_full_scans__dataset_composition.csv
+datasets,vegetation_plot / BIEN,24233,V1_full_scans__dataset_composition.csv
+datasets,vegetation_plot / sPlotOpen,67022,V1_full_scans__dataset_composition.csv
+samples,fossil_pollen_archive / FOSSILPOL,88423,V1_full_scans__sample_composition.csv
+samples,gridpoints / gridpoints,1542813,V1_full_scans__sample_composition.csv
+samples,traits / BIEN,10399832,V1_full_scans__sample_composition.csv
+samples,traits / TRY,876656,V1_full_scans__sample_composition.csv
+samples,vegetation_plot / BIEN,24233,V1_full_scans__sample_composition.csv
+samples,vegetation_plot / sPlotOpen,67022,V1_full_scans__sample_composition.csv
+positions,all,373225,V1_full_scans__tuples_all_sources.csv
+positions,fossil_pollen_archive / FOSSILPOL,88340,V1_full_scans__tuples_per_source.csv
+positions,traits / BIEN,194675,V1_full_scans__tuples_per_source.csv
+positions,traits / TRY,22876,V1_full_scans__tuples_per_source.csv
+positions,vegetation_plot / BIEN,16719,V1_full_scans__tuples_per_source.csv
+positions,vegetation_plot / sPlotOpen,53377,V1_full_scans__tuples_per_source.csv
+sample_taxa_rows,fossil_pollen_archive / FOSSILPOL,1196421,v1.0.0_scan_per_source.csv
+sample_taxa_rows,vegetation_plot / BIEN,972791,v1.0.0_scan_per_source.csv
+sample_taxa_rows,vegetation_plot / sPlotOpen,1520208,v1.0.0_scan_per_source.csv
+traits_value_rows,traits / BIEN,10161055,v1.0.0_scan_per_source.csv
+traits_value_rows,traits / TRY,1205168,v1.0.0_scan_per_source.csv
+abiotic_values,HWSD2,73808,V1_full_scans__abiotic_values_per_variable.csv
+abiotic_values,bio1,1542813,V1_full_scans__abiotic_values_per_variable.csv
+abiotic_values,bio12,1542813,V1_full_scans__abiotic_values_per_variable.csv
+abiotic_values,bio15,1541019,V1_full_scans__abiotic_values_per_variable.csv
+abiotic_values,bio18,1542813,V1_full_scans__abiotic_values_per_variable.csv
+abiotic_values,bio19,1542813,V1_full_scans__abiotic_values_per_variable.csv
+abiotic_values,bio4,1542813,V1_full_scans__abiotic_values_per_variable.csv
+abiotic_values,bio6,1542813,V1_full_scans__abiotic_values_per_variable.csv

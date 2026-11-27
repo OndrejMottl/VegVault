@@ -1,0 +1,6 @@
+source_run,source_folder,script,target,run_started,run_seconds,peak_wset_mb,chunk_size,connection_flags,r_version,rsqlite_version,source_unchanged
+run_20261120_093701_positions_chunk100,Full_links,20_run_full_size_links.R,positions,2026-11-20 09:37:01,123.08399200439453,4741.226496,100,RSQLite SQLITE_RO; temporary tables only,4.6.2,3.53.3,TRUE
+run_20261120_093904_positions_chunk500,Full_links,20_run_full_size_links.R,positions,2026-11-20 09:39:04,47.54419279098511,4735.7952,500,RSQLite SQLITE_RO; temporary tables only,4.6.2,3.53.3,TRUE
+run_20261120_093952_positions_chunk2000,Full_links,20_run_full_size_links.R,positions,2026-11-20 09:39:52,33.41749691963196,4696.420352,2000,RSQLite SQLITE_RO; temporary tables only,4.6.2,3.53.3,TRUE
+run_20261120_094026_positions_chunk10000,Full_links,20_run_full_size_links.R,positions,2026-11-20 09:40:26,34.2550630569458,4714.72128,10000,RSQLite SQLITE_RO; temporary tables only,4.6.2,3.53.3,TRUE
+run_20261120_094101_positions_chunk50000,Full_links,20_run_full_size_links.R,positions,2026-11-20 09:41:01,36.988600969314575,7114.81344,50000,RSQLite SQLITE_RO; temporary tables only,4.6.2,3.53.3,TRUE

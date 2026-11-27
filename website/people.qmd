@@ -27,7 +27,7 @@ source(
 
 source(
   here::here(
-    "R/03_Visualisation/00_Config_quarto.R"
+    "R/Website/00_Config_quarto.R"
   )
 )
 
@@ -87,11 +87,11 @@ We thank the global community of data contributors, including:
 - sPlotOpen consortium members
 - BIEN database contributors  
 - TRY Plant Trait Database contributors
-- CHELSA and WoSIS data providers
+- CHELSA and Harmonized World Soil Database (FAO and IIASA) data providers
 
 ## Get Involved
 
-Interested in contributing to VegVault? See our [Contributing Guide](website/contribute.qmd) for information on:
+Interested in contributing to VegVault? See our [Contributing Guide](contribute.qmd) for information on:
 
 - Data contributions
 - Code contributions
@@ -101,4 +101,4 @@ Interested in contributing to VegVault? See our [Contributing Guide](website/con
 
 - **General inquiries**: [GitHub Discussions](https://github.com/OndrejMottl/VegVault/discussions)
 - **Technical issues**: [GitHub Issues](https://github.com/OndrejMottl/VegVault/issues)
-- **Detailed contact information**: [Contact & Support](website/contact.qmd)
+- **Detailed contact information**: [Contact & Support](contact.qmd)

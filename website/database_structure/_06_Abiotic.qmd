@@ -1,6 +1,9 @@
-## Abiotic Variables
+## Abiotic Variables {.topic-abiotic .topic-icon}
 
-The [abiotic data]{.abiotic} in the [VegVault]{.vegvault} database provide essential information on [environmental factors]{.abiotic} affecting vegetation distribution and [traits]{.traits}. Currently, [VegVault]{.vegvault} includes [abiotic data]{.abiotic} from [CHELSA](https://chelsa-climate.org/), [CHELSA-TRACE21](https://chelsa-climate.org/chelsa-trace21k/), and [WoSIS](https://www.isric.org/explore/wosis). [CHELSA]{.abiotic} and [CHELSA-TRACE21]{.abiotic} provide high-resolution [climate data]{.abiotic}, while [WoSIS]{.abiotic} offers detailed [soil information]{.abiotic}.
+The [abiotic data]{.abiotic} in the [VegVault]{.vegvault} database provide essential information on [environmental factors]{.abiotic} affecting vegetation distribution and [traits]{.traits}.
+Currently, [VegVault]{.vegvault} includes [abiotic data]{.abiotic} from [CHELSA](https://chelsa-climate.org/), [CHELSA-TRACE21](https://doi.org/10.16904/envidat.211), and the [Harmonized World Soil Database (HWSD) v2.2](https://data.apps.fao.org/catalog/iso/ff5c613c-75bb-46a9-a162-bc728059b465).
+[CHELSA]{.abiotic} and [CHELSA-TRACE21]{.abiotic} provide high-resolution [climate data]{.abiotic}, while [HWSD]{.abiotic} offers detailed [soil information]{.abiotic}.
+VegVault 1.0.0 named the soil source WoSIS; it was HWSD v2.0 or v2.01 (the exact version was not recorded).
 
 ```{r}
 #| label: source config
@@ -22,7 +25,7 @@ source(
 
 source(
   here::here(
-    "R/03_Visualisation/00_Config_quarto.R"
+    "R/Website/00_Config_quarto.R"
   )
 )
 
@@ -39,7 +42,7 @@ invisible(
 )
 ```
 
-### [Abiotic variables]{.abiotic} (`AbioticVariable`)
+### Abiotic variables (`AbioticVariable`) {.topic-abiotic}
 
 As [VegVault]{.vegvault} contains [abiotic variables]{.abiotic} from several [primary sources]{.database}, the `AbioticVariable` table contains descriptions of [abiotic variables]{.abiotic} (`abiotic_variable_name`), their units (`abiotic_variable_unit`), and measurement details (`measure_details`). These data include variables such as [climate]{.abiotic} and [soil conditions]{.abiotic}, which are crucial for understanding the ecological contexts of vegetation dynamics. 
 
@@ -52,11 +55,10 @@ data_comments_abiotic_variable <-
     "abiotic_variable_id", "ID of a Abiotic Variable",
     "abiotic_variable_name", "Name of a Abiotic Variable from primary source",
     "abiotic_variable_unit", "Unit of a Abiotic Variable",
-    "abiotic_variable_scale", "Scale of a Abiotic Variable",
     "measure_details", "Additional details about Abiotic Variable"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "AbioticVariable"
 ) %>%
@@ -69,9 +71,9 @@ get_db_table_data_types(
 
 ```{r}
 #| label: AbioticVariable scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/AbioticVariable.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/AbioticVariable.svg"
   )
 )
 ```
@@ -92,7 +94,14 @@ dplyr::tbl(con, "AbioticVariable") %>%
   plot_table()
 ```
 
-### [Abiotic Data]{.abiotic} (`AbioticData`) 
+Some properties of the values need attention:
+
+- `bio4` (temperature seasonality) is in hundredths of a degree Celsius, as its unit says; in VegVault 1.0.0, the present-day `bio4` was 0 south of about 65.7° N because of a truncated download.
+- A present-day `bio12` (annual precipitation) of 6553.5 kg m^-2^ is the storage limit of CHELSA V2.1, so it is a lower bound.
+- CHELSA-TRACE21 stores precipitation in whole kg m^-2^, so a dry quarter with less than 0.5 kg m^-2^ is 0 in the past (`bio18`, `bio19`), while the present-day values come in steps of 0.1.
+- In the Sahel and the Sudanian belt, the coldest quarter of `bio19` can be the dry winter in one product and the rainy season in the other, so `bio19` can change between 0 and several hundred kg m^-2^ between the present day and the past.
+
+### Abiotic Data (`AbioticData`) {.topic-abiotic}
 
 The `AbioticData` table holds the actual values of abiotic variables (the units are the same for each `AbioticVariable`).
 
@@ -106,25 +115,53 @@ data_comments_abiotic_data <-
     "abiotic_variable_id", "ID of an Abiotic Variable",
     "abiotic_value", "Value of an Abiotic Variable"
   )
+
+load_db_table_data_types(
+  con,
+  "AbioticData"
+) %>%
+  dplyr::full_join(
+    data_comments_abiotic_data,
+    by = "column_name"
+  ) %>%
+  plot_table()
 ```
 
 ```{r}
 #| label: AbioticData scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/AbioticData.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/AbioticData.svg"
   )
 )
 ```
 
 
-### Gridpoints (`AbioticDataReference`)
+### Gridpoints (`AbioticDataReference`) {.topic-abiotic}
 
-Gridpoints are stored in artificially created [Datasets]{.database} and [Samples]{.database}, with one [Dataset]{.database} holding more [Samples]{.database} only if they differ in age. We have estimated the spatial and temporal distance between each [gridpoint]{.abiotic} and other non-[gridpoint]{.abiotic} [Samples]{.database} (`vegetation_plot`, `fossil_pollen_archive`, and `traits`). We store the link between [gridpoint]{.abiotic} and non-[gridpoint]{.abiotic} [Samples]{.database} as well as the spatial and temporal distance. As this results in very large amounts of data, we have discarded any [gridpoint]{.abiotic} [Sample]{.database}, which is not close to 50 km and/or 5000 years to any other non-[gridpoint]{.abiotic} [Samples]{.database} as not relevant for the vegetation dynamics.
+```{r}
+#| label: link-limits
+#| include: false
+
+link_distance_km <-
+  load_config_value(value = c("link", "distance_km"))
+
+link_distance_years <-
+  load_config_value(value = c("link", "distance_years"))
+```
+
+Gridpoints are stored in artificially created [Datasets]{.database} and [Samples]{.database}, with one [Dataset]{.database} holding more [Samples]{.database} only if they differ in age.
+We have estimated the spatial and temporal distance between each [gridpoint]{.abiotic} and other non-[gridpoint]{.abiotic} [Samples]{.database} (`vegetation_plot`, `fossil_pollen_archive`, and `traits`).
+We store the link between [gridpoint]{.abiotic} and non-[gridpoint]{.abiotic} [Samples]{.database} as well as the spatial and temporal distance.
+A link is kept when the two are at most `r link_distance_km` km and at most `r scales::label_comma()(link_distance_years)` years apart, and any [gridpoint]{.abiotic} [Sample]{.database} without a link is discarded as not relevant for the vegetation dynamics.
+
+Since VegVault 2.0.0, the links are stored once per position, a distinct combination of longitude, latitude and age, because many [Samples]{.database} share a position.
+`AbioticDataReference` is a view, a stored query: it combines the tables `SamplePosition` (the position of each non-[gridpoint]{.abiotic} [Sample]{.database}) and `PositionLink` (the [gridpoints]{.abiotic} linked to each position) and returns one row per [Sample]{.database} and linked [gridpoint]{.abiotic}, with the same columns as the table `AbioticDataReference` of VegVault 1.0.0.
+The positions themselves are in the table `Positions`.
 
 ```{r}
 #| label: AbioticDataReference variables scheme structure
-#| tbl-cap: "Column names and types for table `AbioticDataReference`."
+#| tbl-cap: "Column names and types for view `AbioticDataReference`."
 data_comments_abiotic_data_reference <-
   tibble::tribble(
     ~column_name, ~description,
@@ -134,7 +171,7 @@ data_comments_abiotic_data_reference <-
     "distance_in_years", "Distance among samples expressed in years"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "AbioticDataReference"
 ) %>%
@@ -147,11 +184,78 @@ get_db_table_data_types(
 
 ```{r}
 #| label: AbioticDataReference scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/AbioticDataReference.svg"
   )
 )
+```
+
+```{r}
+#| label: Positions variables scheme structure
+#| tbl-cap: "Column names and types for table `Positions`."
+data_comments_positions <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "position_id", "ID of a position (unique)",
+    "coord_long", "Longitude of the position",
+    "coord_lat", "Latitude of the position",
+    "age", "Age of the position (cal yr BP)"
+  )
+
+load_db_table_data_types(
+  con,
+  "Positions"
+) %>%
+  dplyr::full_join(
+    data_comments_positions,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
+```{r}
+#| label: SamplePosition variables scheme structure
+#| tbl-cap: "Column names and types for table `SamplePosition`."
+data_comments_sample_position <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "sample_id", "ID of a non-gridpoint Sample",
+    "position_id", "ID of the position of the Sample"
+  )
+
+load_db_table_data_types(
+  con,
+  "SamplePosition"
+) %>%
+  dplyr::full_join(
+    data_comments_sample_position,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
+```{r}
+#| label: PositionLink variables scheme structure
+#| tbl-cap: "Column names and types for table `PositionLink`."
+data_comments_position_link <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "position_id", "ID of a position",
+    "sample_ref_id", "ID of a gridpoint Sample linked to the position",
+    "distance_in_km", "Distance between the position and the gridpoint in whole kilometres",
+    "distance_in_years", "Age difference between the position and the gridpoint in whole years"
+  )
+
+load_db_table_data_types(
+  con,
+  "PositionLink"
+) %>%
+  dplyr::full_join(
+    data_comments_position_link,
+    by = "column_name"
+  ) %>%
+  plot_table()
 ```
 
 Such data structure allows that environmental context is readily available for each vegetation and trait [Sample]{.database}. For each non-[gridpoint]{.abiotic} [Sample]{.database}, users can select the closest spatio-temporally abiotic data or get average from all surrounding [gridpoints]{.abiotic}.
@@ -182,9 +286,20 @@ data_grid_coord <-
       coord_lat <= !!rlang::enquo(y_lim_max)
   )
 
+data_grid_coord_local <-
+  dplyr::collect(data_grid_coord)
+
+# The spacing of the grid, from the distinct longitudes of the gridpoints
+value_grid_step <-
+  data_grid_coord_local %>%
+  dplyr::distinct(coord_long) %>%
+  dplyr::arrange(coord_long) %>%
+  dplyr::pull(coord_long) %>%
+  base::diff() %>%
+  stats::median()
+
 fig_data_grid_coord <-
-  data_grid_coord %>%
-  dplyr::collect() %>%
+  data_grid_coord_local %>%
   ggplot2::ggplot(
     mapping = ggplot2::aes(
       x = coord_long,
@@ -196,20 +311,26 @@ fig_data_grid_coord <-
     ylim = y_lim
   ) +
   ggplot2::labs(
-    title = "Example of gridpoints resolution",
-    x = "Longtitude",
+    title = "Gridpoints in Czechia",
+    subtitle = stringr::str_c(
+      "One gridpoint about every ",
+      base::round(value_grid_step, 2),
+      " degrees"
+    ),
+    x = "Longitude",
     y = "Latitude"
   ) +
-  ggplot2::borders(
-    fill = NA,
-    col = col_blue_light, # [config]
-    size = line_size * 10 # [config]
+  build_world_borders_layer(
+    col_fill = NA,
+    col_line = col_blue_light, # [config]
+    linewidth = line_size * 10 # [config]
   ) +
   ggplot2::geom_point(
-    shape = 15,
+    shape = 22,
     size = point_size / 2,
-    alpha = 0.75,
-    col = col_green_dark
+    stroke = 0.3,
+    fill = col_green_dark,
+    colour = col_white
   )
 
 save_figure_to_render(fig_data_grid_coord)
@@ -219,7 +340,7 @@ save_figure_to_render(fig_data_grid_coord)
 #| label: exampe of abitic data - bio1
 
 # Acess the VegVault file
-data_example_all <-
+plan_example_all <-
   vaultkeepr::open_vault(
     path = path_to_vegvault # [config]
   ) %>%
@@ -246,11 +367,17 @@ data_example_all <-
   # Add abiotic data
   vaultkeepr::get_abiotic_data() %>%
   # Select only Mean Anual Temperature (bio1)
-  vaultkeepr::select_abiotic_var_by_name(sel_var_name = "bio1") %>%
+  vaultkeepr::select_abiotic_var_by_name(sel_var_name = "bio1")
+
+data_example_all <-
   vaultkeepr::extract_data(
+    con = plan_example_all,
     return_raw_data = TRUE,
     verbose = FALSE
   )
+
+# The extraction leaves the connection of the plan open
+DBI::dbDisconnect(purrr::chuck(plan_example_all, "db_con"))
 
 data_gridpoints_abiotic <-
   data_example_all %>%
@@ -275,26 +402,32 @@ data_links <-
     by = c("sample_id_link_grid" = "sample_id_veg")
   )
 
+# A band of the area, so that the single links can be seen; at 50 degrees
+#   N, 4 degrees of longitude by 1 of latitude fill the width of the figure
+x_lim_links <- c(13, 17)
+y_lim_links <- c(49.5, 50.5)
+
 fig_gridpoint_links_example <-
   ggplot2::ggplot() +
   ggplot2::coord_quickmap(
-    xlim = x_lim,
-    ylim = y_lim
+    xlim = x_lim_links,
+    ylim = y_lim_links
   ) +
   ggplot2::labs(
-    title = stringr::str_wrap("Example of vegetation plot distance to gridpoints", fig_width_def),
-    x = "Longtitude",
-    y = "Latitude"
-    # caption = paste(
-    #  "Each square represents the gridpoint.", "\n",
-    #  "Each circle represents the vegetation plot.", "\n",
-    #  "Each line represents the distance between vegetation plot and the closest gridpoint."
-    # )
+    title = "Links between vegetation plots and gridpoints",
+    subtitle = stringr::str_c(
+      "Part of Czechia, ", x_lim_links[1], " to ", x_lim_links[2],
+      " degrees E and ", y_lim_links[1], " to ", y_lim_links[2],
+      " degrees N"
+    ),
+    x = "Longitude",
+    y = "Latitude",
+    caption = "Squares: gridpoints. Dots: vegetation plots. Lines: links."
   ) +
-  ggplot2::borders(
-    fill = NA,
-    col = col_blue_light, # [config]
-    size = line_size * 10 # [config]
+  build_world_borders_layer(
+    col_fill = NA,
+    col_line = col_blue_light, # [config]
+    linewidth = line_size * 10 # [config]
   ) +
   ggplot2::geom_segment(
     data = data_links,
@@ -305,7 +438,7 @@ fig_gridpoint_links_example <-
       yend = coord_lat_veg
     ),
     col = col_white,
-    linewidth = line_size
+    linewidth = line_size * 4
   ) +
   ggplot2::geom_point(
     data = data_gridpoints_abiotic,
@@ -313,10 +446,11 @@ fig_gridpoint_links_example <-
       x = coord_long_grid,
       y = coord_lat_grid
     ),
-    shape = 15,
-    alpha = 0.75,
-    size = point_size / 2,
-    col = col_green_dark
+    shape = 22,
+    size = point_size,
+    stroke = 0.3,
+    fill = col_green_dark,
+    colour = col_white
   ) +
   ggplot2::geom_point(
     data = data_vegetation,
@@ -334,7 +468,7 @@ save_figure_to_render(fig_gridpoint_links_example)
 
 ```
 
-### Abiotic Variable Reference (`AbioticVariableReference`)
+### Abiotic Variable Reference (`AbioticVariableReference`) {.topic-abiotic}
 
 Each [Abiotic Variable]{.abiotic} can have a separate [Reference]{.database}, in addition to a [Dataset]{.database} and [Sample]{.database}. 
 
@@ -348,7 +482,7 @@ data_comments_abiotic_variable_reference <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   table_name = "AbioticVariableReference"
 ) %>%

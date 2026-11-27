@@ -1,0 +1,491 @@
+#----------------------------------------------------------#
+#
+#
+#                         VegVault
+#
+#                   Validation pipeline
+#
+#
+#                         O. Mottl
+#                           2026
+#
+#----------------------------------------------------------#
+# Defines the target graph of the validation stage: the release checks of
+#   the built database, read-only, the comparison of its counts with the
+#   committed v1.0.0 reference counts, and the validation report and the
+#   table of count changes in `validation: output_dir`. A failed check
+#   stops the stage after both are written; a flagged result is listed for
+#   review.
+# The schema enforces keys, NOT NULL, UNIQUE and the documented ranges
+#   (Documentation/Database_design_2.0.0.md, section 7); this stage
+#   confirms that the schema is in place, runs integrity_check and
+#   foreign_key_check once, and checks what no constraint can express.
+# Run with:
+#   R/Analyses/04_Validation/00_run.R
+# Sourcing this script only declares targets; it does not execute them.
+
+
+#----------------------------------------------------------#
+# 0. Configure pipeline -----
+#----------------------------------------------------------#
+
+library(here)
+
+source(
+  here::here("R/___setup_project___.R")
+)
+
+targets::tar_option_set(
+  seed = config_seed
+)
+
+
+#----------------------------------------------------------#
+# 1. Upstream contract -----
+#----------------------------------------------------------#
+
+# No store is imported. The upstream contract is the database and its
+#   build manifest, which the last target of the database assembly
+#   (R/Analyses/03_Database_assembly/00_run.R) writes next to the database.
+#   Every check opens the database read-only and takes the manifest as an
+#   argument, so the checks run again when a new build writes a new
+#   manifest, and the database itself is never hashed.
+
+
+#----------------------------------------------------------#
+# 2. Define targets -----
+#----------------------------------------------------------#
+
+list(
+  # Database to check: from `secrets.yaml`, or the disposable database of
+  #   the `subset` profile. Resolved on every run, so a new path is noticed
+  targets::tar_target(
+    name = "path_database",
+    command = resolve_database_path(),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Active profile, which the build manifest must record
+  targets::tar_target(
+    name = "profile_active",
+    command = load_config_value(value = "profile"),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Folder that receives the report
+  targets::tar_target(
+    name = "dir_validation",
+    command = resolve_output_dir(
+      path_relative = load_config_value(value = c("validation", "output_dir")),
+      section_name = "validation"
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Whether the shorter quick_check replaces integrity_check (development
+  #   only; such a build is not eligible for release)
+  targets::tar_target(
+    name = "flag_quick_check",
+    command = load_config_value(value = c("validation", "quick_check")),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Version being built: the last entry of `database: versions`
+  targets::tar_target(
+    name = "list_version_config",
+    command = load_config_value(value = c("database", "versions")) |>
+      purrr::pluck(-1),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # The schema file and the pin manifest, tracked as files so that an edit
+  #   of either runs the checks that read them again
+  targets::tar_target(
+    name = "file_database_schema",
+    command = here::here("Data", "SQL", "make_tables.sql"),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "file_producer_manifest",
+    command = here::here(load_config_value(value = c("producers", "manifest"))),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # The contracts of the climate and soil artefacts, which give the
+  #   variable labels, plausible ranges and forbidden values
+  targets::tar_target(
+    name = "file_contract_neoclimate",
+    command = here::here("Data", "Contracts", "chelsa_neoclimate.yml"),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "file_contract_palaeoclimate",
+    command = here::here(
+      "Data", "Contracts", "chelsa_trace21k_palaeoclimate.yml"
+    ),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "file_contract_soil",
+    command = here::here("Data", "Contracts", "hwsd_soil.yml"),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Storage caps, zero-share thresholds and their exceptions
+  targets::tar_target(
+    name = "list_abiotic_config",
+    command = load_config_value(value = c("validation", "abiotic_values")),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # The link rule (distance in km and age difference in years) and the
+  #   number of positions drawn per stratum for the link check
+  targets::tar_target(
+    name = "list_link_rule",
+    command = load_config_value(value = "link"),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "n_link_positions",
+    command = load_config_value(
+      value = c("validation", "links", "n_positions_per_stratum")
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # The comparison with v1.0.0 (tolerance, mapped counts, expected
+  #   changes) and its committed reference table, tracked as a file
+  targets::tar_target(
+    name = "list_v1_comparison",
+    command = load_config_value(value = c("validation", "v1_comparison")),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # The scope of each pinned trait artefact in the counts per source
+  targets::tar_target(
+    name = "list_trait_value_sources",
+    command = load_config_value(
+      value = c("validation", "trait_value_counts")
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # The accepted numbers of datasets without a named data source, with
+  #   their reasons
+  targets::tar_target(
+    name = "list_missing_sources_accepted",
+    command = load_config_value(
+      value = c("validation", "missing_data_sources", "accepted")
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  targets::tar_target(
+    name = "file_v1_reference",
+    command = here::here(purrr::chuck(list_v1_comparison, "reference")),
+    format = "file",
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Build manifest next to the database
+  targets::tar_target(
+    name = "path_build_manifest",
+    command = resolve_build_manifest_path(path_database = path_database)
+  ),
+  # Manifest content, read on every run and checked against the database
+  #   file and the active profile
+  targets::tar_target(
+    name = "list_build_manifest",
+    command = load_build_manifest(
+      path_manifest = path_build_manifest,
+      path_database = path_database,
+      profile_expected = profile_active
+    ),
+    cue = targets::tar_cue(mode = "always")
+  ),
+  # Every table, view and index of the schema file, with its definition
+  targets::tar_target(
+    name = "data_check_schema",
+    command = diagnose_database_schema(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      path_schema = file_database_schema
+    )
+  ),
+  # The file structure, every index against its table, and the UNIQUE,
+  #   CHECK and NOT NULL constraints on every row
+  targets::tar_target(
+    name = "data_check_integrity",
+    command = diagnose_database_integrity(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      flag_quick_check = flag_quick_check
+    )
+  ),
+  # Every declared foreign key, which the bulk load does not enforce
+  targets::tar_target(
+    name = "data_check_foreign_keys",
+    command = diagnose_foreign_keys(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # The version row against config.yml, the manifest and the pin manifest
+  targets::tar_target(
+    name = "data_check_version_row",
+    command = diagnose_version_row(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      list_version = list_version_config,
+      path_producer_manifest = file_producer_manifest
+    )
+  ),
+  # The BuildProducers rows against the producer pins of the manifest
+  targets::tar_target(
+    name = "data_check_build_producers",
+    command = diagnose_build_producers(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # Every trait value finite and in the unit its conversion and derivation
+  #   rules produce
+  targets::tar_target(
+    name = "data_check_trait_units",
+    command = diagnose_trait_units(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # One TraitsValue row per record of each pinned trait artefact, from the
+  #   counts per source and the row counts of the pins
+  targets::tar_target(
+    name = "data_check_trait_value_counts",
+    command = diagnose_trait_value_counts(
+      data_counts = data_database_counts,
+      list_build_manifest = list_build_manifest,
+      list_sources = list_trait_value_sources
+    )
+  ),
+  # Repeated or missing names in the name columns the schema does not keep
+  #   unique
+  targets::tar_target(
+    name = "data_check_names",
+    command = diagnose_duplicate_names(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # Rows left without the rows that give them meaning, and links to the
+  #   wrong kind of sample
+  targets::tar_target(
+    name = "data_check_orphans",
+    command = diagnose_orphan_rows(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # Datasets without coordinates, which get no climate link
+  targets::tar_target(
+    name = "data_check_missing_coordinates",
+    command = diagnose_missing_coordinates(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # Datasets without a named data source, whose records cannot be traced
+  #   to a data provider, against the accepted counts
+  targets::tar_target(
+    name = "data_check_missing_data_sources",
+    command = diagnose_missing_data_sources(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      list_accepted = list_missing_sources_accepted
+    )
+  ),
+  # One value rule per artefact and variable, from the contracts: age 0
+  #   from the present day, older time steps from CHELSA-TraCE21k
+  targets::tar_target(
+    name = "data_abiotic_rules",
+    command = build_abiotic_value_rules(
+      path_contract_present = file_contract_neoclimate,
+      path_contract_past = file_contract_palaeoclimate,
+      path_contract_soil = file_contract_soil
+    )
+  ),
+  # The ages at which gridpoints exist
+  targets::tar_target(
+    name = "vec_gridpoint_ages",
+    command = build_gridpoint_ages(path_contract = file_contract_palaeoclimate)
+  ),
+  # Units and descriptions of the abiotic variables against the contracts
+  targets::tar_target(
+    name = "data_check_abiotic_variables",
+    command = diagnose_abiotic_variables(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      data_rules = data_abiotic_rules
+    )
+  ),
+  # Abiotic values outside their range or equal to a forbidden value fail;
+  #   values at a storage cap are flagged
+  targets::tar_target(
+    name = "data_check_abiotic_values",
+    command = diagnose_abiotic_values(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      data_rules = data_abiotic_rules,
+      list_capped_values = purrr::pluck(
+        list_abiotic_config, "capped_values",
+        .default = base::list()
+      )
+    )
+  ),
+  # Shares of zeros per variable, age and latitude band, flagged for review
+  targets::tar_target(
+    name = "data_check_abiotic_zero_shares",
+    command = diagnose_abiotic_zero_shares(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      data_rules = data_abiotic_rules,
+      list_thresholds = purrr::chuck(list_abiotic_config, "zero_share"),
+      list_exceptions = purrr::pluck(
+        list_abiotic_config, "zero_share_exceptions",
+        .default = base::list()
+      ),
+      min_values_per_band = purrr::chuck(
+        list_abiotic_config, "min_values_per_band"
+      )
+    )
+  ),
+  # Missing ages, ages after the build and gridpoint ages off the time
+  #   steps, flagged for review
+  targets::tar_target(
+    name = "data_check_sample_ages",
+    command = diagnose_sample_ages(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      vec_gridpoint_ages = vec_gridpoint_ages
+    )
+  ),
+  # A reproducible sample of positions near the dateline, at high
+  #   latitudes and elsewhere
+  targets::tar_target(
+    name = "data_link_positions",
+    command = select_link_positions(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      distance_km = purrr::chuck(list_link_rule, "distance_km"),
+      n_per_stratum = n_link_positions,
+      seed = config_seed
+    )
+  ),
+  # The stored links of the sampled positions recomputed, and the links
+  #   the rule asks for but the database lacks
+  targets::tar_target(
+    name = "data_check_link_distances",
+    command = diagnose_link_distances(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest,
+      data_positions = data_link_positions,
+      distance_km = purrr::chuck(list_link_rule, "distance_km"),
+      distance_years = purrr::chuck(list_link_rule, "distance_years")
+    )
+  ),
+  # Every placeable sample at the position of its coordinates and age;
+  #   positions without a link are flagged
+  targets::tar_target(
+    name = "data_check_sample_positions",
+    command = diagnose_sample_positions(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  # The v1.0.0 reference counts, the same counts of the build, and every
+  #   change, judged against the tolerance
+  targets::tar_target(
+    name = "data_v1_reference",
+    command = readr::read_csv(file_v1_reference, show_col_types = FALSE)
+  ),
+  targets::tar_target(
+    name = "data_database_counts",
+    command = compute_database_counts(
+      path_database = path_database,
+      list_build_manifest = list_build_manifest
+    )
+  ),
+  targets::tar_target(
+    name = "data_v1_deltas",
+    command = compute_v1_count_deltas(
+      data_counts = data_database_counts,
+      data_reference = data_v1_reference,
+      list_comparison = list_v1_comparison
+    )
+  ),
+  # One report row per metric; the full table goes to its own file
+  targets::tar_target(
+    name = "data_check_v1_counts",
+    command = diagnose_v1_counts(
+      data_deltas = data_v1_deltas,
+      list_build_manifest = list_build_manifest,
+      tolerance = purrr::chuck(list_v1_comparison, "tolerance")
+    )
+  ),
+  targets::tar_target(
+    name = "data_checks_database",
+    command = dplyr::bind_rows(
+      data_check_schema,
+      data_check_integrity,
+      data_check_foreign_keys,
+      data_check_version_row,
+      data_check_build_producers,
+      data_check_trait_units,
+      data_check_trait_value_counts,
+      data_check_names,
+      data_check_orphans,
+      data_check_missing_coordinates,
+      data_check_missing_data_sources,
+      data_check_abiotic_variables,
+      data_check_abiotic_values,
+      data_check_abiotic_zero_shares,
+      data_check_sample_ages,
+      data_check_link_distances,
+      data_check_sample_positions,
+      data_check_v1_counts
+    )
+  ),
+  # Release eligibility: the release profile, a clean checkout, no failed
+  #   check and the full integrity_check
+  targets::tar_target(
+    name = "data_check_release",
+    command = diagnose_release_eligibility(
+      list_build_manifest = list_build_manifest,
+      data_checks = data_checks_database
+    )
+  ),
+  targets::tar_target(
+    name = "data_checks",
+    command = dplyr::bind_rows(data_checks_database, data_check_release)
+  ),
+  # The report: one row per check and scope, and a summary for review
+  targets::tar_target(
+    name = "file_validation_report",
+    command = save_validation_report(
+      data_checks = data_checks,
+      list_build_manifest = list_build_manifest,
+      dir_output = dir_validation
+    ),
+    format = "file"
+  ),
+  # The table of count changes against v1.0.0, next to the report
+  targets::tar_target(
+    name = "file_v1_deltas",
+    command = save_v1_count_deltas(
+      data_deltas = data_v1_deltas,
+      list_build_manifest = list_build_manifest,
+      dir_output = dir_validation
+    ),
+    format = "file"
+  ),
+  # Stops the stage when a check failed, after the report and the table of
+  #   changes are written
+  targets::tar_target(
+    name = "check_validation",
+    command = validate_database_checks(
+      data_checks = data_checks,
+      vec_paths_report = c(file_validation_report, file_v1_deltas)
+    )
+  )
+)

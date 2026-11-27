@@ -1,4 +1,4 @@
-## Taxa
+## Taxa {.topic-taxa .topic-icon}
 
 ```{r}
 #| label: source config
@@ -20,7 +20,7 @@ source(
 
 source(
   here::here(
-    "R/03_Visualisation/00_Config_quarto.R"
+    "R/Website/00_Config_quarto.R"
   )
 )
 
@@ -37,9 +37,26 @@ invisible(
 )
 ```
 
-### [Taxa Structure Overview]{.database} (`Taxa`)
+```{r}
+#| label: database-statistics
+#| include: false
 
-The [VegVault]{.vegvault} database records the original [taxonomic names]{.database} derived directly from the [primary data sources]{.data-processing}, and currently, it holds over 100 thousand [taxonomic names]{.database}. 
+data_database_statistics <-
+  load_database_statistics(
+    path_database = path_to_vegvault,
+    list_build_manifest = list_build_manifest
+  )
+
+label_count <-
+  scales::label_comma()
+
+label_share <-
+  scales::label_percent(accuracy = 0.1)
+```
+
+### Taxa Structure Overview (`Taxa`) {.topic-taxa}
+
+The [VegVault]{.vegvault} database records the original [taxonomic names]{.taxa} derived directly from the [primary data sources]{.database}, and currently, it holds `r label_count(dplyr::pull(data_database_statistics, n_taxa))` [taxonomic names]{.taxa}.
 
 ```{r}
 #| label: Taxa variables scheme structure
@@ -51,7 +68,7 @@ data_comments_taxa <-
     "taxon_name", "Name of a Taxon from primary source."
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "Taxa"
 ) %>%
@@ -64,16 +81,16 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Taxa scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/Taxa.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/Taxa.svg"
   )
 )
 ```
 
-### [Sample-Taxa]{.database} (`SampleTaxa`)
+### Sample-Taxa (`SampleTaxa`) {.topic-taxa}
 
-Each individual [Taxon]{.database} is linked to corresponding [Samples]{.database} through the `SampleTaxa` table, ensuring accurate and systematic association between species and their ecological data. Note that the abundance information varies across the primary data sources. Therefore, users have to be careful while processing data from various sources. 
+Each individual [Taxon]{.taxa} is linked to corresponding [Samples]{.database} through the `SampleTaxa` table, ensuring accurate and systematic association between species and their ecological data. Note that the abundance information varies across the primary data sources. Therefore, users have to be careful while processing data from various sources. 
 
 ```{r}
 #| label: SampleTaxa variables scheme structure
@@ -85,7 +102,7 @@ data_comments_sample_taxa <-
     "taxon_id", "ID of a Taxon",
     "value", "Abundance representation of a Taxon (the units may differ among primary sources, i.e. Dataset Source-Types)"
   )
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SampleTaxa"
   ) %>%
@@ -98,46 +115,54 @@ get_db_table_data_types(
 
 ```{r}
 #| label: SampleTaxa scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SampleTaxa.svg"
   )
 )
 ```
 
 ```{r}
 #| label: Number of taxa per data source type
-n_taxa_per_source_type <-
+# The dataset type and source type of every dataset
+data_dataset_types <-
   dplyr::inner_join(
     dplyr::tbl(con, "Datasets"),
     dplyr::tbl(con, "DatasetTypeID"),
     by = "dataset_type_id"
   ) %>%
-  dplyr::filter(
-    dataset_type == "vegetation_plot" |
-    dataset_type == "traits"
-  ) %>%
   dplyr::inner_join(
     dplyr::tbl(con, "DatasetSourceTypeID"),
     by = "data_source_type_id"
   ) %>%
-  dplyr::inner_join(
-    dplyr::tbl(con, "DatasetSample"),
-    by = "dataset_id"
+  dplyr::select("dataset_id", "dataset_type", "dataset_source_type")
+
+# Taxa of plots and pollen samples are in SampleTaxa, taxa of trait records
+#   in TraitsValue
+n_taxa_per_source_type <-
+  dplyr::union(
+    data_dataset_types %>%
+      dplyr::inner_join(
+        dplyr::tbl(con, "DatasetSample"),
+        by = "dataset_id"
+      ) %>%
+      dplyr::inner_join(
+        dplyr::tbl(con, "SampleTaxa"),
+        by = "sample_id"
+      ) %>%
+      dplyr::distinct(dataset_type, dataset_source_type, taxon_id),
+    data_dataset_types %>%
+      dplyr::inner_join(
+        dplyr::tbl(con, "TraitsValue"),
+        by = "dataset_id"
+      ) %>%
+      dplyr::distinct(dataset_type, dataset_source_type, taxon_id)
   ) %>%
-  dplyr::inner_join(
-    dplyr::tbl(con, "Samples"),
-    by = "sample_id"
-  ) %>%
-  dplyr::inner_join(
-    dplyr::tbl(con, "SampleTaxa"),
-    by = "sample_id"
-  ) %>%
-  dplyr::distinct(dataset_source_type, taxon_id) %>%
-  dplyr::group_by(dataset_source_type) %>%
-  dplyr::count(name = "N") %>%
+  dplyr::count(dataset_type, dataset_source_type, name = "N") %>%
   dplyr::collect() %>%
-  dplyr::ungroup()
+  dplyr::mutate(
+    dataset_type = stringr::str_replace_all(dataset_type, "_", " ")
+  )
 
 fig_n_taxa_per_source_type <-
   n_taxa_per_source_type %>%
@@ -156,22 +181,25 @@ fig_n_taxa_per_source_type <-
   ) +
   ggplot2::scale_y_continuous(
     transform = scales::transform_log10(),
-    breaks = scales::trans_breaks("log10", function(x) 10^x),
-    labels = scales::trans_format("log10", scales::math_format(10^.x)),
-  ) +
-  ggplot2::coord_cartesian(
-    ylim = c(10e3, 10e5)
+    breaks = c(10, 100, 1e3, 1e4, 1e5, 1e6),
+    labels = scales::label_comma(),
+    limits = c(10, 1e6)
   ) +
   ggplot2::labs(
-    title = "Taxa per Source Type",
+    title = "Taxa per source type, by dataset type",
     x = "",
     y = "Number of taxa"
   ) +
   ggplot2::guides(
     fill = "none"
   ) +
+  ggplot2::facet_wrap(~dataset_type, nrow = 1, scales = "free_x") +
+  ggplot2::theme(
+    strip.text = ggplot2::element_text(colour = "white")
+  ) +
+  # Colour marks the dataset type, as in every other figure
   ggplot2::scale_fill_manual(
-    values = palette_dataset_source_type
+    values = palette_dataset_type
   ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
@@ -179,33 +207,32 @@ fig_n_taxa_per_source_type <-
       xend = dataset_source_type,
       yend = 0
     ),
-    color = col_black,
-    position = ggplot2::position_dodge(0.5)
+    color = col_black
   ) +
   ggplot2::geom_point(
     mapping = ggplot2::aes(
-      fill = dataset_source_type
+      fill = dataset_type
     ),
     size = point_size,
     shape = 21,
-    col = col_black,
-    position = ggplot2::position_dodge(0.5)
+    col = col_black
   ) +
   ggplot2::geom_label(
     mapping = ggplot2::aes(
-      label = scales::number(N)
+      label = scales::label_comma()(N)
     ),
     vjust = -0.5,
     size = point_size * 2,
-    position = ggplot2::position_dodge(0.5)
+    family = font_family
   )
 
 save_figure_to_render(fig_n_taxa_per_source_type)
 ```
 
-### [Taxon Classification]{.database} (`TaxonClassification`)
+### Taxon Classification (`TaxonClassification`) {.topic-taxa}
 
-Each taxonomic name undergoes an automated classification (see [Database Assembly](/website/database_assembly.qmd)) and results are stored in the `TaxonClassification` table. To classify the diverse taxa present in the [VegVault]{.vegvault} database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package was used. This tool automatically aligns taxa names with the [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from the [Global Biodiversity Information Facility](https://www.gbif.org/), providing a standardized classification framework. Specifically, we try to find the best match of the raw names of taxa using [Global Names Resolver](https://resolver.globalnames.org/). 
+Each taxonomic name undergoes an automated classification (see [Database Assembly](database_assembly.qmd)) and results are stored in the `TaxonClassification` table. To classify the diverse taxa present in the [VegVault]{.vegvault} database, the {[taxospace](https://github.com/OndrejMottl/taxospace)} R package was used. This tool automatically aligns taxa names with the [Taxonomy Backbone](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c) from the [Global Biodiversity Information Facility](https://www.gbif.org/), providing a standardized classification framework. Specifically, we try to find the best match of the raw names of taxa using the [Global Names Verifier](https://verifier.globalnames.org/).
+Two kinds of names are corrected by hand after the automatic classification: fossil pollen types that combine two or more taxa, and the pollen type "Pinus Picea" (see [Database Assembly](database_assembly.qmd#i-taxonomic-classification)).
 
 ```{r}
 #| label: TaxonClassification variables scheme structure
@@ -219,7 +246,7 @@ data_comments_taxon_classification <-
     "taxon_family", "ID of a Taxon, which was assign as family level"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "TaxonClassification"
 ) %>%
@@ -233,62 +260,47 @@ get_db_table_data_types(
 
 ```{r}
 #| label: TaxonClassification scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/TaxonClassification.svg"
   )
 )
 ```
 
-Taxonomic classification for some [Taxa]{.database} might be only available down to the genus or family level, while most of the data is classified to species level. Classification information, detailed up to the family level, is stored for each taxon, ensuring consistency and facilitating comparative analyses across different datasets. Currently, the [VegVault]{.vegvault} database holds over 110 thousand taxonomic names, of which we were unable to classify only 1312 (1.2%).
+Taxonomic classification for some [Taxa]{.taxa} might be only available down to the genus or family level, while most of the data is classified to species level.
+Classification information, detailed up to the family level, is stored for each taxon, ensuring consistency and facilitating comparative analyses across different datasets.
+Currently, the [VegVault]{.vegvault} database holds `r label_count(dplyr::pull(data_database_statistics, n_taxa))` taxonomic names, of which we were unable to classify only `r label_count(dplyr::pull(data_database_statistics, n_taxa_unclassified))` (`r label_share(dplyr::pull(data_database_statistics, n_taxa_unclassified) / dplyr::pull(data_database_statistics, n_taxa))`).
 
 ```{r}
 #| label: taxa classification plot
-get_n_taxa_per_level <- function(sel_level) {
-  dplyr::tbl(con, "TaxonClassification") %>%
-    dplyr::distinct({{ sel_level }}) %>%
-    dplyr::collect() %>%
-    nrow() %>%
-    return()
-}
-
-n_taxa_total <-
-  dplyr::tbl(con, "Taxa") %>%
-  dplyr::count(name = "N") %>%
-  dplyr::collect() %>%
-  purrr::chuck("N")
-
-n_taxa_not_classificed <-
-  dplyr::left_join(
-    dplyr::tbl(con, "Taxa"),
-    dplyr::tbl(con, "TaxonClassification"),
-    by = "taxon_id"
-  ) %>%
-  dplyr::filter(
-    is.na(taxon_species) &
-      is.na(taxon_genus) &
-      is.na(taxon_family)
-  ) %>%
-  dplyr::count(name = "N") %>%
-  dplyr::collect() %>%
-  purrr::chuck("N")
-
+# Total taxa, distinct species, genera and families, and taxa without any
+#   classification, from the tested loader of the figures stage
 n_taxa_per_class <-
-  tibble::tribble(
-    ~class, ~N,
-    "total taxa", n_taxa_total,
-    "species", get_n_taxa_per_level(taxon_species),
-    "genus", get_n_taxa_per_level(taxon_genus),
-    "family", get_n_taxa_per_level(taxon_family),
-    "not classified", n_taxa_not_classificed
+  load_taxa_classification_counts(
+    path_database = path_to_vegvault,
+    list_build_manifest = list_build_manifest
+  ) %>%
+  dplyr::rename(
+    class = taxon_level,
+    N = n_taxa
+  )
+
+# The levels count distinct names, so they do not add up to the total
+vec_class_labels <-
+  c(
+    "total taxa" = "all taxa",
+    "species" = "distinct species",
+    "genus" = "distinct genera",
+    "family" = "distinct families",
+    "not classified" = "taxa not classified"
   )
 
 fig_n_taxa_per_class <-
   n_taxa_per_class %>%
   dplyr::mutate(
     class = factor(
-      class,
-      levels = n_taxa_per_class$class
+      vec_class_labels[class],
+      levels = vec_class_labels
     )
   ) %>%
   ggplot2::ggplot(
@@ -298,24 +310,13 @@ fig_n_taxa_per_class <-
     )
   ) +
   ggplot2::labs(
-    title = "Taxa classification",
+    title = "Taxa and their classification",
     x = "",
-    y = "Number of Taxa"
+    y = "Number of names"
   ) +
-  ggplot2::guides(
-    fill = "none"
-  ) +
-  ggplot2::scale_fill_manual(
-    values = c(
-      "#FCFCFC",
-      "#FFE6F5",
-      "#FFDEC9",
-      "#FFE593",
-      "#D8DBE0"
-    )
-  ) +
-  ggplot2::coord_cartesian(
-    ylim = c(0, 120e3)
+  ggplot2::scale_y_continuous(
+    labels = scales::label_comma(),
+    expand = ggplot2::expansion(mult = c(0, 0.15))
   ) +
   ggplot2::geom_segment(
     mapping = ggplot2::aes(
@@ -327,29 +328,28 @@ fig_n_taxa_per_class <-
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_point(
-    mapping = ggplot2::aes(
-      fill = class
-    ),
     size = point_size,
     shape = 21,
     col = col_black,
+    fill = col_white,
     position = ggplot2::position_dodge(0.5)
   ) +
   ggplot2::geom_label(
     mapping = ggplot2::aes(
-      label = scales::number(N)
+      label = scales::label_comma()(N)
     ),
     vjust = -0.5,
     size = point_size * 2,
+    family = font_family,
     position = ggplot2::position_dodge(0.5)
   )
 
 save_figure_to_render(fig_n_taxa_per_class)
 ```
 
-### [Taxon Reference]{.database} (`TaxonReference`)
+### Taxon Reference (`TaxonReference`) {.topic-taxa}
 
-Each taxon might get a reference. Currently, this is used to track the origin of the [Taxon]{.database} name (i.e. which primary source was used first with this [Taxon]{.database}). Note that [Taxa]{.database}, generated from taxonomic classification are associated with `taxospace` reference.
+Each taxon might get a reference. Currently, this is used to track the origin of the [Taxon]{.taxa} name (i.e. which primary source was used first with this [Taxon]{.taxa}). Note that [Taxa]{.taxa}, generated from taxonomic classification are associated with `taxospace` reference.
 
 ```{r}
 #| label: TaxonReference variables scheme structure
@@ -361,7 +361,7 @@ data_comments_taxon_reference <-
     "reference_id", "ID of a Reference"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "TaxonReference"
 ) %>%

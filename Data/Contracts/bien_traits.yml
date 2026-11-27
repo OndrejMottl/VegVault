@@ -1,0 +1,257 @@
+# Producer artefact contract. Format: Data/Contracts/README.md
+contract_id: bien_traits
+contract_version: 1.0.2
+status: active
+title: BIEN plant traits under the unit contract
+description: >-
+  One row per published BIEN trait measurement, already converted to the
+  canonical unit of its trait by the producer's unit contract, split into
+  numbered parts. VegVault turns every measurement into one sample (age 0)
+  and one trait value.
+producer:
+  repository: OndrejMottl/VegVault-Trait_data
+  directory: Outputs/Data
+consumers:
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Producers/validate_trait_rule_keys.R
+  - R/Functions/Gridpoints/prepare_modern_positions.R
+  - R/Functions/Database/prepare_trait_tables.R
+file:
+  name_templates:
+    - 'data_traits_bien_{partition}_{date}__{hash}__.qs'
+  evidence: >-
+    The producer sorts the published records by record id
+    (select_bien_published_records.R). Its export stage splits them into
+    n_bien_parts (4 in its config.yml) parts of consecutive rows and saves
+    them as data_traits_bien_<part> with save_trait_export_parts(), in the
+    target data_bien_parts of R/Analyses/03_Data_export/pipeline.R:361-369.
+    The entries below were first taken from code unless a local value is
+    quoted, before any artefact existed under this contract (the local files
+    data_traits_bien_0..3_2025-08-02 predate the unit contract and hold
+    trait_name and unit, not the contract columns); the four 2.0.0 release
+    parts of 2026-11-21 pass them. Producer file and line numbers refer to
+    VegVault-Trait_data 2.0.0 at 5ab2904; line numbers of VegVault files
+    refer to the branch of pull request 81.
+partitioning:
+  scheme: integer
+  first: 0
+  contiguous: true
+  evidence: >-
+    save_trait_export_parts.R:80-93 in the producer numbers the parts from
+    0; the v1.0.0 files, the local files and the 2.0.0 release parts are
+    numbered 0 to 3. The import used to
+    keep the newest file per part by modification time
+    (load_local_trait_artifacts.R); the pin manifest replaces that with an
+    explicit list of files, which this contract checks for gaps and
+    duplicates. The number of parts is not fixed by the contract.
+extra_columns: allow
+columns:
+  - name: source_provider
+    class: character
+    nullable: false
+    description: Provider of the record.
+    evidence: >-
+      load_local_trait_artifacts.R:47-54 requires it;
+      resolve_trait_unit_contract.R:51 in the producer coerces it to
+      character.
+    checks:
+      allowed_values: [BIEN]
+  - name: source_dataset_key
+    class: character
+    nullable: true
+    description: Provider dataset identifier, when the record has one.
+    evidence: >-
+      load_local_trait_artifacts.R:47-54 requires it;
+      resolve_trait_unit_contract.R:52,64-69 allows it to be missing.
+  - name: source_record_id
+    class: character
+    nullable: false
+    description: Provider record identifier.
+    evidence: >-
+      load_local_trait_artifacts.R:47-54 and validate_trait_import.R:2-8
+      require it; resolve_trait_unit_contract.R:53.
+    checks:
+      not_empty: true
+  - name: source_trait_id
+    class: character
+    nullable: false
+    description: Provider trait identifier.
+    evidence: >-
+      load_local_trait_artifacts.R:47-54 and validate_trait_import.R:2-8
+      require it; resolve_trait_unit_contract.R:54.
+    checks:
+      not_empty: true
+  - name: original_value_string
+    class: character
+    nullable: false
+    description: Value as written by the provider, before parsing.
+    evidence: >-
+      load_local_trait_artifacts.R:47-54 requires it;
+      resolve_trait_unit_contract.R:55,144 in the producer marks records
+      whose value cannot be parsed as failed, so published records have one.
+    checks:
+      not_empty: true
+  - name: original_unit
+    class: character
+    nullable: false
+    description: Unit as written by the provider.
+    evidence: >-
+      load_local_trait_artifacts.R:47-54 requires it;
+      resolve_trait_unit_contract.R:145-146 in the producer marks records
+      with a missing or blank unit as ambiguous, so published records have
+      one.
+    checks:
+      not_empty: true
+  - name: normalized_original_unit
+    class: character
+    nullable: false
+    description: >-
+      Provider unit after alias normalisation; the key into the conversion
+      registry.
+    evidence: >-
+      resolve_trait_unit_contract.R:147 in the producer marks records
+      without it as unsupported, so published records always have one.
+    checks:
+      not_empty: true
+  - name: conversion_rule_key
+    class: character
+    nullable: false
+    description: Key of the unit-conversion rule applied to the record.
+    evidence: >-
+      validate_trait_import.R:13-18 aborts on a missing rule key, but not on
+      an empty one, which would only fail later as an unresolved rule.
+    checks:
+      not_empty: true
+  - name: conversion_status
+    class: character
+    nullable: false
+    description: Outcome of the unit conversion.
+    evidence: >-
+      resolve_trait_unit_contract.R:143-155,198-212 publishes only records
+      whose status is identity or converted.
+    checks:
+      allowed_values: [identity, converted]
+  - name: disposition
+    class: character
+    nullable: false
+    description: Publication decision of the unit contract.
+    evidence: >-
+      load_local_trait_artifacts.R:65 aborts unless every row is published;
+      select_bien_published_records.R:38-39 in the producer keeps only
+      disposition == "published".
+    checks:
+      allowed_values: [published]
+  - name: derivation_rule_key
+    class: character
+    nullable: true
+    description: >-
+      Key of the derivation rule when the value was derived from other
+      traits; missing otherwise.
+    evidence: load_local_trait_artifacts.R:47-54 requires it.
+  - name: trait_value
+    class: numeric
+    nullable: false
+    description: Trait value in trait_unit.
+    evidence: validate_trait_import.R:13-18 aborts on non-finite values.
+    checks:
+      finite: true
+  - name: trait_unit
+    class: character
+    nullable: false
+    description: Canonical unit of trait_full_name and of its trait_domain.
+    evidence: >-
+      validate_trait_import.R:13-18 and 21-28 abort on a missing unit or on a
+      trait with more than one unit; save_trait_domain.R:9-18
+      (add_trait_domain.R before pull request 118) aborts on a trait domain
+      with more than one unit.
+    checks:
+      not_empty: true
+  - name: id
+    class: character
+    nullable: false
+    description: >-
+      BIEN measurement identifier; becomes the sample name bien_traits_<id>,
+      so it must be unique over all parts.
+    evidence: >-
+      05_Import_bien_trait_data.R:145; local 2025-08-02 parts: character,
+      unique within each part.
+    checks:
+      not_empty: true
+  - name: project_pi
+    class: character
+    nullable: true
+    description: Principal investigator; stored as the data source description.
+    evidence: >-
+      05_Import_bien_trait_data.R:80; local 2025-08-02 parts: 1207 and 874
+      missing.
+  - name: source_citation
+    class: character
+    nullable: true
+    description: Citation; stored as the data source reference.
+    evidence: 05_Import_bien_trait_data.R:83.
+  - name: longitude
+    class: numeric
+    nullable: true
+    unit: decimal degree (WGS84)
+    description: Measurement longitude, when known.
+    evidence: >-
+      05_Import_bien_trait_data.R:81 coerces with as.numeric(); local
+      2025-08-02 parts: double, partly missing.
+    checks:
+      finite: true
+      range:
+        min: -180
+        max: 180
+  - name: latitude
+    class: numeric
+    nullable: true
+    unit: decimal degree (WGS84)
+    description: Measurement latitude, when known.
+    evidence: >-
+      05_Import_bien_trait_data.R:82 coerces with as.numeric(); local
+      2025-08-02 parts: double, partly missing.
+    checks:
+      finite: true
+      range:
+        min: -90
+        max: 90
+  - name: scrubbed_species_binomial
+    class: character
+    nullable: false
+    description: Scrubbed species name; stored as the taxon name.
+    evidence: >-
+      05_Import_bien_trait_data.R:194; the local 2025-08-02 parts have
+      missing values (26368 in part 0) before the unit contract is applied.
+      Missing names are not allowed because the record cannot be attached to
+      a taxon; prepare_bien_contract_input.R:115-117 in the producer removes
+      them (is_bien_species_missing()).
+    checks:
+      not_empty: true
+  - name: trait_domain
+    class: character
+    nullable: false
+    description: VegVault trait domain.
+    evidence: 05_Import_bien_trait_data.R:212.
+    checks:
+      not_empty: true
+  - name: trait_full_name
+    class: character
+    nullable: false
+    description: Trait name; stored as the trait name.
+    evidence: 05_Import_bien_trait_data.R:234.
+    checks:
+      not_empty: true
+keys:
+  - [id]
+dependencies:
+  - determinant: [trait_full_name]
+    dependent: [trait_unit]
+  - determinant: [trait_domain]
+    dependent: [trait_unit]
+notes:
+  - >-
+    Every conversion_rule_key and derivation_rule_key must exist in the rule
+    registry. The trait import of pull request 81 reads the registry from
+    the producer's config/trait_units/ in the sibling checkout
+    (add_trait_rules.R), so the producer's registry is authoritative; the pin
+    manifest pins it and the import stage checks the keys.

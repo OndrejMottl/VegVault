@@ -1,15 +1,15 @@
 
 
-## Samples
+## Samples {#samples .topic-samples .topic-icon}
 
 <span class="database">Samples</span> represent the main unit of data in
 <span class="vegvault">VegVault</span>, serving as the fundamental
-building blocks for all analyses. There are currently over 13 million
+building blocks for all analyses. There are currently 12,459,714
 <span class="database">Samples</span> in
-<span class="vegvault">VegVault</span> v1.0.0 (of which ~ 1.6 million
-are <span class="abiotic">gridpoints</span> of
-<span class="abiotic">abiotic data</span>, see [Database
-Assembly](.\website/database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)).
+<span class="vegvault">VegVault</span> 2.0.0 (of which 1,569,221 are
+<span class="abiotic">gridpoints</span> of <span class="abiotic">abiotic
+data</span>, see [Database
+Assembly](database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)).
 
 <span class="vegvault">VegVault</span> encompasses both
 <span class="neo-vegetation">contemporary</span> and
@@ -23,17 +23,16 @@ pollen records</span> are in <span class="paleo">calibrated years before
 the present (cal yr BP)</span>. The *present* is here specified as
 `1950 AD`.
 
-### <span class="database">Sample Structure Overview</span> (`Samples`)
+### Sample Structure Overview (`Samples`) {#sample-structure-overview-samples .topic-database}
 
 The table contains one <span class="database">Sample</span> per row,
 with each <span class="database">Sample</span> containing: a unique
 <span class="database">Sample ID</span> (`sample_id`),
 <span class="database">Sample name</span> (`sample_name`), temporal
-information about <span class="database">Sample</span>
-(<span class="paleo">age</span>), sample site (size of the plot if
-available; `sample_size_id`), and additional information about sample
-(`sample_details`; this is currently not being used in v1.0.0.). As
-<span class="vegvault">VegVault</span> encompasses both
+information about <span class="database">Sample</span> (age), sample
+site (size of the plot if available; `sample_size_id`), and additional
+information about sample (`sample_details`; this is currently not being
+used). As <span class="vegvault">VegVault</span> encompasses both
 <span class="neo-vegetation">contemporary</span> and
 <span class="paleo">paleo-data</span>, accurate <span class="paleo">age
 information</span> is required for each
@@ -49,11 +48,10 @@ information</span> is required for each
 
 Column names and types for table `Samples`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/Samples.svg){fig-align="center"
+width="100%"}
 
-### <span class="database">Dataset-Sample</span> (`DatasetSample`)
+### Dataset-Sample (`DatasetSample`) {#dataset-sample-datasetsample .topic-database}
 
 Each <span class="database">Sample</span> is linked to a specific
 <span class="database">Dataset</span> via the `DatasetSample` table,
@@ -73,11 +71,13 @@ differ in time (`age`).
 
 Column names and types for table `DatasetSample`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.svg){fig-align="center"
+width="100%"}
 
-### <span class="database">Sample Size</span> (`SampleSizeID`)
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_n_samples_per_dataset_type.png){fig-align="center"
+width="100%"}
+
+### Sample Size (`SampleSizeID`) {#sample-size-samplesizeid .topic-database}
 
 The size of vegetation plots can vary substantially. This detail is
 crucial for ecological studies where plot size can influence species
@@ -95,22 +95,20 @@ plot size is recorded separately for each
 
 Column names and types for table `SampleSizeID`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.svg){fig-align="center"
+width="100%"}
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_samples_plot_size.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_samples_plot_size.png){fig-align="center"
+width="100%"}
 
-### <span class="paleo">Sample age uncertainty</span> (`SampleUncertainty`)
+### Sample age uncertainty (`SampleUncertainty`) {#sample-age-uncertainty-sampleuncertainty .topic-paleo}
 
 Each <span class="database">Sample</span> from the
 `fossil_pollen_archive` <span class="database">Dataset</span> is also
 associated with an <span class="paleo">uncertainty matrix</span>
 generated during the re-estimation of ages using [FOSSILPOL
-workflow](%5Bhttps%5D(https://bit.ly/FOSSILPOL)). This matrix provides a
-range of potential ages derived from <span class="paleo">age-depth
+workflow](https://bit.ly/FOSSILPOL). This matrix provides a range of
+potential ages derived from <span class="paleo">age-depth
 modelling</span>, reflecting the inherent uncertainty in dating
 <span class="paleo">paleoecological records</span>.
 
@@ -122,18 +120,16 @@ modelling</span>, reflecting the inherent uncertainty in dating
 
 Column names and types for table `SampleUncertainty`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.svg){fig-align="center"
+width="100%"}
 
-We can show this on the previously selected fossil pollen archive with
-dataset ID: 91256.
+We can show this on the previously selected fossil pollen archive
+fossilpol_1001 (Hail Lake, dataset ID 91184 in this version).
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_sample_age.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_structure/fig_sample_age.png){fig-align="center"
+width="100%"}
 
-### <span class="database">Sample Reference</span>
+### Sample Reference {#sample-reference .topic-database}
 
 Each <span class="database">Sample</span> in
 <span class="vegvault">VegVault</span> can have specific
@@ -154,8 +150,7 @@ the dataset continues to be updated in the future.
 
 Column names and types for table `SampleReference`.
 
-<img
-src="D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
-style="width:100.0%" data-fig-align="center" />
+![](D:/GITHUB/VegVault/VegVault/Outputs/Figures/website/DB_scheme_visualisation/SampleReference.svg){fig-align="center"
+width="100%"}
 
 <br>

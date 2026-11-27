@@ -1,0 +1,2 @@
+script,run_started,run_seconds,n_repetitions,n_variants,r_version,rsqlite_version,sources_unchanged
+21_benchmark_bulk_load.R,2026-11-20 09:41:52,3018.2319781780243,2,15,4.6.2,3.53.3,TRUE

@@ -1,0 +1,160 @@
+# Producer artefact contract. Format: Data/Contracts/README.md
+contract_id: splot_plots
+contract_version: 2.0.1
+status: active
+title: sPlotOpen vegetation plots
+description: >-
+  One row per sPlotOpen vegetation plot with its location, plot area and the
+  taxa recorded in it. VegVault turns every row into one dataset and one
+  sample (age 0) named splot_<plot_observation_id>.
+producer:
+  repository: OndrejMottl/VegVault-Vegetation_data
+  directory: Outputs/Data
+consumers:
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Gridpoints/prepare_modern_positions.R
+  - R/Functions/Database/prepare_splot_tables.R
+file:
+  name_templates:
+    - 'data_splot_{date}__{hash}__.qs'
+  evidence: >-
+    R/02_Main_analyses/05_sPlot_output.R in the producer saves with
+    RUtilpol::save_latest_file(file_name = "data_splot", prefered_format =
+    "qs"); v1 file data_splot_2023-12-06__cbf9022330b5d47a5c76bf7ca6b226b4__.qs
+    (tag v1.0.0).
+partitioning:
+  scheme: none
+extra_columns: allow
+columns:
+  - name: plot_observation_id
+    class: numeric
+    nullable: false
+    description: >-
+      sPlotOpen plot identifier. Becomes the dataset and sample name
+      splot_<plot_observation_id>, so it must be unique.
+    evidence: >-
+      01_Import_splot_data.R:85,132; producer drops rows without it
+      (05_sPlot_output.R, drop_na); v1: double, whole numbers 440 to 1126790,
+      67022 distinct in 67022 rows.
+    checks:
+      whole_number: true
+      range:
+        min: 1
+  - name: givd_id
+    class: character
+    nullable: false
+    description: >-
+      Global Index of Vegetation-Plot Databases identifier of the source
+      database; stored as the data source description.
+    evidence: >-
+      01_Import_splot_data.R:81; producer drops rows without it; v1:
+      character, no missing values, 105 distinct.
+    checks:
+      not_empty: true
+  - name: longitude
+    class: numeric
+    nullable: false
+    unit: decimal degree (WGS84)
+    description: Plot longitude.
+    evidence: >-
+      01_Import_splot_data.R:87 coerces with as.numeric(); v1: double, no
+      missing values, -156.02 to 176.42. The contract requires numeric so
+      that no coercion is needed.
+    checks:
+      finite: true
+      range:
+        min: -180
+        max: 180
+  - name: latitude
+    class: numeric
+    nullable: false
+    unit: decimal degree (WGS84)
+    description: Plot latitude.
+    evidence: >-
+      01_Import_splot_data.R:88 coerces with as.numeric(); v1: double, no
+      missing values, -54.82 to 80.15.
+    checks:
+      finite: true
+      range:
+        min: -90
+        max: 90
+  - name: releve_area
+    class: numeric
+    nullable: false
+    unit: m2
+    description: Plot (releve) area; stored as the sample size in square metres.
+    evidence: >-
+      01_Import_splot_data.R:135 with description "square meters"; producer
+      drops rows without it; v1: double, no missing values, 0.03 to 40000.
+    checks:
+      finite: true
+      range:
+        min: 0
+        min_inclusive: false
+  - name: taxa
+    class: list
+    nullable: false
+    description: >-
+      Taxa recorded in the plot: one data frame per plot with one row per
+      taxon.
+    evidence: >-
+      01_Import_splot_data.R:165-205; v1: list of 67022 tibbles, 1 to 208
+      rows in a sample of 300.
+    element:
+      class: data.frame
+      nullable: false
+      min_rows: 1
+      columns:
+        - name: Species
+          class: character
+          nullable: false
+          description: >-
+            Taxon name. The v1 import took the first column by position
+            (01_Import_splot_data.R:170) and renamed Species (line 201); the
+            contract requires it by name, so the import that replaces the v1
+            script must read it by name too. Missing or empty names are not
+            allowed: add_sample_taxa() writes such records with no taxon.
+          evidence: >-
+            01_Import_splot_data.R:170,201; v1: character and the first column
+            in every element; 1677 missing of 1520208 values, which the v1
+            database holds as SampleTaxa rows without a taxon (shown by
+            tests/test_contract_fixtures_integration.R, a check of the
+            v1.0.0 writers last held by commit 0a530f9).
+          checks:
+            not_empty: true
+        - name: Original_abundance
+          class: numeric
+          nullable: true
+          description: >-
+            Abundance as recorded in the source database, in the scale given
+            by the producer's Abundance_scale column; stored as the
+            sample-taxon value.
+          evidence: >-
+            01_Import_splot_data.R:202; v1: numeric, 18 missing of 1520208
+            values, 0 to 3700 in a sample of 300 plots.
+          checks:
+            finite: true
+            range:
+              min: 0
+      keys:
+        - [Species]
+keys:
+  - [plot_observation_id]
+notes:
+  - >-
+    The producer exports 48 columns; only those listed here are read.
+  - >-
+    v1 fails this contract on the 1677 records without a species name; from
+    2.0.0 the producer drops them before export (no Species is missing or
+    empty in the 2.0.0 export, VegVault-Vegetation_data issue 21).
+  - >-
+    The v1 import reads the taxon name as the first column of each taxa
+    element, which the contract does not check; the import stage that
+    replaces it reads Species by name.
+  - >-
+    Version 2.0.0 adds the key within each taxa element: one record per
+    Species in a plot. The producer merges repeated records with the rules
+    approved for VegVault-Vegetation_data issue 21; a merged record's
+    Original_species can hold several names joined with " | ". v1.0.0
+    repeated 9897 (sample, taxon) pairs from sPlotOpen plots; the 2.0.0
+    export has none in 1508470 records.

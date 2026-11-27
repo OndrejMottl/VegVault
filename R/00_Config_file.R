@@ -10,155 +10,84 @@
 #                         2023
 #
 #----------------------------------------------------------#
-# Configuration script with the variables that should be consistent throughout
-#   the whole repo. It loads packages, defines important variables,
-#   authorises the user, and saves config file.
+# Compatibility entry point for the website, which sources this file
+#   (directly and through R/Website/00_Config_quarto.R). It sources
+#   the project setup and keeps the objects the website uses. New code
+#   sources R/___setup_project___.R directly. Remove this file when the
+#   website moves to the new setup, after the 2.0.0 release.
 
-# Set the current environment
-current_env <- environment()
 
-# set seed
+#----------------------------------------------------------#
+# 0. Setup -----
+#----------------------------------------------------------#
+
+library(here)
+
+# Loads the functions, attaches `packages: attach` of config.yml and
+#   resolves the data root. Packages are restored from renv.lock by
+#   R/___Init_project___.R, no longer here
+source(
+  here::here("R/___setup_project___.R")
+)
+
+# The seed of the website; the setup sets `seed` of config.yml
 set.seed(1234)
 
 
 #----------------------------------------------------------#
-# 1. Load packages -----
+# 1. Database path -----
 #----------------------------------------------------------#
 
-if (
-  isFALSE(
-    exists("already_synch", envir = current_env)
-  )
-) {
-  already_synch <- FALSE
-}
+# The database the website reads: the release database, `database_path`
+#   in the git-ignored secrets.yaml
+path_to_vegvault <-
+  resolve_database_path(key = "database_path")
 
-if (
-  isFALSE(already_synch)
-) {
-  library(here)
-  # Synchronise the package versions
-  renv::restore(
-    lockfile = here::here("renv/library_list.lock")
-  )
-  already_synch <- TRUE
-
-  # Save snapshot of package versions
-  # renv::snapshot(lockfile =  "renv/library_list.lock")  # do only for update
-}
-
-# Define packages
-package_list <-
-  c(
-    "assertthat",
-    "DBI",
-    "here",
-    "janitor",
-    "jsonlite",
-    "knitr",
-    "languageserver",
-    "renv",
-    "remotes",
-    "rlang",
-    "roxygen2",
-    "RSQLite",
-    "tidyverse",
-    "tinytable",
-    "usethis",
-    "utils"
+# Its build manifest must still describe the file (name, size and
+#   modification time) and record a release build from a clean checkout,
+#   so that the pages report the published database and nothing else
+list_build_manifest <-
+  load_build_manifest(
+    path_manifest = resolve_build_manifest_path(
+      path_database = path_to_vegvault
+    ),
+    path_database = path_to_vegvault,
+    profile_expected = "release"
   )
 
-# Attach all packages
-sapply(package_list, library, character.only = TRUE)
-
 
 #----------------------------------------------------------#
-# 2. Define space -----
+# 2. Database version -----
 #----------------------------------------------------------#
 
-current_date <- Sys.Date()
-
-# project directory is set up by 'here' package, Adjust if needed
-current_dir <- here::here()
-
-
-#----------------------------------------------------------#
-# 3. Load functions -----
-#----------------------------------------------------------#
-
-# get vector of general functions
-fun_list <-
-  list.files(
-    path = "R/Functions/",
-    pattern = "*.R",
-    recursive = TRUE
-  )
-
-# source them
-if (
-  length(fun_list) > 0
-) {
-  sapply(
-    paste0("R/functions/", fun_list, sep = ""),
-    source
-  )
-}
-
-
-#----------------------------------------------------------#
-# 4. Authorise the user -----
-#----------------------------------------------------------#
-
-# !!!  IMPORTANT  !!!
-
-# This solution was created due to VegVault data not being stored
-#  in publick the repository.
-
-# Pleae download the data from the VegVault repository and place the path to it
-#  in the '.secrets/path.yaml' file.
-
-if (
-  file.exists(
-    here::here(".secrets/path.yaml")
-  )
-) {
-  path_to_vegvault <-
-    yaml::read_yaml(
-      here::here(".secrets/path.yaml")
-    ) %>%
-    purrr::chuck(Sys.info()["user"])
-} else {
-  stop(
-    paste(
-      "The path to the VegVault data is not specified.",
-      " Please, create a 'path.yaml' file."
-    )
-  )
-}
-
-#----------------------------------------------------------#
-# 5. Define variables -----
-#----------------------------------------------------------#
-
+# The version record of config.yml; its last entry is the version being
+#   built
 data_version_control <-
-  tibble::tribble(
-    ~version, ~update_date, ~changelog,
-    "0.0.2", "2024-10-17",
-    "Beging the versioning of the database",
-    "0.0.3", "2024-11-18",
-    "Reworked the `References` and flagged `mandatory`",
-    "0.0.4", "2024-12-19",
-    "Update the version control and correct the Dataset References",
-    "1.0.0", "2025-01-20",
-    "First release of the database"
-  ) %>%
+  load_config_value(value = c("database", "versions")) |>
+  purrr::map(.f = tibble::as_tibble) |>
+  dplyr::bind_rows() |>
   dplyr::mutate(
-    # check the date format
-    update_date = lubridate::ymd(update_date) %>%
-      as.character()
+    # Checks the date format
+    update_date = base::as.character(lubridate::ymd(update_date))
   )
 
 db_version <-
-  data_version_control %>%
-  dplyr::slice_tail(n = 1) %>%
-  purrr::chuck("version")
+  data_version_control |>
+  dplyr::slice_tail(n = 1) |>
+  dplyr::pull(version)
+
+# The version the pages print must be the version the database records;
+#   the two differ only when config.yml was changed after the build
+version_manifest <-
+  purrr::chuck(list_build_manifest, "version", "version")
+
+if (
+  !base::identical(base::as.character(version_manifest), db_version)
+) {
+  cli::cli_abort(
+    c(
+      "The database version in config.yml is not the one of the database.",
+      "i" = "config.yml: {db_version}; build manifest: {version_manifest}."
+    )
+  )
+}

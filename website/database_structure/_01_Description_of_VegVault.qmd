@@ -1,13 +1,5 @@
 # VegVault Database Structure
 
-Currently, [VegVault]{.vegvault} consists of 31 interconnected tables with 87 fields (variables), which are described in detail below. However, the internal [database structure]{.database} may not be directly relevant to most users, as the [{vaultkeepr}](https://bit.ly/vaultkeepr) R package processes all data to output only the most relevant information in a "[ready-to-analyze]{.data-processing}" format.
-
-::: {.callout-note}
-**For Most Users**: If you're primarily interested in using [VegVault]{.vegvault} for research, you may want to start with our [Usage Examples](/website/database_examples.qmd) rather than diving into the technical [database structure]{.database}.
-:::
-
-This section provides comprehensive documentation of all tables and their relationships for users who need detailed technical information about the [database architecture]{.database}.
-
 ```{r}
 #| label: source config
 #| include: FALSE
@@ -28,7 +20,7 @@ source(
 
 source(
   here::here(
-    "R/03_Visualisation/00_Config_quarto.R"
+    "R/Website/00_Config_quarto.R"
   )
 )
 
@@ -46,16 +38,39 @@ invisible(
 
 ```
 
+```{r}
+#| label: database-statistics
+#| include: false
+
+data_database_statistics <-
+  load_database_statistics(
+    path_database = path_to_vegvault,
+    list_build_manifest = list_build_manifest
+  )
+```
+
+Currently, [VegVault]{.vegvault} `r db_version` consists of `r dplyr::pull(data_database_statistics, n_tables)` interconnected tables with `r dplyr::pull(data_database_statistics, n_columns)` fields (variables), and `r dplyr::pull(data_database_statistics, n_views)` view (a stored query that combines tables), which are described in detail below.
+However, the internal [database structure]{.database} may not be directly relevant to most users, as the [{vaultkeepr}](https://bit.ly/vaultkeepr) R package processes all data to output only the most relevant information in a "[ready-to-analyze]{.reproducibility}" format.
+
+::: {.callout-note}
+**For Most Users**: If you're primarily interested in using [VegVault]{.vegvault} for research, you may want to start with our [Usage Examples](database_examples.qmd) rather than diving into the technical [database structure]{.database}.
+:::
+
+This section provides comprehensive documentation of all tables and their relationships for users who need detailed technical information about the [database architecture]{.database}.
+
 <br>
 
 ## Full Database Schema
 
+The diagram shows every table with its columns and the links between tables; it is drawn from the schema with `R/Website/render_schema_diagrams.R`, as are the diagrams of the single tables below.
+The colour of a table's header marks its section: brown for datasets, samples and taxa, teal for traits, olive for abiotic data and the links to gridpoints, light brown for the references, and black for the authors and the record of each build.
+
 ```{r}
 #| label: full-database-schema
 #| echo: false
-knitr::include_graphics(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/schema_diagram.png"
+    "Outputs/Figures/schema_diagram.svg"
   )
 )
 ```
@@ -65,7 +80,8 @@ knitr::include_graphics(
 Several tables contain [metadata]{.database} and administrative information that are not directly linked to the scientific data:
 
 - `Authors`: Information about [VegVault]{.vegvault} authors and maintainers, including contact details
-- `version_control`: [Database version information]{.database} with descriptions of changes over time
+- `version_control`: [Database version information]{.database} with descriptions of changes over time and, from v2.0.0, how each version was built
+- `BuildProducers`: the input files of each build, one row per data file type, with the tag of the data release it was read from
 - `sqlite_stat1` & `sqlite_stat4`: [SQLite system tables]{.database} containing [database index statistics]{.database} for query optimization
 
 ```{r}
@@ -80,7 +96,7 @@ data_comments_authors <-
     "author_orcid", "ORCID ID of an Author"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "Authors"
 ) %>%
@@ -98,12 +114,15 @@ data_comments_version_control <-
   tibble::tribble(
     ~column_name, ~description,
     "id", "ID of a database version (unique)",
-    "version", "Version number",
+    "version", "Version number (unique)",
     "update_date", "Date of the creation of that version",
-    "changelog", "Text description of main changes in the database"
+    "changelog", "Text description of main changes in the database",
+    "build_profile", "Configuration profile of the build (`release` for a published version)",
+    "git_commit", "Commit of the VegVault code that built the database",
+    "manifest_sha256", "SHA-256 checksum of the file that pins the input files of the build"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "version_control"
 ) %>%
@@ -112,6 +131,48 @@ get_db_table_data_types(
     by = "column_name"
   ) %>%
   plot_table()
+```
+
+The versions recorded in this database:
+
+```{r}
+#| label: Version Control rows
+#| tbl-cap: "Versions of VegVault recorded in table `version_control`."
+dplyr::tbl(con, "version_control") %>%
+  dplyr::select("version", "update_date", "changelog") %>%
+  dplyr::collect() %>%
+  plot_table()
+```
+
+```{r}
+#| label: Build Producers variables scheme structure
+#| tbl-cap: "Column names and types for table `BuildProducers`."
+data_comments_build_producers <-
+  tibble::tribble(
+    ~column_name, ~description,
+    "version_id", "ID of the database version that the build made (`id` of `version_control`)",
+    "producer", "Name of the type of input data file, for example `splot_plots`",
+    "tag", "Tag of the data release the file was read from (empty in a development build)"
+  )
+
+load_db_table_data_types(
+  con,
+  "BuildProducers"
+) %>%
+  dplyr::full_join(
+    data_comments_build_producers,
+    by = "column_name"
+  ) %>%
+  plot_table()
+```
+
+```{r}
+#| label: BuildProducers scheme structure
+build_absolute_graphics_include(
+  here::here(
+    "Outputs/Figures/website/DB_scheme_visualisation/BuildProducers.svg"
+  )
+)
 ```
 
 <br>

@@ -1,0 +1,2 @@
+type_km,type_years,n_links,km_min,km_max,years_min,years_max,n_key_missing
+integer,integer,2067445952,0,49,0,5000,0

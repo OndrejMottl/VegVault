@@ -30,7 +30,7 @@ source(
 
 source(
   here::here(
-    "R/03_Visualisation/00_Config_quarto.R"
+    "R/Website/00_Config_quarto.R"
   )
 )
 
@@ -38,34 +38,54 @@ source(
 
 ## Database Content Overview
 
-VegVault v1.0.0 is a comprehensive [SQLite database]{.text-background-brownDark .text-color-white .text-bold} (~110 GB) that integrates global vegetation data spanning both [contemporary]{.text-background-greenLight .text-color-black .text-bold} and [paleovegetation]{.text-background-purpleLight .text-color-black .text-bold} records. This unified database combines [fossil pollen]{.text-background-purpleLight .text-color-black .text-bold} records, [contemporary vegetation plots]{.text-background-greenLight .text-color-black .text-bold}, [functional trait]{.text-background-blueDark .text-color-white .text-bold} measurements, and associated [abiotic environmental data]{.text-background-greenDark .text-color-white .text-bold} to provide an unprecedented resource for vegetation ecology research.
+```{r}
+#| label: database-statistics
+#| include: false
 
-The database consists of 31 interconnected tables with 87 fields (variables). For detailed technical information, see our [Database Structure](database_structure.qmd) documentation.
+data_database_statistics <-
+  load_database_statistics(
+    path_database = path_to_vegvault,
+    list_build_manifest = list_build_manifest
+  )
+
+label_count <-
+  scales::label_comma()
+
+label_size <-
+  scales::label_bytes(units = "auto_binary", accuracy = 0.1)
+```
+
+[VegVault]{.vegvault} `r db_version` is a comprehensive [SQLite database]{.database} (`r label_size(dplyr::pull(data_database_statistics, size_bytes))`) that integrates global vegetation data spanning both [contemporary]{.neo-vegetation} and [paleovegetation]{.paleo} records.
+This unified database combines [fossil pollen]{.paleo} records, [contemporary vegetation plots]{.neo-vegetation}, [functional trait]{.traits} measurements, and associated [abiotic environmental data]{.abiotic} to provide an unprecedented resource for vegetation ecology research.
+
+The database consists of `r dplyr::pull(data_database_statistics, n_tables)` interconnected tables with `r dplyr::pull(data_database_statistics, n_columns)` fields (variables).
+For detailed technical information, see our [Database Structure](database_structure.qmd) documentation.
+What changed between versions is on the [changelog page](database_changelog.qmd).
 
 ## Database Statistics
 
-**VegVault v1.0.0 contains:**
+**VegVault `r db_version` contains:**
 
 |||
 |-----|-----|
-| **Datasets** | > 480,000 |  
-| **Samples** | > 13,000,000|
-| **Taxa** | > 110,000|
-| **Vegetation Traits** | 6|
-| **Trait Values** | > 11,000,000|
-| **Abiotic Variables** | 8|
+| **Datasets** | `r label_count(dplyr::pull(data_database_statistics, n_datasets))` |
+| **Samples** | `r label_count(dplyr::pull(data_database_statistics, n_samples))` |
+| **Taxa** | `r label_count(dplyr::pull(data_database_statistics, n_taxa))` |
+| **Trait Domains** | `r dplyr::pull(data_database_statistics, n_trait_domains)` |
+| **Trait Values** | `r label_count(dplyr::pull(data_database_statistics, n_trait_values))` |
+| **Abiotic Variables** | `r dplyr::pull(data_database_statistics, n_abiotic_variables)` |
 | **Geographic Coverage** | Global |
-| **Temporal Coverage** | 0-20,000 years BP |
+| **Temporal Coverage** | `r label_count(dplyr::pull(data_database_statistics, age_min))` to `r label_count(dplyr::pull(data_database_statistics, age_max))` cal yr BP |
 
 ::: {.callout-tip}
-**Getting Started**: New to [VegVault]{.text-background-black .text-color-white .text-bold}? Check our [Database Access](database_access.qmd) guide for download instructions and our [Usage Examples](database_examples.qmd) for practical applications.
+**Getting Started**: New to [VegVault]{.vegvault}? Check our [Database Access](database_access.qmd) guide for download instructions and our [Usage Examples](database_examples.qmd) for practical applications.
 :::
 
 
 ## Spatio-temporal overview of the database content
 
 ```{r}
-data_vegetation_samples <-
+plan_vegetation_samples <-
   vaultkeepr::open_vault(
     path = path_to_vegvault # [config]
   ) %>%
@@ -79,10 +99,11 @@ data_vegetation_samples <-
     )
   ) %>%
   # Add samples
-  vaultkeepr::get_samples() %>%
-  # select only modern data
-  # Add abiotic data
+  vaultkeepr::get_samples()
+
+data_vegetation_samples <-
   vaultkeepr::extract_data(
+    con = plan_vegetation_samples,
     return_raw_data = TRUE,
     verbose = FALSE
   ) %>%
@@ -94,6 +115,9 @@ data_vegetation_samples <-
     )
   )
 
+# The extraction leaves the connection of the plan open
+DBI::dbDisconnect(purrr::chuck(plan_vegetation_samples, "db_con"))
+
 data_vegetation_samples_space <-
   data_vegetation_samples %>%
   dplyr::distinct(dataset_type, coord_long, coord_lat)
@@ -102,12 +126,36 @@ data_vegetation_samples_time <-
   data_vegetation_samples %>%
   dplyr::distinct(dataset_id, dataset_type, age)
 
+# Samples per 1,000 years and dataset type (ages after 1950 in the first
+#   bin); the larger count of a bin is drawn first, so that both bars of a
+#   bin start at zero and stay readable on the log scale
+data_vegetation_samples_time_bins <-
+  data_vegetation_samples_time %>%
+  dplyr::mutate(
+    age_bin = (base::floor(base::pmax(age, 0) / 1e3) + 0.5) * 1e3
+  ) %>%
+  dplyr::count(age_bin, dataset_type, name = "n_samples") %>%
+  dplyr::group_by(age_bin) %>%
+  dplyr::mutate(
+    order_draw = base::rank(-n_samples, ties.method = "first")
+  ) %>%
+  dplyr::ungroup()
+
+# The map ends at 60 degrees S, below which there is only Antarctica, unless
+#   a sample lies further south
+y_lim_world <-
+  c(
+    base::min(-60, dplyr::pull(data_vegetation_samples_space, coord_lat)),
+    base::max(85, dplyr::pull(data_vegetation_samples_space, coord_lat))
+  )
+
 fig_world_empty <-
   tibble::tibble() %>%
   ggplot2::ggplot() +
-  ggplot2::borders(
-    fill = col_beige_dark,
-    col = NA
+  build_world_borders_layer(
+    col_fill = col_beige_dark,
+    col_line = NA,
+    linewidth = line_size
   ) +
   ggplot2::labs(
     x = "Longitude",
@@ -131,36 +179,61 @@ fig_vegetation_space <-
   ggplot2::scale_color_manual(
     values = palette_dataset_type # [config]
   ) +
+  # Legend keys without the transparency of the points, in the colours of
+  #   the bars
   ggplot2::guides(
-    color = ggplot2::guide_legend(override.aes = list(size = point_size))
-  ) +
-  ggplot2::theme(
-    legend.position = "top",
-  ) +
-  ggplot2::coord_sf()
-
-fig_vegetation_time <-
-  data_vegetation_samples_time %>%
-  ggplot2::ggplot(
-    ggplot2::aes(
-      x = age,
-      y = ggplot2::after_stat(count)
+    color = ggplot2::guide_legend(
+      override.aes = list(size = point_size, alpha = 1)
     )
   ) +
-  ggplot2::geom_histogram(
-    ggplot2::aes(
-      fill = dataset_type
+  ggplot2::labs(
+    colour = "Dataset Type"
+  ) +
+  # One legend for both panels, in the empty ocean of the map
+  ggplot2::theme(
+    legend.position = "inside",
+    legend.position.inside = c(0.01, 0.02),
+    legend.justification = c(0, 0),
+    legend.background = ggplot2::element_rect(
+      fill = col_beige_light, # [config]
+      colour = NA
     ),
-    alpha = 1,
-    bins = 20
+    # Room for the label 180 at the edge of the map
+    plot.margin = ggplot2::margin(t = 5.5, r = 20, b = 5.5, l = 5.5)
+  ) +
+  ggplot2::coord_sf(
+    xlim = c(-180, 180),
+    ylim = y_lim_world,
+    expand = FALSE
+  )
+
+fig_vegetation_time <-
+  ggplot2::ggplot() +
+  # Bars drawn over each other, not stacked: stacked bars on a log scale
+  #   would add the logarithms
+  purrr::map(
+    .x = base::sort(
+      base::unique(
+        dplyr::pull(data_vegetation_samples_time_bins, order_draw)
+      )
+    ),
+    .f = ~ ggplot2::geom_col(
+      data = dplyr::filter(data_vegetation_samples_time_bins, order_draw == .x),
+      mapping = ggplot2::aes(
+        x = age_bin,
+        y = n_samples,
+        fill = dataset_type
+      ),
+      width = 1e3
+    )
   ) +
   ggplot2::scale_fill_manual(
     values = palette_dataset_type # [config]
   ) +
   ggplot2::scale_y_continuous(
     transform = scales::transform_log1p(),
-    breaks = c(1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9),
-    labels = c("1", "10", "100", "1e3", "1e4", "1e5", "1e6", "1e7", "1e8", "1e9")
+    breaks = c(1, 10, 100, 1e3, 1e4, 1e5),
+    labels = scales::label_comma()
   ) +
   ggplot2::scale_x_continuous(
     transform = "reverse",
@@ -168,57 +241,60 @@ fig_vegetation_time <-
     labels = seq(20, 0, by = -5)
   ) +
   ggplot2::coord_cartesian(
-    xlim = c(20e3, 0.2),
-    ylim = c(1, 1e9)
-  ) +
-  ggplot2::guides(
-    fill = ggplot2::guide_legend(override.aes = list(size = point_size))
+    xlim = c(20e3, 0)
   ) +
   ggplot2::theme(
-    legend.position = "top"
+    legend.position = "none"
   ) +
   ggplot2::labs(
     x = "Age (ka cal yr BP)",
-    y = "Number of Samples",
-    fill = "Dataset Type"
+    y = "Samples per 1,000 years"
   )
 
-fig_legend <-
-  cowplot::get_plot_component(
-    fig_vegetation_time,
-    "guide-box-top",
-    return_all = TRUE
+path_fig_vegetation <-
+  here::here(
+    "Outputs/Figures/website/DB_overview/fig_db_spatiotemporal_overview.png"
   )
 
-fig_vegetation <-
-  cowplot::plot_grid(
-    fig_vegetation_space +
-      ggplot2::theme(
-        legend.position = "none"
-      ),
-    fig_vegetation_time +
-      ggplot2::theme(
-        legend.position = "none"
-      ),
-    nrow = 1,
-    rel_widths = c(1.5, 1)
-  ) %>%
-  cowplot::plot_grid(
-    .,
-    fig_legend,
-    nrow = 2,
-    rel_heights = c(1, 0.1)
-  )
-
-ggplot2::ggsave(
-  here::here("Outputs/Figures/website/DB_overview/fig_db_spatiotemporal_overview.png"),
-  plot = fig_vegetation,
+# The two panels are laid out on the device that writes the file (the one
+#   ggsave() uses), not combined beforehand with cowplot: cowplot measures
+#   the text on another device, where showtext is not switched on, so the
+#   text is measured larger than it is drawn, which leaves gaps around the
+#   axis titles and an oversized legend
+ragg::agg_png(
+  filename = path_fig_vegetation,
   width = 10,
   height = 4,
-  bg = col_beige_light # [config]
+  units = "in",
+  res = 300,
+  background = col_beige_light # [config]
 )
 
-knitr::include_graphics(here::here("Outputs/Figures/website/DB_overview/fig_db_spatiotemporal_overview.png"))
+grid::grid.newpage()
+
+grid::pushViewport(
+  grid::viewport(
+    layout = grid::grid.layout(
+      nrow = 1,
+      ncol = 2,
+      widths = grid::unit(c(2.3, 1), "null")
+    )
+  )
+)
+
+print(
+  fig_vegetation_space,
+  vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1)
+)
+
+print(
+  fig_vegetation_time,
+  vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2)
+)
+
+invisible(grDevices::dev.off())
+
+knitr::include_graphics(path_fig_vegetation)
 ```
 
 ## Related Resources
@@ -226,5 +302,6 @@ knitr::include_graphics(here::here("Outputs/Figures/website/DB_overview/fig_db_s
 - **[Database Structure](database_structure.qmd)** - Technical database schema
 - **[Database Assembly](database_assembly.qmd)** - Overview of the data assembly process
 - **[Database Access](database_access.qmd)** - Download and setup instructions
+- **[Changelog](database_changelog.qmd)** - Versions and what changed between them
 - **[Usage Examples](database_examples.qmd)** - Practical applications
 - **[Materials & Outputs](materials.qmd)** - Publications and resources

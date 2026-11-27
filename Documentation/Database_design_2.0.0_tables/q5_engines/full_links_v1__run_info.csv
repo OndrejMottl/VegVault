@@ -1,0 +1,2 @@
+script,target,run_started,run_seconds,peak_wset_mb,chunk_size,connection_flags,r_version,rsqlite_version,source_unchanged
+20_run_full_size_links.R,v1,2026-11-20 09:25:14,124.36148405075073,6030.999552,500,RSQLite SQLITE_RO; temporary tables only,4.6.2,3.53.3,TRUE

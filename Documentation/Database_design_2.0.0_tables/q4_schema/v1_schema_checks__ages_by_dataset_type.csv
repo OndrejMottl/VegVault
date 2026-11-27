@@ -1,0 +1,5 @@
+dataset_type_id,age_type,n_samples,n_fractional,age_min,age_max
+1,real,91255,0,0,0
+2,real,88423,27562,-73,19997
+3,real,11276488,0,0,0
+4,real,1542813,0,0,18000

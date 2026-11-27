@@ -1,8 +1,4 @@
-## Samples
-
-[Samples]{.database} represent the main unit of data in [VegVault]{.vegvault}, serving as the fundamental building blocks for all analyses. There are currently over 13 million [Samples]{.database} in [VegVault]{.vegvault} v1.0.0 (of which ~ 1.6 million are [gridpoints]{.abiotic} of [abiotic data]{.abiotic}, see [Database Assembly](/website/database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)). 
-
-[VegVault]{.vegvault} encompasses both [contemporary]{.neo-vegetation} and [paleo data]{.paleo}, necessitating accurate [age information]{.paleo} for each [Sample]{.database}. [Contemporary]{.neo-vegetation} [Samples]{.database} are assigned an age of `0`, while [Samples]{.database} from [fossil pollen records]{.paleo} are in [calibrated years before the present (cal yr BP)]{.paleo}. The *present* is here specified as `1950 AD`. 
+## Samples {.topic-samples .topic-icon}
 
 ```{r}
 #| label: source config
@@ -24,7 +20,7 @@ source(
 
 source(
   here::here(
-    "R/03_Visualisation/00_Config_quarto.R"
+    "R/Website/00_Config_quarto.R"
   )
 )
 
@@ -40,12 +36,36 @@ invisible(
   )
 )
 
-sel_dataset_for_example <- 91256
+# The example dataset is chosen by name, because dataset IDs change with
+#   every build: Hail Lake, Yukon (Neotoma dataset 1001)
+sel_dataset_name_for_example <- "fossilpol_1001"
+
+sel_dataset_for_example <-
+  dplyr::tbl(con, "Datasets") %>%
+  dplyr::filter(dataset_name == sel_dataset_name_for_example) %>%
+  dplyr::pull(dataset_id)
+
+data_database_statistics <-
+  load_database_statistics(
+    path_database = path_to_vegvault,
+    list_build_manifest = list_build_manifest
+  )
+
+label_count <-
+  scales::label_comma()
 ```
 
-### [Sample Structure Overview]{.database} (`Samples`)
+[Samples]{.database} represent the main unit of data in [VegVault]{.vegvault}, serving as the fundamental building blocks for all analyses.
+There are currently `r label_count(dplyr::pull(data_database_statistics, n_samples))` [Samples]{.database} in [VegVault]{.vegvault} `r db_version` (of which `r label_count(dplyr::pull(data_database_statistics, n_samples_gridpoints))` are [gridpoints]{.abiotic} of [abiotic data]{.abiotic}, see [Database Assembly](database_assembly.qmd#iii-creation-of-gridpoints-for-abiotic-data)).
 
-The table contains one [Sample]{.database} per row, with each [Sample]{.database} containing: a unique [Sample ID]{.database} (`sample_id`), [Sample name]{.database} (`sample_name`), temporal information about [Sample]{.database} ([age]{.paleo}), sample site (size of the plot if available; `sample_size_id`), and additional information about sample (`sample_details`; this is currently not being used in v1.0.0.). As [VegVault]{.vegvault} encompasses both [contemporary]{.neo-vegetation} and [paleo-data]{.paleo}, accurate [age information]{.paleo} is required for each [Sample]{.database}. 
+[VegVault]{.vegvault} encompasses both [contemporary]{.neo-vegetation} and [paleo data]{.paleo}, necessitating accurate [age information]{.paleo} for each [Sample]{.database}.
+[Contemporary]{.neo-vegetation} [Samples]{.database} are assigned an age of `0`, while [Samples]{.database} from [fossil pollen records]{.paleo} are in [calibrated years before the present (cal yr BP)]{.paleo}.
+The *present* is here specified as `1950 AD`.
+
+### Sample Structure Overview (`Samples`) {.topic-database}
+
+The table contains one [Sample]{.database} per row, with each [Sample]{.database} containing: a unique [Sample ID]{.database} (`sample_id`), [Sample name]{.database} (`sample_name`), temporal information about [Sample]{.database} (age), sample site (size of the plot if available; `sample_size_id`), and additional information about sample (`sample_details`; this is currently not being used).
+As [VegVault]{.vegvault} encompasses both [contemporary]{.neo-vegetation} and [paleo-data]{.paleo}, accurate [age information]{.paleo} is required for each [Sample]{.database}.
 
 ```{r}
 #| label: Samples variables scheme structure
@@ -60,7 +80,7 @@ data_comments_samples <-
     "sample_size_id", "ID of a Sample Size"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "Samples"
 ) %>%
@@ -74,14 +94,14 @@ get_db_table_data_types(
 
 ```{r}
 #| label: Samples scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/Samples.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/Samples.svg"
   )
 )
 ```
 
-### [Dataset-Sample]{.database} (`DatasetSample`)
+### Dataset-Sample (`DatasetSample`) {.topic-database}
 
 Each [Sample]{.database} is linked to a specific [Dataset]{.database} via the `DatasetSample` table, which ensures that every [Sample]{.database} is correctly associated with its corresponding [Dataset Type]{.database} (whether it is `vegetation_plot`, `fossil_pollen_archive`, `traits`, or `gridpoint`) and other [Dataset]{.database} properties (e.g., geographic location). One [Dataset]{.database} contains several [Samples]{.database} only in a case where they differ in time (`age`). 
 
@@ -94,7 +114,7 @@ data_comments_dataset_sample <-
     "dataset_id", "ID of a Dataset",
     "sample_id", "ID of a Sample"
   )
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "DatasetSample"
 ) %>%
@@ -107,9 +127,9 @@ get_db_table_data_types(
 
 ```{r}
 #| label: DatasetSample scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/DatasetSample.svg"
   )
 )
 ```
@@ -134,21 +154,39 @@ n_samples_per_dataset_type <-
   dplyr::group_by(dataset_type) %>%
   dplyr::count(name = "N") %>%
   dplyr::collect() %>%
-  dplyr::ungroup()
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    dataset_type = stringr::str_replace_all(dataset_type, "_", " ")
+  )
+
+# Legend entries with their counts, as a small class may be a few squares
+vec_labels_samples_per_type <-
+  rlang::set_names(
+    stringr::str_c(
+      dplyr::pull(n_samples_per_dataset_type, dataset_type),
+      " (", scales::label_comma()(dplyr::pull(n_samples_per_dataset_type, N)),
+      ")"
+    ),
+    dplyr::pull(n_samples_per_dataset_type, dataset_type)
+  )
 
 fig_n_samples_per_dataset_type <-
   plot_waffle(
     n_samples_per_dataset_type,
     dataset_type,
-    plot_title = "Number of Samples per Dataset Type",
-    one_point_is = 25e3
+    plot_title = "Samples per dataset type",
+    one_point_is = 25e3,
+    data_point_name = "samples"
   ) +
   ggplot2::scale_fill_manual(
-    values = palette_dataset_type
+    values = palette_dataset_type,
+    labels = vec_labels_samples_per_type
   )
+
+save_figure_to_render(fig_n_samples_per_dataset_type)
 ```
 
-### [Sample Size]{.database} (`SampleSizeID`)
+### Sample Size (`SampleSizeID`) {.topic-database}
 
 The size of vegetation plots can vary substantially. This detail is crucial for ecological studies where plot size can influence species diversity and abundance metrics, thus impacting follow-up analyses and interpretations. To account for this variability, information about the plot size is recorded separately for each [contemporary]{.neo-vegetation} [Sample]{.database}. 
 
@@ -163,7 +201,7 @@ data_comments_sample_size <-
     "description", "Mostly description of units in which the values are stored"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SampleSizeID"
 ) %>%
@@ -176,9 +214,9 @@ get_db_table_data_types(
 
 ```{r}
 #| label: SampleSizeID scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SampleSizeID.svg"
   )
 )
 ```
@@ -217,6 +255,9 @@ if (
     dplyr::select(sample_size) %>%
     dplyr::collect()
 
+  n_plots_without_size <-
+    base::sum(base::is.na(dplyr::pull(data_samples_plot_size, sample_size)))
+
   fig_samples_plot_size <-
     data_samples_plot_size %>%
     ggplot2::ggplot(
@@ -225,17 +266,22 @@ if (
       )
     ) +
     ggplot2::scale_x_continuous(
-      trans = "log10"
+      transform = "log10",
+      labels = scales::label_comma()
     ) +
     ggplot2::scale_y_continuous(
-      trans = "log10",
-      breaks = scales::trans_breaks("log10", function(x) 10^x),
-      labels = scales::trans_format("log10", scales::math_format(10^.x))
+      transform = "log10",
+      labels = scales::label_comma()
     ) +
+    # The sizes are stored in square metres (`description` of SampleSizeID)
     ggplot2::labs(
       title = "Vegetation plot size",
-      x = paste0("plot size (", plot_size_types$description, ")"),
-      y = "Number of Samples"
+      subtitle = stringr::str_c(
+        scales::label_comma()(n_plots_without_size),
+        " plots without a recorded size are not shown"
+      ),
+      x = "Plot size (m\u00b2)",
+      y = "Number of plots"
     ) +
     ggplot2::geom_histogram(
       fill = col_green_light,
@@ -247,9 +293,9 @@ if (
 }
 ```
 
-### [Sample age uncertainty]{.paleo} (`SampleUncertainty`)
+### Sample age uncertainty (`SampleUncertainty`) {.topic-paleo}
 
-Each [Sample]{.database} from the `fossil_pollen_archive` [Dataset]{.database} is also associated with an [uncertainty matrix]{.paleo} generated during the re-estimation of ages using [FOSSILPOL workflow]([https](https://bit.ly/FOSSILPOL)). This matrix provides a range of potential ages derived from [age-depth modelling]{.paleo}, reflecting the inherent uncertainty in dating [paleoecological records]{.paleo}. 
+Each [Sample]{.database} from the `fossil_pollen_archive` [Dataset]{.database} is also associated with an [uncertainty matrix]{.paleo} generated during the re-estimation of ages using [FOSSILPOL workflow](https://bit.ly/FOSSILPOL). This matrix provides a range of potential ages derived from [age-depth modelling]{.paleo}, reflecting the inherent uncertainty in dating [paleoecological records]{.paleo}. 
 
 
 ```{r}
@@ -263,7 +309,7 @@ data_comments_sample_uncertainty <-
     "age", "Potential age of a Sample"
   )
 
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SampleUncertainty"
 ) %>%
@@ -277,14 +323,14 @@ get_db_table_data_types(
 
 ```{r}
 #| label: SampleUncertainty scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SampleUncertainty.svg"
   )
 )
 ```
 
-We can show this on the previously selected fossil pollen archive with dataset ID: `r as.character(sel_dataset_for_example)`.
+We can show this on the previously selected fossil pollen archive `r sel_dataset_name_for_example` (Hail Lake, dataset ID `r as.character(sel_dataset_for_example)` in this version).
 
 ```{r}
 #| label: Sample potential age - plot
@@ -340,12 +386,16 @@ fig_sample_age <-
   ) +
   ggplot2::coord_fixed() +
   ggplot2::labs(
-    title = paste0(
-      "Dataset ID:",
-      as.character(sel_dataset_for_example)
-    ),
+    title = "Age uncertainty of the samples of Hail Lake (fossilpol_1001)",
     y = "Sample age (cal yr BP)",
-    x = "Potential age of Samples (cal yr BP)"
+    x = "Ages of the sample in the age-depth model runs (cal yr BP)"
+  ) +
+  # Where the runs agree with the sample age
+  ggplot2::geom_abline(
+    slope = 1,
+    intercept = 0,
+    colour = col_white,
+    linetype = "dashed"
   ) +
   ggplot2::geom_boxplot(
     col = col_purple_dark,
@@ -356,7 +406,7 @@ fig_sample_age <-
 save_figure_to_render(fig_sample_age)
 ```
 
-### [Sample Reference]{.database}
+### Sample Reference {.topic-database}
 
 Each [Sample]{.database} in [VegVault]{.vegvault} can have specific [References]{.database} in addition to those at the [Dataset]{.database}-level. These individual [Sample References]{.database} provide detailed provenance and citation information, ensuring that users can trace the origin and validation of each data point. Note that a single [Sample]{.database} can have several [References]{.database}. This level of referencing enhances the transparency and reliability of the data, especially when the dataset continues to be updated in the future. 
 
@@ -369,7 +419,7 @@ data_comments_sample_reference <-
     "sample_id", "ID of a Sample",
     "reference_id", "ID of a Reference"
   )
-get_db_table_data_types(
+load_db_table_data_types(
   con,
   "SampleReference"
 ) %>%
@@ -382,9 +432,9 @@ get_db_table_data_types(
 
 ```{r}
 #| label: SampleReference scheme structure
-include_graphics_absolute_path(
+build_absolute_graphics_include(
   here::here(
-    "Outputs/Figures/website/DB_scheme_visualisation/SampleReference.png"
+    "Outputs/Figures/website/DB_scheme_visualisation/SampleReference.svg"
   )
 )
 ```

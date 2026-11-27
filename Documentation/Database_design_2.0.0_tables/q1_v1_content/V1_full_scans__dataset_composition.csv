@@ -1,0 +1,7 @@
+dataset_type_id,data_source_type_id,n_datasets,n_coord_missing
+1,1,67022,0
+1,2,24233,0
+2,3,1393,0
+3,2,194788,212
+3,4,32342,4410
+4,5,106447,0

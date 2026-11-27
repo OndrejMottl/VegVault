@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: >-
+  Please cite this release when you use the code. When you use the
+  VegVault database, cite the version you used, the VegVault data paper
+  (https://doi.org/10.1038/s41597-025-06176-1) and the original data
+  sources.
+type: software
+title: "VegVault: code that builds the VegVault database"
+doi: 10.5281/zenodo.14777447
+authors:
+  - family-names: "Mottl"
+    given-names: "Ondřej"
+    affiliation: "Department of Botany, Faculty of Science, Charles University, Prague, Czech Republic"
+    orcid: "https://orcid.org/0000-0002-9796-5081"
+repository-code: "https://github.com/OndrejMottl/VegVault"
+license: MIT
+keywords:
+  - vegetation
+  - fossil pollen
+  - plant functional traits
+  - palaeoclimate
+  - palaeoecology
+  - macroecology
+  - database
+  - SQLite

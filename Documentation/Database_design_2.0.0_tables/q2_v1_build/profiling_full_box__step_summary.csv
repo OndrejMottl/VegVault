@@ -1,0 +1,147 @@
+fn_name,step_order,n_calls,seconds_total,seconds_median,seconds_max,step_label
+add_dataset_type,1,1,9.481906890869141e-4,9.481906890869141e-4,9.481906890869141e-4,"assertthat::assert_that(assertthat::has_name(data_source, ""dataset_..."
+add_dataset_type,2,1,0.1044778823852539,0.1044778823852539,0.1044778823852539,"dataset_type_db <- dplyr::tbl(con, ""DatasetTypeID"") %>% dplyr::dist..."
+add_dataset_type,3,1,0.005975008010864258,0.005975008010864258,0.005975008010864258,dataset_type_id <- data_source %>% dplyr::distinct(dataset_type) %>...
+add_dataset_type,4,1,0.05762910842895508,0.05762910842895508,0.05762910842895508,"add_to_db(conn = con, data = dataset_type_id, table_name = ""Dataset..."
+add_to_db,1,119,0.09829831123352051,5.819797515869141e-4,0.02455902099609375,is_valid <- FALSE
+add_to_db,2,119,1.9424161911010742,0.004330873489379883,0.2567758560180664,if (isTRUE(overwrite_test)) {
+add_to_db,3,119,135.19550037384033,0.015729904174804688,34.72842884063721,if (isTRUE(is_valid)) {
+add_dataset_type,5,1,0.009736776351928711,0.009736776351928711,0.009736776351928711,"dataset_type_id_db <- dplyr::tbl(con, ""DatasetTypeID"") %>% dplyr::c..."
+add_dataset_type,6,1,5.841255187988281e-4,5.841255187988281e-4,5.841255187988281e-4,return(dataset_type_id_db)
+add_dataset_source_type,1,1,0.04976820945739746,0.04976820945739746,0.04976820945739746,data_dataset_source_type_db <- add_dataset_source_type_id(data_sour...
+add_dataset_source_type,2,1,0.12368083000183105,0.12368083000183105,0.12368083000183105,"add_dataset_source_type_reference(data_source = data_source, data_s..."
+add_dataset_source_type,3,1,4.801750183105469e-4,4.801750183105469e-4,4.801750183105469e-4,return(data_dataset_source_type_db)
+add_data_source,1,1,0.05584001541137695,0.05584001541137695,0.05584001541137695,"data_source_id_db <- add_data_source_id(data_source, con)"
+add_data_source,2,1,0.08923697471618652,0.08923697471618652,0.08923697471618652,"add_data_source_reference(data_source = data_source, data_source_id..."
+add_data_source,3,1,6.191730499267578e-4,6.191730499267578e-4,6.191730499267578e-4,return(data_source_id_db)
+add_gridpoints_with_links,1,1,9.548664093017578e-4,9.548664093017578e-4,9.548664093017578e-4,`%>%` <- magrittr::`%>%`
+add_gridpoints_with_links,2,1,0.00063991546630859375,0.00063991546630859375,0.00063991546630859375,.data <- rlang::.data
+add_gridpoints_with_links,3,1,5.481243133544922e-4,5.481243133544922e-4,5.481243133544922e-4,current_env <- environment()
+add_gridpoints_with_links,4,1,0.0014290809631347656,0.0014290809631347656,0.0014290809631347656,"data_gridpoints_raw <- data_source %>% dplyr::select(""dataset_name""..."
+add_gridpoints_with_links,5,1,0.4514319896697998,0.4514319896697998,0.4514319896697998,"data_bd_vegetation_raw <- dplyr::tbl(sel_con, ""Datasets"") %>% dplyr..."
+add_gridpoints_with_links,6,1,0.13642001152038574,0.13642001152038574,0.13642001152038574,gc(verbose = FALSE)
+add_gridpoints_with_links,7,1,0.23399686813354492,0.23399686813354492,0.23399686813354492,vec_gridpoints_sample_id <- data_gridpoints_raw %>% dplyr::distinct...
+add_gridpoints_with_links,8,1,0.02190399169921875,0.02190399169921875,0.02190399169921875,"vec_relevant_vegetation_sample_names <- dplyr::tbl(sel_con, ""Abioti..."
+add_gridpoints_with_links,9,1,6.320476531982422e-4,6.320476531982422e-4,6.320476531982422e-4,"rm(vec_gridpoints_sample_id, envir = current_env)"
+add_gridpoints_with_links,10,1,0.00459599494934082,0.00459599494934082,0.00459599494934082,data_bd_vegetation_sub <- data_bd_vegetation_raw %>% dplyr::filter(...
+add_gridpoints_with_links,11,1,6.809234619140625e-4,6.809234619140625e-4,6.809234619140625e-4,"rm(data_bd_vegetation_raw, envir = current_env)"
+add_gridpoints_with_links,12,1,0.032508134841918945,0.032508134841918945,0.032508134841918945,data_bd_vegetation_nest <- data_bd_vegetation_sub %>% dplyr::distin...
+add_gridpoints_with_links,13,1,0.02164602279663086,0.02164602279663086,0.02164602279663086,data_bd_vegetation_nest_ref <- data_bd_vegetation_nest %>% dplyr::s...
+add_gridpoints_with_links,14,1,0.001466989517211914,0.001466989517211914,0.001466989517211914,data_bd_vegetation_to_limit <- data_bd_vegetation_nest %>% dplyr::s...
+add_gridpoints_with_links,15,1,6.349086761474609e-4,6.349086761474609e-4,6.349086761474609e-4,"rm(data_bd_vegetation_nest, envir = current_env)"
+add_gridpoints_with_links,16,1,0.06138300895690918,0.06138300895690918,0.06138300895690918,data_gridpoints_to_limit <- data_gridpoints_raw %>% dplyr::distinct...
+add_gridpoints_with_links,17,1,9.589195251464844e-4,9.589195251464844e-4,9.589195251464844e-4,"rm(data_gridpoints_raw, envir = current_env)"
+add_gridpoints_with_links,18,1,0.13953804969787598,0.13953804969787598,0.13953804969787598,gc(verbose = FALSE)
+add_gridpoints_with_links,19,1,448.0195620059967,448.0195620059967,448.0195620059967,data_bd_vegetation_to_limit %>% dplyr::mutate(batch = 1 + (dplyr::r...
+get_gridpoints_link,1,12,0.008748531341552734,7.170438766479492e-4,0.00082683563232421875,"assertthat::assert_that(inherits(data_source, ""tbl""), msg = ""data_s..."
+get_gridpoints_link,2,12,0.006608247756958008,5.38945198059082e-4,6.768703460693359e-4,"assertthat::assert_that(inherits(data_source_gridpoints, ""tbl""), ms..."
+get_gridpoints_link,3,12,0.0065381526947021484,5.065202713012695e-4,0.00090694427490234375,"assertthat::assert_that(is.numeric(sel_distance_km), msg = ""sel_dis..."
+get_gridpoints_link,4,12,0.006857156753540039,5.165338516235352e-4,8.471012115478516e-4,"assertthat::assert_that(length(sel_distance_km) == 1, msg = ""sel_di..."
+get_gridpoints_link,5,12,0.006111860275268555,4.925727844238281e-4,6.709098815917969e-4,"assertthat::assert_that(sel_distance_km > 0, msg = ""sel_distance_km..."
+get_gridpoints_link,6,12,0.006417036056518555,4.91023063659668e-4,9.601116180419922e-4,"assertthat::assert_that(is.numeric(sel_grid_size_degree), msg = ""se..."
+get_gridpoints_link,7,12,0.006285667419433594,4.775524139404297e-4,7.259845733642578e-4,"assertthat::assert_that(length(sel_grid_size_degree) == 1, msg = ""s..."
+get_gridpoints_link,8,12,0.006337642669677734,4.991292953491211e-4,7.729530334472656e-4,"assertthat::assert_that(sel_grid_size_degree > 0, msg = ""sel_grid_s..."
+get_gridpoints_link,9,12,0.00596165657043457,4.8792362213134766e-4,0.00061893463134765625,"assertthat::assert_that(is.numeric(sel_distance_years), msg = ""sel_..."
+get_gridpoints_link,10,12,0.006349325180053711,4.91023063659668e-4,8.721351623535156e-4,"assertthat::assert_that(length(sel_distance_years) == 1, msg = ""sel..."
+get_gridpoints_link,11,12,0.0061223506927490234,0.00049495697021484375,6.668567657470703e-4,"assertthat::assert_that(sel_distance_years > 0, msg = ""sel_distance..."
+get_gridpoints_link,12,12,8.133515357971191,0.6216574907302856,1.4028799533843994,"vec_gridpoits_coarse_filtering <- c(""none"", ""NE"", ""SE"", ""SW"", ""NW"")..."
+get_valid_gridpoints_ids,1,60,0.03530573844909668,5.614757537841797e-4,8.461475372314453e-4,"assertthat::assert_that(is.numeric(sel_grid_size_degree), msg = ""se..."
+get_valid_gridpoints_ids,2,60,0.033708810806274414,5.439519882202148e-4,9.579658508300781e-4,"assertthat::assert_that(length(sel_grid_size_degree) == 1, msg = ""s..."
+get_valid_gridpoints_ids,3,60,0.03398418426513672,5.2642822265625e-4,0.0021288394927978516,"assertthat::assert_that(sel_grid_size_degree > 0, msg = ""sel_grid_s..."
+get_valid_gridpoints_ids,4,60,0.031899213790893555,5.290508270263672e-4,7.309913635253906e-4,offset <- match.arg(offset)
+get_valid_gridpoints_ids,5,60,0.030625343322753906,4.990100860595703e-4,8.080005645751953e-4,long_offset <- NULL
+get_valid_gridpoints_ids,6,60,0.03128194808959961,5.090236663818359e-4,0.00080013275146484375,lat_offset <- NULL
+get_valid_gridpoints_ids,7,60,0.030706405639648438,4.940032958984375e-4,7.569789886474609e-4,"switch(offset, none = {"
+get_valid_gridpoints_ids,8,60,0.0946969985961914,0.0014264583587646484,0.007460832595825195,data_source_coord <- data_source %>% bin_coord_data(sel_grid_size_d...
+get_valid_gridpoints_ids,9,60,0.9165763854980469,0.010280489921569824,0.148529052734375,data_source_gridpoints_coord <- data_source_gridpoints %>% dplyr::m...
+get_valid_gridpoints_ids,10,60,6.664219617843628,0.09219789505004883,0.25429606437683105,vec_gridpoits_coarse_filtering <- dplyr::inner_join(data_source_coo...
+get_valid_gridpoints_ids,11,60,0.05154132843017578,8.410215377807617e-4,0.0011949539184570313,return(vec_gridpoits_coarse_filtering)
+get_gridpoints_link,13,12,0.2890493869781494,0.021340489387512207,0.05097508430480957,data_source_gridpoints_sub <- data_source_gridpoints %>% dplyr::fil...
+get_gridpoints_link,14,12,0.026559829711914063,0.002205967903137207,0.002586841583251953,data_vegetation_bounding_box <- data_source %>% dplyr::distinct(.da...
+get_gridpoints_link,15,12,14.518372058868408,1.1975364685058594,2.381871223449707,data_vegetation_grid_data <- data_vegetation_bounding_box %>% dplyr...
+get_gridpoints_link,16,12,0.35793352127075195,0.0203554630279541,0.04824686050415039,data_vegetation_grid_unnest <- data_vegetation_grid_data %>% dplyr:...
+get_gridpoints_link,17,12,252.21415281295776,18.835299372673035,28.855080127716064,data_vegetation_distance <- data_vegetation_grid_unnest %>% dplyr::...
+get_gridpoints_link,18,12,0.13765501976013184,0.010993123054504395,0.016015052795410156,data_vegetation_distance_filter <- data_vegetation_distance %>% dpl...
+get_gridpoints_link,19,12,0.029102802276611328,0.00076198577880859375,0.020825862884521484,return(data_vegetation_distance_filter)
+add_datasets,1,12,0.01010751724243164,8.025169372558594e-4,0.0011019706726074219,"assertthat::assert_that(assertthat::has_name(data_source, c(""datase..."
+add_datasets,2,12,0.007332801818847656,5.929470062255859e-4,8.170604705810547e-4,dataset <- data_source
+add_datasets,3,12,0.021919965744018555,0.0018035173416137695,0.002429962158203125,if (isFALSE(is.null(dataset_source))) {
+add_datasets,4,12,0.0198519229888916,0.001611948013305664,0.0018780231475830078,if (isFALSE(is.null(data_type))) {
+add_datasets,5,12,0.019439220428466797,0.0015025138854980469,0.0022079944610595703,if (isFALSE(is.null(data_source_type))) {
+add_datasets,6,12,0.00658869743347168,4.96983528137207e-4,8.718967437744141e-4,if (isFALSE(is.null(sampling_method))) {
+add_datasets,7,12,0.1589829921722412,0.01144862174987793,0.03273582458496094,"dataset_id_db <- dplyr::tbl(con, ""Datasets"") %>% dplyr::distinct(da..."
+add_datasets,8,12,0.02563309669494629,0.00212860107421875,0.0025060176849365234,"dataset_unique <- dataset %>% dplyr::select(dplyr::all_of(c(""datase..."
+add_datasets,9,12,0.35103344917297363,0.029493093490600586,0.05431389808654785,"add_to_db(conn = con, data = dataset_unique, table_name = ""Datasets"")"
+add_datasets,10,12,0.14091992378234863,0.011708974838256836,0.013298988342285156,"dataset_id <- dplyr::tbl(con, ""Datasets"") %>% dplyr::select(dataset..."
+add_datasets,11,12,0.775609016418457,0.05773460865020752,0.10647392272949219,"add_dataset_reference(data_source = data_source, dataset_id = datas..."
+add_datasets,12,12,0.006828784942626953,5.440711975097656e-4,7.660388946533203e-4,return(dataset_id)
+add_samples,1,12,0.35605621337890625,0.026015043258666992,0.06243109703063965,data_sample_size_id_db <- add_sample_size_id(data_source = data_sou...
+add_sample_size_id,1,12,0.006494283676147461,5.180835723876953e-4,7.4005126953125e-4,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_sample_size_id,2,12,0.025473356246948242,0.0021060705184936523,0.0024940967559814453,"sample_size <- data_source %>% dplyr::distinct(sample_size, descrip..."
+add_sample_size_id,3,12,0.05634808540344238,0.004697918891906738,0.00535893440246582,samples_size_unique <- sample_size %>% dplyr::anti_join(dplyr::tbl(...
+add_sample_size_id,4,12,0.14174842834472656,0.010981917381286621,0.019659042358398438,"add_to_db(conn = con, data = samples_size_unique, table_name = ""Sam..."
+add_sample_size_id,5,12,0.07085084915161133,0.005886077880859375,0.006251096725463867,"sample_size_id_db <- dplyr::tbl(con, ""SampleSizeID"") %>% dplyr::col..."
+add_sample_size_id,6,12,0.006852388381958008,5.58018684387207e-4,6.659030914306641e-4,return(sample_size_id_db)
+add_samples,2,12,0.6254870891571045,0.044671058654785156,0.10075497627258301,data_sample_reference_id_db <- add_sample_reference_id(data_source ...
+add_sample_reference_id,1,12,0.0064623355865478516,5.010366439819336e-4,7.011890411376953e-4,"assertthat::assert_that(assertthat::has_name(data_source, ""sample_r..."
+add_sample_reference_id,2,12,0.14802145957946777,0.012065410614013672,0.014617919921875,"reference_detail_db <- dplyr::tbl(con, ""References"") %>% dplyr::dis..."
+add_sample_reference_id,3,12,0.029057979583740234,0.002341628074645996,0.002933979034423828,samples_reference <- data_source %>% dplyr::distinct(sample_referen...
+add_sample_reference_id,4,12,0.22353792190551758,0.014985084533691406,0.060122013092041016,"add_to_db(conn = con, data = samples_reference, table_name = ""Refer..."
+add_sample_reference_id,5,12,0.14096808433532715,0.011725544929504395,0.013093948364257813,"samples_reference_id <- dplyr::tbl(con, ""References"") %>% dplyr::se..."
+add_sample_reference_id,6,12,0.007772922515869141,6.384849548339844e-4,7.801055908203125e-4,return(samples_reference_id)
+add_samples,3,12,5.040766716003418,0.42621099948883057,0.5482468605041504,"data_samples_id_db <- add_samples_id(data_source = data_source, sam..."
+add_samples_id,1,12,0.006598234176635742,5.259513854980469e-4,0.00071811676025390625,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_samples_id,2,12,1.652397871017456,0.14024150371551514,0.16301989555358887,"samples_db <- dplyr::tbl(con, ""Samples"") %>% dplyr::distinct(sample..."
+add_samples_id,3,12,0.05885505676269531,0.0048868656158447266,0.00572514533996582,"samples <- data_source %>% dplyr::distinct(sample_name, age, sample..."
+add_samples_id,4,12,0.08867168426513672,0.007222890853881836,0.00896906852722168,samples_unique <- samples %>% dplyr::filter(!sample_name %in% sampl...
+add_samples_id,5,12,1.9451172351837158,0.15552043914794922,0.29454708099365234,"add_to_db(conn = con, data = samples_unique, table_name = ""Samples"")"
+add_samples_id,6,12,1.2252659797668457,0.10616850852966309,0.11867904663085938,"samples_id <- dplyr::tbl(con, ""Samples"") %>% dplyr::select(sample_i..."
+add_samples_id,7,12,0.009561777114868164,7.954835891723633e-4,0.00094890594482421875,return(samples_id)
+add_samples,4,12,1.9260914325714111,0.15772199630737305,0.18959307670593262,"add_samples_reference(data_source = data_source, samples_reference_..."
+add_samples_reference,1,12,0.0069844722747802734,5.615949630737305e-4,7.040500640869141e-4,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_samples_reference,2,12,0.9713876247406006,0.08039987087249756,0.11464095115661621,"sample_id_db <- dplyr::tbl(con, ""Samples"") %>% dplyr::distinct(samp..."
+add_samples_reference,3,12,0.3796861171722412,0.027973055839538574,0.05948019027709961,samples_reference_lookup <- data_source %>% dplyr::distinct(sample_...
+add_samples_reference,4,12,0.19368481636047363,0.017607569694519043,0.02199387550354004,samples_reference_unique <- samples_reference_lookup %>% dplyr::ant...
+add_samples_reference,5,12,0.3049936294555664,0.02449512481689453,0.040849924087524414,"add_to_db(conn = con, data = samples_reference_unique, table_name =..."
+add_samples,5,12,0.006201505661010742,5.054473876953125e-4,0.00059604644775390625,return(data_samples_id_db)
+add_dataset_sample,1,12,0.006772756576538086,0.00051403045654296875,8.149147033691406e-4,"assertthat::assert_that(assertthat::has_name(data_source, c(""datase..."
+add_dataset_sample,2,12,0.006319999694824219,5.02467155456543e-4,6.511211395263672e-4,"assertthat::assert_that(assertthat::has_name(dataset_id, ""dataset_i..."
+add_dataset_sample,3,12,0.006234884262084961,5.095005035400391e-4,5.76019287109375e-4,"assertthat::assert_that(assertthat::has_name(sample_id, ""sample_id""..."
+add_dataset_sample,4,12,0.11863446235656738,0.00825643539428711,0.03077387809753418,"dataset_sample <- data_source %>% dplyr::distinct(dataset_name, sam..."
+add_dataset_sample,5,12,0.6752183437347412,0.05754959583282471,0.07287883758544922,dataset_sample_unique <- dataset_sample %>% dplyr::anti_join(dplyr:...
+add_dataset_sample,6,12,0.3759303092956543,0.030804991722106934,0.03483700752258301,"add_to_db(conn = con, data = dataset_sample_unique, table_name = ""D..."
+add_abiotic_data_ref,1,12,0.00706791877746582,5.606412887573242e-4,8.819103240966797e-4,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_abiotic_data_ref,2,12,0.937169075012207,0.0814824104309082,0.0889120101928711,"sample_id_db <- dplyr::tbl(con, ""Samples"") %>% dplyr::select(sample..."
+add_abiotic_data_ref,3,12,9.988884925842285,0.272674560546875,2.637416124343872,"dataset_sample <- data_source %>% dplyr::select(sample_name, sample..."
+add_abiotic_data_ref,4,12,0.6656770706176758,0.0160825252532959,0.2602729797363281,vec_samples_present <- dataset_sample %>% dplyr::distinct(sample_id...
+add_abiotic_data_ref,5,12,0.5405526161193848,0.02845942974090576,0.21563482284545898,vec_samples_ref_present <- dataset_sample %>% dplyr::distinct(sampl...
+add_abiotic_data_ref,6,12,11.342710971832275,0.1655576229095459,4.892021179199219,dataset_sample_unique <- dataset_sample %>% dplyr::anti_join(dplyr:...
+add_abiotic_data_ref,7,12,133.51254296302795,5.319236516952515,34.73116111755371,"add_to_db(conn = con, data = dataset_sample_unique, table_name = ""A..."
+add_chelsa_neo_data,1,1,7.472038269042969e-4,7.472038269042969e-4,7.472038269042969e-4,`%>%` <- magrittr::`%>%`
+add_chelsa_neo_data,2,1,5.729198455810547e-4,5.729198455810547e-4,5.729198455810547e-4,.data <- rlang::.data
+add_chelsa_neo_data,3,1,5.76019287109375e-4,5.76019287109375e-4,5.76019287109375e-4,current_env <- environment()
+add_chelsa_neo_data,4,1,0.2569389343261719,0.2569389343261719,0.2569389343261719,data_climate <- dowload_and_load(sel_url) %>% dplyr::mutate(var_nam...
+dowload_and_load,1,1,7.531642913818359e-4,7.531642913818359e-4,7.531642913818359e-4,"file_format <- ""rds"""
+dowload_and_load,2,1,0.009976863861083984,0.009976863861083984,0.009976863861083984,"if (stringr::str_detect(sel_url, "".qs"")) {"
+dowload_and_load,3,1,0.01536417007446289,0.01536417007446289,0.01536417007446289,"name_clean <- stringr::str_extract(sel_url, ""/([^/]+)$"") %>% string..."
+dowload_and_load,4,1,0.00062084197998046875,0.00062084197998046875,0.00062084197998046875,"file_full_path <- paste0(tempdir(), ""/"", name_clean, ""."", file_format)"
+dowload_and_load,5,1,0.026765108108520508,0.026765108108520508,0.026765108108520508,"download.file(url = sel_url, destfile = file_full_path, method = ""c..."
+dowload_and_load,6,1,0.13266706466674805,0.13266706466674805,0.13266706466674805,"if (file_format == ""qs"") {"
+dowload_and_load,7,1,7.359981536865234e-4,7.359981536865234e-4,7.359981536865234e-4,return(data_load)
+add_chelsa_neo_data,5,1,7.190704345703125e-4,7.190704345703125e-4,7.190704345703125e-4,"assertthat::assert_that(exists(""data_climate"", envir = current_env)..."
+add_chelsa_neo_data,6,1,10.324984073638916,10.324984073638916,10.324984073638916,data_climate_raw <- data_climate %>% dplyr::mutate(coord_long = as....
+add_chelsa_neo_data,7,1,0.12056183815002441,0.12056183815002441,0.12056183815002441,"data_samples_db <- dplyr::tbl(sel_con, ""Samples"") %>% dplyr::distin..."
+add_chelsa_neo_data,8,1,0.8391790390014648,0.8391790390014648,0.8391790390014648,data_climate_sub <- data_climate_raw %>% dplyr::filter(.data$sample...
+add_chelsa_neo_data,9,1,0.2227771282196045,0.2227771282196045,0.2227771282196045,abiotic_variabe_id <- add_abiotic_variable(data_source = data_clima...
+add_abiotic_variable,1,1,8.118152618408203e-4,8.118152618408203e-4,8.118152618408203e-4,"assertthat::assert_that(assertthat::has_name(data_source, c(""abioti..."
+add_abiotic_variable,2,1,0.06080508232116699,0.06080508232116699,0.06080508232116699,data_abiotic_variable_id_db <- add_abiotic_variable_id(data_source ...
+add_abiotic_variable,3,1,0.09576606750488281,0.09576606750488281,0.09576606750488281,data_reference_id_db <- add_abiotic_reference_id(data_source = data...
+add_abiotic_variable,4,1,0.03400683403015137,0.03400683403015137,0.03400683403015137,"add_abiotic_reference(data_source = data_source, abiotic_reference_..."
+add_abiotic_variable,5,1,5.340576171875e-4,5.340576171875e-4,5.340576171875e-4,return(data_abiotic_variable_id_db)
+add_chelsa_neo_data,10,1,0.8304028511047363,0.8304028511047363,0.8304028511047363,"add_sample_abiotic_value(data_source = data_climate_sub, con = sel_..."
+add_sample_abiotic_value,1,1,9.121894836425781e-4,9.121894836425781e-4,9.121894836425781e-4,"assertthat::assert_that(assertthat::has_name(data_source, c(""sample..."
+add_sample_abiotic_value,2,1,0.00066089630126953125,0.00066089630126953125,0.00066089630126953125,"assertthat::assert_that(assertthat::has_name(sample_id, c(""sample_n..."
+add_sample_abiotic_value,3,1,6.000995635986328e-4,6.000995635986328e-4,6.000995635986328e-4,"assertthat::assert_that(assertthat::has_name(abiotic_variable_id, c..."
+add_sample_abiotic_value,4,1,0.7584819793701172,0.7584819793701172,0.7584819793701172,"data_sample_value <- data_source %>% dplyr::left_join(sample_id, by..."
+add_sample_abiotic_value,5,1,0.011806964874267578,0.011806964874267578,0.011806964874267578,data_sample_value_unique <- data_sample_value %>% dplyr::anti_join(...
+add_sample_abiotic_value,6,1,0.020547866821289063,0.020547866821289063,0.020547866821289063,"add_to_db(conn = con, data = data_sample_value_unique, table_name =..."

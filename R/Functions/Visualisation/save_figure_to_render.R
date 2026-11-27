@@ -23,7 +23,7 @@ save_figure_to_render <- function(
     bg = col_beige_light # [config]
   )
 
-  include_graphics_absolute_path(
+  build_absolute_graphics_include(
     here::here(
       "Outputs/Figures/website/DB_structure",
       paste0(

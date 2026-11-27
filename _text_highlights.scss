@@ -1,44 +1,91 @@
 // Higher-level semantic text highlighting classes
-// These combine multiple utility classes for commonly used formatting patterns
+// These combine multiple utility classes for commonly used formatting patterns.
+// Pages use these classes, not the colour classes of _colors.scss, for
+// every mention of a term, and never inside a heading.
 
+// The name as a small wordmark in the pixel font of the logo and headings
 .vegvault {
   @extend .text-background-black;
   @extend .text-color-white;
-  font-weight: bold;
+  font-family: $headingFont;
+  font-size: 0.72em;
+  font-weight: normal;
+  letter-spacing: 0.02em;
+  padding: 0.3em 0.5em;
+  border-radius: 0.25em;
 }
 
+// A slightly lighter purple keeps the black text above 4.5:1
 .paleo {
   @extend .text-background-purpleLight;
   @extend .text-color-black;
-  font-weight: bold;
+  background-color: lighten($purpleLight, 5%);
+  font-weight: 600;
 }
 
 .neo-vegetation {
   @extend .text-background-greenLight;
   @extend .text-color-black;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .traits {
   @extend .text-background-blueDark;
   @extend .text-color-white;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .abiotic {
   @extend .text-background-greenDark;
   @extend .text-color-white;
-  font-weight: bold;
+  font-weight: 600;
 }
 
+// A slightly darker brown keeps the white text above 4.5:1
 .reproducibility {
   @extend .text-background-brownLight;
   @extend .text-color-white;
-  font-weight: bold;
+  background-color: darken($brownLight, 7%);
+  font-weight: 600;
 }
 
 .database {
   @extend .text-background-brownDark;
   @extend .text-color-white;
-  font-weight: bold;
+  font-weight: 600;
+}
+
+.taxa {
+  @extend .text-background-brownNeutral;
+  @extend .text-color-white;
+  font-weight: 600;
+}
+
+// Headings of a topic of topics.json: `### Heading {.topic-traits}` draws a
+// bar in the colour of the topic; `{.topic-traits .topic-icon}` draws the
+// icon of the topic on a tile of its colour instead. Pandoc puts the classes
+// on the section too, so the rules name the headings.
+:is(h1, h2, h3, h4, h5)[class*="topic-"] {
+  border-left: 0.3em solid var(--topic-color);
+  padding-left: 0.45em;
+}
+
+:is(h1, h2, h3, h4, h5).topic-icon {
+  border-left: none;
+  padding-left: 0;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 1.4em;
+    height: 1.4em;
+    margin-right: 0.45em;
+    vertical-align: -0.3em;
+    border-radius: 0.3em;
+    background-color: var(--topic-color);
+    background-image: var(--topic-icon);
+    background-position: center;
+    background-size: 62%;
+    background-repeat: no-repeat;
+  }
 }

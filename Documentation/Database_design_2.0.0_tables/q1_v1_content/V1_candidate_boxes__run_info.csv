@@ -1,0 +1,2 @@
+script,run_started,run_seconds,seed,n_samples_link_draw,connection_flags,file_unchanged
+03_count_v1_candidate_boxes.R,2026-11-19 12:09:02,5.138509035110474,1234,5000,SQLITE_RO,TRUE

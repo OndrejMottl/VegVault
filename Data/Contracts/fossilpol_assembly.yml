@@ -1,0 +1,210 @@
+# Producer artefact contract. Format: Data/Contracts/README.md
+contract_id: fossilpol_assembly
+contract_version: 1.0.1
+status: active
+title: FOSSILPOL fossil-pollen data assembly
+description: >-
+  One row per fossil-pollen dataset (record) with its location, depositional
+  environment, levels with ages, and harmonised pollen counts. VegVault turns
+  every row into one dataset and every level into one sample.
+producer:
+  repository: OndrejMottl/VegVault-FOSSILPOL
+  directory: Outputs/Data
+consumers:
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Producers/validate_fossilpol_relations.R
+  - R/Functions/Gridpoints/prepare_fossilpol_positions.R
+  - R/Functions/Database/prepare_fossilpol_tables.R
+file:
+  name_templates:
+    - 'data_assembly_light_{date}__{hash}__.qs'
+    - 'data_assembly_{date}__{hash}__.rds'
+  evidence: >-
+    R/01_Data_processing/07_Outputs/02_Save_assembly.R in the producer saves
+    data_filtered without age_uncertainty and raw_counts as
+    data_assembly_light (prefered_format = "qs"), and the whole assembly as
+    data_assembly_<date>__<hash>__.rds through RFossilpol::proc_save_assembly().
+    v1 file data_assembly_light_2023-12-12__305b96031416d8b0c6b5762daacd41dd__.qs
+    (tag v1.0.0). The .rds template is accepted because the v1 .qs file was
+    written by the legacy qs package, which R 4.6 cannot read, so a
+    rehearsal can only use the .rds; it holds the same columns and more.
+partitioning:
+  scheme: none
+extra_columns: allow
+columns:
+  - name: dataset_id
+    class: character
+    nullable: false
+    description: >-
+      Neotoma dataset identifier. Becomes the dataset name
+      fossilpol_<dataset_id>, so it must be unique.
+    evidence: >-
+      03_Import_fossilpol_data.R:107-109; v1: character, 1393 distinct in
+      1393 rows.
+    checks:
+      not_empty: true
+  - name: source_of_data
+    class: character
+    nullable: false
+    description: >-
+      Source database of the record; stored as the data source description,
+      which add_data_source() requires (mandatory = TRUE).
+    evidence: >-
+      03_Import_fossilpol_data.R:101,135-139; v1: character, one value
+      (Neotoma), no missing values.
+    checks:
+      not_empty: true
+  - name: doi
+    class: character
+    nullable: true
+    description: DOI of the dataset; stored as the dataset reference.
+    evidence: >-
+      03_Import_fossilpol_data.R:111; v1: character, 8 missing of 1393.
+  - name: long
+    class: numeric
+    nullable: false
+    unit: decimal degree (WGS84)
+    description: Site longitude.
+    evidence: >-
+      03_Import_fossilpol_data.R:112; v1: double, -179.94 to 178.53.
+    checks:
+      finite: true
+      range:
+        min: -180
+        max: 180
+  - name: lat
+    class: numeric
+    nullable: false
+    unit: decimal degree (WGS84)
+    description: Site latitude.
+    evidence: >-
+      03_Import_fossilpol_data.R:113; v1: double, -54.87 to 73.33.
+    checks:
+      finite: true
+      range:
+        min: -90
+        max: 90
+  - name: depositionalenvironment
+    class: character
+    nullable: false
+    description: >-
+      Neotoma depositional environment; stored as the sampling-method
+      details.
+    evidence: >-
+      03_Import_fossilpol_data.R:114; v1: character, 42 distinct, no missing
+      values.
+  - name: levels
+    class: list
+    nullable: false
+    description: >-
+      Levels (samples) of the dataset: one data frame per dataset with one row
+      per level.
+    evidence: >-
+      03_Import_fossilpol_data.R:171-185 selects sample_id and age; v1: list
+      of 1393 tibbles with 18 columns, 5 to 449 rows in a sample of 300.
+    element:
+      class: data.frame
+      nullable: false
+      min_rows: 1
+      keys:
+        - [sample_id]
+      columns:
+        - name: sample_id
+          class: character
+          nullable: false
+          description: >-
+            Level identifier, unique within the dataset; joins the levels to
+            counts_harmonised and to the columns of the age-uncertainty
+            matrices.
+          evidence: >-
+            03_Import_fossilpol_data.R:177-181,253; v1: character, no
+            missing values, no duplicates within any dataset.
+        - name: age
+          class: numeric
+          nullable: false
+          unit: cal yr BP (0 = 1950 CE)
+          description: >-
+            Median modelled age of the level in calibrated years before 1950
+            CE; negative for levels younger than 1950. It must never be
+            missing: the import replaces missing values in every numeric
+            column by 0 (03_Import_fossilpol_data.R:189-194), which would
+            turn a missing age into a modern age.
+          evidence: >-
+            03_Import_fossilpol_data.R:177,189-194; v1: double, no missing
+            values, -73 to 19997. -73 is the year 2023 (the run year) in
+            years before 1950, which fixes the zero point at 1950 CE.
+          checks:
+            finite: true
+            range:
+              min: -150
+              max: 60000
+  - name: counts_harmonised
+    class: list
+    nullable: false
+    description: >-
+      Harmonised pollen counts: one data frame per dataset with one row per
+      level, the column sample_id and one numeric column per taxon, named
+      by the harmonised taxon name.
+    evidence: >-
+      03_Import_fossilpol_data.R:171-185,274-320 pivots every column except
+      sample_id into taxon values; v1: list of 1393 tibbles, 8 to 196
+      columns, 3043 distinct taxon columns, counts 0 to 8700 with no missing
+      values.
+    element:
+      class: data.frame
+      nullable: false
+      min_rows: 1
+      keys:
+        - [sample_id]
+      columns:
+        - name: sample_id
+          class: character
+          nullable: false
+          description: Level identifier, as in levels.
+          evidence: >-
+            03_Import_fossilpol_data.R:181; v1: the same set of sample_id as
+            levels in every dataset.
+      other_columns:
+        class: numeric
+        nullable: false
+        description: >-
+          One column per harmonised taxon with the count of each level.
+          Missing counts are not allowed, because the import would silently
+          turn them into 0 (03_Import_fossilpol_data.R:189-194); a taxon
+          absent from a level is written as 0. Column names must not repeat
+          the names the import uses for its own columns after unnesting.
+        checks:
+          finite: true
+          range:
+            min: 0
+        forbidden_names:
+          - sample_id
+          - age
+          - dataset_id
+          - dataset_name
+          - sample_name
+          - sample_size
+          - description
+          - sample_reference
+          - taxon_name
+          - value
+keys:
+  - [dataset_id]
+relations:
+  - contract_id: fossilpol_assembly
+    columns:
+      - levels[].sample_id
+      - counts_harmonised[].sample_id
+    description: >-
+      Within every dataset, levels and counts_harmonised hold the same set of
+      sample_id; the import joins them with an inner join, so a level without
+      counts is lost silently. Holds in v1 for all 1393 datasets.
+notes:
+  - >-
+    No separate references artefact is part of the contract. The import takes
+    references from doi and source_of_data and from citations written in
+    03_Import_fossilpol_data.R; the producer's Outputs/Meta_and_references/
+    files are not read by VegVault.
+  - >-
+    sample_name in VegVault is fossilpol_<database dataset_id>_<sample_id>,
+    built from the database identifier, so it is not a producer-side key.

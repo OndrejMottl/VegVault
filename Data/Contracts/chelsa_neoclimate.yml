@@ -1,0 +1,216 @@
+# Producer artefact contract. Format: Data/Contracts/README.md
+contract_id: chelsa_neoclimate
+contract_version: 1.1.1
+status: active
+title: CHELSA present-day bioclimatic variables
+description: >-
+  One file per bioclimatic variable with one row per grid cell of the
+  VegVault gridpoint raster and the CHELSA value for the present day. VegVault
+  attaches each value at age 0 to the gridpoint sample named
+  geo_<long>_<lat>_0, with the coordinates rounded to 2 decimals.
+producer:
+  repository: OndrejMottl/VegVault-abiotic_data
+  directory: Outputs/Data/Neoclimate
+consumers:
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Producers/prepare_climate_coordinates.R
+  - R/Functions/Gridpoints/prepare_gridpoint_cells.R
+  - R/Functions/Database/prepare_abiotic_tables.R
+file:
+  name_templates:
+    - 'CHELSA_bio_{variable}_{date}__{hash}__.qs'
+  evidence: >-
+    R/02_Main_analyses/04_Save_neoclimate_to_qs.R in the producer; v1 files
+    CHELSA_bio_01_2024-08-06__ff1659d322855ca35555ac7b96d58720__.qs and six
+    more (tag v1.1.0), 1442880 rows each.
+partitioning:
+  scheme: none
+extra_columns: error
+columns:
+  - name: long
+    class: numeric
+    nullable: false
+    unit: decimal degree (WGS84)
+    description: Grid-cell centre longitude.
+    evidence: >-
+      add_chelsa_neo_data.R:30-40; v1: double, -179.90 to 179.90, identical
+      in every variable file.
+    checks:
+      finite: true
+      range:
+        min: -180
+        max: 180
+  - name: lat
+    class: numeric
+    nullable: false
+    unit: decimal degree (WGS84)
+    description: Grid-cell centre latitude.
+    evidence: >-
+      add_chelsa_neo_data.R:30-40; v1: double, -89.85 to 83.90.
+    checks:
+      finite: true
+      range:
+        min: -90
+        max: 90
+  - name: value
+    class: numeric
+    nullable: false
+    description: >-
+      Value of the variable in the unit given in variables.table; the
+      plausible range and storage-type limits are checked per variable.
+    evidence: >-
+      add_chelsa_neo_data.R:42-47; v1: double, no missing values.
+    checks:
+      finite: true
+  - name: var_name
+    class: character
+    nullable: false
+    description: >-
+      Producer label of the variable (bio_01 in v1). The import overwrites it
+      (add_chelsa_neo_data.R:19), but 06_Create_gridpoints.R:98 drops it by
+      name, so the column must exist.
+    evidence: >-
+      06_Create_gridpoints.R:98; v1: character, one value per file.
+keys:
+  - [long, lat]
+rounded_keys:
+  - columns: [long, lat]
+    digits: 2
+variables:
+  value_column: value
+  table:
+    - variable: bio1
+      file_token: '01'
+      unit: C (degree Celsius)
+      description: mean annual air temperature
+      evidence: >-
+        07_Import_chelsa_neo_climate_data.R:84-87; v1: -53.55 to 34.35.
+        Values end in .x5, which matches storage as unsigned 16-bit integers
+        scaled by 0.1 with an offset of -273.15; the storage limits -273.15
+        and 6280.35 lie outside the range, so the range catches them.
+      checks:
+        range:
+          min: -80
+          max: 45
+    - variable: bio4
+      file_token: '04'
+      unit: C/100 (hundredths of a degree Celsius)
+      description: >-
+        temperature seasonality: standard deviation of the monthly mean
+        temperatures times 100
+      evidence: >-
+        07_Import_chelsa_neo_climate_data.R:101-104 stored the unit
+        "C (degree Celsius)" and the detail "temperature seasonality"; v1:
+        0 to 2178.1 with 1290816 of 1442880 cells exactly 0, the defect of
+        VegVault issue 78, which the exclusive lower bound rejects. The
+        values are the standard deviation of the 12 monthly means times 100,
+        in degrees Celsius / 100 as CHELSA documents; the abiotic lane
+        corrected unit and detail (VegVault issue 93). The 2.0.0 file stores
+        unsigned 16-bit integers scaled by 0.1; the storage limit 6553.5
+        lies above the range.
+      checks:
+        range:
+          min: 0
+          min_inclusive: false
+          max: 3000
+    - variable: bio6
+      file_token: '06'
+      unit: C (degree Celsius)
+      description: mean daily minimum air temperature of the coldest month
+      evidence: >-
+        07_Import_chelsa_neo_climate_data.R:118-121; v1: -65.85 to 26.35;
+        stored like bio1, so the range catches the storage limits.
+      checks:
+        range:
+          min: -95
+          max: 40
+    - variable: bio12
+      file_token: '12'
+      unit: kg m-2 year-1
+      description: annual precipitation amount
+      evidence: >-
+        07_Import_chelsa_neo_climate_data.R:135-138; v1: 0.6 to 6553.5 with
+        1172 cells exactly 6553.5, the largest value of an unsigned 16-bit
+        integer scaled by 0.1 (VegVault issue 78); the 2.0.0 download is
+        stored the same way and declares no usable NoData value, so capped
+        cells read as 6553.5. The cap is in the source product: the raw
+        CHELSA V2.1 file holds 773582 cells at 6553.5, its maximum, in the
+        wettest regions (VegVault-abiotic_data issue 16). Decided for 2.0.0
+        (Ondrej Mottl, 2026-11-21): the capped values are kept and documented
+        as lower bounds, so 6553.5 means at least 6553.5 mm; until 1.1.0 they
+        were forbidden. The validation stage flags their share. The upper
+        bound of 15000 is above the wettest recorded places (about 12000 to
+        13500 mm).
+      checks:
+        range:
+          min: 0
+          max: 15000
+    - variable: bio15
+      file_token: '15'
+      unit: Unitless
+      description: precipitation seasonality
+      evidence: >-
+        07_Import_chelsa_neo_climate_data.R:152-155; v1: 4 to 225.2. As a
+        coefficient of variation of 12 monthly values in percent its maximum
+        is 100 * sqrt(11) = 331.66; the storage limit 6553.5 lies above the
+        range.
+      checks:
+        range:
+          min: 0
+          max: 331.67
+    - variable: bio18
+      file_token: '18'
+      unit: kg m-2 quarter-1
+      description: precipitation amount of the warmest quarter
+      evidence: >-
+        07_Import_chelsa_neo_climate_data.R:169-172 stored the detail "mean
+        monthly precipitation amount of the warmest quarter"; v1: 0 to
+        5963.2. The values are quarterly totals: bio18 exceeds a third of
+        bio12 in 26 percent of the cells, which a monthly mean cannot, so
+        the abiotic lane corrected the detail and kept the unit (VegVault
+        issue 93). The 2.0.0 file declares NoData at the stored value of
+        6553.5, so a capped cell reads as missing and gets no row; the
+        forbidden value stays as a guard.
+      checks:
+        range:
+          min: 0
+          max: 12000
+        forbidden_values: [6553.5]
+    - variable: bio19
+      file_token: '19'
+      unit: kg m-2 quarter-1
+      description: precipitation amount of the coldest quarter
+      evidence: >-
+        07_Import_chelsa_neo_climate_data.R:186-189 stored the detail "mean
+        monthly precipitation amount of the coldest quarter"; v1: 0 to
+        4690.3. Quarterly totals, corrected as for bio18; the same NoData
+        declaration applies.
+      checks:
+        range:
+          min: 0
+          max: 12000
+        forbidden_values: [6553.5]
+notes:
+  - >-
+    Unit and description strings are the ones the import writes to the
+    database. They equal the strings hard-coded in
+    07_Import_chelsa_neo_climate_data.R except the corrections of 2.0.0:
+    the unit and detail of bio4 and the detail of bio18 and bio19.
+  - >-
+    Gridpoint names round the coordinates to 2 decimals
+    (add_chelsa_neo_data.R:30-40), so (long, lat) must also be unique after
+    rounding (rounded_keys); v1 is.
+  - >-
+    The abiotic lane confirmed the plausible ranges and storage limits
+    against the headers of the 2.0.0 download (VegVault issue 93): every
+    variable is stored as unsigned 16-bit integers scaled by 0.1, with an
+    offset of -273.15 for bio1 and bio6. Its raster quality checks read
+    them from its copy of this contract.
+  - >-
+    Version 1.1.0 removes the forbidden value 6553.5 of bio12, because the
+    capped cells are kept (see bio12). bio18 and bio19 keep it as a guard,
+    although their files declare that stored value as NoData.
+  - >-
+    A masked or missing cell has no row, so a variable can have fewer rows
+    than bio1; the import attaches each value to an existing gridpoint
+    sample.

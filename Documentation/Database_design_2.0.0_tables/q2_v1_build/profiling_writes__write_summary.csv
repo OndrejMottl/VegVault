@@ -1,0 +1,4 @@
+variant,flag_indexes_first,n_rows_written,seconds_writes,seconds_index_last,seconds_analyze_full,flag_statistics_by_writes,size_bytes
+v1_copy_to,TRUE,48501507,242.31119298934937,4.76837158203125e-6,NA,TRUE,2578739200
+copy_to_no_analyze,TRUE,48501507,217.1937153339386,9.059906005859375e-6,NA,FALSE,2578722816
+append_then_index,FALSE,48501507,11.278006315231323,21.825994968414307,3.5946929454803467,FALSE,2379087872

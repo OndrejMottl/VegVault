@@ -1,6 +1,6 @@
 
 
-## References
+## References {#references .topic-references .topic-icon}
 
 The `References` table is a central component that serves all sections
 of the <span class="vegvault">VegVault</span> database. This table
@@ -17,6 +17,5 @@ Moreover, most <span class="database">primary sources</span> of the data
 have a license, which requires <span class="reproducibility">correct
 attribution</span>. Therefore, each
 <span class="database">Reference</span> has information if such a
-<span class="database">Reference</span> needs to be
-<span class="reproducibility">cited</span> while using the specific
-data.
+<span class="database">Reference</span> needs to be cited while using
+the specific data.

@@ -1,0 +1,6 @@
+source_run,source_folder,chunk_size,n_links_run,n_links_source,n_gridpoints_run,n_gridpoints_source,flag_same
+run_20261120_093701_positions_chunk100,Full_links,100,95345705,95345705,1560757,1560757,TRUE
+run_20261120_093904_positions_chunk500,Full_links,500,95345705,95345705,1560757,1560757,TRUE
+run_20261120_093952_positions_chunk2000,Full_links,2000,95345705,95345705,1560757,1560757,TRUE
+run_20261120_094026_positions_chunk10000,Full_links,10000,95345705,95345705,1560757,1560757,TRUE
+run_20261120_094101_positions_chunk50000,Full_links,50000,95345705,95345705,1560757,1560757,TRUE

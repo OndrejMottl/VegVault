@@ -1,0 +1,161 @@
+# Producer artefact contract. Format: Data/Contracts/README.md
+contract_id: trait_unit_conversions
+contract_version: 1.0.1
+status: active
+title: Trait unit conversion rules of the trait producer
+description: >-
+  The trait producer's registry of unit conversions: one row per rule that
+  turns the unit a provider gives for one trait into the standard unit of
+  that trait. Every conversion_rule_key of try_traits and bien_traits must
+  be a rule here. VegVault stores the rules in TraitUnitConversion.
+producer:
+  repository: OndrejMottl/VegVault-Trait_data
+  directory: config/trait_units
+consumers:
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Contracts/load_producer_csv.R
+  - R/Functions/Producers/build_trait_unit_rules.R
+  - R/Functions/Producers/validate_trait_rule_keys.R
+  - R/Functions/Database/build_database_tables.R
+file:
+  name_templates:
+    - 'unit_conversions.csv'
+  evidence: >-
+    The registry is a file of the producer repository, not an export, so
+    its name has no date or hash: load_trait_unit_registry.R:9-14 in the
+    producer names config/trait_units/unit_conversions.csv. VegVault reads
+    it as CSV with the column classes below (load_producer_csv()).
+    Producer file and line numbers refer to VegVault-Trait_data 2.0.0 at
+    5ab2904; on that commit the file has 65 rules.
+partitioning:
+  scheme: none
+extra_columns: allow
+columns:
+  - name: conversion_rule_key
+    class: character
+    nullable: false
+    description: Key of the rule, as cited by the trait artefacts.
+    evidence: >-
+      TraitUnitConversion.conversion_rule_key is TEXT NOT NULL UNIQUE in
+      Data/SQL/make_tables.sql.
+    checks:
+      not_empty: true
+  - name: rule_version
+    class: character
+    nullable: false
+    description: Version of the rule.
+    evidence: >-
+      TraitUnitConversion.rule_version is TEXT NOT NULL; 1.0.0 for all 65
+      rules at 5ab2904.
+    checks:
+      not_empty: true
+  - name: source_provider
+    class: character
+    nullable: false
+    description: Provider whose records the rule converts.
+    evidence: >-
+      TraitUnitConversion.source_provider is TEXT NOT NULL; the trait
+      artefacts allow only TRY and BIEN (try_traits, bien_traits). 59 TRY and
+      6 BIEN rules at 5ab2904.
+    checks:
+      allowed_values: [TRY, BIEN]
+  - name: source_trait_id
+    class: character
+    nullable: false
+    description: Provider trait identifier the rule applies to.
+    evidence: >-
+      TraitUnitConversion.source_trait_id is TEXT NOT NULL; part of the
+      producer's rule key (load_trait_unit_registry.R:70-91).
+    checks:
+      not_empty: true
+  - name: source_dataset_key
+    class: character
+    nullable: true
+    description: >-
+      Provider dataset the rule is limited to; missing for a rule that holds
+      for every dataset.
+    evidence: >-
+      TraitUnitConversion.source_dataset_key is nullable;
+      resolve_trait_unit_contract.R:62-69 in the producer tells a
+      dataset-specific rule from a general one. Missing for 63 of 65 rules
+      at 5ab2904.
+  - name: normalized_original_unit
+    class: character
+    nullable: false
+    description: Provider unit after alias normalisation.
+    evidence: >-
+      TraitUnitConversion.normalized_original_unit is TEXT NOT NULL; part of
+      the producer's rule key (load_trait_unit_registry.R:70-91).
+    checks:
+      not_empty: true
+  - name: standardized_unit
+    class: character
+    nullable: false
+    description: Standard unit of the trait, the unit after conversion.
+    evidence: TraitUnitConversion.standardized_unit is TEXT NOT NULL.
+    checks:
+      not_empty: true
+  - name: trait_dimension
+    class: character
+    nullable: false
+    description: Physical dimension of the trait, for example area or length.
+    evidence: >-
+      TraitUnitConversion.trait_dimension is TEXT NOT NULL; 6 dimensions at
+      5ab2904.
+    checks:
+      not_empty: true
+  - name: operation
+    class: character
+    nullable: false
+    description: How the value is converted.
+    evidence: >-
+      TraitUnitConversion.operation is TEXT NOT NULL;
+      resolve_trait_unit_contract.R:118-125 in the producer applies only
+      identity, multiply and reciprocal and fails any other operation.
+    checks:
+      allowed_values: [identity, multiply, reciprocal]
+  - name: multiplier
+    class: numeric
+    nullable: false
+    description: >-
+      Factor of a multiply rule, numerator of a reciprocal rule, 1 for an
+      identity rule.
+    evidence: >-
+      TraitUnitConversion.multiplier is REAL NOT NULL;
+      load_trait_unit_registry.R:52 coerces it to a number. 0.001 to
+      1000000 at 5ab2904; a factor of 0 or less would not give a plausible
+      trait value.
+    checks:
+      finite: true
+      range:
+        min: 0
+        min_inclusive: false
+  - name: evidence
+    class: character
+    nullable: false
+    description: Where the rule comes from.
+    evidence: TraitUnitConversion.evidence is TEXT NOT NULL.
+    checks:
+      not_empty: true
+keys:
+  - [conversion_rule_key]
+  - - source_provider
+    - source_trait_id
+    - source_dataset_key
+    - normalized_original_unit
+notes:
+  - >-
+    The second key is the producer's own rule key
+    (load_trait_unit_registry.R:70-91): one rule per provider, trait,
+    dataset and unit, so a record matches at most one rule. A missing
+    source_dataset_key counts as equal to another missing one, as in the
+    producer.
+  - >-
+    The file has two more columns, verify_source_standardized and
+    verification_absolute_tolerance, which only the producer uses (to check
+    its conversions against TRY's standardised values). VegVault does not
+    store them, so the contract does not describe them.
+  - >-
+    Stage 01 pins this file to the same Trait_data tag (or dev checkout) as
+    try_traits and bien_traits, and its target check_trait_rule_keys stops
+    the build when a conversion_rule_key of a trait artefact is not here.

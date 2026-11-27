@@ -1,0 +1,115 @@
+# Producer artefact contract. Format: Data/Contracts/README.md
+contract_id: trait_derivations
+contract_version: 1.0.1
+status: active
+title: Trait derivation rules of the trait producer
+description: >-
+  The trait producer's registry of derivations: one row per rule that
+  derives a trait value from a value of another trait, for example leaf
+  mass per area from specific leaf area. Every derivation_rule_key of
+  try_traits and bien_traits must be a rule here. VegVault stores the rules
+  in TraitDerivation.
+producer:
+  repository: OndrejMottl/VegVault-Trait_data
+  directory: config/trait_units
+consumers:
+  - R/Analyses/01_Producer_import/pipeline.R
+  - R/Functions/Contracts/load_producer_csv.R
+  - R/Functions/Producers/build_trait_unit_rules.R
+  - R/Functions/Producers/validate_trait_rule_keys.R
+  - R/Functions/Database/build_database_tables.R
+file:
+  name_templates:
+    - 'trait_derivations.csv'
+  evidence: >-
+    The registry is a file of the producer repository, not an export, so
+    its name has no date or hash: load_trait_unit_registry.R:9-14 in the
+    producer names config/trait_units/trait_derivations.csv. VegVault reads
+    it as CSV with the column classes below (load_producer_csv()).
+    Producer file and line numbers refer to VegVault-Trait_data 2.0.0 at
+    5ab2904; on that commit the file has 1 rule, sla_to_lma.
+partitioning:
+  scheme: none
+extra_columns: allow
+columns:
+  - name: derivation_rule_key
+    class: character
+    nullable: false
+    description: Key of the rule, as cited by the trait artefacts.
+    evidence: >-
+      TraitDerivation.derivation_rule_key is TEXT NOT NULL UNIQUE in
+      Data/SQL/make_tables.sql; load_trait_unit_registry.R:93-97 in the
+      producer refuses a repeated key.
+    checks:
+      not_empty: true
+  - name: rule_version
+    class: character
+    nullable: false
+    description: Version of the rule.
+    evidence: TraitDerivation.rule_version is TEXT NOT NULL; 1.0.0 at 5ab2904.
+    checks:
+      not_empty: true
+  - name: input_unit
+    class: character
+    nullable: false
+    description: Unit of the value the trait is derived from.
+    evidence: >-
+      TraitDerivation.input_unit is TEXT NOT NULL;
+      resolve_trait_unit_contract.R:182 in the producer fails a
+      derivation whose input unit differs from the converted unit.
+    checks:
+      not_empty: true
+  - name: output_unit
+    class: character
+    nullable: false
+    description: Unit of the derived value, the trait's standard unit.
+    evidence: TraitDerivation.output_unit is TEXT NOT NULL.
+    checks:
+      not_empty: true
+  - name: trait_dimension
+    class: character
+    nullable: false
+    description: Physical dimension of the derived trait.
+    evidence: TraitDerivation.trait_dimension is TEXT NOT NULL.
+    checks:
+      not_empty: true
+  - name: operation
+    class: character
+    nullable: false
+    description: How the value is derived.
+    evidence: >-
+      TraitDerivation.operation is TEXT NOT NULL;
+      resolve_trait_unit_contract.R:187-192 in the producer derives only by
+      reciprocal and fails any other operation.
+    checks:
+      allowed_values: [reciprocal]
+  - name: multiplier
+    class: numeric
+    nullable: false
+    description: Numerator of the reciprocal.
+    evidence: >-
+      TraitDerivation.multiplier is REAL NOT NULL;
+      load_trait_unit_registry.R:62 coerces it to a number. 1 at 5ab2904.
+    checks:
+      finite: true
+      range:
+        min: 0
+        min_inclusive: false
+  - name: evidence
+    class: character
+    nullable: false
+    description: Where the rule comes from.
+    evidence: TraitDerivation.evidence is TEXT NOT NULL.
+    checks:
+      not_empty: true
+keys:
+  - [derivation_rule_key]
+notes:
+  - >-
+    Stage 01 pins this file to the same Trait_data tag (or dev checkout) as
+    try_traits and bien_traits, and its target check_trait_rule_keys stops
+    the build when a derivation_rule_key of a trait artefact is not here.
+  - >-
+    A new derivation operation needs a change in the producer first
+    (resolve_trait_unit_contract.R), then a minor version of this contract
+    that allows it.

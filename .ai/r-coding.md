@@ -6,30 +6,31 @@ Canonical R guidance for scripts, reusable functions, data processing, database 
 
 Apply these conventions to new and materially edited R code. Preserve readable established idioms in untouched legacy sections; do not turn a focused change into a repository-wide restyle. When editing an old block substantially, bring that block toward this guide without changing behavior accidentally.
 
-The main repository areas are:
+The main areas of the VegVault repository are (`.ai/analysis-structure.md` describes the stage layout):
 
-- `R/00_Config_file.R`: shared configuration, packages, constants, secrets-path resolution, and database version
-- `R/01_Master.R`: full workflow orchestrator; never run without explicit authorization
-- `R/01_Data_processing/`: database creation and persistent-write logic
-- `R/02_Main_analyses/`: ordered producer imports, integration, checks, and exports
-- `R/Functions/`: reusable project functions
-- `R/04_Webiste/`: website-support code, retaining the repository's historical directory spelling
+- `R/___setup_project___.R`, `config.yml` and the git-ignored `secrets.yaml`: shared setup, settings, and machine-local paths
+- `R/Analyses/`: the `{targets}` stages, each run through its `00_run.R` (all of them through `00_run_main.R`); never run a stage that builds or writes the database without explicit authorization
+- `R/Functions/`: reusable project functions, with tests in `R/Tests/testthat/`
+- `R/00_Config_file.R`: the legacy entry point that the website still sources (directly and through `R/Website/00_Config_quarto.R`), kept until the website moves to the new setup. The v1.0.0 scripts (`R/01_Master.R`, `R/01_Data_processing/`, `R/02_Main_analyses/`, `R/03_Visualisation/`) are deleted
+- `R/Website/`: website-support code (formerly `R/04_Webiste/`): the setup every website page sources (`00_Config_quarto.R`), the Quarto pre-render step (`generate_theme.R`), `render_dots.R` and the figures drawn in code: the data assembly (`render_assembly_workflow.R`), the data extraction (`render_extraction_workflow.R`) and the schema diagrams (`render_schema_diagrams.R`), and the counts of a release for the changelog (`save_version_counts.R`)
 
 ## Project setup and clean execution
 
-Use `R/___Init_project___.R` only for one-time machine setup; it may install packages or restore `renv`. Executable scripts load the repository configuration from a clean R session:
+Use `R/___Init_project___.R` only for one-time machine setup; it may install packages or restore `renv`. Executable scripts load the repository configuration from a clean R session. In VegVault, stage runners, pipelines and tests source the project setup:
 
 ```r
 library(here)
 
 source(
-  here::here(
-    "R/00_Config_file.R"
-  )
+  here::here("R/___setup_project___.R")
 )
 ```
 
+The VegVault website and the producer repositories source their `R/00_Config_file.R` the same way.
+
 Do not rely on objects, options, packages, connections, or environment variables left by an interactive session. A reusable function must not source setup files or attach packages.
+
+The R version, `renv` lockfile, package changes, artefact formats, and test runs are covered in `.ai/r-environment.md`.
 
 ## Script structure
 
@@ -68,7 +69,11 @@ Prefer type prefixes for important objects:
 
 Do not encode issue numbers, pull-request numbers, or temporary plan stages in R identifiers, target names, filenames, comments, or configuration values. Name code after its scientific or computational role.
 
-Prefer a new object for a materially transformed state:
+Treat assigned R objects as immutable within their lexical scope. Once an
+object name has received a value, do not assign another value to that name and
+do not change its columns, elements, or attributes in place. Every filtered,
+validated, enriched, selected, or otherwise transformed state gets a new,
+descriptive object name. Do not overwrite function arguments.
 
 ```r
 data_samples_raw <-
@@ -76,9 +81,14 @@ data_samples_raw <-
 
 data_samples_valid <-
   validate_samples(data_samples_raw)
+
+data_samples_selected <-
+  dplyr::filter(data_samples_valid, .data$quality_flag == "accepted")
 ```
 
-Reuse a name only for deliberate in-place semantics, memory pressure, or a tight loop, and keep the reason clear.
+Memory or performance concerns do not silently override this rule. If measured
+constraints make reassignment necessary, obtain explicit user approval for that
+exception and document its scope and evidence.
 
 ## Formatting
 
@@ -177,8 +187,9 @@ Before reading or writing an expensive artifact, validate its path, expected sch
 
 ## Reusable functions
 
-- Keep one exported or broadly reusable function per matching file under `R/Functions/`.
-- Document new or materially changed functions with roxygen2: purpose, parameters, return structure, units, side effects, and important edge cases.
+- Also read and follow `.ai/r-functions.md` whenever creating or editing a
+  function or its tests. That guide defines the binding one-function-per-file,
+  roxygen2, matching-test-file, helper-exception, and strict-TDD contracts.
 - Validate caller inputs early and fail with actionable messages.
 - End with an explicit `return(res)` or a descriptively named result.
 - Do not mutate global state, open an undeclared live connection, or write files unless that side effect is part of the documented contract.
@@ -219,4 +230,4 @@ Profile before optimizing. Prefer reducing downloads, repeated parsing, raster r
 - Do not use environment variables as hidden switches for normal analysis logic; prefer explicit arguments or configuration values.
 - Start validation with parsing/sourcing the smallest affected component in a clean session.
 - Broaden to focused functions, representative subsets, disposable schema checks, and downstream contracts as risk increases.
-- Do not run a full producer pipeline, `R/01_Master.R`, or database assembly solely to validate formatting or documentation.
+- Do not run a full producer pipeline, a stage that builds the database, or database assembly solely to validate formatting or documentation.

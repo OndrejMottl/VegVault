@@ -48,12 +48,31 @@ rsconnect/
 
 # secrets
 .secrets/
+secrets.yaml
 
 # Large files
 Outputs/Data/VegVault/VegVault.sqlite
+# The 2.0.0 database, wherever secrets.yaml puts it inside the checkout,
+#   with its work copy, the SQLite side files and the build manifest
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*_build_manifest.yml
 Outputs/Data/VegVault/Flat_files/
 !Outputs/Data/VegVault/Flat_files/Column_names/*.csv
 Data/Processed/Classified_taxa/
+Data/Temp/
+# {targets} stores, one per pipeline
+Data/Targets_data/
+# Download cache of the release build (`producers: cache_dir`), one folder
+#   per SHA-256 next to the pin manifest; without this line the downloaded
+#   files count as untracked and the release build refuses to continue
+Data/Producers/*/
+# Validation reports, one set per build (stage 04_Validation); the
+#   release build's report is attached to the GitHub release and the
+#   data deposit instead
+Outputs/Tables/validation_*
 
 # debug
 debug.R
