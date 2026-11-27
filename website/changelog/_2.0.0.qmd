@@ -123,6 +123,7 @@ label_percent <-
 [VegVault]{.vegvault} 2.0.0 is the second release.
 It is rebuilt from tagged, checksum-verified releases of the [vegetation]{.neo-vegetation}, [fossil pollen]{.paleo}, [trait]{.traits} and [abiotic data]{.abiotic}, with audited [trait units]{.traits} and a corrected linkage of [gridpoints]{.abiotic} to samples.
 It is also about `r label_ratio(ratio_size_2_0_0)` times smaller than 1.0.0 (`r label_size(size_bytes_2_0_0)` instead of `r label_size(size_bytes_1_0_0)`) and, read with [{vaultkeepr}](https://bit.ly/vaultkeepr) 0.2.0, about `r label_ratio(ratio_speed_2_0_0)` times faster to query than 1.0.0 was with {vaultkeepr} 0.1.0.
+Its [SQLite database]{.database} ([10.48700/y3p8y-g8106](https://doi.org/10.48700/y3p8y-g8106)) and its flat files ([10.48700/gpf0m-ptq85](https://doi.org/10.48700/gpf0m-ptq85)) are deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/) as new versions of the 1.0.0 records.
 
 ::: {.callout-tip title="Moving from 1.0.0 to 2.0.0"}
 Running the same code with [VegVault]{.vegvault} 2.0.0 and {vaultkeepr} 0.2.0 may return different data than with [VegVault]{.vegvault} 1.0.0 and {vaultkeepr} 0.1.0.

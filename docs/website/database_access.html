@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,10 +10,16 @@
 
 <title>database_access – VegVault</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -69,15 +75,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../Outputs/Figures/website/VegVault_logo.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cbe7964b9d8370f69a85a17d22cd4503.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2369be5c0caa2746cf32d0ac885706ed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -109,21 +115,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed fullcontent quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">VegVault</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -154,6 +157,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">VegVault Access</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../website/database_changelog.html">
+ <span class="dropdown-text">VegVault Changelog</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../website/database_examples.html">
  <span class="dropdown-text">Examples of usage</span></a>
   </li>  
@@ -177,6 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a href="https://bsky.app/profile/ondrejmottl.bsky.social" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bluesky"></i></a>
     <a href="https://github.com/OndrejMottl/VegVault" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -186,7 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content" tabindex="-1">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -207,7 +215,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">August 28, 2025</p>
+      <p class="date-modified">November 27, 2026</p>
     </div>
   </div>
     
@@ -222,8 +230,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Database Access &amp; Usage</h1>
 <section id="download-vegvault-database" class="level2">
 <h2 class="anchored" data-anchor-id="download-vegvault-database">Download VegVault Database</h2>
-<p><span class="text-background-black text-color-white text-bold">VegVault</span> v1.0.0 is available as a comprehensive <span class="text-background-brownDark text-color-white text-bold">SQLite database</span> providing integrated access to global vegetation, <span class="text-background-blueDark text-color-white text-bold">trait</span>, and <span class="text-background-greenDark text-color-white text-bold">environmental data</span>.</p>
-<p><a href="https://doi.org/10.48700/datst.t21cz-2nq07" class="btn">Download VegVault v1.0.0 (SQLite)</a></p>
+<p><span class="vegvault">VegVault</span> 2.0.0 is available as a comprehensive <span class="database">SQLite database</span> providing integrated access to global vegetation, <span class="traits">trait</span>, and <span class="abiotic">environmental data</span>. What changed between versions, and what it means for code written for an earlier version, is on the <a href="../website/database_changelog.html">changelog page</a>.</p>
+<p><a href="https://doi.org/10.48700/frrj8-ync93" class="btn">Download VegVault (latest version)</a></p>
+<p>The button leads to the newest version of the <span class="database">SQLite database</span> in the <a href="https://datarepo.eosc.cz/">EOSC CZ data repository</a>; the current version is <span class="vegvault">VegVault</span> 2.0.0. Earlier versions stay available there, and the <a href="../website/database_changelog.html">changelog page</a> gives the DOI of each version.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -234,13 +243,13 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>System Requirements</strong>: <span class="text-background-black text-color-white text-bold">VegVault</span> contains over 100GB of data. Ensure your system has sufficient storage space and memory (RAM) before downloading.</p>
+<p><strong>System Requirements</strong>: The <span class="vegvault">VegVault</span> 2.0.0 database is a single file of 6.1 GiB. Ensure your system has sufficient storage space and memory (RAM) before downloading.</p>
 </div>
 </div>
 <section id="alternative-access-flat-files" class="level3">
 <h3 class="anchored" data-anchor-id="alternative-access-flat-files">Alternative Access: Flat Files</h3>
-<p>For users who prefer working with individual data tables, we provide <span class="text-background-black text-color-white text-bold">VegVault</span> as separate CSV files:</p>
-<p><a href="https://doi.org/10.48700/datst.thktf-5rr35" class="btn">Download VegVault v1.0.0 (Flat Files)</a></p>
+<p>For users who prefer working with individual data tables, we provide <span class="vegvault">VegVault</span> as separate CSV files:</p>
+<p><a href="https://doi.org/10.48700/qwdh2-qh173" class="btn">Download VegVault flat files (latest version)</a></p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -251,7 +260,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Note</strong>: Flat files are not the <span class="text-background-brownLight text-color-white text-bold">recommended</span> approach. Many files exceed 1GB and may be difficult to load into memory. We strongly recommend using the <span class="text-background-brownDark text-color-white text-bold">SQLite database</span> with the {vaultkeepr} R package for optimal performance.</p>
+<p><strong>Note</strong>: Flat files are not the recommended approach. The 34 table files hold 5.3 GiB together, and the largest 2 exceed 1 GB, which may be difficult to load into memory. The links between samples and grid points are stored once per position, so the flat files have no <code>AbioticDataReference</code> table: join <code>SamplePosition</code> and <code>PositionLink</code> by <code>position_id</code> to get the grid points of each sample. We strongly recommend using the <span class="database">SQLite database</span> with the {vaultkeepr} R package for optimal performance.</p>
 </div>
 </div>
 </section>
@@ -260,7 +269,7 @@ Warning
 <h2 class="anchored" data-anchor-id="accessing-vegvault-with-vaultkeepr">Accessing VegVault with {vaultkeepr}</h2>
 <div class="columns">
 <div class="column" style="width:75%;">
-<p>To make <span class="text-background-black text-color-white text-bold">VegVault</span> easily accessible, we developed <a href="https://bit.ly/vaultkeepr">{vaultkeepr}</a>, a well-tested R package (&gt;95% code coverage) that provides intuitive functions for interacting with the <span class="text-background-brownDark text-color-white text-bold">database</span>. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory.</p>
+<p>To make <span class="vegvault">VegVault</span> easily accessible, we developed <a href="https://bit.ly/vaultkeepr">{vaultkeepr}</a>, a well-tested R package (&gt;95% code coverage) that provides intuitive functions for interacting with the <span class="database">database</span>. The package handles database connections, data filtering, and extraction, allowing you to retrieve only project-specific data without loading everything into memory.</p>
 </div><div class="column" style="width:25%;">
 <div class="cell">
 <div class="cell-output-display">
@@ -311,14 +320,16 @@ Warning
 <h3 class="anchored" data-anchor-id="citation-requirements">Citation Requirements</h3>
 <p>When using VegVault in your research:</p>
 <ol type="1">
-<li><strong>Cite VegVault</strong>: Always cite the latest VegVault version with its corresponding DOI</li>
+<li><strong>Cite VegVault</strong>: Always cite the VegVault version you used with its corresponding DOI, and the VegVault data paper</li>
 <li><strong>Cite primary sources</strong>: Acknowledge all original data providers included in your analysis</li>
 <li><strong>Use our helper function</strong>: The <code>vaultkeepr::get_references()</code> function automatically generates the complete list of recommended citations for your specific data compilation</li>
 </ol>
 </section>
-<section id="publication-pre-print" class="level3">
-<h3 class="anchored" data-anchor-id="publication-pre-print">Publication &amp; Pre-print</h3>
-<p><strong>Pre-print</strong>: “<em>VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers</em>”</p>
+<section id="publication" class="level3">
+<h3 class="anchored" data-anchor-id="publication">Publication</h3>
+<p><strong>Data paper</strong>: “<em>VegVault dataset: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers</em>”</p>
+<p><a href="https://doi.org/10.1038/s41597-025-06176-1" class="btn">Read the Data Paper</a></p>
+<p><strong>Pre-print</strong> (the earlier version of the data paper): “<em>VegVault database: linking global paleo-, and neo-vegetation data with functional traits and abiotic drivers</em>”</p>
 <p><a href="https://doi.org/10.1101/2025.01.31.635213" class="btn">Access Pre-print</a></p>
 <p>For additional citation materials, visit our <a href="../website/materials.html">Materials &amp; Outputs</a> page.</p>
 </section>
@@ -332,7 +343,7 @@ Warning
 <section id="technical-limitations" class="level3">
 <h3 class="anchored" data-anchor-id="technical-limitations">Technical Limitations</h3>
 <ul>
-<li><strong>Storage requirements</strong>: &gt;100GB database size may be challenging for some systems</li>
+<li><strong>Storage requirements</strong>: the 6.1 GiB database file may be challenging for some systems</li>
 <li><strong>Memory requirements</strong>: Large datasets may require substantial RAM for analysis</li>
 <li><strong>Version dependencies</strong>: Always specify the VegVault version used in your research</li>
 </ul>
@@ -431,7 +442,8 @@ Warning
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -440,8 +452,69 @@ Warning
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -455,6 +528,7 @@ Warning
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -617,44 +691,54 @@ Warning
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -752,6 +836,9 @@ Warning
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 <footer class="footer">
