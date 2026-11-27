@@ -37,13 +37,10 @@ This page provides access to all VegVault-related resources including the databa
 
 ### Primary Database Access
 
-::: {.callout-important}
-**To be updated after the deposit:** VegVault `r db_version` and its flat files receive their DOIs when they are deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/).
-Until then, the buttons on this page lead to VegVault 1.0.0.
-:::
+**VegVault (SQLite Database - Recommended)**
+[Download VegVault (latest version)](https://doi.org/10.48700/frrj8-ync93){.btn}
 
-**VegVault v1.0.0 (SQLite Database - Recommended)**
-[Download Database v1.0.0](https://doi.org/10.48700/datst.t21cz-2nq07){.btn}
+The current version is [VegVault]{.vegvault} `r db_version`; the [changelog page](database_changelog.qmd) gives the DOI of each version.
 
 Please review our [Database Access Guidelines](database_access.qmd#guidelines-for-data-reuse-and-citation) for proper usage and citation requirements.
 
@@ -67,8 +64,8 @@ knitr::include_graphics(
 
 ### Alternative Format
 
-**VegVault v1.0.0 (Flat Files - Not Recommended)**
-[Download Database v1.0.0 as Flat Files](https://doi.org/10.48700/datst.thktf-5rr35){.btn}
+**VegVault (Flat Files - Not Recommended)**
+[Download VegVault flat files (latest version)](https://doi.org/10.48700/qwdh2-qh173){.btn}
 
 ::: {.callout-warning}
 **Note**: Flat files are provided for accessibility but are not the preferred method.

@@ -107,8 +107,8 @@ The [Database Content](https://ondrejmottl.github.io/VegVault/website/database_c
 
 ## Get the data
 
-VegVault is one SQLite file of `r label_size(select_version_count(data_counts, "size_bytes", "database"))`, deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/) together with a copy of its tables as flat files.
-The [Database Access](https://ondrejmottl.github.io/VegVault/website/database_access.html) page of the website links the files of each version.
+VegVault is one SQLite file of `r label_size(select_version_count(data_counts, "size_bytes", "database"))`, deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/) together with a copy of its tables as flat files: [the database](https://doi.org/10.48700/frrj8-ync93) and [the flat files](https://doi.org/10.48700/qwdh2-qh173).
+These two DOIs always lead to the newest version; the [changelog](https://ondrejmottl.github.io/VegVault/website/database_changelog.html) of the website gives the DOI of each version, and the [Database Access](https://ondrejmottl.github.io/VegVault/website/database_access.html) page describes the files.
 We recommend the SQLite file with the R package vaultkeepr.
 
 ## Use it with vaultkeepr

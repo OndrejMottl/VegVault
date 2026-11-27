@@ -45,12 +45,10 @@ label_size <-
 [VegVault]{.vegvault} `r db_version` is available as a comprehensive [SQLite database]{.database} providing integrated access to global vegetation, [trait]{.traits}, and [environmental data]{.abiotic}.
 What changed between versions, and what it means for code written for an earlier version, is on the [changelog page](database_changelog.qmd).
 
-::: {.callout-important}
-**To be updated after the deposit:** VegVault `r db_version` and its flat files receive their DOIs when they are deposited in the [EOSC CZ data repository](https://datarepo.eosc.cz/).
-Until then, the buttons on this page lead to VegVault 1.0.0.
-:::
+[Download VegVault (latest version)](https://doi.org/10.48700/frrj8-ync93){.btn}
 
-[Download VegVault v1.0.0 (SQLite)](https://doi.org/10.48700/datst.t21cz-2nq07){.btn}
+The button leads to the newest version of the [SQLite database]{.database} in the [EOSC CZ data repository](https://datarepo.eosc.cz/); the current version is [VegVault]{.vegvault} `r db_version`.
+Earlier versions stay available there, and the [changelog page](database_changelog.qmd) gives the DOI of each version.
 
 ::: {.callout-note}
 **System Requirements**: The [VegVault]{.vegvault} `r db_version` database is a single file of `r label_size(dplyr::pull(data_database_statistics, size_bytes))`.
@@ -61,7 +59,7 @@ Ensure your system has sufficient storage space and memory (RAM) before download
 
 For users who prefer working with individual data tables, we provide [VegVault]{.vegvault} as separate CSV files:
 
-[Download VegVault v1.0.0 (Flat Files)](https://doi.org/10.48700/datst.thktf-5rr35){.btn}
+[Download VegVault flat files (latest version)](https://doi.org/10.48700/qwdh2-qh173){.btn}
 
 ```{r}
 #| label: flat-file-sizes

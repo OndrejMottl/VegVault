@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,10 +10,16 @@
 
 <title>database_assembly – VegVault</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -34,15 +40,15 @@ ul.task-list li input[type="checkbox"] {
 <link href="../Outputs/Figures/website/VegVault_logo.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cbe7964b9d8370f69a85a17d22cd4503.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2369be5c0caa2746cf32d0ac885706ed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -74,21 +80,18 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed fullcontent quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">VegVault</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -119,6 +122,10 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">VegVault Access</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../website/database_changelog.html">
+ <span class="dropdown-text">VegVault Changelog</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../website/database_examples.html">
  <span class="dropdown-text">Examples of usage</span></a>
   </li>  
@@ -142,6 +149,7 @@ ul.task-list li input[type="checkbox"] {
     <a href="https://bsky.app/profile/ondrejmottl.bsky.social" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bluesky"></i></a>
     <a href="https://github.com/OndrejMottl/VegVault" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -151,7 +159,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content" tabindex="-1">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -172,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">August 28, 2025</p>
+      <p class="date-modified">November 26, 2026</p>
     </div>
   </div>
     
@@ -183,15 +191,15 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="data-assembly-process-of-vegvault-1.0.0" class="level1">
-<h1>Data Assembly Process of VegVault 1.0.0</h1>
-<p><span class="vegvault">VegVault</span> v1.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions.</p>
+<section id="data-assembly-process-of-vegvault-2.0.0" class="level1">
+<h1>Data Assembly Process of VegVault 2.0.0</h1>
+<p><span class="vegvault">VegVault</span> v2.0.0 has been assembled through systematic integration of multiple publicly available databases, each contributing specialized data types to create a comprehensive vegetation database spanning both temporal and ecological dimensions. Each data source is processed in its own repository and released with a tag, and the database is built from these tagged files only.</p>
 <p>The assembly workflow visualization:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="../Outputs/Figures/DB_assembly_visualisation/assembly_viz_04.png" class="img-fluid figure-img"></p>
+<p><img src="../Outputs/Figures/DB_assembly_visualisation/assembly_workflow.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -201,43 +209,42 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Primary data sources</strong>:</p>
 <ol type="1">
 <li><strong><a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a></strong> - <span class="paleo">Fossil pollen data</span> (0-20,000 years BP)</li>
-<li><strong><a href="https://idiv-biodiversity.de/en/splot/splotopen.html">sPlotOpen</a></strong> - <span class="neo-vegetation">Contemporary vegetation plots</span><br>
-</li>
+<li><strong><a href="https://idiv-biodiversity.de/en/splot/splotopen.html">sPlotOpen</a></strong> - <span class="neo-vegetation">Contemporary vegetation plots</span></li>
 <li><strong><a href="https://bien.nceas.ucsb.edu/bien/">BIEN</a></strong> - <span class="neo-vegetation">Contemporary vegetation</span> and <span class="traits">functional traits</span></li>
 <li><strong><a href="https://www.try-db.org/TryWeb/Home.php">TRY Plant Trait Database</a></strong> - Comprehensive <span class="traits">plant functional traits</span></li>
 <li><strong><a href="https://chelsa-climate.org/">CHELSA</a></strong> - High-resolution <span class="abiotic">climate data</span> (contemporary and paleoclimate)</li>
-<li><strong><a href="https://www.isric.org/explore/wosis">WoSIS</a></strong> - Global <span class="abiotic">soil property data</span></li>
+<li><strong><a href="https://data.apps.fao.org/catalog/iso/ff5c613c-75bb-46a9-a162-bc728059b465">Harmonized World Soil Database (HWSD) v2.2</a></strong> - Global <span class="abiotic">soil data</span> (VegVault 1.0.0 named this source WoSIS)</li>
 </ol>
 <p><strong>Data Processing</strong>: Individual processing pipelines for each data type using specialized <span class="reproducibility">GitHub repositories</span></p>
 <ol start="7" type="1">
-<li><strong><a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v1.0.0">VegVault-FOSSILPOL v1.0.0</a></strong> - <span class="paleo">Fossil pollen data</span> processing</li>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v1.1.0">VegVault-Vegetation_data v1.1.0</a></strong> - <span class="neo-vegetation">Contemporary vegetation</span> processing<br>
-</li>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault-Trait_data/tree/v1.1.0">VegVault-Trait_data v1.1.0</a></strong> - <span class="traits">Functional trait data</span> processing</li>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v1.1.0">VegVault-abiotic_data v1.1.0</a></strong> - <span class="abiotic">Environmental data</span> processing</li>
-<li><strong><a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault v1.0.0</a></strong> - Consolidation into unified <span class="database">SQLite database</span> structure with key steps:
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v2.0.0">VegVault-FOSSILPOL v2.0.0</a></strong> - <span class="paleo">Fossil pollen data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Vegetation_data/tree/v2.0.0">VegVault-Vegetation_data v2.0.0</a></strong> - <span class="neo-vegetation">Contemporary vegetation</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-Trait_data/tree/v2.0.0">VegVault-Trait_data v2.0.0</a></strong> - <span class="traits">Functional trait data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault-abiotic_data/tree/v2.0.0">VegVault-abiotic_data v2.0.0</a></strong> - <span class="abiotic">Environmental data</span> processing</li>
+<li><strong><a href="https://github.com/OndrejMottl/VegVault/tree/v2.0.0">VegVault v2.0.0</a></strong> - Consolidation into unified <span class="database">SQLite database</span> structure with key steps:
 <ul>
-<li><strong><span class="traits">Taxonomic Harmonization</span></strong>: Using the {taxospace} R package to align taxa with GBIF backbone</li>
+<li><strong><span class="taxa">Taxonomic Harmonization</span></strong>: Using the {taxospace} R package to align taxa with GBIF backbone</li>
 <li><strong><span class="traits">Trait Categorization</span></strong>: Grouping <span class="traits">traits</span> into functional domains following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a></li>
 <li><strong>Spatial-Temporal Linking</strong>: Creating gridpoints for <span class="abiotic">abiotic data</span> and linking to <span class="neo-vegetation">vegetation samples</span></li>
 </ul></li>
+<li><strong><span class="vegvault">VegVault</span> database</strong> - The released <span class="database">SQLite database</span> (see <a href="../website/database_access.html">Database Access</a>)</li>
 </ol>
 </section>
-<section id="reproducibility-through-version-control" class="level2">
-<h2 class="anchored" data-anchor-id="reproducibility-through-version-control"><span class="reproducibility">Reproducibility</span> Through Version Control</h2>
-<p>All <span class="vegvault">VegVault</span> processing repositories use <a href="https://docs.github.com/en/repositories/releasing-projects-on-github/viewing-your-repositorys-releases-and-tags">GitHub Tags</a> to ensure complete <span class="reproducibility">reproducibility</span>. The specific tagged versions used for v1.0.0 are documented in both our code and documentation, enabling exact replication of the <span class="database">database assembly</span> process.</p>
+<section id="reproducibility-through-version-control" class="level2 topic-reproducibility topic-icon">
+<h2 class="topic-reproducibility topic-icon anchored" data-anchor-id="reproducibility-through-version-control">Reproducibility Through Version Control</h2>
+<p>All <span class="vegvault">VegVault</span> processing repositories use <a href="https://docs.github.com/en/repositories/releasing-projects-on-github/viewing-your-repositorys-releases-and-tags">GitHub Tags</a> to ensure complete <span class="reproducibility">reproducibility</span>. For v2.0.0, every input file of the build is pinned by repository, tag, file name and SHA-256 checksum in <a href="https://github.com/OndrejMottl/VegVault/blob/v2.0.0/Data/Producers/producer_manifest.yml"><code>Data/Producers/producer_manifest.yml</code></a>, checked against its data specification before the build, and listed with its tag in the table <code>BuildProducers</code> of the database. The table <code>version_control</code> of the database records the build profile, the git commit of the code and the checksum of the pin manifest, enabling exact replication of the <span class="database">database assembly</span> process.</p>
 </section>
 <section id="data-processing-details" class="level2">
 <h2 class="anchored" data-anchor-id="data-processing-details">Data Processing Details</h2>
-<section id="fossil-pollen-records" class="level3">
-<h3 class="anchored" data-anchor-id="fossil-pollen-records"><span class="paleo">Fossil Pollen Records</span></h3>
-<p><span class="paleo">Fossil pollen records</span> have been downloaded from the <a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a> using their API on 26th June 2023. All data acquisition and processing have been done using the <a href="https://bit.ly/FOSSILPOL">FOSSILPOL: Workflow for processing and standardizing global paleoecological pollen data</a> (version 1.0.0). This includes the selection of depositional environments, ecological groups, chronology control point types, and a minimum number of chronology control points to construct age-depth models. Individual samples and records have been filtered by age limits, number of <span class="paleo">pollen grains</span>, maximum age interpolation, and number of valid levels. In addition, the accuracy of <span class="paleo">fossil pollen data</span> is increased by re-estimating all age-depth models using the Bayesian probabilistic approach and including the information about individual age uncertainty.</p>
+<section id="fossil-pollen-records" class="level3 topic-paleo topic-icon">
+<h3 class="topic-paleo topic-icon anchored" data-anchor-id="fossil-pollen-records">Fossil Pollen Records</h3>
+<p><span class="paleo">Fossil pollen records</span> have been downloaded from the <a href="https://www.neotomadb.org/">Neotoma Paleoecology Database</a> using their API on 19th November 2026 (VegVault 1.0.0 used the download of 26th June 2023). All data acquisition and processing have been done using the <a href="https://bit.ly/FOSSILPOL">FOSSILPOL: Workflow for processing and standardizing global paleoecological pollen data</a> (version 1.0.0), with the settings of VegVault 1.0.0. This includes the selection of depositional environments, ecological groups, chronology control point types, and a minimum number of chronology control points to construct age-depth models. Individual samples and records have been filtered by age limits, number of <span class="paleo">pollen grains</span>, maximum age interpolation, and number of valid levels. In addition, the accuracy of <span class="paleo">fossil pollen data</span> is increased by re-estimating all age-depth models using the Bayesian probabilistic approach and including the information about individual age uncertainty. Age-depth models of VegVault 1.0.0 are reused for records whose chronology did not change since the 2023 download, and fitted again for the others.</p>
 <p><strong>Selection Criteria:</strong></p>
 <ul>
 <li>Only records with type “pollen” with valid geological coordinates (longitude between -180 and 180, latitude between -90 and 90)</li>
-<li>Depositional environments: lakes, bogs, and mires only (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Depositional_environment/Neotoma/depositional_environment_selection_2023-06-26.csv">selection table</a>)</li>
-<li>Specific ecological groups retained (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Eco_group/eco_group_2023-06-28.csv">selection table</a>)</li>
-<li>Minimum 5 chronology control points (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v1.0.0-zenodo/Data/Input/Chronology_setting/Chron_control_point_types/chron_control_point_types_2023-06-28.csv">valid types</a>)</li>
+<li>Depositional environments: lakes, bogs, and mires only (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v2.0.0/Data/Input/Depositional_environment/Neotoma/depositional_environment_selection_2026-11-19.csv">selection table</a>)</li>
+<li>Specific ecological groups retained (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/tree/v2.0.0/Data/Input/Eco_group">selection tables</a>)</li>
+<li>Minimum 5 chronology control points (<a href="https://github.com/OndrejMottl/VegVault-FOSSILPOL/blob/v2.0.0/Data/Input/Chronology_setting/Chron_control_point_types/chron_control_point_types_2026-11-19.csv">valid types</a>)</li>
 </ul>
 <p><strong>Quality Filters:</strong></p>
 <ul>
@@ -251,29 +258,33 @@ ul.task-list li input[type="checkbox"] {
 <li>Minimum 5 samples per record</li>
 <li>Re-calculated age-depth models using Bayesian approach <a href="https://andrewcparnell.github.io/Bchron/">{Bchron} package</a></li>
 </ul>
-<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745060">VegVault-FOSSILPOL</a></p>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.24505587">VegVault-FOSSILPOL</a></p>
 </section>
-<section id="contemporary-vegetation-plots" class="level3">
-<h3 class="anchored" data-anchor-id="contemporary-vegetation-plots"><span class="neo-vegetation">Contemporary Vegetation Plots</span></h3>
+<section id="contemporary-vegetation-plots" class="level3 topic-neo-vegetation topic-icon">
+<h3 class="topic-neo-vegetation topic-icon anchored" data-anchor-id="contemporary-vegetation-plots">Contemporary Vegetation Plots</h3>
 <p>The primary sources of <span class="neo-vegetation">contemporary plot-based vegetation data</span> are BIEN (Botanical Information and Ecology Network) and sPlotOpen (the open-access version of sPlot).</p>
 <p><strong>BIEN Processing:</strong></p>
 <ul>
-<li>Downloaded using <a href="https://cran.r-project.org/web/packages/BIEN/index.html">{RBIEN} R package</a> v1.2.7 on 2nd August 2023 using function <code>BIEN::BIEN_plot_datasource()</code></li>
+<li>Downloaded using <a href="https://cran.r-project.org/web/packages/BIEN/index.html">{BIEN} R package</a> v1.2.8 on 20th November 2026 from BIEN database 4.2.8, the database version of VegVault 1.0.0, using function <code>BIEN::BIEN_plot_datasource()</code></li>
 <li>Retained key columns: <code>datasource_id</code>, <code>datasource</code>, <code>plot_name</code>, <code>sampling_protocol</code>, <code>methodology_reference</code>, <code>methodology_description</code>, <code>longitude</code>, <code>latitude</code>, <code>plot_area_ha</code>, <code>subplot</code>, <code>individual_count</code>, <code>family_matched</code>, <code>name_matched</code>, <code>name_matched_author</code>, <code>verbatim_family</code>, <code>verbatim_scientific_name</code>, <code>scrubbed_species_binomial</code>, <code>scrubbed_taxonomic_status</code>, <code>scrubbed_family</code>, <code>scrubbed_author</code></li>
 <li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
 <li>Filtered out records with missing essential information (NA values in <code>datasource_id</code>, <code>datasource</code>, <code>plot_name</code>, <code>longitude</code>, <code>latitude</code>, and/or <code>plot_area_ha</code>)</li>
+<li>Records of one taxon (<code>name_matched</code>) in a plot merged into one record, with their individual counts added</li>
+<li>Only the latest survey kept for plots surveyed more than once</li>
+<li>One row per plot, with a stable plot identifier <code>plot_id</code></li>
 </ul>
 <p><strong>sPlotOpen Processing:</strong></p>
 <ul>
-<li>Downloaded sPlotOpen v2.0 on 26th September 2023</li>
+<li>sPlotOpen v2.0, downloaded on 26th September 2023 for VegVault 1.0.0 and kept, as no newer open release exists</li>
 <li>Linked tables <code>DT2.oa</code> and <code>header.oa</code> via <code>PlotObservationID</code> column</li>
 <li>Applied quality filters for geographic and area data (filtered out rows with NA values in <code>PlotObservationID</code>, <code>GIVD_ID</code>, <code>Longitude</code>, <code>Latitude</code>, and/or <code>Releve_area</code>)</li>
+<li>Records without a species name dropped, and records of one species in a plot merged into one record</li>
 <li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
 </ul>
-<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.16729978">VegVault-Vegetation_data</a></p>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.24505586">VegVault-Vegetation_data</a></p>
 </section>
-<section id="functional-traits" class="level3">
-<h3 class="anchored" data-anchor-id="functional-traits"><span class="traits">Functional Traits</span></h3>
+<section id="functional-traits" class="level3 topic-traits topic-icon">
+<h3 class="topic-traits topic-icon anchored" data-anchor-id="functional-traits">Functional Traits</h3>
 <p>Following <a href="https://doi.org/10.1038/nature16489">Díaz et al.&nbsp;(2016)</a>, we selected six key <span class="traits">functional traits</span> representing:</p>
 <ul>
 <li><code>Stem specific density</code></li>
@@ -285,58 +296,71 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p><strong><span class="traits">TRY Database</span> Processing:</strong></p>
 <ul>
-<li>Data request ID: <code>28498</code> on 29th August 2023</li>
+<li>Data request ID: <code>28498</code> on 29th August 2023, the request of VegVault 1.0.0 (no new request was made)</li>
 <li>Requested <span class="traits">traits</span> with codes: <code>3106</code>, <code>4</code>, <code>3108</code>, <code>3110</code>, <code>3112</code>, <code>3114</code>, <code>3116</code>, <code>3117</code>, <code>14</code>, and <code>26</code> (closest to Díaz et al.&nbsp;2016 description)</li>
-<li>Used {rtry} R package v1.1.0 for data import</li>
+<li>The request file is read with the same settings as <code>rtry::rtry_import()</code></li>
 <li>For each <span class="traits">trait</span> (<code>TraitID</code>), extracted all relevant observations (<code>ObservationID</code>), ensuring only observations unique to each <span class="traits">trait</span></li>
 <li>Identified all unique data (<code>DataID</code>) associated with each <span class="traits">trait</span></li>
 <li>Excluded non-meaningful <span class="traits">trait</span> variations (DataID: <code>2221</code>, <code>2222</code>, <code>2223</code>, <code>2224</code>, <code>2225</code>, <code>3646</code>, <code>3647</code>, <code>3698</code>, <code>3699</code>, <code>3727</code>, <code>3728</code>, <code>3730</code>, <code>3731</code>, <code>3849</code>, <code>3850</code>, <code>4029</code>, and <code>4030</code>), e.g., <code>height at 15 days</code></li>
 <li>Extracted covariate information (additional data stored in <code>DataName</code> column)</li>
+<li>Trait values taken from TRY’s standardised values (<code>StdValue</code>)</li>
+<li>Removed records that TRY flags as copies of another record, and repeated values of one <span class="traits">trait</span> within one observation</li>
+<li>Impossible, unparsable or incomplete coordinates set to missing</li>
 <li>All columns renamed using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a></li>
 <li>Added <code>Trait Domain</code> variable to group <span class="traits">traits</span> following Díaz et al.&nbsp;(2016) selection for efficient extraction across TRY and BIEN</li>
 </ul>
 <p><strong><span class="traits">BIEN Traits</span> Processing:</strong></p>
 <ul>
-<li>Downloaded using {RBIEN} R package v1.2.7 on 15th December 2023 using function <code>BIEN::BIEN_trait_trait()</code></li>
+<li>Downloaded using {BIEN} R package v1.2.8 on 19th November 2026 from BIEN database 4.2.8, using function <code>BIEN::BIEN_trait_trait()</code></li>
 <li>Requested <span class="traits">traits</span>: <code>whole plant height</code>, <code>stem wood density</code>, <code>leaf area</code>, <code>leaf area per leaf dry mass</code>, <code>leaf nitrogen content per leaf dry mass</code>, and <code>seed mass</code></li>
 <li>Retained columns: <code>trait_name</code>, <code>trait_value</code>, <code>unit</code>, <code>id</code>, <code>longitude</code>, <code>latitude</code>, <code>method</code>, <code>url_source</code>, <code>source_citation</code>, <code>project_pi</code>, <code>scrubbed_species_binomial</code>, and <code>access</code></li>
-<li>Calculated derived measures (e.g., <code>leaf mass per area</code> = 1/<code>leaf area per leaf dry mass</code>)</li>
+<li>Removed records from sources that copy a compilation held by TRY and match a published TRY record (the TRY copy is kept)</li>
 </ul>
-<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745086">VegVault-Trait_data</a></p>
+<p><strong>Units and quality checks (both providers):</strong></p>
+<ul>
+<li>Every value converted to the single unit of its trait domain by a registered and versioned rule; values whose unit is not registered, or whose conversion fails, are not published</li>
+<li><code>leaf mass per area</code> derived from specific leaf area (<code>leaf area per leaf dry mass</code>) as 1/value, after the specific leaf area is converted to a known unit</li>
+<li>Values from sources whose scale is physically implausible not published</li>
+</ul>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.24505585">VegVault-Trait_data</a></p>
 </section>
-<section id="abiotic-environmental-data" class="level3">
-<h3 class="anchored" data-anchor-id="abiotic-environmental-data"><span class="abiotic">Abiotic Environmental Data</span></h3>
-<p>The primary sources of <span class="abiotic">abiotic data</span> are CHELSA, CHELSA-TRACE21, and WoSIS Soil Profile Database. The first two data sources provide high-resolution downscaled <span class="abiotic">climatic data</span>, while the latter offers detailed <span class="abiotic">soil information</span> (only available for <span class="neo-vegetation">contemporary data</span>).</p>
+<section id="abiotic-environmental-data" class="level3 topic-abiotic topic-icon">
+<h3 class="topic-abiotic topic-icon anchored" data-anchor-id="abiotic-environmental-data">Abiotic Environmental Data</h3>
+<p>The primary sources of <span class="abiotic">abiotic data</span> are CHELSA, CHELSA-TRACE21, and the Harmonized World Soil Database (HWSD) v2.2. The first two data sources provide high-resolution downscaled <span class="abiotic">climatic data</span>, while the latter offers detailed <span class="abiotic">soil information</span> (only available for <span class="neo-vegetation">contemporary data</span>). VegVault 1.0.0 used HWSD v2.0 or v2.01 (the exact version was not recorded) and named it WoSIS or SoilGrids.</p>
 <p><strong><span class="abiotic">CHELSA Climate Data</span>:</strong></p>
 <ul>
-<li><span class="neo-vegetation">Contemporary</span>: CHELSA v2.1 downloaded on 8th September 2023</li>
+<li><span class="neo-vegetation">Contemporary</span>: CHELSA v2.1, all seven files downloaded on 20th November 2026 (VegVault 1.0.0: 8th September 2023)</li>
 <li>Used <a href="https://github.com/HelgeJentsch/ClimDatDownloadR">{ClimDatDownloadR} R package</a> with function <code>ClimDatDownloadR::Chelsa.Clim.download()</code></li>
 <li>Selected bio-variables: <code>1</code>, <code>4</code>, <code>6</code>, <code>12</code>, <code>15</code>, <code>18</code>, <code>19</code></li>
 <li>Spatial aggregation: 25x factor using median values with <a href="https://rspatial.github.io/terra/">{terra} R package</a> function <code>terra::aggregate(factor = 25, fun = "median")</code></li>
+<li><code>bio4</code> (temperature seasonality) in hundredths of a degree Celsius; in VegVault 1.0.0 it was 0 south of about 65.7° N because of a truncated download</li>
+<li>A <code>bio12</code> value of 6553.5 is the storage limit of CHELSA V2.1, so it is a lower bound</li>
 </ul>
 <p><strong><span class="paleo">Paleoclimate</span>: CHELSA-TRACE21</strong></p>
 <ul>
-<li><span class="paleo">Paleoclimate</span>: CHELSA-TRACE21 v1.0 downloaded on 31st December 2023</li>
+<li><span class="paleo">Paleoclimate</span>: CHELSA-TRACE21 v1.0, the files downloaded on 31st December 2023 for VegVault 1.0.0, with <code>bio15</code> at age 0 downloaded again on 20th November 2026 (in VegVault 1.0.0 it was 0 south of 14.65° S because of a truncated download)</li>
 <li>Downloaded values for each 500-year time-slice between 0 and 18,000 years before present (BP)</li>
 <li>Selected bio-variables: <code>1</code>, <code>4</code>, <code>6</code>, <code>12</code>, <code>15</code>, <code>18</code>, <code>19</code></li>
 <li>For each time slice, applied spatial aggregation using <code>terra::aggregate(factor = 25, fun = "median")</code></li>
+<li>Inflated precipitation of the source in 25° S to 5° N and 80° W to 35° W, at 12,000, 12,500 and 15,000 to 18,000 years, masked: there, <code>bio12</code>, <code>bio15</code>, <code>bio18</code> and <code>bio19</code> have no value</li>
+<li>Precipitation stored in whole kg m<sup>-2</sup>, so a quarter with less than 0.5 kg m<sup>-2</sup> is 0</li>
 </ul>
-<p><strong><span class="abiotic">WoSIS Soil Data</span>:</strong></p>
+<p><strong><span class="abiotic">HWSD Soil Data</span>:</strong></p>
 <ul>
-<li>Downloaded on 11th September 2023 (both <code>HWSD2_RASTER.zip</code> and <code>HWSD2_DB.zip</code>)</li>
-<li>Extracted <span class="abiotic">soil type names</span> (column <code>HWSD2_SMU_ID</code>) by combining tables <code>HWSD2_SMU</code> and <code>D_WRB4</code></li>
-<li>Added <span class="abiotic">soil type information</span> to the raster</li>
+<li>HWSD v2.2 downloaded on 20th November 2026 (both <code>hwsd2.2_raster.zip</code> and <code>hwsd2.2_db.zip</code>); VegVault 1.0.0 used HWSD v2.0 or v2.01, downloaded on 11th September 2023</li>
+<li><span class="abiotic">Soil groups</span>: the WRB 2022 Reference Soil Group of each cell, coded 1 to 32 in alphabetical order; a cell whose dominant class is not a soil (glaciers, open water) has no value</li>
+<li>The soil codes of VegVault 1.0.0 came from a wrong lookup and cannot be compared with those of v2.0.0</li>
 <li><span class="reproducibility">Resampled</span> using <code>terra::resample(method = "near")</code> function to match <span class="abiotic">climate data</span> resolution</li>
 <li>Provides essential <span class="abiotic">edaphic context</span> for vegetation-environment relationships (<span class="neo-vegetation">contemporary data</span> only)</li>
 </ul>
-<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.14745293">VegVault-abiotic_data</a></p>
+<p><strong>Processing Details</strong>: Available at <a href="https://doi.org/10.5281/zenodo.24504826">VegVault-abiotic_data</a></p>
 </section>
 </section>
-<section id="data-integration-procedures" class="level2">
-<h2 class="anchored" data-anchor-id="data-integration-procedures"><span class="reproducibility">Data Integration Procedures</span></h2>
-<p>All <span class="reproducibility">processing pipelines</span> with their corresponding <span class="database">Tags</span> are migrated into an <span class="vegvault">SQLite database</span> using the GitHub repository titled <a href="https://github.com/OndrejMottl/VegVault/tree/v1.0.0-zenodo">VegVault</a>, which can be accessed as DOI: <a href="https://doi.org/10.5281/zenodo.15201994">10.5281/zenodo.15201994</a>.</p>
-<section id="data-migration-details" class="level3">
-<h3 class="anchored" data-anchor-id="data-migration-details"><span class="reproducibility">Data Migration Details</span></h3>
+<section id="data-integration-procedures" class="level2 topic-database topic-icon">
+<h2 class="topic-database topic-icon anchored" data-anchor-id="data-integration-procedures">Data Integration Procedures</h2>
+<p>All <span class="reproducibility">processing pipelines</span> with their corresponding <span class="database">Tags</span> are migrated into an <span class="database">SQLite database</span> using the GitHub repository titled <a href="https://github.com/OndrejMottl/VegVault/tree/v2.0.0">VegVault</a>, which can be accessed as DOI: <a href="https://doi.org/10.5281/zenodo.14777447">10.5281/zenodo.14777447</a> (all versions). The build is a <code>{targets}</code> pipeline in six stages: import of the pinned files, links between samples and gridpoints, assembly of the database, validation, export of the flat files, and the figures of the data paper.</p>
+<section id="data-migration-details" class="level3 topic-reproducibility">
+<h3 class="topic-reproducibility anchored" data-anchor-id="data-migration-details">Data Migration Details</h3>
 <p><strong><span class="neo-vegetation">Migrating sPlotOpen vegetation data</span>:</strong></p>
 <ul>
 <li><span class="database">Dataset name</span> (<code>dataset_name</code>) created from <code>plot_observation_id</code> as <code>splot_[plot_observation_id]</code></li>
@@ -344,68 +368,68 @@ ul.task-list li input[type="checkbox"] {
 <li><span class="database">Sample name</span> (<code>sample_name</code>) created using <code>plot_observation_id</code> as <code>splot_[plot_observation_id]</code></li>
 <li><span class="database">Sample Size</span> (<code>sample_size</code>) created from <code>releve_area</code> column</li>
 <li>All samples automatically assigned age of 0</li>
-<li>Taxonomic names extracted from <code>Species</code> column, abundances from <code>Original_abundance</code></li>
+<li>Taxonomic names extracted from <code>Species</code> column, abundances from <code>Original_abundance</code>; records without a species name are not stored</li>
 </ul>
 <p><strong>Migrating BIEN vegetation data:</strong></p>
 <ul>
-<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>bien_[row number]</code></li>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created from the plot identifier as <code>bien_[plot_id]</code> (VegVault 1.0.0 used the row number of the file, which changes when rows are added or reordered)</li>
 <li>Original <span class="database">data source</span> from column <code>datasource</code> stored in <code>DatasetSourcesID</code> table</li>
-<li><span class="reproducibility">Sampling method</span> extracted from <code>methodology_description</code> column</li>
-<li><span class="database">Sample name</span> (<code>sample_name</code>) created as <code>bien_[row number]</code></li>
+<li><span class="database">Sampling method</span> extracted from <code>methodology_description</code> column</li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created as <code>bien_[plot_id]</code></li>
 <li><span class="database">Sample Size</span> (<code>sample_size</code>) created from <code>plot_area_ha</code> column, multiplied by 10,000 (stored in square meters)</li>
 <li>All samples automatically assigned age of 0</li>
-<li><span class="traits">Taxonomic names</span> extracted from <code>name_matched</code> column</li>
+<li><span class="taxa">Taxonomic names</span> extracted from <code>name_matched</code> column</li>
 </ul>
 <p><strong><span class="paleo">Migrating fossil pollen data</span>:</strong></p>
 <ul>
-<li><span class="database">Dataset name</span>(<code>dataset_name</code>) created from <code>dataset_id</code> (fossilpol_[dataset_id])</li>
-<li>Note: column <code>dataset_id</code> from primary source does not match <code>dataset_id</code> in <span class="vegvault">VegVault</span></li>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created from the Neotoma dataset identifier as <code>fossilpol_[dataset_id]</code></li>
+<li>Note: the Neotoma <code>dataset_id</code> in the name is not the <code>dataset_id</code> of the <span class="vegvault">VegVault</span> table <code>Datasets</code>, which is numbered anew in every build</li>
 <li>Original <span class="database">data source</span> from <code>source_of_data</code> column stored in <code>DatasetSourcesID</code> table</li>
-<li><span class="reproducibility">Sampling method</span> extracted from <code>depositionalenvironment</code> column</li>
+<li><span class="database">Sampling method</span> extracted from <code>depositionalenvironment</code> column</li>
 <li>Individual <span class="database">Dataset Reference</span> extracted from <code>doi</code> column</li>
-<li><span class="database">Sample name</span> (<code>sample_name</code>) created using <code>dataset_id</code> and <code>sample_id</code> as <code>fossilpol_[dataset_id]_[sample_id]</code></li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created from the Neotoma identifiers of the dataset and the sample as <code>fossilpol_[dataset_id]_[sample_id]</code> (VegVault 1.0.0 used the database identifier of the dataset here, so sample names changed with every build)</li>
 <li><span class="paleo">Ages</span> extracted from <code>levels</code> column</li>
 <li><span class="paleo">Age uncertainty</span> from age-depth models extracted from <code>age_uncertainty</code> column</li>
-<li><span class="traits">Taxonomic names</span> and <span class="paleo">abundances</span> extracted from <code>counts_harmonised</code> column</li>
+<li><span class="taxa">Taxonomic names</span> and abundances extracted from <code>counts_harmonised</code> column; a taxon is stored for a sample only when its count is above zero</li>
 </ul>
 <p><strong><span class="traits">Migrating TRY functional traits</span>:</strong></p>
 <ul>
-<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>try_[row number]</code></li>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>try_[number]</code>: one dataset per combination of data source, longitude, latitude and reference, numbered in the order of these values (VegVault 1.0.0 numbered them in the order of the file)</li>
 <li>Original <span class="database">data source</span> from column <code>dataset</code> stored in <code>DatasetSourcesID</code> table</li>
 <li>Individual <span class="database">Dataset Reference</span> extracted from <code>reference_source</code> column</li>
-<li><span class="database">Sample name</span> (<code>sample_name</code>) created as <code>try_[row number]</code></li>
-<li>Individual <span class="database">Sample reference</span> extracted from <code>dataset_reference_citation</code></li>
+<li><span class="database">Sample name</span> (<code>sample_name</code>) created from the TRY observation as <code>try_[observation_id]</code></li>
+<li>Individual <span class="database">Sample references</span> extracted from <code>dataset_reference_citation</code> and <code>record_reference</code> (the publication of each TRY record)</li>
 <li>All samples automatically assigned age of 0</li>
-<li>Trait names extracted from <code>trait_full_name</code>, taxonomic names from <code>acc_species_name</code>, trait values from <code>trait_value</code></li>
+<li>Trait names extracted from <code>trait_full_name</code>, taxonomic names from <code>acc_species_name</code>, trait values from <code>trait_value</code>, with their unit and conversion rule</li>
 </ul>
 <p><strong><span class="traits">Migrating BIEN functional traits</span>:</strong></p>
 <ul>
-<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>bien_traits_[row number]</code></li>
+<li><span class="database">Dataset name</span> (<code>dataset_name</code>) created as <code>bien_traits_[number]</code>, by the same rule as for TRY</li>
 <li>Original <span class="database">data source</span> from column <code>project_pi</code> stored in <code>DatasetSourcesID</code> table</li>
 <li>Individual <span class="database">Dataset Reference</span> extracted from <code>source_citation</code> column</li>
 <li><span class="database">Sample name</span> (<code>sample_name</code>) created using column <code>id</code> as <code>bien_traits_[id]</code></li>
 <li>All samples automatically assigned age of 0</li>
-<li><span class="traits">Trait names</span> extracted from <code>trait_name</code>, <span class="traits">taxonomic names</span> from <code>scrubbed_species_binomial</code>, <span class="traits">trait values</span> from <code>trait_value</code></li>
-<li><span class="traits">Trait</span> <code>leaf mass per area</code> calculated from <code>leaf area per leaf dry mass</code> as 1/value</li>
+<li><span class="traits">Trait names</span> extracted from <code>trait_full_name</code>, <span class="taxa">taxonomic names</span> from <code>scrubbed_species_binomial</code>, <span class="traits">trait values</span> from <code>trait_value</code>, with their unit and conversion rule</li>
 </ul>
 </section>
-<section id="final-database-integration-procedures" class="level3">
-<h3 class="anchored" data-anchor-id="final-database-integration-procedures"><span class="reproducibility">Final Database Integration Procedures</span></h3>
-<p>In addition to the consolidation of all <span class="reproducibility">processed data</span> into a unified <span class="vegvault">SQLite database</span>, the final <span class="vegvault">VegVault</span> migration repository performs three critical procedures to ensure <span class="reproducibility">data consistency</span> and usability:</p>
-<section id="i-taxonomic-classification" class="level4">
-<h4 class="anchored" data-anchor-id="i-taxonomic-classification">(i) <span class="traits">Taxonomic Classification</span></h4>
-<p>As <span class="vegvault">VegVault</span> integrates data on <span class="traits">taxa</span> from various sources, the <span class="reproducibility">{taxospace}</span> R package is used to classify diverse <span class="traits">taxa</span> into a unifying <span class="traits">taxonomic backbone</span>. The <span class="reproducibility">{taxospace}</span> tool automatically aligns <span class="traits">taxon names</span> with the <span class="traits">GBIF taxonomical backbone</span>. Specifically, we find the best match of raw <span class="traits">taxon names</span> using the Global Names Resolver, which is then aligned with GBIF. The resulting <span class="traits">taxonomic classification</span> information, detailed up to the family level, is stored for each <span class="traits">taxon</span>, ensuring consistency and facilitating comparative analyses across different datasets.</p>
-<p><strong>Important limitations</strong>: <span class="traits">Taxonomic classification</span> down to the species level is not available for each <span class="traits">taxon</span> (e.g., some <span class="paleo">fossil pollen types</span> can only be identified to the genus or family level). For several <span class="traits">taxa</span>, no matching classification could be found. Note that <span class="traits">taxonomic classification</span> is additional information—the original <span class="traits">taxon name</span> is always present and returned by default. Finally, users should be aware that this classification is an <span class="reproducibility">automated process</span> and may contain errors.</p>
+<section id="final-database-integration-procedures" class="level3 topic-reproducibility">
+<h3 class="topic-reproducibility anchored" data-anchor-id="final-database-integration-procedures">Final Database Integration Procedures</h3>
+<p>In addition to the consolidation of all <span class="reproducibility">processed data</span> into a unified <span class="database">SQLite database</span>, the final <span class="vegvault">VegVault</span> migration repository performs three critical procedures to ensure <span class="reproducibility">data consistency</span> and usability:</p>
+<section id="i-taxonomic-classification" class="level4 topic-taxa">
+<h4 class="topic-taxa anchored" data-anchor-id="i-taxonomic-classification">(i) Taxonomic Classification</h4>
+<p>As <span class="vegvault">VegVault</span> integrates data on <span class="taxa">taxa</span> from various sources, the <span class="reproducibility">{taxospace}</span> R package is used to classify diverse <span class="taxa">taxa</span> into a unifying <span class="taxa">taxonomic backbone</span>. The <span class="reproducibility">{taxospace}</span> tool automatically aligns <span class="taxa">taxon names</span> with the <span class="taxa">GBIF taxonomical backbone</span>. Specifically, we find the best match of raw <span class="taxa">taxon names</span> using the Global Names Verifier, which is then aligned with GBIF. Only plant taxa count, each name is sent with only its first letter in capitals, and when a name matches several taxa equally well, the taxon with the smallest GBIF identifier is used. The resulting <span class="taxa">taxonomic classification</span> information, detailed up to the family level, is stored for each <span class="taxa">taxon</span>, ensuring consistency and facilitating comparative analyses across different datasets.</p>
+<p>Two kinds of names are corrected by hand after the automatic classification. <span class="paleo">Fossil pollen types</span> that combine two or more taxa (such as the Neotoma name “Betula/Carpinus”, stored as “Betula Carpinus”) keep only what their parts share: the family when all parts belong to one family, and no classification otherwise. The pollen type “Pinus Picea” is classified as the family Pinaceae, the family of both genera, instead of <em>Abies alba</em>, to which the automatic matching resolves it.</p>
+<p><strong>Important limitations</strong>: <span class="taxa">Taxonomic classification</span> down to the species level is not available for each <span class="taxa">taxon</span> (e.g., some <span class="paleo">fossil pollen types</span> can only be identified to the genus or family level). For several <span class="taxa">taxa</span>, no matching classification could be found. Note that <span class="taxa">taxonomic classification</span> is additional information—the original <span class="taxa">taxon name</span> is always present and returned by default. Finally, users should be aware that this classification is an <span class="reproducibility">automated process</span> and may contain errors.</p>
 </section>
-<section id="ii-grouping-of-traits-into-trait-domains" class="level4">
-<h4 class="anchored" data-anchor-id="ii-grouping-of-traits-into-trait-domains">(ii) <span class="traits">Grouping of Traits into Trait Domains</span></h4>
-<p>As there are differences in <span class="traits">trait names</span> across data sources (e.g., “Leaf nitrogen (N) content per leaf dry mass” vs.&nbsp;“leaf nitrogen content per leaf dry mass”), we added a new variable <code>Trait Domain</code> that groups <span class="traits">traits</span> together following the <span class="traits">trait selection</span> of Díaz et al.&nbsp;(2016). For example, <span class="traits">trait</span> <code>Plant height vegetative</code> from <span class="traits">TRY</span> and <span class="traits">trait</span> <code>whole plant height</code> from <span class="traits">BIEN</span> are both grouped under the <code>Plant height</code> <span class="traits">Trait Domain</span>. This grouping serves as an efficient mechanism for extracting comparable <span class="traits">traits</span> across both <span class="traits">TRY</span> and <span class="traits">BIEN</span> datasets.</p>
+<section id="ii-grouping-of-traits-into-trait-domains" class="level4 topic-traits">
+<h4 class="topic-traits anchored" data-anchor-id="ii-grouping-of-traits-into-trait-domains">(ii) Grouping of Traits into Trait Domains</h4>
+<p>As there are differences in <span class="traits">trait names</span> across data sources (e.g., “Leaf nitrogen (N) content per leaf dry mass” vs.&nbsp;“leaf nitrogen content per leaf dry mass”), we added a new variable <code>Trait Domain</code> that groups <span class="traits">traits</span> together following the <span class="traits">trait selection</span> of Díaz et al.&nbsp;(2016). For example, <span class="traits">trait</span> <code>Plant height vegetative</code> from <span class="traits">TRY</span> and <span class="traits">trait</span> <code>whole plant height</code> from <span class="traits">BIEN</span> are both grouped under the <span class="traits">Trait Domain</span> stored as <code>Plant heigh</code>, the spelling of VegVault 1.0.0. This grouping serves as an efficient mechanism for extracting comparable <span class="traits">traits</span> across both <span class="traits">TRY</span> and <span class="traits">BIEN</span> datasets. Every <span class="traits">trait value</span> is stored in the unit of its <span class="traits">Trait Domain</span>, together with the rule that converted it.</p>
 </section>
-<section id="iii-creation-of-gridpoints-for-abiotic-data" class="level4">
-<h4 class="anchored" data-anchor-id="iii-creation-of-gridpoints-for-abiotic-data">(iii) <span class="abiotic">Creation of Gridpoints for Abiotic Data</span></h4>
+<section id="iii-creation-of-gridpoints-for-abiotic-data" class="level4 topic-abiotic">
+<h4 class="topic-abiotic anchored" data-anchor-id="iii-creation-of-gridpoints-for-abiotic-data">(iii) Creation of Gridpoints for Abiotic Data</h4>
 <p>We developed a data structure that provides readily available <span class="abiotic">environmental context</span> for each <span class="neo-vegetation">vegetation</span> (and <span class="traits">trait</span>) record by creating spatio-temporal links between these records and <span class="abiotic">abiotic information</span>. As raster data are not suitable for storage in an <span class="database">SQLite database</span>, we created artificial points, called ‘<span class="abiotic">gridpoints</span>’, located in the center of each raster cell. This resulted in a uniform spatio-temporal matrix of <span class="abiotic">gridpoints</span> holding the <span class="abiotic">abiotic information</span>.</p>
 <p><strong><span class="reproducibility">Gridpoint naming conventions</span></strong>: <code>dataset_name</code> are created as “geo_[longitude]<em>[latitude]” and <code>sample_name</code> are created as ”geo</em>[longitude]<em>[latitude]</em>[age]”.</p>
-<p><strong><span class="reproducibility">Spatial-temporal linking</span></strong>: We linked <span class="abiotic">gridpoints</span> with other non-gridpoint <span class="database">Samples</span> (<code>vegetation_plot</code>, <code>fossil_pollen_archive</code>, and <span class="traits">traits</span>) and calculated the spatial and temporal distances between them. We retained any <span class="abiotic">gridpoint Sample</span> within 50 km and/or 5000 years from any other non-gridpoint <span class="database">Sample</span> and discarded the rest.</p>
+<p><strong><span class="reproducibility">Spatial-temporal linking</span></strong>: We linked <span class="abiotic">gridpoints</span> with every other non-gridpoint <span class="database">Sample</span> (<code>vegetation_plot</code>, <code>fossil_pollen_archive</code>, and <span class="traits">traits</span>) that lies at most 50 km and at most 5,000 years from it, and discarded the <span class="abiotic">gridpoint Samples</span> without such a link. The distance is the geodesic distance on the WGS84 ellipsoid; the distance and the age difference are stored truncated to whole kilometres and years. Since v2.0.0 the rule is applied exactly: VegVault 1.0.0 searched only within one degree of longitude and did not wrap at the dateline, so it missed the links at high latitudes, where 50 km is more than one degree of longitude, and across the dateline. The links are computed and stored once per position, a distinct combination of longitude, latitude and age (tables <code>Positions</code>, <code>SamplePosition</code> and <code>PositionLink</code>), and the view <code>AbioticDataReference</code> returns them per sample, as the table of the same name did in VegVault 1.0.0.</p>
 </section>
 </section>
 </section>
@@ -502,7 +526,8 @@ ul.task-list li input[type="checkbox"] {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -511,8 +536,69 @@ ul.task-list li input[type="checkbox"] {
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -526,6 +612,7 @@ ul.task-list li input[type="checkbox"] {
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -688,44 +775,54 @@ ul.task-list li input[type="checkbox"] {
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -823,6 +920,9 @@ ul.task-list li input[type="checkbox"] {
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 <footer class="footer">

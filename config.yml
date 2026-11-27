@@ -576,15 +576,16 @@ default:
     # The figure of the data extraction with {vaultkeepr}
     #   (website/database_examples.qmd), drawn by
     #   R/Website/render_extraction_workflow.R, which holds its layout. The
-    #   DOI is the one of the database download; replace it with the DOI of
-    #   the release when the release is deposited. Colours are names of
-    #   colors.json; fonts are system font families.
+    #   DOI is the one of all versions of the database deposit, which always
+    #   leads to the newest version, so a new release does not change the
+    #   figure. Colours are names of colors.json; fonts are system font
+    #   families.
     extraction_workflow:
       file: "Outputs/Figures/Scheme_extraction/extraction_workflow.png"
       width_mm: 180
       height_mm: 230
       dpi: 300
-      doi: "10.48700/datst.t21cz-2nq07"
+      doi: "10.48700/frrj8-ync93"
       background: "brown_light"
       font_text: "Inter"
       font_code: "Consolas"
